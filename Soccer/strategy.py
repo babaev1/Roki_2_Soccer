@@ -1,0 +1,797 @@
+import sys
+import os
+import math
+import json
+import time
+import Soccer.utility
+#import threading
+import random
+#from Soccer.Motion.class_stm_channel import STM_channel
+#from Soccer.Vision.class_Vision_RPI import Vision_RPI
+
+
+def coord2yaw(x, y):
+    if x == 0:
+        if y > 0 : yaw = math.pi/2
+        else: yaw = -math.pi/2
+    else: yaw = math.atan(y/x)
+    if x < 0:
+        if yaw > 0: yaw -= math.pi
+        else: yaw += math.pi
+    return yaw
+
+class GoalKeeper:
+    def __init__(self, motion, local, glob):
+        self.motion = motion
+        self.local = local
+        self.glob = glob
+        self.direction_To_Guest = 0
+
+    def turn_Face_To_Guest(self):
+        if self.local.coord_odometry[0] < 0:
+            self.motion.turn_To_Course(0)
+            self.direction_To_Guest = 0
+            return
+        elif self.local.coord_odometry[0] > 0.8 and abs(self.local.coord_odometry[1]) > 0.6:
+            self.direction_To_Guest = math.atan(-self.local.coord_odometry[1]/(1.8-self.local.coord_odometry[0]))
+            self.motion.turn_To_Course(self.direction_To_Guest)
+        elif self.local.coord_odometry[0] < 1.5 and abs(self.local.coord_odometry[1]) < 0.25:
+            if (1.8-self.local.ball_odometry[0]) == 0: self.direction_To_Guest = 0
+            else: self.direction_To_Guest = math.atan((0.4* (round(random.random(),0)*2 - 1)-
+                                                       self.local.ball_odometry[1])/(1.8-self.local.ball_odometry[0]))
+            self.motion.turn_To_Course(self.direction_To_Guest)
+            return
+        else:
+            self.direction_To_Guest = math.atan(-self.local.coord_odometry[1]/(2.8-self.local.coord_odometry[0]))
+            self.motion.turn_To_Course(self.direction_To_Guest)
+
+    def goto_Center(self):                      #Function for reterning to center position
+        print('Function for reterning to center position')
+        #if self.local.coordinate_trust_estimation() < 0.5: self.motion.localisation_Motion()
+        player_X_m = self.local.coord_odometry[0]
+        player_Y_m = self.local.coord_odometry[1]
+        duty_position_x = - self.glob.landmarks['FIELD_LENGTH']/2 + 0.4
+        distance_to_target = math.sqrt((duty_position_x -player_X_m)**2 + (0 - player_Y_m)**2 )
+        if distance_to_target > 0.5 :
+            target_in_front_of_duty_position = [duty_position_x + 0.15, 0]
+            if distance_to_target > 1: stop_Over = True
+            else: stop_Over = False
+            self.motion.far_distance_plan_approach(target_in_front_of_duty_position, self.direction_To_Guest, stop_Over = stop_Over)
+        else:
+            if (duty_position_x -player_X_m)==0:
+                alpha = math.copysign(math.pi/2, (0 - player_Y_m) )
+            else:
+                if (duty_position_x - player_X_m)> 0: alpha = math.atan((0 - player_Y_m)/(duty_position_x -player_X_m))
+                else: alpha = math.atan((0 - player_Y_m)/(duty_position_x - player_X_m)) + math.pi
+            napravl = alpha - self.motion.imu_body_yaw()
+            dist_mm = distance_to_target * 1000
+            self.motion.near_distance_omni_motion(dist_mm, napravl)
+        self.turn_Face_To_Guest()
+
+    def ball_Speed_Dangerous(self):
+        pass
+    def fall_to_Defence(self):
+        print('fall to defence')
+    def get_Up_from_defence(self):
+        print('up from defence')
+    def scenario_A1(self, dist, napravl):#The robot knock out the ball to the side of the enemy
+        print('The robot knock out the ball to the side of the enemy')
+        for i in range(10):
+            if dist > 0.5 :
+                if dist > 1: stop_Over = True
+                else: stop_Over = False
+                self.motion.far_distance_plan_approach(self.local.ball_odometry, self.direction_To_Guest, stop_Over = stop_Over)
+            self.turn_Face_To_Guest()
+            success_Code = self.motion.near_distance_ball_approach_and_kick(self.direction_To_Guest)
+            if success_Code == False and self.motion.falling_Flag != 0: return
+            if success_Code == False : break
+            #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = False)
+            dist = self.glob.ball_distance
+            if dist > 1 : break
+        target_course1 = self.local.coord_odometry[2] +math.pi
+        self.motion.turn_To_Course(target_course1)
+        self.goto_Center()
+
+    def scenario_A2(self, dist, napravl):#The robot knock out the ball to the side of the enemy
+        print('The robot knock out the ball to the side of the enemy')
+        self.scenario_A1( dist, napravl)
+
+    def scenario_A3(self, dist, napravl):#The robot knock out the ball to the side of the enemy
+        print('The robot knock out the ball to the side of the enemy')
+        self.scenario_A1( dist, napravl)
+
+    def scenario_A4(self, dist, napravl):#The robot knock out the ball to the side of the enemy
+        print('The robot knock out the ball to the side of the enemy')
+        self.scenario_A1( dist, napravl)
+
+    def scenario_B1(self):#the robot moves to the left and stands on the same axis as the ball and the opponents' goal
+        print('the robot moves to the left 4 steps')
+        if self.local.ball_odometry[1] > self.local.coord_odometry[1]:
+            if self.local.ball_odometry[1] > 0.4: 
+                if self.local.coord_odometry[1] < 0.4:
+                    self.motion.near_distance_omni_motion( 1000*(0.4 - self.local.coord_odometry[1]), math.pi/2)
+            else:
+                self.motion.near_distance_omni_motion( 1000*(self.local.ball_odometry[1] - self.local.coord_odometry[1]), math.pi/2)
+        self.turn_Face_To_Guest()
+
+    def scenario_B2(self):#the robot moves to the left and stands on the same axis as the ball and the opponents' goal
+        print('the robot moves to the left 4 steps')
+        self.scenario_B1()
+
+    def scenario_B3(self):#the robot moves to the right and stands on the same axis as the ball and the opponents' goal
+        print('the robot moves to the right 4 steps')
+        #self.motion.first_Leg_Is_Right_Leg = True
+        #self.motion.near_distance_omni_motion( 110, -math.pi/2)
+        if self.local.ball_odometry[1] < self.local.coord_odometry[1]:
+            if self.local.ball_odometry[1] < -0.4: 
+                if self.local.coord_odometry[1] > -0.4:
+                    self.motion.near_distance_omni_motion( 1000*(0.4 + self.local.coord_odometry[1]), -math.pi/2)
+            else:
+                self.motion.near_distance_omni_motion( 1000*(-self.local.ball_odometry[1] + self.local.coord_odometry[1]), -math.pi/2)
+        self.turn_Face_To_Guest()
+
+    def scenario_B4(self):#the robot moves to the right and stands on the same axis as the ball and the opponents' goal
+        print('the robot moves to the right 4 steps')
+        self.scenario_B3()
+
+class Forward:
+    def __init__(self, motion, local, glob):
+        self.motion = motion
+        self.local = local
+        self.glob = glob
+        self.direction_To_Guest = 0
+
+    def dir_To_Guest(self):
+        if self.local.ball_odometry[0] < 0:
+            self.direction_To_Guest = 0
+        elif self.local.ball_odometry[0] > 0.8 and abs(self.local.ball_odometry[1]) > 0.6:
+            self.direction_To_Guest = math.atan(-self.local.ball_odometry[1]/(1.8-self.local.ball_odometry[0]))
+        elif self.local.ball_odometry[0] < 1.5 and abs(self.local.ball_odometry[1]) < 0.25:
+            if (1.8-self.local.ball_odometry[0]) == 0: self.direction_To_Guest = 0
+            else:
+                if abs(self.local.ball_odometry[1]) > 0.2:
+                    self.direction_To_Guest = math.atan((math.copysign(0.2, self.local.ball_odometry[1])-
+                                                       self.local.ball_odometry[1])/(1.8-self.local.ball_odometry[0]))
+                else:
+                    self.direction_To_Guest = math.atan((0.2* (round(random.random(),0)*2 - 1)-
+                                                       self.local.ball_odometry[1])/(1.8-self.local.ball_odometry[0]))
+        else:
+            self.direction_To_Guest = math.atan(-self.local.coord_odometry[1]/(2.8-self.local.coord_odometry[0]))
+        return self.direction_To_Guest
+
+    def turn_Face_To_Guest(self):
+        self.dir_To_Guest()
+        self.motion.turn_To_Course(self.direction_To_Guest)
+
+class Forward_Vector_Matrix:
+    def __init__(self, motion, local, glob):
+        self.motion = motion
+        self.local = local
+        self.glob = glob
+        self.direction_To_Guest = 0
+        self.kick_Power = 1
+
+    def dir_To_Guest(self):
+        if abs(self.local.ball_odometry[0])  >  self.glob.landmarks["FIELD_LENGTH"] / 2:
+            ball_x = math.copysign(self.glob.landmarks["FIELD_LENGTH"] / 2, self.local.ball_odometry[0])
+        else: ball_x = self.local.ball_odometry[0]
+        if abs(self.local.ball_odometry[1])  >  self.glob.landmarks["FIELD_WIDTH"] / 2:
+            ball_y = math.copysign(self.glob.landmarks["FIELD_WIDTH"] / 2, self.local.ball_odometry[1])
+        else: ball_y = self.local.ball_odometry[1]
+        col = math.floor((ball_x + self.glob.landmarks["FIELD_LENGTH"] / 2) / (self.glob.landmarks["FIELD_LENGTH"] / self.glob.COLUMNS))
+        row = math.floor((- ball_y + self.glob.landmarks["FIELD_WIDTH"] / 2) / (self.glob.landmarks["FIELD_WIDTH"] / self.glob.ROWS))
+        if col >= self.glob.COLUMNS : col = self.glob.COLUMNS - 1
+        if row >= self.glob.ROWS : row = self.glob.ROWS -1
+        self.direction_To_Guest = self.glob.strategy_data[(col * self.glob.ROWS + row) * 2 + 1] / 40
+        self.kick_Power = self.glob.strategy_data[(col * self.glob.ROWS + row) * 2]
+        #print('direction_To_Guest = ', math.degrees(self.direction_To_Guest))
+        return row, col
+
+    def turn_Face_To_Guest(self):
+        self.dir_To_Guest()
+        self.motion.turn_To_Course(self.direction_To_Guest)
+
+class Player():
+    def __init__(self, role, second_pressed_button, glob, motion, local):
+        self.role = role   #'goalkeeper', 'penalty_Goalkeeper', 'forward', 'penalty_Shooter'
+        self.second_pressed_button = second_pressed_button
+        self.glob = glob
+        self.motion = motion
+        self.local = local
+        self.g = None
+        self.f = None
+        if self.glob.SIMULATION == 5:
+            from Soccer.Motion.class_stm_channel import STM_channel
+            from Soccer.Vision.class_Vision_RPI import Vision_RPI
+            self.STM_channel = STM_channel
+            self.Vision_RPI = Vision_RPI
+
+    def play_game(self):
+        if self.role == 'goalkeeper': self.goalkeeper_main_cycle()
+        if self.role == 'penalty_Goalkeeper': self.penalty_Goalkeeper_main_cycle()
+        if self.role == 'side_to_side': self.side_to_side_main_cycle()
+        if self.role == 'forward': self.forward_main_cycle(self.second_pressed_button)
+        if self.role == 'forward_v2': self.forward_v2_main_cycle()
+        if self.role == 'forward1': self.forward1_main_cycle()
+        if self.role == 'penalty_Shooter': self.penalty_Shooter_main_cycle()
+        if self.role == 'run_test': self.run_test_main_cycle(self.second_pressed_button)
+        if self.role == 'rotation_test': self.rotation_test_main_cycle()
+        if self.role == 'sidestep_test': self.sidestep_test_main_cycle()
+        if self.role == 'obstacle_runner': self.obstacle_runner_main_cycle()
+        if self.role == 'dribbling': self.dribbling_main_cycle()
+        if self.role == 'ball_moving': self.ball_moving_main_cycle()
+        if self.role == 'dance': self.dance_main_cycle()
+        if self.role == 'quaternion_test': self.quaternion_test()
+        if self.role == 'corner_kick_1': self.corner_kick_1_main_cycle()
+        if self.role == 'corner_kick_2': self.corner_kick_2_main_cycle()
+        if self.role == 'dribbling': self.dribbling_main_cycle()
+        if self.role == 'test_walk': self.test_walk()
+        if self.role == 'kick_test': self.kick_test(self.second_pressed_button)
+        #print('self.glob.SIMULATION:', self.glob.SIMULATION)
+        if [0,1,3].count(self.glob.SIMULATION) == 1:
+            self.motion.sim_Stop()
+            if self.glob.SIMULATION != 0:
+                self.motion.print_Diagnostics()
+                pass
+            self.motion.sim_Disable()
+        sys.exit()
+
+    def rotation_test_main_cycle(self):
+        number_Of_Cycles = 10
+        stepLength = 0
+        sideLength = 0
+        self.motion.params['ROTATION_YIELD_RIGHT'] = 0.23
+        self.motion.params['ROTATION_YIELD_LEFT'] = 0.23
+        self.motion.refresh_Orientation()
+        first_yaw_measurement = self.motion.imu_body_yaw()
+        rotation = -0.23
+        self.motion.walk_Initial_Pose()
+        for cycle in range(number_Of_Cycles):
+            self.motion.walk_Cycle(stepLength,sideLength, rotation, cycle, number_Of_Cycles)
+        self.motion.walk_Final_Pose()
+        self.motion.refresh_Orientation()
+        second_yaw_measurement = self.motion.imu_body_yaw()
+        time.sleep(2)
+        rotation = 0.23
+        self.motion.walk_Initial_Pose()
+        for cycle in range(number_Of_Cycles):
+            self.motion.walk_Cycle(stepLength,sideLength, rotation, cycle, number_Of_Cycles)
+        self.motion.walk_Final_Pose()
+        self.motion.refresh_Orientation()
+        third_yaw_measurement = self.motion.imu_body_yaw()
+        if self.motion.glob.SIMULATION == 5:
+            filename = "/home/pi/Desktop/" + "Init_params/Real/Real_params.json"
+        else:
+            filename = self.glob.current_work_directory + "Init_params/Sim/" + "Sim_params.json"
+        with open(filename, "r") as f:
+            params = json.loads(f.read())
+            rotation_yield_right = abs(second_yaw_measurement - first_yaw_measurement) / 10
+            rotation_yield_left = abs(third_yaw_measurement - second_yaw_measurement) / 10
+            #rotation_yield = (rotation_yield_right + rotation_yield_left)/2
+            params['ROTATION_YIELD_RIGHT'] = round(rotation_yield_right, 3)
+            params['ROTATION_YIELD_LEFT'] = round(rotation_yield_left, 3)
+        jsonstring = '{\n"BODY_TILT_AT_WALK": ' + str(params["BODY_TILT_AT_WALK"]) \
+                    + ',\n"SOLE_LANDING_SKEW": ' + str(params["SOLE_LANDING_SKEW"]) \
+                    + ',\n"BODY_TILT_AT_KICK": ' + str(params["BODY_TILT_AT_KICK"]) \
+                    + ',\n"ROTATION_YIELD_RIGHT": ' + str(params["ROTATION_YIELD_RIGHT"]) \
+                    + ',\n"ROTATION_YIELD_LEFT": ' + str(params["ROTATION_YIELD_LEFT"]) \
+                    + ',\n"MOTION_SHIFT_TEST_X": ' + str(params["MOTION_SHIFT_TEST_X"]) \
+                    + ',\n"MOTION_SHIFT_TEST_Y": ' + str(params["MOTION_SHIFT_TEST_Y"]) \
+                    + ',\n"SIDE_STEP_RIGHT_TEST_RESULT": ' + str(params["SIDE_STEP_RIGHT_TEST_RESULT"]) \
+                    + ',\n"SIDE_STEP_LEFT_TEST_RESULT": ' + str(params["SIDE_STEP_LEFT_TEST_RESULT"]) \
+                    + ',\n"RUN_TEST_10_STEPS": ' + str(params["RUN_TEST_10_STEPS"]) \
+                    + ',\n"RUN_TEST_20_STEPS": ' + str(params["RUN_TEST_20_STEPS"]) \
+                    + ',\n"KICK_ADJUSTMENT_DISTANCE_1": ' + str(params["KICK_ADJUSTMENT_DISTANCE_1"]) \
+                    + ',\n"KICK_ADJUSTMENT_DISTANCE_2": ' + str(params["KICK_ADJUSTMENT_DISTANCE_2"]) \
+                    + ',\n"KICK_OFFSET_OF_BALL": ' + str(params["KICK_OFFSET_OF_BALL"]) \
+                    + ',\n"IMU_DRIFT_IN_DEGREES_DURING_6_MIN_MEASUREMENT": ' + str(params["IMU_DRIFT_IN_DEGREES_DURING_6_MIN_MEASUREMENT"]) \
+                    + '\n}'
+        with open(filename, "w") as f:
+            f.write(jsonstring)
+            #json.dump(params_new, f)
+        self.motion.turn_To_Course(math.pi/3*2)
+        self.motion.turn_To_Course(0)
+
+    def run_test_main_cycle(self, pressed_button, stepLength = 64):
+        if pressed_button == 'head_tilt_calibration':
+            #execfile("Head_Tilt_Calibration.py")
+            if self.motion.head_Tilt_Calibration():
+                self.motion.rcb.motionPlay(25)          # zummer
+            else: 
+                self.motion.rcb.motionPlay(25)          # zummer
+                time.sleep(0.2)
+                self.motion.rcb.motionPlay(25)          # zummer
+            return
+        self.motion.head_Return(0, self.motion.neck_play_pose)
+        if pressed_button == 'side_step_right' or pressed_button =='side_step_left' :
+            self.sidestep_test_main_cycle(pressed_button)
+            return
+        if pressed_button == 'rotation_right' or pressed_button =='rotation_left' :
+            self.rotation_test_main_cycle()
+            return
+
+        stepLength = 64
+        self.motion.gaitHeight = 180
+        if pressed_button == 'spot_run': stepLength = 0
+        number_Of_Cycles = 20
+        self.motion.amplitude = 32
+        if pressed_button == 'short_run': number_Of_Cycles = 10
+        sideLength = 0
+        #self.motion.first_Leg_Is_Right_Leg = False
+        if self.motion.first_Leg_Is_Right_Leg: invert = -1
+        else: invert = 1
+        self.motion.walk_Initial_Pose()
+        number_Of_Cycles += 1
+        for cycle in range(number_Of_Cycles):
+            stepLength1 = stepLength
+            if cycle ==0 : stepLength1 = stepLength/3
+            if cycle ==1 : stepLength1 = stepLength/3 * 2
+            self.motion.refresh_Orientation()
+            rotation = 0 + invert * self.motion.imu_body_yaw() * 1.1
+            #if rotation > 0: rotation *= 1.5
+            rotation = self.motion.normalize_rotation(rotation)
+            #rotation = 0
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+        self.motion.walk_Final_Pose()
+
+    def sidestep_test_main_cycle(self, pressed_button):
+        number_Of_Cycles = 20
+        stepLength = 0 #64
+        sideLength = 20
+        #if pressed_button == 'side_step_left':
+        #    self.motion.first_Leg_Is_Right_Leg = False
+        #if self.motion.first_Leg_Is_Right_Leg: invert = -1
+        #else: invert = 1
+        if pressed_button == 'side_step_left': sideLength = -20
+        else: sideLength = 20
+        invert = 1
+        self.motion.walk_Initial_Pose()
+        for cycle in range(number_Of_Cycles):
+            stepLength1 = stepLength
+            #if cycle ==0 : stepLength1 = stepLength/3
+            #if cycle ==1 : stepLength1 = stepLength/3 * 2
+            self.motion.refresh_Orientation()
+            rotation = 0 - invert * self.motion.imu_body_yaw() * 1.1
+            rotation = self.motion.normalize_rotation(rotation)
+            #rotation = 0
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+        self.motion.walk_Final_Pose()
+
+    def norm_yaw(self, yaw):
+        yaw %= 2 * math.pi
+        if yaw > math.pi:  yaw -= 2* math.pi
+        if yaw < -math.pi: yaw += 2* math.pi
+        return yaw
+
+    def forward_main_cycle(self, pressed_button):
+        #self.glob.with_pf = False
+        self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
+        if self.glob.SIMULATION == 5:
+            self.motion.rcb.motionPlay(25)          # zummer
+            labels = [[], [], [], ['start', 'start_later'], []]
+            pressed_button = self.motion.push_Button(labels)
+        second_player_timer = time.time()
+        self.glob.vision.camera_thread.start()
+        self.motion.control_Head_motion_thread.start()
+        if pressed_button == 'start':
+            self.motion.kick_off_ride()
+            first_look_point = None
+        else:
+            first_look_point= self.local.ball_odometry
+        while (True):
+            if (time.perf_counter() - self.motion.start_point_for_imu_drift) > 360:
+                self.motion.turn_To_Course(0)
+                self.motion.turn_To_Course(0, accurate = True)
+                if self.glob.SIMULATION == 5:
+                    for i in range(5):
+                        self.motion.rcb.motionPlay(25)
+                        self.motion.pause_in_ms(400)
+                break
+            if self.motion.falling_Flag != 0:
+                if self.motion.falling_Flag == 3: break
+                self.motion.falling_Flag = 0
+                self.local.coordinate_fall_reset()
+            if self.glob.SIMULATION == 5:
+                if self.glob.camera_down_Flag == True:
+                    self.glob.camera_down_Flag = False
+                    self.glob.vision.camera.picam2.close()
+                    self.glob.vision.event.set()
+                    new_stm_channel  = self.STM_channel(self.glob)
+                    self.glob.stm_channel = new_stm_channel
+                    self.glob.rcb = self.glob.stm_channel.rcb
+                    new_vision = self.Vision_RPI(self.glob)
+                    self.glob.vision = new_vision
+                    self.motion.vision = self.glob.vision
+                    self.local.vision = self.glob.vision
+                    self.glob.vision.camera_thread.start()
+            #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+            #                                                                  very_Fast = True, first_look_point=first_look_point)
+            time.sleep(1) # this is to look around for ball 
+            if self.glob.robot_see_ball > 0: 
+                self.glob.ball_coord = self.local.ball_odometry
+            self.glob.pf_coord = self.local.coord_odometry
+            time_elapsed = time.time() - second_player_timer
+            if self.glob.SIMULATION == 5: frozen_time = 10
+            else: frozen_time = 10
+            if pressed_button == 'start_later' and time_elapsed < frozen_time : 
+                #if self.glob.SIMULATION == 1: self.motion.sim_simxSynchronousTrigger(self.motion.clientID)
+                time.sleep(0.02)
+                continue
+            self.f.dir_To_Guest()
+            print('direction_To_Guest = ', round(math.degrees(self.f.direction_To_Guest)), 'degrees')
+            print('coord =', round(self.local.coord_odometry[0],2), round(self.local.coord_odometry[1],2), 'ball =', round(self.local.ball_odometry[0],2), round(self.local.ball_odometry[1],2))
+            if self.glob.robot_see_ball <= 0:
+                print('Seek ball')
+                self.motion.turn_To_Course(self.local.coord_odometry[2]+ 2 * math.pi / 3)
+                continue
+            player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0],
+                                                          self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
+            player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
+            player_in_front_of_ball = -math.pi/2 < player_from_ball_yaw < math.pi/2
+            player_in_fast_kick_position = (player_from_ball_yaw > 2.5 or player_from_ball_yaw < -2.5) and self.glob.ball_distance < 0.6
+            if self.glob.ball_distance > 0.35  and not player_in_fast_kick_position:
+                if self.glob.ball_distance > 3: stop_Over = True
+                else: stop_Over = False
+                direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
+                print('napravl :', self.glob.ball_course)
+                print('direction_To_Ball', direction_To_Ball)
+                #self.motion.far_distance_plan_approach(self.local.ball_odometry, self.f.direction_To_Guest, stop_Over = stop_Over)
+                self.motion.far_distance_straight_approach(self.local.ball_odometry, direction_To_Ball, stop_Over = stop_Over)
+                #self.go_Around_Ball(dist, napravl)
+                continue
+            if player_in_front_of_ball or not player_in_fast_kick_position:
+                self.go_Around_Ball(self.glob.ball_distance, self.glob.ball_course)
+                continue
+            if player_in_fast_kick_position:
+                self.motion.turn_To_Course(self.f.direction_To_Guest)
+                small_kick = False
+                if self.f.kick_Power > 1: small_kick = True
+                success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest, small_kick = small_kick)
+
+    def goalkeeper_main_cycle(self):
+        def ball_position_is_dangerous(row, col):
+            danger = False
+            danger = (col <= (round(self.glob.COLUMNS / 3) - 1))
+            if ((row <= (round(self.glob.ROWS / 3) - 1) or row >= round(self.glob.ROWS * 2 / 3)) and col == 0) or (col == 1 and (row == 0 or row == (self.glob.ROWS -1))):
+               danger = False
+            return danger
+        second_player_timer = time.time()
+        self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
+        #self.motion.near_distance_omni_motion(400, 0)                    # get out from goal
+        fast_Reaction_On = True
+        while (True):
+            if self.motion.falling_Flag != 0:
+                if self.motion.falling_Flag == 3: break
+                self.motion.falling_Flag = 0
+                #self.local.coordinate_fall_reset()
+            #if self.local.ball_odometry[0] <= 0.15:
+            #    success_Code, napravl, dist, speed =  self.motion.watch_Ball_In_Pose()
+            #else:
+            #    success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = fast_Reaction_On)
+            time.sleep(1) # this is to look around for ball
+            napravl, dist, speed = self.glob.ball_course, self.glob.ball_distance, self.glob.ball_speed
+            if abs(speed[0]) > 0.02 and dist < 1 :                         # if dangerous tangential speed
+                fast_Reaction_On = True
+                if speed[0] > 0:
+                    if self.local.coord_odometry[1] < 0.35:
+                        self.motion.play_Soft_Motion_Slot(name ='PenaltyDefenceL')
+                else:
+                    if self.local.coord_odometry[1] > -0.35:
+                        self.motion.play_Soft_Motion_Slot(name ='PenaltyDefenceR')
+                self.motion.pause_in_ms(3000)
+                self.motion.falling_Test()
+                continue
+            if speed[1] < - 0.01 and dist < 1.5 :                          # if dangerous front speed
+                fast_Reaction_On = True
+                self.motion.play_Soft_Motion_Slot(name = 'PanaltyDefenceReady_Fast')
+                self.motion.play_Soft_Motion_Slot(name = 'PenaltyDefenceF')
+                self.motion.pause_in_ms(3000)
+                self.motion.play_Soft_Motion_Slot(name = 'Get_Up_From_Defence')
+                continue
+            if (time.time() - second_player_timer) < 10 : continue
+            row, col = self.f.dir_To_Guest()
+            #print('direction_To_Guest = ', math.degrees(self.f.direction_To_Guest), 'degrees')
+            #print('goalkeeper coord =', self.glob.pf_coord, 'ball =', self.glob.ball_coord, 'row =', row, 'col =', col, 'ball_position_is_dangerous =', ball_position_is_dangerous(row,col))
+            if dist == 0 and self.glob.robot_see_ball <= 0:
+                if self.local.coord_odometry[0] > -1.3:
+                    print('goalkeeper turn_To_Course(pi*2/3)')
+                    self.motion.turn_To_Course(self.local.coord_odometry[2]+ 2 * math.pi / 3)
+                continue
+            if ball_position_is_dangerous(row, col):
+                fast_Reaction_On = True
+                player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0], self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
+                player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
+                player_in_front_of_ball = -math.pi/2 < player_from_ball_yaw < math.pi/2
+                player_in_fast_kick_position = (player_from_ball_yaw > 2 or player_from_ball_yaw < -2) and dist < 0.6
+                if dist > 0.35 and not player_in_fast_kick_position:
+                    if dist > 3: stop_Over = True
+                    else: stop_Over = False
+                    print('goalkeeper far_distance_plan_approach')
+                    direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
+                    self.motion.far_distance_straight_approach(self.local.ball_odometry, direction_To_Ball, stop_Over = stop_Over)
+                    #self.f.turn_Face_To_Guest()
+                    continue
+                if player_in_front_of_ball or not player_in_fast_kick_position:
+                    self.go_Around_Ball(dist, napravl)
+                    continue
+                print('goalkeeper turn_To_Course(direction_To_Guest)')
+                self.motion.turn_To_Course(self.f.direction_To_Guest)
+                small_kick = False
+                if self.f.kick_Power > 1: small_kick = True
+                print('goalkeeper near_distance_ball_approach_and_kick')
+                success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest, strong_kick = False, small_kick = small_kick)
+
+            else:
+                fast_Reaction_On = False
+                duty_x_position =  min((-self.glob.landmarks['FIELD_LENGTH']/2 + 0.4),(self.local.ball_odometry[0]-self.glob.landmarks['FIELD_LENGTH']/2)/2)
+                duty_y_position = self.local.ball_odometry[1] * (duty_x_position + self.glob.landmarks['FIELD_LENGTH']/2) / (self.local.ball_odometry[0] + self.glob.landmarks['FIELD_LENGTH']/2)
+                duty_distance = math.sqrt((duty_x_position - self.local.coord_odometry[0])**2 + (duty_y_position - self.local.coord_odometry[1])**2)
+                #print('duty_x_position =', duty_x_position, 'duty_y_position =', duty_y_position)
+                if duty_distance < 0.2 : continue
+                elif duty_distance <  3: #   0.6 :
+                    print('goalkeeper turn_To_Course(0)')
+                    self.motion.turn_To_Course(0)
+                    duty_direction = coord2yaw(duty_x_position - self.local.coord_odometry[0], duty_y_position - self.local.coord_odometry[1])
+                    print('goalkeeper near_distance_omni_motion')
+                    self.motion.near_distance_omni_motion(duty_distance * 1000, duty_direction)
+                    print('goalkeeper turn_To_Course(0)')
+                    self.motion.turn_To_Course(0)
+                else:
+                    direction_To_Duty = math.atan2((duty_y_position - self.local.coord_odometry[1]), (duty_x_position - self.local.coord_odometry[0]))
+                    self.motion.far_distance_straight_approach([duty_x_position , duty_y_position], direction_To_Duty, gap = 0, stop_Over = False)
+                    self.motion.turn_To_Course(0)
+
+
+    def penalty_Shooter_main_cycle(self):
+        self.f = Forward(self.motion, self.local, self.glob)
+        first_shoot = True
+        first_look_point = [0.9, 0]
+        self.glob.vision.camera_thread.start()
+        self.motion.control_Head_motion_thread.start()
+        self.motion.kick_off_ride()
+        while (True):
+            if self.motion.falling_Flag != 0:
+                if self.motion.falling_Flag == 3: break
+                self.motion.falling_Flag = 0
+                self.local.coordinate_fall_reset()
+            #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+            #                                                                  very_Fast = False, first_look_point=first_look_point )
+            if self.glob.robot_see_ball > 0: self.local.ball_position_calculation()
+            first_look_point = self.local.ball_odometry
+            self.f.dir_To_Guest()
+            print('ball_coord = ', self.local.ball_odometry)
+            print('direction_To_Guest = ', math.degrees(self.f.direction_To_Guest), 'degrees')
+            if self.glob.robot_see_ball <= 0:
+                self.motion.turn_To_Course(self.local.coord_odometry[2]+ 2 * math.pi / 3)
+                continue
+            player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0],
+                                                          self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
+            player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
+            player_in_front_of_ball = -math.pi/2 < player_from_ball_yaw < math.pi/2
+            player_in_fast_kick_position = (player_from_ball_yaw > 2.5 or player_from_ball_yaw < -2.5) and self.glob.ball_distance < 0.6
+            if self.glob.ball_distance > 0.35  and not player_in_fast_kick_position:
+                if self.glob.ball_distance> 3: stop_Over = True
+                else: stop_Over = False
+                direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
+                self.motion.far_distance_straight_approach(self.local.ball_odometry, direction_To_Ball, stop_Over = stop_Over)
+                continue
+            if player_in_front_of_ball or not player_in_fast_kick_position:
+                self.go_Around_Ball(self.glob.ball_distance, self.glob.ball_course)
+                continue
+            self.motion.turn_To_Course(self.f.direction_To_Guest)
+            #if first_shoot:
+            success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
+            first_shoot = False
+
+
+    def penalty_Goalkeeper_main_cycle(self):
+        self.g = GoalKeeper(self.motion, self.local, self.glob)
+        self.glob.obstacleAvoidanceIsOn = False
+        first_Get_Up = True
+        while (True):
+            dist = -1.0
+            if self.motion.falling_Flag != 0:
+                if self.motion.falling_Flag == 3: break
+                self.motion.falling_Flag = 0
+                self.local.coordinate_fall_reset()
+                self.g.turn_Face_To_Guest()
+                if first_Get_Up:
+                    first_Get_Up = False
+                    self.g.goto_Center()
+            while(dist < 0):
+                a, napravl, dist, speed = self.motion.watch_Ball_In_Pose(penalty_Goalkeeper = True)
+                napravl = self.glob.ball_course
+                dist = self.glob.ball_distance
+                speed = self.glob.ball_speed
+                #print('speed = ', speed, 'dist  =', dist , 'napravl =', napravl)
+                if abs(speed[0]) > 0.002 and dist < 1 :                         # if dangerous tangential speed
+                    if speed[0] > 0:
+                        self.motion.play_Motion_Slot(name ='PenaltyDefenceL')
+                    else:
+                        self.motion.play_Motion_Slot(name ='PenaltyDefenceR')
+                    continue
+                if speed[1] < - 0.01 and dist < 1.5 :                          # if dangerous front speed
+                    self.motion.play_Motion_Slot(name = 'PanaltyDefenceReady_Fast')
+                    self.motion.play_Motion_Slot(name = 'PenaltyDefenceF')
+                    self.motion.pause_in_ms(5000)
+                    self.motion.play_Motion_Slot(name = 'Get_Up_From_Defence')
+
+                if (dist == 0 and napravl == 0) or dist > 2.5:
+                    continue
+                old_neck_pan, old_neck_tilt = self.motion.head_Up()
+                if (dist <= 0.5         and 0 <= napravl <= math.pi/4):         self.g.scenario_A1( dist, napravl)
+                if (dist <= 0.5         and math.pi/4 < napravl <= math.pi/2):  self.g.scenario_A2( dist, napravl)
+                if (dist <= 0.5         and 0 >= napravl >= -math.pi/4):        self.g.scenario_A3( dist, napravl)
+                if (dist <= 0.7         and -math.pi/4 > napravl >= -math.pi/2): self.g.scenario_A4( dist, napravl)
+                if ((0.5 < dist < self.glob.landmarks['FIELD_LENGTH']/2) and (math.pi/18 <= napravl <= math.pi/4)): self.g.scenario_B1()
+                if ((0.5 < dist < self.glob.landmarks['FIELD_LENGTH']/2) and (math.pi/4 < napravl <= math.pi/2)): self.g.scenario_B2()
+                if ((0.5 < dist < self.glob.landmarks['FIELD_LENGTH']/2) and (-math.pi/18 >= napravl >= -math.pi/4)): self.g.scenario_B3()
+                if ((0.7 < dist < self.glob.landmarks['FIELD_LENGTH']/2) and (-math.pi/4 > napravl >= -math.pi/2)): self.g.scenario_B4()
+                self.motion.head_Return(old_neck_pan, old_neck_tilt)
+
+    def go_Around_Ball(self, dist, napravl):
+        print('go_Around_Ball')
+        turning_radius = 0.20 # meters
+        #first_look_point= self.local.ball_odometry
+        #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+        #                                                                  very_Fast = True, first_look_point=first_look_point)
+        #if success_Code != True: return
+        if dist > 0.5: return
+        correction_x = dist * math.cos(napravl)
+        correction_y = dist * math.sin(napravl)
+        alpha = self.f.direction_To_Guest - self.local.coord_odometry[2]
+        alpha = self.motion.norm_yaw(alpha)
+        initial_body_yaw = self.local.coord_odometry[2]
+        correction_napravl = math.atan2(correction_y, (correction_x - turning_radius))
+        correction_dist = math.sqrt(correction_y**2 + (correction_x - turning_radius)**2)
+        old_neck_pan, old_neck_tilt = self.motion.head_Up()
+        if napravl * alpha > 0:
+            if napravl > 0: self.motion.first_Leg_Is_Right_Leg = False
+            self.motion.walk_Initial_Pose()
+            if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+            self.motion.turn_To_Course(self.local.coord_odometry[2] + napravl, one_Off_Motion = False)
+            if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+            self.motion.walk_Restart()
+            if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+            self.motion.near_distance_omni_motion((dist - turning_radius) * 1000 , 0, one_Off_Motion = False)
+            alpha = self.motion.norm_yaw(alpha - napravl)
+            initial_body_yaw += napravl
+        else:
+            if correction_napravl > 0: self.motion.first_Leg_Is_Right_Leg = False
+            self.motion.walk_Initial_Pose()
+            if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+            self.motion.near_distance_omni_motion(correction_dist*1000, correction_napravl, one_Off_Motion = False)
+        if alpha >= 0:
+            if self.motion.first_Leg_Is_Right_Leg == False:
+                change_legs = True
+            else:
+                change_legs = False
+                self.motion.walk_Restart()
+            self.motion.first_Leg_Is_Right_Leg = True
+            side_step_yield = self.motion.side_step_right_yield
+            invert = 1
+        else:
+            if self.motion.first_Leg_Is_Right_Leg == True:
+                change_legs = True
+            else:
+                change_legs = False
+                self.motion.walk_Restart()
+            self.motion.first_Leg_Is_Right_Leg = False
+            side_step_yield = self.motion.side_step_left_yield
+            invert = -1
+        #print('6self.motion.first_Leg_Is_Right_Leg:', self.motion.first_Leg_Is_Right_Leg)
+        yaw_increment_at_side_step = 2 * math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
+        number_Of_Cycles = int(round(abs(alpha / yaw_increment_at_side_step)))+1
+        stepLength = 0
+        sideLength = 40
+        for cycle in range(number_Of_Cycles):
+            self.motion.refresh_Orientation()
+            rotation = initial_body_yaw + cycle * yaw_increment_at_side_step - self.motion.imu_body_yaw() * 1.1
+            rotation = self.motion.normalize_rotation(rotation)
+            #rotation = 0
+            if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+            self.motion.walk_Cycle(stepLength, sideLength, invert*rotation, cycle, number_Of_Cycles)
+        if self.motion.falling_Flag == 3 : self.motion.falling_Flag = 0 
+        self.motion.walk_Final_Pose()
+        self.motion.first_Leg_Is_Right_Leg = True
+
+    def dance_main_cycle(self):
+        if self.glob.SIMULATION == 5:
+            # while True:
+            #     self.motion.refresh_Orientation()
+            #     print('\rbody pitch: ', round(self.motion.body_euler_angle['pitch'],3), '\tbody roll : ', round(self.motion.body_euler_angle['roll'], 3),
+            #           '\tbody yaw: ', round(self.motion.body_euler_angle['yaw'], 3),
+            #           '\thead pitch: ', round(self.motion.euler_angle['pitch'], 3),
+            #           '\thead roll : ', round(self.motion.euler_angle['roll'], 3),
+            #           '\thead yaw: ', round(self.motion.euler_angle['yaw'], 3), end='' )
+            #     time.sleep(1)
+                
+            self.motion.play_Soft_Motion_Slot( name = 'Basketball3')
+#             while True:
+#                 successCode, u10 = self.motion.rcb.getUserParameter(10)
+#                 #time.sleep(2)
+#                 if successCode and u10 == 1:
+#                     self.motion.rcb.motionPlay(26)
+#                     for i in range(10):
+#                         self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
+#                     self.motion.play_Soft_Motion_Slot( name = 'Dance_7-1')
+#                     self.motion.play_Soft_Motion_Slot( name = 'Dance_7-2')
+#                     for i in range(9):
+#                         self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
+#                     self.motion.play_Soft_Motion_Slot( name = 'Dance_2')
+#                     for i in range(2):
+#                         self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
+#                     self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
+#                     self.motion.rcb.setUserParameter(10,0)
+        else:
+            for i in range(10):
+                self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
+            self.motion.play_Soft_Motion_Slot( name = 'Dance_7')
+            self.motion.play_Soft_Motion_Slot( name = 'Dance_2')
+            self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
+
+    def test_walk(self):
+        self.motion.first_Leg_Is_Right_Leg == True
+        self.motion.walk_Restart()
+        return
+        #self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
+        #self.go_Around_Ball(0.5, -0.5)
+        number_Of_Cycles = 5
+        stepLength = 20
+        self.motion.gaitHeight = 180
+        sideLength = -20
+        #self.motion.first_Leg_Is_Right_Leg = False
+        if self.motion.first_Leg_Is_Right_Leg: invert = 1
+        else: invert = -1
+        self.motion.walk_Initial_Pose()
+        number_Of_Cycles += 1
+        for cycle in range(number_Of_Cycles):
+            stepLength1 = stepLength
+            #if cycle ==0 : stepLength1 = stepLength/3
+            #if cycle ==1 : stepLength1 = stepLength/3 * 2
+            self.motion.refresh_Orientation()
+            rotation = 0 - self.motion.imu_body_yaw() * 1.2
+            rotation = self.motion.normalize_rotation(rotation)
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
+        #self.motion.first_Leg_Is_Right_Leg == False
+        self.motion.walk_Restart()
+        #self.motion.first_Leg_Is_Right_Leg == False
+        sideLength = 20
+        invert = 1
+        for cycle in range(number_Of_Cycles):
+            stepLength1 = stepLength
+            #if cycle ==0 : stepLength1 = stepLength/3
+            #if cycle ==1 : stepLength1 = stepLength/3 * 2
+            self.motion.refresh_Orientation()
+            rotation = 0 - self.motion.imu_body_yaw() * 1.2
+            rotation = self.motion.normalize_rotation(rotation)
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
+        self.motion.walk_Restart()
+        #self.motion.first_Leg_Is_Right_Leg == True
+        sideLength = -20
+        invert = 1
+        for cycle in range(number_Of_Cycles):
+            stepLength1 = stepLength
+            #if cycle ==0 : stepLength1 = stepLength/3
+            #if cycle ==1 : stepLength1 = stepLength/3 * 2
+            self.motion.refresh_Orientation()
+            rotation = 0 - self.motion.imu_body_yaw() * 1.2
+            rotation = self.motion.normalize_rotation(rotation)
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+        self.motion.walk_Final_Pose()
+
+    def kick_test(self, second_pressed_button):
+        if second_pressed_button == 'regular':
+            self.motion.kick(True)
+        else:
+            self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v2')
+        if self.glob.SIMULATION == 1:
+            self.motion.sim_Progress(10)
+        
+
+        
+
+
+
+if __name__=="__main__":
+    pass
