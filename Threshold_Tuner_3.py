@@ -498,6 +498,19 @@ class mywindow(QtWidgets.QMainWindow):
                         bmin = self.ui.horizontalSlider_B_min.value()
                         bmax = self.ui.horizontalSlider_B_max.value()
                         self.threshold_Dict[self.current_device]['th'] = [lmin, lmax, amin, amax, bmin, bmax]
+            else:
+                if self.glob.camera_down_Flag == True:
+                    self.glob.camera_down_Flag = False
+                    self.glob.vision.camera.picam2.close()
+                    self.glob.vision.event.set()
+                    new_stm_channel  = self.STM_channel(self.glob)
+                    self.glob.stm_channel = new_stm_channel
+                    self.glob.rcb = self.glob.stm_channel.rcb
+                    new_vision = self.Vision_RPI(self.glob)
+                    self.glob.vision = new_vision
+                    self.motion.vision = self.glob.vision
+                    self.local.vision = self.glob.vision
+                    self.glob.vision.camera_thread.start()
             #print('FPS:', 1/(time.perf_counter() - timer))
             timer = time.perf_counter()
 
