@@ -509,7 +509,7 @@ class mywindow(QtWidgets.QMainWindow):
                     new_vision = self.Vision(self.glob)
                     self.glob.vision = new_vision
                     self.motion.vision = self.glob.vision
-                    self.local.vision = self.glob.vision
+                    #self.local.vision = self.glob.vision
                     self.glob.vision.camera_thread.start()
             #print('FPS:', 1/(time.perf_counter() - timer))
             timer = time.perf_counter()
