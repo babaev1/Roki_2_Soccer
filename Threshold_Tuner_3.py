@@ -503,7 +503,7 @@ class mywindow(QtWidgets.QMainWindow):
                     self.glob.camera_down_Flag = False
                     self.glob.vision.camera.picam2.close()
                     self.glob.vision.event.set()
-                    new_stm_channel  = self.STM_channel(self.glob)
+                    new_stm_channel  = self.glob.STM_channel_class(self.glob)
                     self.glob.stm_channel = new_stm_channel
                     self.glob.rcb = self.glob.stm_channel.rcb
                     new_vision = self.Vision_RPI(self.glob)

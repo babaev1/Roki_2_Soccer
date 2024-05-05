@@ -35,6 +35,7 @@ class Glob:
                 self.target_wifi_address = (self.wifi_params['HOST'], self.wifi_params['PORT'])
         elif self.SIMULATION == 5 :
             from Soccer.Motion.class_stm_channel import STM_channel
+            self.STM_channel_class = STM_channel
             #import usocket, network
             landmarks_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_landmarks.json"
             params_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_params.json"
