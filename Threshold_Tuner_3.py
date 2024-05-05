@@ -506,7 +506,7 @@ class mywindow(QtWidgets.QMainWindow):
                     new_stm_channel  = self.glob.STM_channel_class(self.glob)
                     self.glob.stm_channel = new_stm_channel
                     self.glob.rcb = self.glob.stm_channel.rcb
-                    new_vision = self.Vision_RPI(self.glob)
+                    new_vision = self.Vision(self.glob)
                     self.glob.vision = new_vision
                     self.motion.vision = self.glob.vision
                     self.local.vision = self.glob.vision
