@@ -22,9 +22,9 @@ class Vision_RPI(Vision_General):
         self.focal_length_horizontal = P_matrix[0,0]
         self.focal_length_vertical = P_matrix[1,1]
         self.camera = Camera()
-        self.glob.stm_channel.mb.SetStrobeOffset(5)   # the best value of strobe offset is 9 for 30fps and 5 for 60fps
+        self.glob.stm_channel.mb.SetIMUStrobeOffset(5)   # the best value of strobe offset is 9 for 30fps and 5 for 60fps
         self.glob.stm_channel.mb.ConfigureStrobeFilter(CAMERA_FRAME_DURATION_US//1000, 4)
-        self.glob.stm_channel.mb.ResetIMUCounter()
+        self.glob.stm_channel.mb.ResetStrobeContainers()
         self.camera.start(exposure = self.TH['exposure'], gain = self.TH['gain'], frame_duration_us = CAMERA_FRAME_DURATION_US)
         self.led = Led()
         self.camera_sleep = 0.1

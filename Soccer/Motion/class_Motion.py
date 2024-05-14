@@ -107,7 +107,7 @@ class Motion(Robot):
 
     def wait_for_gueue_end(self):
         for _ in range(1000):
-            if self.stm_channel.mb.GetQueueInfo().NumRequests < 2: break
+            if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 2: break
             time.sleep(0.002)
 
     def imu_body_yaw(self):
@@ -224,7 +224,7 @@ class Motion(Robot):
                     a=self.rcb.setServoPosAsync(servoDatas, frames_number, frames_number-1)
 
             while True:
-                if self.stm_channel.mb.GetQueueInfo().NumRequests < 1: break
+                if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 1: break
                 time.sleep(0.02)
                 #self.pyb.delay(30 * frames_number)
                 #self.pyb.delay(250 )
@@ -282,12 +282,12 @@ class Motion(Robot):
         if self.glob.SIMULATION == 5:
             if self.body_euler_angle['pitch'] > 1:                  # on stomach
                 self.falling_Flag = 1                               # on stomach
-                self.stm_channel.mb.ResetQueue()                    # cleans queue of commands to controller
+                self.stm_channel.mb.ResetBodyQueue()                    # cleans queue of commands to controller
                 self.play_Soft_Motion_Slot(name = self.model + '_Get_UP_Stomach')
                 time.sleep(1)
             if self.body_euler_angle['pitch'] < -1:
                 self.falling_Flag = -1                              # face up
-                self.stm_channel.mb.ResetQueue()                    # cleans queue of commands to controller
+                self.stm_channel.mb.ResetBodyQueue()                    # cleans queue of commands to controller
                 self.play_Soft_Motion_Slot(name = self.model + '_Get_UP_Face_Up')
             if self.body_euler_angle['roll'] > 1: 
                 self.falling_Flag = -2                              # on right side
@@ -402,7 +402,7 @@ class Motion(Robot):
         if self.glob.SIMULATION == 5:
             self.rcb.motionPlay(3)
             while True:
-                if self.stm_channel.mb.GetQueueInfo().NumRequests < 1: break
+                if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 1: break
                 time.sleep(0.02)
         for j in range (self.initPoses):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
@@ -555,7 +555,7 @@ class Motion(Robot):
         self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
         if self.glob.SIMULATION == 5:
             while True:
-                if self.stm_channel.mb.GetQueueInfo().NumRequests < 3: break
+                if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
                 time.sleep(0.02)
         fase_offset = 0.7
         for iii in range(0,frameNumberPerCycle,framestep):
@@ -714,7 +714,7 @@ class Motion(Robot):
         framestep = self.simThreadCycleInMs//10
         if self.glob.SIMULATION == 5:
             while True:
-                if self.stm_channel.mb.GetQueueInfo().NumRequests < 3: break
+                if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
                 time.sleep(0.02)
         for j in range (self.initPoses):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
@@ -792,7 +792,7 @@ class Motion(Robot):
         pose_taking_cycles = 2
         if self.glob.SIMULATION == 5:
             while True:
-                if self.stm_channel.mb.GetQueueInfo().NumRequests < 3: break
+                if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
                 time.sleep(0.02)
         for j in range (pose_taking_cycles):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
@@ -886,7 +886,7 @@ class Motion(Robot):
         fase_offset = 0.7
         if self.glob.SIMULATION == 5:
             while True:
-                if self.stm_channel.mb.GetQueueInfo().NumRequests < 3: break
+                if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
                 time.sleep(0.02)
         for iii in range(0,frameNumberPerCycle,framestep):
             if self.glob.SIMULATION == 2: start1 = self.pyb.millis()
@@ -1043,7 +1043,7 @@ class Motion(Robot):
         pose_taking_cycles = 2
         if self.glob.SIMULATION == 5:
             while True:
-                if self.stm_channel.mb.GetQueueInfo().NumRequests < 3: break
+                if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
                 time.sleep(0.02)
 
         for j in range (pose_taking_cycles):

@@ -19,21 +19,32 @@ class STM_channel():
         self.rcb = Roki.Rcb4(self.mb)
 
     def read_quaternion_from_imu_in_head(self, frame_number = None):
-        try:
-            if frame_number != None:
-                fr = self.mb.GetOrientationBySeq(frame_number)
-            else:
-                fr = self.mb.GetCurrentOrientation()
-        except Exception: 
-            info = self.mb.GetIMUInfo()
+        if frame_number != None:
+            ok, fr = self.mb.GetIMUFrame(frame_number)
+        else:
+            ok, fr = self.mb.GetIMULatest()
+        if not ok:
+            ok, info = self.mb.GetIMUContainerInfo()
             print("Imu info: " + "  First: " + str(info.First), "  NumAv: " + str(info.NumAv), "  MaxFr: " + str(info.MaxFrames))
             print('error : ', 'frame_number = ', frame_number)
             if frame_number < info.First: self.glob.camera_down_Flag = True
             return (0,0,0,0,0,0)
+        # try:
+        #     if frame_number != None:
+        #         fr = self.mb.GetOrientationBySeq(frame_number)
+        #     else:
+        #         fr = self.mb.GetCurrentOrientation()
+        # except Exception: 
+        #     info = self.mb.GetIMUInfo()
+        #     print("Imu info: " + "  First: " + str(info.First), "  NumAv: " + str(info.NumAv), "  MaxFr: " + str(info.MaxFrames))
+        #     print('error : ', 'frame_number = ', frame_number)
+        #     if frame_number < info.First: self.glob.camera_down_Flag = True
+        #     return (0,0,0,0,0,0)
         return fr.Orientation.X, fr.Orientation.Y, fr.Orientation.Z, fr.Orientation.W, fr.Timestamp.TimeS, fr.Timestamp.TimeNS
     
     def read_quaternion_from_imu_in_body(self):
         result, quat_bytes = self.rcb.moveRamToComCmdSynchronize(0x0060, 8)
+        print("read_quaternion_from_imu_in_body, quat_bytes: ", quat_bytes)
         try:
             quat = struct.unpack('<hhhh', bytes(quat_bytes))
         except Exception: return False, (0,0,0,1)
@@ -71,13 +82,11 @@ class STM_channel():
         return pitch
 
 if __name__ == '__main__':
-    stm_channel = STM_channel()
+    stm_channel = STM_channel(1)
     start_time = time.perf_counter()
     cycles = 100
     for _ in range(cycles):
-        try:
-            imu_pitch, imu_roll, imu_yaw = stm_channel.pitch_roll_yaw_from_imu_in_head(frame_number = None, degrees = True)
-        except Roki.MotherboardException: pass
+        result, imu_pitch, imu_roll, imu_yaw = stm_channel.pitch_roll_yaw_from_imu_in_head(frame_number = None, degrees = True)
         print('\r', 'yaw = ', imu_yaw, 'pitch = ', imu_pitch, 'roll = ', imu_roll, end='')
     time_elapsed = time.perf_counter() - start_time
     print('\n Rate : ', int(cycles/ time_elapsed), ' FPS')

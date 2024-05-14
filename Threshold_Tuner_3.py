@@ -509,8 +509,11 @@ class mywindow(QtWidgets.QMainWindow):
                     new_vision = Vision(self.glob)
                     self.glob.vision = new_vision
                     self.motion.vision = self.glob.vision
-                    #self.local.vision = self.glob.vision
-                    self.glob.vision.camera_thread.start()
+                    self.vision = self.glob.vision
+                    self.vision.camera.picam2.set_controls({"ExposureTime": self.threshold_Dict['exposure']})
+                    self.vision.camera.picam2.set_controls({"AnalogueGain": self.threshold_Dict['gain']})
+                    self.vision.TH = self.threshold_Dict
+                    self.vision.camera_thread.start()
             #print('FPS:', 1/(time.perf_counter() - timer))
             timer = time.perf_counter()
 

@@ -167,7 +167,7 @@ class Vision_General:
             camera_result, img1, pitch, roll, yaw, pan = self.snapshot()
             if camera_result:
                 img = Image(img1)
-                self.display_camera_image(self.image, window = 'Original')
+                #self.display_camera_image(self.image, window = 'Original')
                 ball_column, ball_row = 0, 0
                 for blob in img.find_blobs([self.TH['orange ball']['th']],
                                     pixels_threshold=self.TH['orange ball']['pixel'],

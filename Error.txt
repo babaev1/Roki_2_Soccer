@@ -1,6 +1,12 @@
 Traceback (most recent call last):
-  File "/home/pi/Desktop/Roki_2_Soccer/main_killable.py", line 68, in <module>
-    vision = Vision_RPI(glob)
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/class_Vision_RPI.py", line 28, in __init__
-    self.camera.start(exposure = self.TH['exposure'], gain = self.TH['gain'], frame_duration_us = CAMERA_FRAME_DURATION_US)
-KeyError: 'exposure'
+  File "main_killable.py", line 91, in <module>
+    player.play_game()
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 217, in play_game
+    if self.role == 'run_test': self.run_test_main_cycle(self.second_pressed_button)
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 334, in run_test_main_cycle
+    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion.py", line 525, in walk_Cycle
+    if not self.falling_Test() == 0:
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion.py", line 285, in falling_Test
+    self.stm_channel.mb.ResetQueue()                    # cleans queue of commands to controller
+AttributeError: 'Roki.Motherboard' object has no attribute 'ResetQueue'

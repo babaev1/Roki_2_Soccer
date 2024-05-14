@@ -48,7 +48,7 @@ class Glob:
             self.params = json.loads(f.read())
         with open(params_2_filename, "r") as f:
             self.params.update(json.loads(f.read()))
-        if self.SIMULATION == 5 : self.stm_channel.mb.SetQueuePeriod(self.params['FRAME_DELAY'])
+        if self.SIMULATION == 5 : self.stm_channel.mb.SetBodyQueuePeriod(self.params['FRAME_DELAY'])
         self.first_step_yield = (19 * self.params['RUN_TEST_10_STEPS'] - 9 * self.params['RUN_TEST_20_STEPS']) / 10
         self.cycle_step_yield = ( self.params['RUN_TEST_20_STEPS'] - self.params['RUN_TEST_10_STEPS']) / 10
         self.side_step_right_yield = self.params['SIDE_STEP_RIGHT_TEST_RESULT'] / 20
