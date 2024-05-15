@@ -44,7 +44,7 @@ class STM_channel():
     
     def read_quaternion_from_imu_in_body(self):
         result, quat_bytes = self.rcb.moveRamToComCmdSynchronize(0x0060, 8)
-        print("read_quaternion_from_imu_in_body, quat_bytes: ", quat_bytes)
+        #print("read_quaternion_from_imu_in_body, quat_bytes: ", quat_bytes)
         try:
             quat = struct.unpack('<hhhh', bytes(quat_bytes))
         except Exception: return False, (0,0,0,1)

@@ -640,7 +640,7 @@ class Motion(Robot):
                 self.xtr -= dx0
                 self.ytr += dy0
             angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA )
-            print('iii = ', iii, 'xtr =', round(self.xtr,2), 'xtl =', round(self.xtl, 2))
+            #print('iii = ', iii, 'xtr =', round(self.xtr,2), 'xtl =', round(self.xtl, 2))
             if not self.falling_Flag ==0: return
             if len(angles)==0:
                 print('bad_ik_calc:', 'iii = ', iii, 'xtr:', self.xtr, 'ytr:', self.ytr, 'ztr:', self.ztr, 'xtl:', self.xtl, 'ytl:', self.ytl, 'ztl:', self.ztl )
