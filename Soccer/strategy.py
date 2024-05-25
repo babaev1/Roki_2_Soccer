@@ -371,8 +371,8 @@ class Player():
             labels = [[], [], [], ['start', 'start_later'], []]
             pressed_button = self.motion.push_Button(labels)
         second_player_timer = time.time()
-        self.glob.vision.camera_thread.start()
-        self.motion.control_Head_motion_thread.start()
+        #self.glob.vision.camera_thread.start()
+        #self.motion.control_Head_motion_thread.start()
         if pressed_button == 'start':
             self.motion.kick_off_ride()
             first_look_point = None
@@ -393,6 +393,7 @@ class Player():
                 self.local.coordinate_fall_reset()
             if self.glob.SIMULATION == 5:
                 if self.glob.camera_down_Flag == True:
+                    print('Camera resetting')
                     self.glob.camera_down_Flag = False
                     self.glob.vision.camera.picam2.close()
                     self.glob.vision.event.set()
@@ -406,7 +407,8 @@ class Player():
                     self.glob.vision.camera_thread.start()
             #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
             #                                                                  very_Fast = True, first_look_point=first_look_point)
-            time.sleep(1) # this is to look around for ball 
+            #time.sleep(1) # this is to look around for ball 
+            self.glob.vision.detect_Ball_in_One_Shot()
             if self.glob.robot_see_ball > 0: 
                 self.glob.ball_coord = self.local.ball_odometry
             self.glob.pf_coord = self.local.coord_odometry

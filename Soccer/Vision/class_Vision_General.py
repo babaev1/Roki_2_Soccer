@@ -200,6 +200,7 @@ class Vision_General:
         else: return True, course, distance, speed
 
     def detect_Ball_in_Stream(self, event):
+        print('Ball detection in stream started')
         while True:
             result, course, distance, speed = self.detect_Ball_Speed()
             if result or distance != 0:
@@ -223,6 +224,24 @@ class Vision_General:
             else: self.glob.robot_see_ball -= 1
             time.sleep(self.camera_sleep)
             if event.is_set(): break
+        print('Ball detection in stream terminated')
+
+    def detect_Ball_in_One_Shot(self):
+        result, course, distance, speed = self.detect_Ball_Speed()
+        if result or distance != 0:
+            self.glob.motion.refresh_Orientation()
+            yaw = self.glob.local.coord_odometry[2] = self.glob.motion.imu_body_yaw()
+            course_global_rad = course + yaw
+            proforma_ball_coord = [distance * math.cos(course_global_rad) + self.glob.local.coord_odometry[0],
+                                    distance * math.sin(course_global_rad) + self.glob.local.coord_odometry[1]]
+            self.glob.local.ball_odometry = [self.glob.local.ball_odometry[0] * 0.5 + proforma_ball_coord[0] * 0.5,
+                                                self.glob.local.ball_odometry[1] * 0.5 + proforma_ball_coord[1] * 0.5]
+            self.glob.ball_course = course
+            self.glob.ball_distance = distance
+            self.glob.ball_speed = speed
+            self.glob.robot_see_ball = 5
+        else: self.glob.robot_see_ball -= 1
+
 
 if __name__=="__main__":
     pass

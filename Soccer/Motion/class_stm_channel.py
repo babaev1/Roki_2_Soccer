@@ -8,6 +8,7 @@ from math import pi
 class STM_channel():
     def __init__(self, glob):
         self.glob = glob
+        self.glob.Roki = Roki
         self.mb = Roki.Motherboard()
         conf = Roki.TTYConfig()
         conf.Port = "/dev/ttyAMA2"
@@ -24,6 +25,8 @@ class STM_channel():
         else:
             ok, fr = self.mb.GetIMULatest()
         if not ok:
+            print(self.mb.GetError())
+            print ('strobe width :', self.mb.GetStrobeWidth())
             ok, info = self.mb.GetIMUContainerInfo()
             print("Imu info: " + "  First: " + str(info.First), "  NumAv: " + str(info.NumAv), "  MaxFr: " + str(info.MaxFrames))
             print('error : ', 'frame_number = ', frame_number)

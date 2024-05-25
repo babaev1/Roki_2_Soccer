@@ -6,6 +6,8 @@ class Camera:
     def __init__(self):
         self.frame_number_counter = None
         self.picam2 = None
+        self.last_frame_number = 0   
+        self.last_frame_time = 0    # frame timestamp in us
 
     class Frame_number_counter:
         def __init__(self):
@@ -25,6 +27,9 @@ class Camera:
                 #     self.list_of_Timestamps = self.list_of_Timestamps[40:]
                 #     self.head_of_Timestamps += 40
                 
+        def do_nothing(self, request):
+            pass
+
     def start(self, exposure = None, gain = None, frame_duration_us = 16700):
         self.picam2 = Picamera2(camera_num=0)
         self.frame_number_counter = self.Frame_number_counter()
@@ -42,7 +47,18 @@ class Camera:
         self.picam2.set_controls({"FrameDurationLimits": (frame_duration_us, frame_duration_us)})
         self.picam2.set_controls({"AwbEnable": False})
         for _ in range(50):
-            if len(self.frame_number_counter.list_of_Timestamps) > 0: return True
+            if len(self.frame_number_counter.list_of_Timestamps) > 0: break
+            time.sleep(0.02)
+        self.picam2.pre_callback = self.frame_number_counter.do_nothing
+        for _ in range(50):
+            request = self.picam2.capture_request()
+            if request:
+                frame_duration = request.get_metadata()['FrameDuration']
+                if (frame_duration_us - 1000) < frame_duration < (frame_duration_us + 1000) :
+                    frame_timestamp = request.get_metadata()['SensorTimestamp']
+                    self.last_frame_time = frame_timestamp / 1000 
+                    self.last_frame_number = 2
+                    return True
             time.sleep(0.02)
         return False
         
@@ -50,21 +66,26 @@ class Camera:
         request = self.picam2.capture_request()
         frame_timestamp = request.get_metadata()['SensorTimestamp']
         frame_duration = request.get_metadata()['FrameDuration']
-        try:
-            frame_number = self.frame_number_counter.list_of_Timestamps.index(frame_timestamp)\
-                            + self.frame_number_counter.head_of_Timestamps
-            total_number_of_frames = len(self.frame_number_counter.list_of_Timestamps) + self.frame_number_counter.head_of_Timestamps
-            self.frame_number_counter.last_processed_frame_number = frame_number
-        except Exception:
-            frame_number = None
-            total_number_of_frames = None
+        # try:
+        #     frame_number = self.frame_number_counter.list_of_Timestamps.index(frame_timestamp)\
+        #                     + self.frame_number_counter.head_of_Timestamps
+        #     total_number_of_frames = len(self.frame_number_counter.list_of_Timestamps) + self.frame_number_counter.head_of_Timestamps
+        #     self.frame_number_counter.last_processed_frame_number = frame_number
+        # except Exception:
+        #     frame_number = None
+        #     total_number_of_frames = None
+        frame_number = self.last_frame_number + int(round((frame_timestamp / 1000 - self.last_frame_time) / frame_duration))
+        self.last_frame_number = frame_number
+        self.last_frame_time = frame_timestamp / 1000
         #print('frame_number: ', frame_number )
         image = request.make_array("lores")  # image from the "main" stream
         request.release()
         image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
         #image = cv2.cvtColor(image, cv2.COLOR_YUV420p2RGB)
         image = image[0:650,0:800,0:3]
-        return image, frame_number, total_number_of_frames, frame_timestamp, frame_duration
+        #cv2.imshow("Camera", image)
+        #cv2.waitKey(10)
+        return image, frame_number
     
     def stop(self):
         self.picam2.stop()

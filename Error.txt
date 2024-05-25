@@ -1,12 +1,12 @@
 Traceback (most recent call last):
-  File "main_killable.py", line 91, in <module>
+  File "/home/pi/Desktop/Roki_2_Soccer/main_killable.py", line 91, in <module>
     player.play_game()
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 217, in play_game
-    if self.role == 'run_test': self.run_test_main_cycle(self.second_pressed_button)
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 334, in run_test_main_cycle
-    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion.py", line 525, in walk_Cycle
-    if not self.falling_Test() == 0:
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion.py", line 285, in falling_Test
-    self.stm_channel.mb.ResetQueue()                    # cleans queue of commands to controller
-AttributeError: 'Roki.Motherboard' object has no attribute 'ResetQueue'
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 213, in play_game
+    if self.role == 'forward': self.forward_main_cycle(self.second_pressed_button)
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 445, in forward_main_cycle
+    self.go_Around_Ball(self.glob.ball_distance, self.glob.ball_course)
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 671, in go_Around_Ball
+    self.motion.walk_Restart()
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion_real.py", line 1014, in walk_Restart
+    if self.stm_channel.mb.GetQueueInfo().NumRequests < 1: break
+AttributeError: 'Roki.Motherboard' object has no attribute 'GetQueueInfo'

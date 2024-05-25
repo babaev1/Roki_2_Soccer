@@ -34,12 +34,15 @@ class Glob:
                 self.udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 self.target_wifi_address = (self.wifi_params['HOST'], self.wifi_params['PORT'])
         elif self.SIMULATION == 5 :
+            from Soccer.Vision.camera import Camera
             from Soccer.Motion.class_stm_channel import STM_channel
+            self.camera = Camera()
             self.STM_channel_class = STM_channel
             #import usocket, network
             landmarks_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_landmarks.json"
             params_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_params.json"
             params_2_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_params_2.json"
+            self.Roki = None
             self.stm_channel = STM_channel(self)
             self.rcb = self.stm_channel.rcb
         with open(landmarks_filename, "r") as f:

@@ -1009,10 +1009,11 @@ class Motion_real(Motion):
         self.ztr = - self.gaitHeight
         self.ztl = - self.gaitHeight
         if self.glob.SIMULATION == 5:
-            self.rcb.motionPlay(2)
-            while True:
-                if self.stm_channel.mb.GetQueueInfo().NumRequests < 1: break
-                time.sleep(0.02)
+            self.rcb.motionPlay(3)
+            self.wait_for_gueue_end()
+            # while True:
+            #     if self.stm_channel.mb.GetQueueInfo().NumRequests < 1: break
+            #     time.sleep(0.02)
         for j in range (initPoses):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
             self.ytr = -self.d10 + (initPoses-(j+1))*self.amplitude/2 /initPoses
@@ -1070,10 +1071,11 @@ class Motion_real(Motion):
             else: uprint('FALLING!!!', self.falling_Flag)
             return[]
         if self.glob.SIMULATION == 5:
-            self.rcb.motionPlay(2)
-            while True:
-                if self.stm_channel.mb.GetQueueInfo().NumRequests < 1: break
-                time.sleep(0.02)
+            self.rcb.motionPlay(3)
+            self.wait_for_gueue_end()
+            # while True:
+            #     if self.stm_channel.mb.GetQueueInfo().NumRequests < 1: break
+            #     time.sleep(0.02)
         for j in range (initPoses):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
             self.ytr = -self.d10 - j*self.amplitude/2 /initPoses

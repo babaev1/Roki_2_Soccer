@@ -21,16 +21,18 @@ class Vision_RPI(Vision_General):
         self.undistort_cx, self.undistort_cy = P_matrix[0,2], P_matrix[1,2]
         self.focal_length_horizontal = P_matrix[0,0]
         self.focal_length_vertical = P_matrix[1,1]
-        self.camera = Camera()
-        self.glob.stm_channel.mb.SetIMUStrobeOffset(5)   # the best value of strobe offset is 9 for 30fps and 5 for 60fps
-        self.glob.stm_channel.mb.ConfigureStrobeFilter(CAMERA_FRAME_DURATION_US//1000, 4)
-        self.glob.stm_channel.mb.ResetStrobeContainers()
+        self.camera = self.glob.camera
+        ok = self.glob.stm_channel.mb.SetIMUStrobeOffset(0)   # the best value of strobe offset is 9 for 30fps and 5 for 60fps
+        ok = self.glob.stm_channel.mb.ConfigureStrobeFilter(CAMERA_FRAME_DURATION_US//1000, 4)
+        ok = self.glob.stm_channel.mb.ResetStrobeContainers()
+        #self.camera.start(frame_duration_us = CAMERA_FRAME_DURATION_US)
         self.camera.start(exposure = self.TH['exposure'], gain = self.TH['gain'], frame_duration_us = CAMERA_FRAME_DURATION_US)
         self.led = Led()
         self.camera_sleep = 0.1
 
     def snapshot(self):
-        self.image, frame_number, total_number_of_frames, frame_timestamp, frame_duration = self.camera.snapshot()
+        self.image, frame_number = self.camera.snapshot()
+        #time.sleep(0.1)
         return_value, imu_pitch, imu_roll, imu_yaw = self.glob.stm_channel.pitch_roll_yaw_from_imu_in_head(frame_number = frame_number , degrees=False)
         if return_value:
             self.pan = - self.glob.motion.neck_pan * self.glob.motion.TIK2RAD
