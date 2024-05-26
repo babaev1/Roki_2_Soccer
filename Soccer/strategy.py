@@ -682,10 +682,10 @@ class Player():
             side_step_yield = self.motion.side_step_left_yield
             invert = -1
         #print('6self.motion.first_Leg_Is_Right_Leg:', self.motion.first_Leg_Is_Right_Leg)
-        yaw_increment_at_side_step = 2 * math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
+        yaw_increment_at_side_step =  math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
         number_Of_Cycles = int(round(abs(alpha / yaw_increment_at_side_step)))+1
         stepLength = 0
-        sideLength = 40
+        sideLength = 20
         for cycle in range(number_Of_Cycles):
             self.motion.refresh_Orientation()
             rotation = initial_body_yaw + cycle * yaw_increment_at_side_step - self.motion.imu_body_yaw() * 1.1
