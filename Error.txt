@@ -3,10 +3,20 @@ Traceback (most recent call last):
     player.play_game()
   File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 213, in play_game
     if self.role == 'forward': self.forward_main_cycle(self.second_pressed_button)
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 445, in forward_main_cycle
-    self.go_Around_Ball(self.glob.ball_distance, self.glob.ball_course)
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 671, in go_Around_Ball
-    self.motion.walk_Restart()
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion_real.py", line 1014, in walk_Restart
-    if self.stm_channel.mb.GetQueueInfo().NumRequests < 1: break
-AttributeError: 'Roki.Motherboard' object has no attribute 'GetQueueInfo'
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 377, in forward_main_cycle
+    self.motion.kick_off_ride()
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion_real.py", line 682, in kick_off_ride
+    self.walk_Cycle(stepLength1, sideLength, rotation, cycle + 1, number_Of_Cycles+2)
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion.py", line 723, in walk_Cycle
+    if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion.py", line 114, in wait_for_gueue_end
+    self.glob.vision.detect_Ball_in_One_Shot()
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/class_Vision_General.py", line 289, in detect_Ball_in_One_Shot
+    result, course, distance, speed = self.detect_Ball_Speed()
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/class_Vision_General.py", line 240, in detect_Ball_Speed
+    if self.orange_ball_is_on_green_field(ball_blob, img, distance_mm = sorted_new_order[i][0]):
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/class_Vision_General.py", line 78, in orange_ball_is_on_green_field
+    blob_p_g = img.find_blobs([self.TH['green field']['th']],roi = [x1 , y1 , w1 , h1], pixels_threshold=7, area_threshold=7, merge=True)
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/reload.py", line 71, in find_blobs
+    image_roi = self.img[y:(y+h), x:(x+w),:]
+TypeError: slice indices must be integers or None or have an __index__ method

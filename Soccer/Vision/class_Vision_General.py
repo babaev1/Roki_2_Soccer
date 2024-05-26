@@ -36,8 +36,8 @@ class Vision_General:
         height = self.glob.params['CAMERA_VERTICAL_RESOLUTION']
         x , y , w , h = blob.rect()  # ball blob
         if distance_mm != 0:
-            h = self.glob.params["DIAMETER_OF_BALL"] / distance_mm * self.focal_length_vertical 
-            w = self.glob.params["DIAMETER_OF_BALL"] / distance_mm * self.focal_length_horizontal
+            h = int(self.glob.params["DIAMETER_OF_BALL"] / distance_mm * self.focal_length_vertical )
+            w = int(self.glob.params["DIAMETER_OF_BALL"] / distance_mm * self.focal_length_horizontal)
         x1 = x + w                      # x1, y1, w1, h1-right rectangle
         y1 = y
         if x1 + w <= width:
@@ -208,7 +208,7 @@ class Vision_General:
         result, self.camera_elevation = self.glob.motion.camera_elevation()
         if result:
             for number in range (2):
-                camera_result, img1, pitch, roll, yaw, pan = self.snapshot()
+                camera_result, img1, self.pitch, self.roll, yaw, pan = self.snapshot()
                 if camera_result:
                     img = Image(img1)
                     #self.display_camera_image(self.image, window = 'Original')
@@ -227,14 +227,15 @@ class Vision_General:
                     for i in range(new_order_len):
                         ball_column = blobs[new_order[i][1]].cx()
                         ball_row = blobs[new_order[i][1]].cy()
-                        relative_x_on_floor, relative_y_on_floor, v = image_point_to_relative_coord_on_floor(ball_column, ball_row,
-                                                                    pitch, roll, camera_elevation, for_ball = True)
+                        result, relative_x_on_floor, relative_y_on_floor = self.image_point_to_relative_coord_on_floor(ball_column, ball_row,
+                                                                    for_ball = True)
                         new_order[i][0] = int(math.sqrt(relative_x_on_floor *relative_x_on_floor + relative_y_on_floor * relative_y_on_floor))
                         new_order[i][2] = int(relative_x_on_floor)
                         new_order[i][3] = int(relative_y_on_floor)
                     sorted_new_order = sorted(new_order)
-                    if len_blobs != 0:
-                        for i in range(len_blobs):
+                    if new_order_len != 0:
+                        for i in range(new_order_len):
+                            if sorted_new_order[i][0] == 0 : continue
                             if sorted_new_order[i][0] > 5000 : break            # getting off if distances more than 5m.
                             ball_blob = blobs[sorted_new_order[i][1]]
                             if self.orange_ball_is_on_green_field(ball_blob, img, distance_mm = sorted_new_order[i][0]): 
@@ -249,9 +250,11 @@ class Vision_General:
                                 break
         n = len(position)
         if n > 1:
-            front_speed = ( position[n-1][1] - position[0][1])/ distance/n
-            tangential_speed = ( position[n-1][0] - position[0][0]) * distance/n
-            speed = [tangential_speed, front_speed ]
+            if distance == 0 : speed = [0,0]
+            else:
+                front_speed = ( position[n-1][1] - position[0][1])/ distance/n
+                tangential_speed = ( position[n-1][0] - position[0][0]) * distance/n
+                speed = [tangential_speed, front_speed ]
         if see_ball < 1: return False, 0, 0, [0,0]
         elif n < 2: return False, course, distance, [0,0]
         else: return True, course, distance, speed
