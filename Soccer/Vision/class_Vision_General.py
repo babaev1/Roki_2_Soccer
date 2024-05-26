@@ -31,10 +31,13 @@ class Vision_General:
                         self.glob.params['CAMERA_HORIZONTAL_RESOLUTION'], self.glob.params['CAMERA_VERTICAL_RESOLUTION'])
         return line_segments
 
-    def orange_ball_is_on_green_field(self, blob, img):
+    def orange_ball_is_on_green_field(self, blob, img, distance_mm = 0):
         width = self.glob.params['CAMERA_HORIZONTAL_RESOLUTION']
         height = self.glob.params['CAMERA_VERTICAL_RESOLUTION']
         x , y , w , h = blob.rect()  # ball blob
+        if distance_mm != 0:
+            h = self.glob.params["DIAMETER_OF_BALL"] / distance_mm * self.focal_length_vertical 
+            w = self.glob.params["DIAMETER_OF_BALL"] / distance_mm * self.focal_length_horizontal
         x1 = x + w                      # x1, y1, w1, h1-right rectangle
         y1 = y
         if x1 + w <= width:
@@ -160,36 +163,90 @@ class Vision_General:
         relative_y_on_floor = point_vector[0,1] * triangulation_base / (- point_vector[0,2])
         return True, relative_x_on_floor, relative_y_on_floor
 
+    #def detect_Ball_Speed(self):
+    #    see_ball = 0
+    #    position = []
+    #    for number in range (2):
+    #        camera_result, img1, pitch, roll, yaw, pan = self.snapshot()
+    #        if camera_result:
+    #            img = Image(img1)
+    #            #self.display_camera_image(self.image, window = 'Original')
+    #            ball_column, ball_row = 0, 0
+    #            for blob in img.find_blobs([self.TH['orange ball']['th']],
+    #                                pixels_threshold=self.TH['orange ball']['pixel'],
+    #                                area_threshold=self.TH['orange ball']['area'],
+    #                                merge=True):
+    #                if blob.cy() > ball_row:
+    #                    ball_row = blob.cy()
+    #                    ball_column = blob.cx()
+    #                    ball_blob = blob
+    #                    see_ball += 1
+    #            if see_ball:
+    #                see_ball = 0
+    #                if self.orange_ball_is_on_green_field(ball_blob, img): 
+    #                    result, self.camera_elevation = self.glob.motion.camera_elevation()
+    #                    if result:
+    #                        self.visible_reaction_ball()
+    #                        img.draw_rectangle(ball_blob.rect())
+    #                        self.display_camera_image(img.img, 'Ball')
+    #                        see_ball += 1
+    #                        result, course, distance = self.get_course_and_distance_to_ball(ball_column, ball_row)
+    #                        if result:
+    #                            position.append([course,distance])
+    #    n = len(position)
+    #    if n > 1:
+    #        front_speed = ( position[n-1][1] - position[0][1])/ distance/n
+    #        tangential_speed = ( position[n-1][0] - position[0][0]) * distance/n
+    #        speed = [tangential_speed, front_speed ]
+    #    if see_ball < 1: return False, 0, 0, [0,0]
+    #    elif n < 2: return False, course, distance, [0,0]
+    #    else: return True, course, distance, speed
+
     def detect_Ball_Speed(self):
         see_ball = 0
         position = []
-        for number in range (2):
-            camera_result, img1, pitch, roll, yaw, pan = self.snapshot()
-            if camera_result:
-                img = Image(img1)
-                #self.display_camera_image(self.image, window = 'Original')
-                ball_column, ball_row = 0, 0
-                for blob in img.find_blobs([self.TH['orange ball']['th']],
-                                    pixels_threshold=self.TH['orange ball']['pixel'],
-                                    area_threshold=self.TH['orange ball']['area'],
-                                    merge=True):
-                    if blob.cy() > ball_row:
-                        ball_row = blob.cy()
-                        ball_column = blob.cx()
-                        ball_blob = blob
-                        see_ball += 1
-                if see_ball:
-                    see_ball = 0
-                    if self.orange_ball_is_on_green_field(ball_blob, img): 
-                        result, self.camera_elevation = self.glob.motion.camera_elevation()
-                        if result:
-                            self.visible_reaction_ball()
-                            img.draw_rectangle(ball_blob.rect())
-                            self.display_camera_image(img.img, 'Ball')
-                            see_ball += 1
-                            result, course, distance = self.get_course_and_distance_to_ball(ball_column, ball_row)
-                            if result:
-                                position.append([course,distance])
+        result, self.camera_elevation = self.glob.motion.camera_elevation()
+        if result:
+            for number in range (2):
+                camera_result, img1, pitch, roll, yaw, pan = self.snapshot()
+                if camera_result:
+                    img = Image(img1)
+                    #self.display_camera_image(self.image, window = 'Original')
+                    blobs = img.find_blobs([self.TH['orange ball']['th']],
+                                        pixels_threshold=self.TH['orange ball']['pixel'],
+                                        area_threshold=self.TH['orange ball']['area'],
+                                        merge=True)
+                    len_blobs = len(blobs)
+                    height = self.glob.params["CAMERA_VERTICAL_RESOLUTION"]
+                    order = []
+                    for i in range(len_blobs):
+                        order.append([height - blobs[i].cy(), i,0,0])
+                    sorted_order = sorted(order)
+                    new_order_len = min(10, len_blobs)
+                    new_order = sorted_order[:new_order_len]
+                    for i in range(new_order_len):
+                        ball_column = blobs[new_order[i][1]].cx()
+                        ball_row = blobs[new_order[i][1]].cy()
+                        relative_x_on_floor, relative_y_on_floor, v = image_point_to_relative_coord_on_floor(ball_column, ball_row,
+                                                                    pitch, roll, camera_elevation, for_ball = True)
+                        new_order[i][0] = int(math.sqrt(relative_x_on_floor *relative_x_on_floor + relative_y_on_floor * relative_y_on_floor))
+                        new_order[i][2] = int(relative_x_on_floor)
+                        new_order[i][3] = int(relative_y_on_floor)
+                    sorted_new_order = sorted(new_order)
+                    if len_blobs != 0:
+                        for i in range(len_blobs):
+                            if sorted_new_order[i][0] > 5000 : break            # getting off if distances more than 5m.
+                            ball_blob = blobs[sorted_new_order[i][1]]
+                            if self.orange_ball_is_on_green_field(ball_blob, img, distance_mm = sorted_new_order[i][0]): 
+                                self.visible_reaction_ball()
+                                print('relative coord of ball on floor (x,y)= ', sorted_new_order[i][2], sorted_new_order[i][3])
+                                img.draw_rectangle(ball_blob.rect())
+                                self.display_camera_image(img.img, 'Ball')
+                                distance = sorted_new_order[i][0] / 1000
+                                course = math.atan2(sorted_new_order[i][3], sorted_new_order[i][2])
+                                position.append([course, distance])
+                                see_ball += 1
+                                break
         n = len(position)
         if n > 1:
             front_speed = ( position[n-1][1] - position[0][1])/ distance/n
