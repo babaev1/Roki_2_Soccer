@@ -125,10 +125,14 @@ class Pose_Designer(wx.Frame, Robot):
         self.dummy_handles = []
         
         if SIMULATION == 5 :
+            class Glob:
+                def __init__(self):
+                    self.Roki = None
+            glob = Glob()
             import Roki
             self.Roki = Roki
             from Soccer.Motion.class_stm_channel import STM_channel
-            self.stm_channel = STM_channel(None)
+            self.stm_channel = STM_channel(glob)
             self.rcb = self.stm_channel.rcb
         else:
             self.clientID = sim_Enable('127.0.0.1', -20000)
