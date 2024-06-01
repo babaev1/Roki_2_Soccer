@@ -416,7 +416,7 @@ class Motion(Robot):
         framestep = self.simThreadCycleInMs//10
         if self.glob.SIMULATION == 5:
             self.rcb.motionPlay(3)
-            self.wait_for_gueue_end()
+            self.wait_for_gueue_end(with_Vision = False)
             # while True:
             #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 1: break
             #     time.sleep(0.02)
