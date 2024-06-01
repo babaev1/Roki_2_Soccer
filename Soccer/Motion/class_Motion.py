@@ -105,21 +105,22 @@ class Motion(Robot):
             time.sleep(time_in_ms / 1000)
         else: self.sim_Progress(time_in_ms/1000)
 
-    def wait_for_gueue_end(self):
+    def wait_for_gueue_end(self, with_Vision = True):
         frame_time_s = self.glob.params['FRAME_DELAY']/1000
         queue_length = self.stm_channel.mb.GetBodyQueueInfo()[1].Size
         if queue_length > 1: queue_length -= 1
         sleeping_time = queue_length * frame_time_s
-        if sleeping_time > 0.1 :
-            self.glob.vision.detect_Ball_in_One_Shot()
-            queue_length = self.stm_channel.mb.GetBodyQueueInfo()[1].Size
-            if queue_length > 1: queue_length -= 1
-            sleeping_time = queue_length * frame_time_s
+        if with_Vision:
+            if sleeping_time > 0.1 :
+                self.glob.vision.detect_Ball_in_One_Shot()
+                queue_length = self.stm_channel.mb.GetBodyQueueInfo()[1].Size
+                if queue_length > 1: queue_length -= 1
+                sleeping_time = queue_length * frame_time_s
         print('wait_for_gueue_end. sleeping time: ', sleeping_time)
         time.sleep(sleeping_time )
-        # for counter in range(1000):
-        #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 2: break
-        #     time.sleep(0.01)
+        for counter in range(1000):
+            if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 2: break
+            time.sleep(0.01)
         
 
 
@@ -235,7 +236,8 @@ class Motion(Robot):
                             #print(i, servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data, file=log_file)
                     frames_number = int(motion[0]) 
                     a=self.rcb.setServoPosAsync(servoDatas, frames_number, frames_number-1)
-            self.wait_for_gueue_end()
+                    time.sleep(self.glob.params['FRAME_DELAY']/1000 * (frames_number-1))
+            self.wait_for_gueue_end(with_Vision = False)
             # while True:
             #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 1: break
             #     time.sleep(0.02)

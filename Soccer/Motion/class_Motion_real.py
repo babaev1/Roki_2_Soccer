@@ -519,7 +519,7 @@ class Motion_real(Motion):
             print('stepLengthResidue_accumulated =', stepLengthResidue_accumulated)
             self.first_Leg_Is_Right_Leg = True
             #self.stepHeight = 20
-            stop_detecting_Ball = threading.Event()
+            #stop_detecting_Ball = threading.Event()
             #camera_thread = threading.Thread(target = self.glob.vision.detect_Ball_in_Stream, args=(stop_detecting_Ball,))
             #camera_thread.setDaemon(True)
             #camera_thread.start()
@@ -629,13 +629,14 @@ class Motion_real(Motion):
             result, kick_by_Right = self.verify_ball_position(kick_by_Right, kick_direction)
             self.first_Leg_Is_Right_Leg = True
             if self.glob.ball_distance < 0.2:
-                if small_kick:
-                    self.kick( first_Leg_Is_Right_Leg=kick_by_Right, small = small_kick)
-                else:
-                    if kick_by_Right:
-                        self.play_Soft_Motion_Slot(name ='Kick_Right_v2')
-                    else:
-                        self.play_Soft_Motion_Slot(name ='Kick_Left_v2')
+                self.kick( first_Leg_Is_Right_Leg=kick_by_Right, small = small_kick)
+                #if small_kick:
+                #    self.kick( first_Leg_Is_Right_Leg=kick_by_Right, small = small_kick)
+                #else:
+                #    if kick_by_Right:
+                #        self.play_Soft_Motion_Slot(name ='Kick_Right_v2')
+                #    else:
+                #        self.play_Soft_Motion_Slot(name ='Kick_Left_v2')
                 self.pause_in_ms(1000)
         return True
 
