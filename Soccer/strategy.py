@@ -338,13 +338,13 @@ class Player():
         number_Of_Cycles = 20
         stepLength = 0 #64
         sideLength = 20
-        #if pressed_button == 'side_step_left':
-        #    self.motion.first_Leg_Is_Right_Leg = False
-        #if self.motion.first_Leg_Is_Right_Leg: invert = -1
-        #else: invert = 1
-        if pressed_button == 'side_step_left': sideLength = -20
-        else: sideLength = 20
-        invert = 1
+        if pressed_button == 'side_step_left':
+            self.motion.first_Leg_Is_Right_Leg = False
+        if self.motion.first_Leg_Is_Right_Leg: invert = -1
+        else: invert = 1
+        #if pressed_button == 'side_step_left': sideLength = -20
+        #else: sideLength = 20
+        #invert = 1
         self.motion.walk_Initial_Pose()
         for cycle in range(number_Of_Cycles):
             stepLength1 = stepLength

@@ -397,8 +397,8 @@ class Motion_real(Motion):
         if abs(yaw) > 2 * math.pi: yaw %= (2 * math.pi)
         if yaw > math.pi : yaw -= (2 * math.pi)
         if yaw < -math.pi : yaw += (2 * math.pi)
-        if yaw > 0.5 : yaw = 0.5
-        if yaw < -0.5 : yaw = -0.5
+        if yaw > 0.3 : yaw = 0.3
+        if yaw < -0.3 : yaw = -0.3
         return yaw
 
     def near_distance_omni_motion(self, dist_mm, napravl, one_Off_Motion = True):

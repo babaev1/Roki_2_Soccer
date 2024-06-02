@@ -553,6 +553,8 @@ class Motion(Robot):
             rotation = -self.rotation/222 * 0.23 / self.params['ROTATION_YIELD_RIGHT']
         else:
             rotation = -self.rotation/222 * 0.23 / self.params['ROTATION_YIELD_LEFT']
+        if rotation > 0.125 : rotation = 0.125
+        if rotation < -0.125 : rotation = -0.125
         alpha = 0
         if self.fr1 == 0:
             alpha01 = math.pi
