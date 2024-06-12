@@ -315,7 +315,7 @@ class Motion_real(Motion):
         cycleNumber = 1
         cycle = 0
         target = course # + self.direction_To_Attack
-        if one_Off_Motion: old_neck_pan, old_neck_tilt = self.head_Up()
+        #if one_Off_Motion: old_neck_pan, old_neck_tilt = self.head_Up()
         self.refresh_Orientation()
         rotation1 = target - self.body_euler_angle['yaw']
         rotation1 = self.norm_yaw(rotation1)
@@ -347,7 +347,7 @@ class Motion_real(Motion):
         self.local.coord_shift = [0,0,0]
         self.local.coordinate_record(odometry = True, shift = True)
         self.local.refresh_odometry()
-        if one_Off_Motion: self.head_Return(old_neck_pan, old_neck_tilt)
+        #if one_Off_Motion: self.head_Return(old_neck_pan, old_neck_tilt)
         self.first_Leg_Is_Right_Leg = True
 
     def head_Up(self):
@@ -402,7 +402,7 @@ class Motion_real(Motion):
         return yaw
 
     def near_distance_omni_motion(self, dist_mm, napravl, one_Off_Motion = True):
-        if one_Off_Motion: old_neck_pan, old_neck_tilt = self.head_Up()
+        #if one_Off_Motion: old_neck_pan, old_neck_tilt = self.head_Up()
         dist = dist_mm/1000
         self.refresh_Orientation()
         initial_direction = self.imu_body_yaw()
@@ -447,7 +447,7 @@ class Motion_real(Motion):
         self.local.coord_odometry[0] += dist * math.cos(napravl)
         self.local.coord_odometry[1] += dist * math.sin(napravl)
         #self.local.coordinate_record(odometry = True)
-        if one_Off_Motion: self.head_Return(old_neck_pan, old_neck_tilt)
+        #if one_Off_Motion: self.head_Return(old_neck_pan, old_neck_tilt)
 
     def near_distance_ball_approach_and_kick(self, kick_direction, strong_kick = False, small_kick = False, very_Fast = False ):
         offset_of_ball = self.params['KICK_OFFSET_OF_BALL']  # self.d10 # module of local robot Y coordinate of ball im mm before kick 
@@ -457,10 +457,10 @@ class Motion_real(Motion):
         if a==False or self.falling_Flag != 0: return False
         if dist > 0.9 or a == False: return False
         if  0.02 < abs(dist * math.cos(napravl)) < 0.06 and dist * math.sin(napravl) < 0.03:
-            old_neck_pan, old_neck_tilt = self.head_Up()
+            #old_neck_pan, old_neck_tilt = self.head_Up()
             if napravl > 0: self.kick(first_Leg_Is_Right_Leg=False)
             else: self.kick(first_Leg_Is_Right_Leg=True)
-            self.head_Return(old_neck_pan, old_neck_tilt)
+            #self.head_Return(old_neck_pan, old_neck_tilt)
         if abs(napravl) > 1 :
             direction = math.copysign(2.55, napravl)
             self.near_distance_omni_motion( 180 , direction)
@@ -488,7 +488,7 @@ class Motion_real(Motion):
             else:
                 kick_by_Right = True
             sideLength = abs(displacement)/number_Of_Cycles*20/side_step_yield
-            old_neck_pan, old_neck_tilt = self.head_Up()
+            #old_neck_pan, old_neck_tilt = self.head_Up()
             self.local.correct_yaw_in_pf()
             init_yaw = kick_direction #= self.imu_body_yaw()
             #init_yaw = self.imu_body_yaw()
@@ -834,7 +834,7 @@ class Motion_real(Motion):
                 steplength_list.append(stepLength)
         start_yaw = self.glob.pf_coord[2]  #self.imu_body_yaw()
         if len(dest) == 0: return False
-        old_neck_pan, old_neck_tilt = self.head_Up()
+        #old_neck_pan, old_neck_tilt = self.head_Up()
         self.local.correct_yaw_in_pf()
         sideLength = 0
         stepLength_old = 0
@@ -996,7 +996,7 @@ class Motion_real(Motion):
                     if cycle == number_Of_Cycles - 1: stepLength1 = stepLength * 2 / 3
                 self.walk_Cycle(stepLength1, sideLength, rotation, cycle, number_Of_Cycles + 1)
         self.walk_Final_Pose()
-        self.head_Return(old_neck_pan, old_neck_tilt)
+        #self.head_Return(old_neck_pan, old_neck_tilt)
         return True
 
     def walk_Restart(self):

@@ -734,14 +734,16 @@ class Player():
 
     def test_walk(self):
         self.motion.first_Leg_Is_Right_Leg == True
-        self.motion.walk_Restart()
-        return
+        #self.motion.walk_Restart()
+        #return
         #self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         #self.go_Around_Ball(0.5, -0.5)
-        number_Of_Cycles = 5
-        stepLength = 20
-        self.motion.gaitHeight = 180
-        sideLength = -20
+        number_Of_Cycles = 10
+        stepLength = 110
+        self.motion.gaitHeight = 170
+        self.motion.fr1 = 6
+        self.motion.fr2 = 10
+        sideLength = 0
         #self.motion.first_Leg_Is_Right_Leg = False
         if self.motion.first_Leg_Is_Right_Leg: invert = 1
         else: invert = -1
@@ -749,37 +751,37 @@ class Player():
         number_Of_Cycles += 1
         for cycle in range(number_Of_Cycles):
             stepLength1 = stepLength
-            #if cycle ==0 : stepLength1 = stepLength/3
-            #if cycle ==1 : stepLength1 = stepLength/3 * 2
-            self.motion.refresh_Orientation()
-            rotation = 0 - self.motion.imu_body_yaw() * 1.2
-            rotation = self.motion.normalize_rotation(rotation)
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
-        #self.motion.first_Leg_Is_Right_Leg == False
-        self.motion.walk_Restart()
-        #self.motion.first_Leg_Is_Right_Leg == False
-        sideLength = 20
-        invert = 1
-        for cycle in range(number_Of_Cycles):
-            stepLength1 = stepLength
-            #if cycle ==0 : stepLength1 = stepLength/3
-            #if cycle ==1 : stepLength1 = stepLength/3 * 2
-            self.motion.refresh_Orientation()
-            rotation = 0 - self.motion.imu_body_yaw() * 1.2
-            rotation = self.motion.normalize_rotation(rotation)
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
-        self.motion.walk_Restart()
-        #self.motion.first_Leg_Is_Right_Leg == True
-        sideLength = -20
-        invert = 1
-        for cycle in range(number_Of_Cycles):
-            stepLength1 = stepLength
-            #if cycle ==0 : stepLength1 = stepLength/3
-            #if cycle ==1 : stepLength1 = stepLength/3 * 2
+            if cycle ==0 : stepLength1 = stepLength/3
+            if cycle ==1 : stepLength1 = stepLength/3 * 2
             self.motion.refresh_Orientation()
             rotation = 0 - self.motion.imu_body_yaw() * 1.2
             rotation = self.motion.normalize_rotation(rotation)
             self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+        #self.motion.first_Leg_Is_Right_Leg == False
+        #self.motion.walk_Restart()
+        ##self.motion.first_Leg_Is_Right_Leg == False
+        #sideLength = 20
+        #invert = 1
+        #for cycle in range(number_Of_Cycles):
+        #    stepLength1 = stepLength
+        #    #if cycle ==0 : stepLength1 = stepLength/3
+        #    #if cycle ==1 : stepLength1 = stepLength/3 * 2
+        #    self.motion.refresh_Orientation()
+        #    rotation = 0 - self.motion.imu_body_yaw() * 1.2
+        #    rotation = self.motion.normalize_rotation(rotation)
+        #    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
+        #self.motion.walk_Restart()
+        ##self.motion.first_Leg_Is_Right_Leg == True
+        #sideLength = -20
+        #invert = 1
+        #for cycle in range(number_Of_Cycles):
+        #    stepLength1 = stepLength
+        #    #if cycle ==0 : stepLength1 = stepLength/3
+        #    #if cycle ==1 : stepLength1 = stepLength/3 * 2
+        #    self.motion.refresh_Orientation()
+        #    rotation = 0 - self.motion.imu_body_yaw() * 1.2
+        #    rotation = self.motion.normalize_rotation(rotation)
+        #    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
 
     def kick_test(self, second_pressed_button):

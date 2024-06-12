@@ -1,22 +1,19 @@
 Traceback (most recent call last):
-  File "/home/pi/Desktop/Roki_2_Soccer/main_killable.py", line 91, in <module>
-    player.play_game()
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 213, in play_game
-    if self.role == 'forward': self.forward_main_cycle(self.second_pressed_button)
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/strategy.py", line 377, in forward_main_cycle
-    self.motion.kick_off_ride()
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion_real.py", line 682, in kick_off_ride
-    self.walk_Cycle(stepLength1, sideLength, rotation, cycle + 1, number_Of_Cycles+2)
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion.py", line 723, in walk_Cycle
-    if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Motion/class_Motion.py", line 114, in wait_for_gueue_end
-    self.glob.vision.detect_Ball_in_One_Shot()
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/class_Vision_General.py", line 289, in detect_Ball_in_One_Shot
-    result, course, distance, speed = self.detect_Ball_Speed()
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/class_Vision_General.py", line 240, in detect_Ball_Speed
-    if self.orange_ball_is_on_green_field(ball_blob, img, distance_mm = sorted_new_order[i][0]):
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/class_Vision_General.py", line 78, in orange_ball_is_on_green_field
-    blob_p_g = img.find_blobs([self.TH['green field']['th']],roi = [x1 , y1 , w1 , h1], pixels_threshold=7, area_threshold=7, merge=True)
-  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/reload.py", line 71, in find_blobs
-    image_roi = self.img[y:(y+h), x:(x+w),:]
-TypeError: slice indices must be integers or None or have an __index__ method
+  File "/usr/lib/python3/dist-packages/picamera2/picamera2.py", line 242, in __init__
+    self._open_camera()
+  File "/usr/lib/python3/dist-packages/picamera2/picamera2.py", line 446, in _open_camera
+    self.camera.acquire()
+RuntimeError: Failed to acquire camera: Device or resource busy
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/pi/Desktop/Roki_2_Soccer/main_killable.py", line 68, in <module>
+    vision = Vision_RPI(glob)
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/class_Vision_RPI.py", line 29, in __init__
+    self.camera.start(exposure = self.TH['exposure'], gain = self.TH['gain'], frame_duration_us = CAMERA_FRAME_DURATION_US)
+  File "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/camera.py", line 34, in start
+    self.picam2 = Picamera2(camera_num=0)
+  File "/usr/lib/python3/dist-packages/picamera2/picamera2.py", line 254, in __init__
+    raise RuntimeError("Camera __init__ sequence did not complete.")
+RuntimeError: Camera __init__ sequence did not complete.

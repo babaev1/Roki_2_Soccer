@@ -30,7 +30,7 @@ except Exception:
     # will be running on desktop computer
     current_work_directory += '/'
     import threading
-    SIMULATION = 0                      # 0 - Simulation without physics, 
+    SIMULATION = 1                      # 0 - Simulation without physics, 
                                         # 1 - Simulation synchronous with physics, 
                                         # 3 - Simulation streaming with physics
 
@@ -130,7 +130,7 @@ try:
             #goalkeeper, forward_v2, run_test, penalty_Shooter, rotation_test, penalty_Goalkeeper, spot_walk, dance, quaternion_test, test_walk, kick_test
             if i == 0 or i == 3:
                 second_pressed_button = 'short_run'   # side_step_left, side_step_right, short_run, rotation_right, spot_run, start_later
-                m.append(Player('run_test', second_pressed_button, glob[i], motion[i], local[i])) 
+                m.append(Player('test_walk', second_pressed_button, glob[i], motion[i], local[i])) 
             if i == 1:
                 second_pressed_button = 'start'
                 m.append(Player('forward', second_pressed_button, glob[i], motion[i], local[i]))
