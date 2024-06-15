@@ -739,10 +739,11 @@ class Player():
         #self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         #self.go_Around_Ball(0.5, -0.5)
         number_Of_Cycles = 10
-        stepLength = 110
-        self.motion.gaitHeight = 170
-        self.motion.fr1 = 6
-        self.motion.fr2 = 10
+        stepLength = 130 #180
+        self.motion.gaitHeight = 180
+        self.motion.stepHeight = 40
+        #self.motion.fr1 = 6
+        #self.motion.fr2 = 10
         sideLength = 0
         #self.motion.first_Leg_Is_Right_Leg = False
         if self.motion.first_Leg_Is_Right_Leg: invert = 1
