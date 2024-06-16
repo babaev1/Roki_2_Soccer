@@ -235,7 +235,7 @@ class Player():
                 self.motion.print_Diagnostics()
                 pass
             self.motion.sim_Disable()
-        sys.exit()
+        #sys.exit(1)
 
     def rotation_test_main_cycle(self):
         number_Of_Cycles = 10
