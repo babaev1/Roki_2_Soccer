@@ -15,6 +15,7 @@ Robots\__pycache__\*.*
 __pycache__/*.*
 __pycache__\*.*
 .vs\*.*
+.vs\
 .vs/slnx.sqlite
 .vs/Roki_2_Soccer/v17/.wsuo
 .vs/*.*
