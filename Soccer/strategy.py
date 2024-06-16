@@ -221,6 +221,7 @@ class Player():
         if self.role == 'dribbling': self.dribbling_main_cycle()
         if self.role == 'ball_moving': self.ball_moving_main_cycle()
         if self.role == 'dance': self.dance_main_cycle()
+        if self.role == 'basketball': self.basketball_main_cycle()
         if self.role == 'quaternion_test': self.quaternion_test()
         if self.role == 'corner_kick_1': self.corner_kick_1_main_cycle()
         if self.role == 'corner_kick_2': self.corner_kick_2_main_cycle()
@@ -697,6 +698,12 @@ class Player():
         self.motion.walk_Final_Pose()
         self.motion.first_Leg_Is_Right_Leg = True
 
+    def basketball_main_cycle(self):
+        if self.glob.SIMULATION == 5:
+            self.motion.play_Soft_Motion_Slot( name = 'Basketball3')
+        else:
+            self.motion.play_Soft_Motion_Slot( name = 'Basketball3')
+
     def dance_main_cycle(self):
         if self.glob.SIMULATION == 5:
             # while True:
@@ -739,10 +746,11 @@ class Player():
         #self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         #self.go_Around_Ball(0.5, -0.5)
         number_Of_Cycles = 10
-        stepLength = 110
-        self.motion.gaitHeight = 170
-        self.motion.fr1 = 6
-        self.motion.fr2 = 10
+        stepLength = 130 #180
+        self.motion.gaitHeight = 180
+        self.motion.stepHeight = 40
+        #self.motion.fr1 = 6
+        #self.motion.fr2 = 10
         sideLength = 0
         #self.motion.first_Leg_Is_Right_Leg = False
         if self.motion.first_Leg_Is_Right_Leg: invert = 1
