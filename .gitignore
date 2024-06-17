@@ -24,3 +24,4 @@ __pycache__/
 .vs/Roki_2_Soccer/v16/.suo
 *.pyc
 *.sqlite
+Export_data.npy
