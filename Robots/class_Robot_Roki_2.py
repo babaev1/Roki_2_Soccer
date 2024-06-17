@@ -79,3 +79,5 @@ class Robot:
             'hand_right_3','hand_right_2','hand_right_1','Tors1','Leg_left_10','Leg_left_9','Leg_left_8',
             'Leg_left_7','Leg_left_6','Leg_left_5','hand_left_4','hand_left_3','hand_left_2','hand_left_1'
             ,'head0','head12', 'hand_right_11', 'hand_left_11', 'hand_right_14', 'hand_left_14']
+
+        self.hand_joints =[6, 7, 8, 9, 17, 18, 19, 20, 23, 24, 25, 26]

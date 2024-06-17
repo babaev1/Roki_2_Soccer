@@ -3,6 +3,7 @@
 
 import sys, os
 import math, time, json
+from tkinter import FALSE
 import numpy as np
 import starkit
 from math import pi
@@ -81,6 +82,7 @@ class Motion(Robot):
         self.wl = 0
         self.euler_angle = {}
         self.robot_In_0_Pose = True
+        self.keep_hands_up = False
         self.motion_slot_progress = False
         self.Vision_Sensor_Display_On = self.glob.params['Vision_Sensor_Display_On']
         #self.start_point_for_imu_drift = 0
@@ -204,13 +206,14 @@ class Motion(Robot):
         camera_elevation = com_2_camera_vector[2] - min(right_leg_vector[2], left_leg_vector[2])
         return True, camera_elevation
 
-    def play_Soft_Motion_Slot(self, name = ''):             # the slot from file will be played in robot
+    def play_Soft_Motion_Slot(self, name = '', motion_list = None):             # the slot from file will be played in robot
         print('playing : ', name) 
         self.motion_slot_progress = True
         if self.glob.SIMULATION == 5:
-            with open(self.glob.current_work_directory + "Soccer/Motion/motion_slots/" + name + ".json", "r") as f:
-                slots = json.loads(f.read())
-            motion_list = slots[name]
+            if motion_list == None:
+                with open(self.glob.current_work_directory + "Soccer/Motion/motion_slots/" + name + ".json", "r") as f:
+                    slots = json.loads(f.read())
+                motion_list = slots[name]
             #joint_number = len(self.ACTIVESERVOS)
             with open('Slot_log.txt', "a") as log_file:
                 print('playing slot', file=log_file)
@@ -244,7 +247,7 @@ class Motion(Robot):
                 #self.pyb.delay(30 * frames_number)
                 #self.pyb.delay(250 )
         else:
-            self.simulateMotion(name = name)
+            self.simulateMotion(name = name, motion_list = motion_list)
         self.motion_slot_progress = False
 
     def falling_Test(self):
@@ -437,6 +440,8 @@ class Motion(Robot):
                     if self.glob.SIMULATION == 3: self.wait_sim_step()
                     #self.sim.simxPauseCommunication(self.clientID, True)
                     for i in range(len(angles)):
+                        if self.keep_hands_up:
+                            if i in self.hand_joints : continue
                         if self.glob.SIMULATION == 1 or self.glob.SIMULATION == 3:
                            returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                                         self.jointHandle[i] , angles[i]*self.ACTIVESERVOS[i][3]+self.trims[i],
@@ -462,6 +467,8 @@ class Motion(Robot):
                     if self.model == 'Roki_2':
                         servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number + 2)]
                         for i in range(joint_number):
+                            if self.keep_hands_up:
+                                if i in self.hand_joints : continue
                             if self.ACTIVESERVOS[i][0] == 8:
                                 n = joint_number - 1 + self.ACTIVESERVOS[i][1]
                                 pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2]/2 + 7500)
@@ -471,6 +478,8 @@ class Motion(Robot):
                     else:
                         servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number)]
                         for i in range(joint_number):
+                            if self.keep_hands_up:
+                                if i in self.hand_joints : continue
                             pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
                             servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
                     if j == 0:
@@ -672,6 +681,8 @@ class Motion(Robot):
                     if self.glob.SIMULATION == 3: self.wait_sim_step()
                     #self.sim.simxPauseCommunication(self.clientID, True)
                     for i in range(len(angles)):
+                        if self.keep_hands_up:
+                            if i in self.hand_joints : continue
                         if self.glob.SIMULATION == 1 or self.glob.SIMULATION == 3:
                            returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                                         self.jointHandle[i] , angles[i]*self.ACTIVESERVOS[i][3]+self.trims[i],
@@ -699,6 +710,8 @@ class Motion(Robot):
                     if self.model == 'Roki_2':
                         servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number + 2)]
                         for i in range(joint_number):
+                            if self.keep_hands_up:
+                                if i in self.hand_joints : continue
                             if self.ACTIVESERVOS[i][0] == 8:
                                 n = joint_number- 1 + self.ACTIVESERVOS[i][1]
                                 pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2]/2 + 7500)
@@ -708,6 +721,8 @@ class Motion(Robot):
                     else:
                         servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number)]
                         for i in range(joint_number):
+                            if self.keep_hands_up:
+                                if i in self.hand_joints : continue
                             pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
                             servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
                     a=self.rcb.setServoPosAsync(servoDatas, self.frames_per_cycle, 0)
@@ -726,7 +741,7 @@ class Motion(Robot):
         #self.first_Leg_Is_Right_Leg = tmp1
         if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
 
-    def walk_Final_Pose(self):
+    def walk_Final_Pose(self, respect_body_tilt = False):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
             self.local.quality =0
@@ -739,6 +754,9 @@ class Motion(Robot):
             # while True:
             #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
             #     time.sleep(0.02)
+        if respect_body_tilt: 
+            xr, xl = self.xr, self.xl
+            self.xr, self.xl = self.params['BODY_TILT_AT_WALK'], self.params['BODY_TILT_AT_WALK']
         for j in range (self.initPoses):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
             self.ztr = -self.gaitHeight - (j+1)*(233.0-self.gaitHeight)/self.initPoses
@@ -756,6 +774,8 @@ class Motion(Robot):
                     if self.glob.SIMULATION == 3: self.wait_sim_step()
                     #self.sim.simxPauseCommunication(self.clientID, True)
                     for i in range(len(angles)):
+                        if self.keep_hands_up:
+                            if i in self.hand_joints : continue
                         if self.glob.SIMULATION == 1 or self.glob.SIMULATION == 3:
                            returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                                         self.jointHandle[i] , angles[i]*self.ACTIVESERVOS[i][3]+self.trims[i],
@@ -781,6 +801,8 @@ class Motion(Robot):
                     if self.model == 'Roki_2':
                         servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number + 2)]
                         for i in range(joint_number):
+                            if self.keep_hands_up:
+                                if i in self.hand_joints : continue
                             if self.ACTIVESERVOS[i][0] == 8:
                                 n = joint_number - 1 + self.ACTIVESERVOS[i][1]
                                 pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2]/2 + 7500)
@@ -790,6 +812,8 @@ class Motion(Robot):
                     else:
                         servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number)]
                         for i in range(joint_number):
+                            if self.keep_hands_up:
+                                if i in self.hand_joints : continue
                             pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
                             servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
                     #start2 = self.pyb.millis()
@@ -800,6 +824,8 @@ class Motion(Robot):
                     #time2 = self.pyb.elapsed_millis(start2)
                     #time.sleep(self.frame_delay/1000 - time1)
         self.robot_In_0_Pose = True
+        if respect_body_tilt: 
+            self.xr, self.xl = xr, xl
 
     def walk_Final_Pose_After_Kick(self):
         self.robot_In_0_Pose = False

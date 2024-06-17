@@ -18,5 +18,7 @@
 	"USE_PENALTY_MARKS_FOR_LOCALISATION": true,
 	"DIRECT_COORD_MEASUREMENT_BY_PAIRS_OF_POST": false,
 	"USE_SINGLE_POST_MEASUREMENT": true,
-	"Vision_Sensor_Display_On": false
+	"Vision_Sensor_Display_On": false,
+	"BASKETBALL_DISTANCE": 0,
+	"BASKETBALL_DIRECTION": 0
 }

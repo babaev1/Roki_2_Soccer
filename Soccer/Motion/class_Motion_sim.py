@@ -241,7 +241,7 @@ class Motion_sim(Motion_real):
             #        filename = current_work_directory + "Soccer/CameraStill/VisionSensor" + token + '.png'
             #        isWritten = self.cv2.imwrite(filename, img)
 
-    def simulateMotion(self, number = 0, name = ''):
+    def simulateMotion(self, number = 0, name = '', motion_list = None):
         #mot = [(0,'Initial_Pose'),(1,0),(2,0),(3,0),(4,0),(5,'Get_Up_Left'),
         #   (6,'Soccer_Get_UP_Stomach_N'),(7,0),(8,'Soccer_Walk_FF'),(9,0),(10,0),
         #   (11,0),(12,0),(13,0),(14,'Soccer_Small_Jump_Forward'),(15,0),
@@ -251,19 +251,23 @@ class Motion_sim(Motion_real):
         #   (31,'Soccer_Walk_FF1'), (32,'Soccer_Walk_FF2'), (33,'Soccer_Get_UP_Stomach'), (34,'Soccer_Get_UP_Face_Up'),
         #   (35,'Get_Up_Right'), (36,'PenaltyDefenceR'), (37,'PenaltyDefenceL')]
         # start the simulation
-        if number > 0 and name == '': name = self.MOTION_SLOT_DICT[number]
-        with open(current_work_directory + "Soccer/Motion/motion_slots/" + name + ".json", "r") as f:
-            slots = json.loads(f.read())
-        mot_list = slots[name]
+        if motion_list == None:
+            if number > 0 and name == '': name = self.MOTION_SLOT_DICT[number]
+            with open(current_work_directory + "Soccer/Motion/motion_slots/" + name + ".json", "r") as f:
+                slots = json.loads(f.read())
+            motion_list = slots[name]
         i=0
-        for i in range(len(mot_list)):
+        if len(self.activePose) < len(self.ACTIVEJOINTS) - 4: 
+            self.activePose.append(self.neck_pan * self.TIK2RAD)
+            self.activePose.append(self.neck_tilt * self.TIK2RAD)
+        for i in range(len(motion_list)):
             if  self.falling_Flag ==3: return
             activePoseOld = []
             for ind in range(len(self.activePose)): activePoseOld.append(self.activePose[ind])
             self.activePose =[]
             for j in range(len(self.ACTIVEJOINTS) - 4):
-                    self.activePose.append(0.017*mot_list[i][j+1]*0.03375)
-            pulseNum = int(mot_list[i][0]*self.FRAMELENGTH * 1000 / self.simThreadCycleInMs)
+                    self.activePose.append(0.017*motion_list[i][j+1]*0.03375)
+            pulseNum = int(motion_list[i][0]*self.FRAMELENGTH * 1000 / self.simThreadCycleInMs)
             for k in range (pulseNum):
                 if self.glob.SIMULATION == 3: self.wait_sim_step()
                 #self.sim.simxPauseCommunication(self.clientID, True)
