@@ -713,6 +713,8 @@ class Player():
         if pressed_button != 'throw_test':
             self.motion.play_Soft_Motion_Slot( name = 'Basketball_PickUp')
         if pressed_button != 'pick_up_test':
+            print("voltage = ", round(self.motion.stm_channel.read_voltage_from_body()[1]/270.2, 2), " 'BASKETBALL_DISTANCE': ", 
+                  int(self.motion.params['BASKETBALL_DISTANCE']))
             self.motion.play_Soft_Motion_Slot( name = 'throw', motion_list = throw)
 
 

@@ -56,6 +56,14 @@ class STM_channel():
         z = quat[2]/16384
         w = quat[3]/16384
         return True, (x,y,z,w)
+    
+    def read_voltage_from_body(self):
+        result, adc_bytes = self.rcb.moveRamToComCmdSynchronize(0xcc, 2)
+        #print("read_voltage_from_body, adc_bytes: ", adc_bytes)
+        try:
+            adc = struct.unpack('<h', bytes(adc_bytes))
+        except Exception: return False, 0
+        return True, adc[0]
 
     def pitch_roll_yaw_from_imu_in_head(self, frame_number = None, degrees=False):
         x, y, z, w , timestamp_s, timestamp_ns = self.read_quaternion_from_imu_in_head(frame_number)
