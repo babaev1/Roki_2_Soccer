@@ -825,7 +825,9 @@ class Player():
             self.motion.fr1 = fr1 
             self.motion.fr2 = fr2 
 
-        if pressed_button == 'start':  walk_straight(number_Of_Cycles = 9, stepLength = 32)          #41 # ��������� ������
+        if pressed_button == 'start':  
+            walk_straight(number_Of_Cycles = 9, stepLength = 32)
+            self.motion.jump_turn(self.motion.direction_To_Attack)
 
         self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')   
 
