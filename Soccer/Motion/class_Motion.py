@@ -465,23 +465,34 @@ class Motion(Robot):
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
-                        servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number + 2)]
+                        #servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number + 2)]
+                        servoDatas = []
                         for i in range(joint_number):
                             if self.keep_hands_up:
                                 if i in self.hand_joints : continue
                             if self.ACTIVESERVOS[i][0] == 8:
-                                n = joint_number - 1 + self.ACTIVESERVOS[i][1]
+                                #n = joint_number - 1 + self.ACTIVESERVOS[i][1]
                                 pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2]/2 + 7500)
-                                servoDatas[n].Id, servoDatas[n].Sio, servoDatas[n].Data = 13, self.ACTIVESERVOS[i][1], pos
+                                #servoDatas[n].Id, servoDatas[n].Sio, servoDatas[n].Data = 13, self.ACTIVESERVOS[i][1], pos
+                                servoData = self.Roki.Rcb4.ServoData()
+                                servoData.Id, servoData.Sio, servoData.Data = 13, self.ACTIVESERVOS[i][1], pos
+                                servoDatas.append(servoData)
                             else: pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
-                            servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                            servoData = self.Roki.Rcb4.ServoData()
+                            servoData.Id, servoData.Sio, servoData.Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                            servoDatas.append(servoData)
+                            #servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
                     else:
-                        servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number)]
+                        #servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number)]
+                        servoDatas = []
                         for i in range(joint_number):
                             if self.keep_hands_up:
                                 if i in self.hand_joints : continue
                             pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
-                            servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                            servoData = self.Roki.Rcb4.ServoData()
+                            servoData.Id, servoData.Sio, servoData.Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                            servoDatas.append(servoData)
+                            #servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
                     if j == 0:
                         a=self.rcb.setServoPosAsync(servoDatas, 10, 9)
                     else:
