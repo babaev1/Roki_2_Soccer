@@ -829,7 +829,7 @@ class Player():
 
         self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')   
 
-        self.motion.keep_hands_up = False
+        self.motion.keep_hands_up = True
         self.motion.ztr0 = - 180
         self.motion.ztl0 = - 180
         self.motion.zt0 = - 180
