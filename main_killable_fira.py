@@ -56,14 +56,14 @@ try:
         second_pressed_button = 'start'
     else:
         second_pressed_button = motion.push_Button(labels)
-    if role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper':
-        motion.direction_To_Attack = -initial_coord[2]
-        motion.activation()
-        local = Local(motion, glob, vision, coord_odometry = initial_coord)
-        motion.local = local
-        local.coordinate_record(odometry = True)
-    else:
-        local = None
+    #if role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper':
+    motion.direction_To_Attack = -initial_coord[2]
+    motion.activation()
+    local = Local(motion, glob, vision, coord_odometry = initial_coord)
+    motion.local = local
+    local.coordinate_record(odometry = True)
+    # else:
+    #     local = None
     print( role, subrole, ' initial_coord = ', initial_coord)
     player = Player(role, second_pressed_button, glob, motion, local)
     player.play_game()

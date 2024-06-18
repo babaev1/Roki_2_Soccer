@@ -825,11 +825,11 @@ class Player():
             self.motion.fr1 = fr1 
             self.motion.fr2 = fr2 
 
-        if pressed_button == 'start':  walk_straight(number_Of_Cycles = 9, stepLength = 52)          #41 # Стартовый проход
+        if pressed_button == 'start':  walk_straight(number_Of_Cycles = 9, stepLength = 32)          #41 # пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
         self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')   
 
-        self.motion.keep_hands_up = True
+        self.motion.keep_hands_up = False
         self.motion.ztr0 = - 180
         self.motion.ztl0 = - 180
         self.motion.zt0 = - 180
