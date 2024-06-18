@@ -1090,6 +1090,7 @@ class Motion(Robot):
                 if result: break
                 time.sleep(0.002)
             self.euler_angle['pitch'], self.euler_angle['roll'], self.euler_angle['yaw'] = pitch, roll, yaw
+            print('body pitch:', round(self.body_euler_angle['pitch'], 2))
         else:
             returnCode, Dummy_Hquaternion= self.sim.simxGetObjectQuaternion(self.clientID, self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
             Dummy_Hquaternion = self.from_vrep_quat_to_conventional_quat(Dummy_Hquaternion)
