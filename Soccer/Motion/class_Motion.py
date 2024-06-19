@@ -1081,15 +1081,21 @@ class Motion(Robot):
     def refresh_Orientation(self):
         if self.glob.SIMULATION == 5:
             for _ in range(10):
-                result, pitch, roll, yaw = self.stm_channel.pitch_roll_yaw_from_imu_in_body()
-                if result: break
+                result1, pitch, roll, yaw = self.stm_channel.pitch_roll_yaw_from_imu_in_body()
+                if result1: 
+                    self.body_euler_angle['pitch'], self.body_euler_angle['roll'], self.body_euler_angle['yaw'] = pitch, roll, yaw
+                    self.body_euler_angle['yaw'] -= self.direction_To_Attack
+                    self.body_euler_angle['yaw'] += self.imu_drift_speed * (time.perf_counter() - self.start_point_for_imu_drift)
+                    break
                 time.sleep(0.002)
-            self.body_euler_angle['pitch'], self.body_euler_angle['roll'], self.body_euler_angle['yaw'] = pitch, roll, yaw
             for _ in range(10):
-                result, pitch, roll, yaw = self.stm_channel.pitch_roll_yaw_from_imu_in_head()
-                if result: break
+                result2, pitch, roll, yaw = self.stm_channel.pitch_roll_yaw_from_imu_in_head()
+                if result2: 
+                    self.euler_angle['pitch'], self.euler_angle['roll'], self.euler_angle['yaw'] = pitch, roll, yaw
+                    self.euler_angle['yaw'] -= self.direction_To_Attack
+                    self.euler_angle['yaw'] += self.imu_drift_speed * (time.perf_counter() - self.start_point_for_imu_drift)
+                    break
                 time.sleep(0.002)
-            self.euler_angle['pitch'], self.euler_angle['roll'], self.euler_angle['yaw'] = pitch, roll, yaw
             print('body pitch:', round(self.body_euler_angle['pitch'], 2), 'body yaw:', round(self.body_euler_angle['yaw'], 2) )
         else:
             returnCode, Dummy_Hquaternion= self.sim.simxGetObjectQuaternion(self.clientID, self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
@@ -1100,10 +1106,12 @@ class Motion(Robot):
             returnCode, Dummy_1quaternion= self.sim.simxGetObjectQuaternion(self.clientID, self.Dummy_1Handle , -1, self.sim.simx_opmode_buffer)
             Dummy_1quaternion = self.from_vrep_quat_to_conventional_quat(Dummy_1quaternion)
             self.body_euler_angle = self.quaternion_to_euler_angle(Dummy_1quaternion)
-        self.body_euler_angle['yaw'] -= self.direction_To_Attack
-        self.euler_angle['yaw'] -= self.direction_To_Attack
-        self.euler_angle['yaw'] += self.imu_drift_speed * (time.perf_counter() - self.start_point_for_imu_drift)
-        self.body_euler_angle['yaw'] += self.imu_drift_speed * (time.perf_counter() - self.start_point_for_imu_drift)
+            self.body_euler_angle['yaw'] -= self.direction_To_Attack
+            self.body_euler_angle['yaw'] += self.imu_drift_speed * (time.perf_counter() - self.start_point_for_imu_drift)
+            self.euler_angle['yaw'] -= self.direction_To_Attack
+            self.euler_angle['yaw'] += self.imu_drift_speed * (time.perf_counter() - self.start_point_for_imu_drift)
+
+        
 
     def turn(self):
         self.robot_In_0_Pose = False

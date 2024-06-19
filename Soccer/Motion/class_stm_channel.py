@@ -55,7 +55,10 @@ class STM_channel():
         y = quat[1]/16384
         z = quat[2]/16384
         w = quat[3]/16384
-        return True, (x,y,z,w)
+        print("quaternion_control_sum = ", (x**2 + y**2 + z**2 + w**2), ' result: ', result)
+        if 0.9 < (x**2 + y**2 + z**2 + w**2) < 1.1:
+            return True, (x,y,z,w)
+        else: return False, (0,0,0,1)
     
     def read_voltage_from_body(self):
         result, adc_bytes = self.rcb.moveRamToComCmdSynchronize(0xcc, 2)

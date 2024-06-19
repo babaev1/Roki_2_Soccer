@@ -799,7 +799,7 @@ class Player():
                 if cycle ==1 or cycle == number_Of_Cycles-2 : stepLength1 = stepLength/3 * 2
                 self.motion.refresh_Orientation()
                 #self.motion.body_euler_angle_calc()
-                rotation = - self.motion.body_euler_angle['yaw'] * 1.1
+                rotation = - self.motion.body_euler_angle['yaw'] * 1.0
                 rotation = self.motion.normalize_rotation(rotation)
                 self.motion.walk_Cycle(stepLength1, sideLength, rotation,cycle, number_Of_Cycles)
             self.motion.walk_Final_Pose(respect_body_tilt = respect_body_tilt)
@@ -841,7 +841,7 @@ class Player():
         self.motion.params['BODY_TILT_AT_WALK'] += 0.0                                  #22222222222222222222222222222222222
         self.motion.first_Leg_Is_Right_Leg = True
         self.motion.stepHeight = 20
-        walk_straight(number_Of_Cycles = 18, stepLength = 30, respect_body_tilt = True)
+        walk_straight(number_Of_Cycles = 16, stepLength = 30, respect_body_tilt = True)
 
         self.motion.play_Soft_Motion_Slot(name = 'Shtanga_2')          # Weight_Lift_2-2023
         self.motion.keep_hands_up = True
@@ -851,7 +851,7 @@ class Player():
         self.motion.params['BODY_TILT_AT_WALK'] += -0.03                                    #333333333333333333333333333333333333333
         #if self.glob.SIMULATION != 5 :  self.motion.params['BODY_TILT_AT_WALK'] = 0
         self.motion.stepHeight = 10
-        walk_straight(number_Of_Cycles = 500, stepLength = 10)
+        walk_straight(number_Of_Cycles = 500, stepLength = 20)
         return
 
         
