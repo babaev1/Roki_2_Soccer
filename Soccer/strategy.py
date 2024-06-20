@@ -221,10 +221,11 @@ class Player():
         if self.role == 'dribbling': self.dribbling_main_cycle()
         if self.role == 'ball_moving': self.ball_moving_main_cycle()
         if self.role == 'dance': self.dance_main_cycle()
-        if self.role == 'quaternion_test': self.quaternion_test()
+        if self.role == 'basketball': self.basketball_main_cycle(self.second_pressed_button)
+        if self.role == 'weight_lifting': self.weight_lifting(self.second_pressed_button)
         if self.role == 'corner_kick_1': self.corner_kick_1_main_cycle()
         if self.role == 'corner_kick_2': self.corner_kick_2_main_cycle()
-        if self.role == 'dribbling': self.dribbling_main_cycle()
+        if self.role == 'triple_jump': self.triple_jump_main_cycle()
         if self.role == 'test_walk': self.test_walk()
         if self.role == 'kick_test': self.kick_test(self.second_pressed_button)
         #print('self.glob.SIMULATION:', self.glob.SIMULATION)
@@ -234,7 +235,7 @@ class Player():
                 self.motion.print_Diagnostics()
                 pass
             self.motion.sim_Disable()
-        sys.exit()
+        #sys.exit(1)
 
     def rotation_test_main_cycle(self):
         number_Of_Cycles = 10
@@ -697,6 +698,26 @@ class Player():
         self.motion.walk_Final_Pose()
         self.motion.first_Leg_Is_Right_Leg = True
 
+    def basketball_main_cycle(self, pressed_button):
+        throw = [
+                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 540, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
+                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 540, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
+                [ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2000, 0, 4700, 0, 0, 0, 0, 0, 0, 0 ],
+                [ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2000, 0, 4700, 0, 0, 0, 0, 0, 0, 0 ],
+                [ 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+                ]
+        throw[2][18] -= int(self.motion.params['BASKETBALL_DISTANCE'])
+        throw[3][18] -= int(self.motion.params['BASKETBALL_DISTANCE'])
+        for i in range(4):
+            throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
+        if pressed_button != 'throw_test':
+            self.motion.play_Soft_Motion_Slot( name = 'Basketball_PickUp')
+        if pressed_button != 'pick_up_test':
+            print("voltage = ", round(self.motion.stm_channel.read_voltage_from_body()[1]/270.2, 2), " 'BASKETBALL_DISTANCE': ", 
+                  int(self.motion.params['BASKETBALL_DISTANCE']))
+            self.motion.play_Soft_Motion_Slot( name = 'throw', motion_list = throw)
+
+
     def dance_main_cycle(self):
         if self.glob.SIMULATION == 5:
             # while True:
@@ -734,14 +755,17 @@ class Player():
 
     def test_walk(self):
         self.motion.first_Leg_Is_Right_Leg == True
-        self.motion.walk_Restart()
-        return
+        #self.motion.walk_Restart()
+        #return
         #self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         #self.go_Around_Ball(0.5, -0.5)
-        number_Of_Cycles = 5
-        stepLength = 20
+        number_Of_Cycles = 10
+        stepLength = 130 #180
         self.motion.gaitHeight = 180
-        sideLength = -20
+        self.motion.stepHeight = 40
+        #self.motion.fr1 = 6
+        #self.motion.fr2 = 10
+        sideLength = 0
         #self.motion.first_Leg_Is_Right_Leg = False
         if self.motion.first_Leg_Is_Right_Leg: invert = 1
         else: invert = -1
@@ -749,33 +773,8 @@ class Player():
         number_Of_Cycles += 1
         for cycle in range(number_Of_Cycles):
             stepLength1 = stepLength
-            #if cycle ==0 : stepLength1 = stepLength/3
-            #if cycle ==1 : stepLength1 = stepLength/3 * 2
-            self.motion.refresh_Orientation()
-            rotation = 0 - self.motion.imu_body_yaw() * 1.2
-            rotation = self.motion.normalize_rotation(rotation)
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
-        #self.motion.first_Leg_Is_Right_Leg == False
-        self.motion.walk_Restart()
-        #self.motion.first_Leg_Is_Right_Leg == False
-        sideLength = 20
-        invert = 1
-        for cycle in range(number_Of_Cycles):
-            stepLength1 = stepLength
-            #if cycle ==0 : stepLength1 = stepLength/3
-            #if cycle ==1 : stepLength1 = stepLength/3 * 2
-            self.motion.refresh_Orientation()
-            rotation = 0 - self.motion.imu_body_yaw() * 1.2
-            rotation = self.motion.normalize_rotation(rotation)
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
-        self.motion.walk_Restart()
-        #self.motion.first_Leg_Is_Right_Leg == True
-        sideLength = -20
-        invert = 1
-        for cycle in range(number_Of_Cycles):
-            stepLength1 = stepLength
-            #if cycle ==0 : stepLength1 = stepLength/3
-            #if cycle ==1 : stepLength1 = stepLength/3 * 2
+            if cycle ==0 : stepLength1 = stepLength/3
+            if cycle ==1 : stepLength1 = stepLength/3 * 2
             self.motion.refresh_Orientation()
             rotation = 0 - self.motion.imu_body_yaw() * 1.2
             rotation = self.motion.normalize_rotation(rotation)
@@ -786,11 +785,78 @@ class Player():
         if second_pressed_button == 'regular':
             self.motion.kick(True)
         else:
-            self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v2')
+            self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
         if self.glob.SIMULATION == 1:
             self.motion.sim_Progress(10)
         
+    def weight_lifting(self, pressed_button):
+        def walk_straight(number_Of_Cycles = 0, stepLength = 0, sideLength = 0, respect_body_tilt = False):
+            self.motion.walk_Initial_Pose()
+            number_Of_Cycles += 2
+            for cycle in range(number_Of_Cycles):
+                stepLength1 = stepLength
+                if cycle ==0 or cycle == number_Of_Cycles-1 : stepLength1 = stepLength/3
+                if cycle ==1 or cycle == number_Of_Cycles-2 : stepLength1 = stepLength/3 * 2
+                self.motion.refresh_Orientation()
+                #self.motion.body_euler_angle_calc()
+                rotation = - self.motion.body_euler_angle['yaw'] * 1.0
+                rotation = self.motion.normalize_rotation(rotation)
+                self.motion.walk_Cycle(stepLength1, sideLength, rotation,cycle, number_Of_Cycles)
+            self.motion.walk_Final_Pose(respect_body_tilt = respect_body_tilt)
 
+        def walk_straight_slow(number_Of_Cycles = 0, stepLength = 0, sideLength = 0):
+            amplitude = self.motion.amplitude
+            fr1 = self.motion.fr1
+            fr2 = self.motion.fr2
+            self.motion.amplitude = 70 
+            self.motion.fr1 = 50 
+            self.motion.fr2 = 20 
+            self.motion.walk_Initial_Pose()
+            number_Of_Cycles += 2
+            for cycle in range(number_Of_Cycles):
+                stepLength1 = stepLength
+                if cycle ==0 or cycle == number_Of_Cycles-1 : stepLength1 = stepLength/3
+                if cycle ==1 or cycle == number_Of_Cycles-2 : stepLength1 = stepLength/3 * 2
+                self.motion.refresh_Orientation()
+                self.motion.body_euler_angle_calc()
+                rotation = - self.motion.body_euler_angle['yaw'] * 1.2
+                rotation = self.motion.normalize_rotation(rotation)
+                self.motion.walk_Cycle_slow(stepLength1, sideLength, rotation,cycle, number_Of_Cycles)
+            self.motion.walk_Final_Pose()
+            self.motion.amplitude = amplitude 
+            self.motion.fr1 = fr1 
+            self.motion.fr2 = fr2 
+
+        if pressed_button == 'start':  
+            walk_straight(number_Of_Cycles = 9, stepLength = 32)
+            self.motion.jump_turn(0)
+
+        self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')   
+
+        self.motion.keep_hands_up = True
+        self.motion.ztr0 = - 180
+        self.motion.ztl0 = - 180
+        self.motion.zt0 = - 180
+        self.motion.gaitHeight = 170
+        self.motion.params['BODY_TILT_AT_WALK'] += 0.0                                  #22222222222222222222222222222222222
+        self.motion.first_Leg_Is_Right_Leg = True
+        self.motion.stepHeight = 20
+        walk_straight(number_Of_Cycles = 16, stepLength = 30, respect_body_tilt = True)
+
+        self.motion.play_Soft_Motion_Slot(name = 'Shtanga_2')          # Weight_Lift_2-2023
+        self.motion.keep_hands_up = True
+        self.motion.ztr0 = - 170
+        self.motion.ztl0 = - 170
+        self.motion.zt0 = - 170
+        self.motion.params['BODY_TILT_AT_WALK'] += -0.03                                    #333333333333333333333333333333333333333
+        #if self.glob.SIMULATION != 5 :  self.motion.params['BODY_TILT_AT_WALK'] = 0
+        self.motion.stepHeight = 10
+        walk_straight(number_Of_Cycles = 500, stepLength = 20)
+        return
+    
+    def triple_jump_main_cycle(self):
+        time.sleep(10)
+        self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
         
 
 

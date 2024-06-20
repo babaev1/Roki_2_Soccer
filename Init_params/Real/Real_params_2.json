@@ -18,5 +18,7 @@
   "USE_SINGLE_POST_MEASUREMENT": true,
   "CAMERA_VERTICAL_RESOLUTION": 650,
   "CAMERA_HORIZONTAL_RESOLUTION": 800,
-  "Vision_Sensor_Display_On": true
+  "Vision_Sensor_Display_On": true,
+  "BASKETBALL_DISTANCE": 0,
+  "BASKETBALL_DIRECTION": 0
 }

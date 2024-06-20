@@ -30,7 +30,7 @@ except Exception:
     # will be running on desktop computer
     current_work_directory += '/'
     import threading
-    SIMULATION = 0                      # 0 - Simulation without physics, 
+    SIMULATION = 1                      # 0 - Simulation without physics, 
                                         # 1 - Simulation synchronous with physics, 
                                         # 3 - Simulation streaming with physics
 
@@ -42,7 +42,7 @@ try:
             print('New process')
             with open(filename01, "a") as f01:
                 print(datetime.datetime.now(), file = f01)
-                p01 = subprocess.Popen(['python', 'main_killable.py'], stderr=f01) #, stdout = f01)
+                p01 = subprocess.Popen(['python', 'main_killable_fira.py'], stderr=f01) #, stdout = f01)
             message_was_sounded = False
             counter = 0
             while True:
@@ -129,8 +129,8 @@ try:
             motion[i].falling_Flag = 0
             #goalkeeper, forward_v2, run_test, penalty_Shooter, rotation_test, penalty_Goalkeeper, spot_walk, dance, quaternion_test, test_walk, kick_test
             if i == 0 or i == 3:
-                second_pressed_button = 'short_run'   # side_step_left, side_step_right, short_run, rotation_right, spot_run, start_later
-                m.append(Player('run_test', second_pressed_button, glob[i], motion[i], local[i])) 
+                second_pressed_button = 'start'   # side_step_left, side_step_right, short_run, rotation_right, spot_run, start_later
+                m.append(Player('weight_lifting', second_pressed_button, glob[i], motion[i], local[i])) 
             if i == 1:
                 second_pressed_button = 'start'
                 m.append(Player('forward', second_pressed_button, glob[i], motion[i], local[i]))
@@ -174,6 +174,7 @@ try:
             ax.grid(True)
             plt.show()
             os.remove("Export_data.npy")
+            print('average timing for 3m : ', 3 / (Dummy_HDataX[-1] - Dummy_HDataX[0]) * len(Dummy_HDataX) * 0.015)
 
 
 
