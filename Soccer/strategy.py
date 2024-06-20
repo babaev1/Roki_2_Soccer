@@ -855,6 +855,7 @@ class Player():
         return
     
     def triple_jump_main_cycle(self):
+        self.glob.stm_channel.mb.SetBodyQueuePeriod(15)
         time.sleep(10)
         self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
         
