@@ -226,7 +226,7 @@ class Player():
         if self.role == 'corner_kick_1': self.corner_kick_1_main_cycle()
         if self.role == 'corner_kick_2': self.corner_kick_2_main_cycle()
         if self.role == 'triple_jump': self.triple_jump_main_cycle()
-        if self.role == 'sprint': self.sprint()
+        if self.role == 'sprint': self.sprint(self.second_pressed_button)
         if self.role == 'kick_test': self.kick_test(self.second_pressed_button)
         #print('self.glob.SIMULATION:', self.glob.SIMULATION)
         if [0,1,3].count(self.glob.SIMULATION) == 1:
@@ -754,13 +754,16 @@ class Player():
             self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
 
     def sprint(self, second_pressed_button):
+        self.motion.rcb.motionPlay(20)
+        time.sleep(20)
+        return
         self.motion.first_Leg_Is_Right_Leg == True
         #self.motion.walk_Restart()
         #return
         #self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         #self.go_Around_Ball(0.5, -0.5)
-        number_Of_Cycles = 10
-        stepLength = 130 #180
+        number_Of_Cycles = 19
+        stepLength = 100 #180
         self.motion.gaitHeight = 180
         self.motion.stepHeight = 40
         #self.motion.fr1 = 6
