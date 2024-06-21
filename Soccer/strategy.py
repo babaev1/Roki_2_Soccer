@@ -225,8 +225,8 @@ class Player():
         if self.role == 'weight_lifting': self.weight_lifting(self.second_pressed_button)
         if self.role == 'corner_kick_1': self.corner_kick_1_main_cycle()
         if self.role == 'corner_kick_2': self.corner_kick_2_main_cycle()
-        if self.role == 'dribbling': self.dribbling_main_cycle()
-        if self.role == 'sprint': self.sprint(self.second_pressed_button)
+        if self.role == 'triple_jump': self.triple_jump_main_cycle()
+        if self.role == 'sprint': self.sprint()
         if self.role == 'kick_test': self.kick_test(self.second_pressed_button)
         #print('self.glob.SIMULATION:', self.glob.SIMULATION)
         if [0,1,3].count(self.glob.SIMULATION) == 1:
@@ -853,7 +853,11 @@ class Player():
         self.motion.stepHeight = 10
         walk_straight(number_Of_Cycles = 500, stepLength = 20)
         return
-
+    
+    def triple_jump_main_cycle(self):
+        self.glob.stm_channel.mb.SetBodyQueuePeriod(15)
+        time.sleep(10)
+        self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
         
 
 
