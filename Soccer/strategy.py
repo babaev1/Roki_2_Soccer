@@ -226,7 +226,7 @@ class Player():
         if self.role == 'corner_kick_1': self.corner_kick_1_main_cycle()
         if self.role == 'corner_kick_2': self.corner_kick_2_main_cycle()
         if self.role == 'dribbling': self.dribbling_main_cycle()
-        if self.role == 'test_walk': self.test_walk()
+        if self.role == 'sprint': self.sprint(self.second_pressed_button)
         if self.role == 'kick_test': self.kick_test(self.second_pressed_button)
         #print('self.glob.SIMULATION:', self.glob.SIMULATION)
         if [0,1,3].count(self.glob.SIMULATION) == 1:
@@ -753,7 +753,7 @@ class Player():
             self.motion.play_Soft_Motion_Slot( name = 'Dance_2')
             self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
 
-    def test_walk(self):
+    def sprint(self, second_pressed_button):
         self.motion.first_Leg_Is_Right_Leg == True
         #self.motion.walk_Restart()
         #return
@@ -776,7 +776,7 @@ class Player():
             if cycle ==0 : stepLength1 = stepLength/3
             if cycle ==1 : stepLength1 = stepLength/3 * 2
             self.motion.refresh_Orientation()
-            rotation = 0 - self.motion.imu_body_yaw() * 1.2
+            rotation = 0 - self.motion.imu_body_yaw() * 1.0
             rotation = self.motion.normalize_rotation(rotation)
             self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
