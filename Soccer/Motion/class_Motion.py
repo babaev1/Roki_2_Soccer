@@ -80,6 +80,16 @@ class Motion(Robot):
         self.yl = 0
         self.zl = -1
         self.wl = 0
+        self.tors_angle = 0
+        self.fase_offset = 0.7
+        self.xtl0 = 0
+        self.xtr0 = 0
+        self.dx0_typical = 0
+        self.dy0_typical = 0
+        self.alpha01 = 0
+        self.lateral_offset = 0
+        self.ugol_torsa = 0.4
+        self.dobavka_x_ot_torsa = 0
         self.euler_angle = {}
         self.robot_In_0_Pose = True
         self.keep_hands_up = False
@@ -315,16 +325,16 @@ class Motion(Robot):
                 self.play_Soft_Motion_Slot(name = 'Get_Up_Left')
         return self.falling_Flag
 
-    def computeAlphaForWalk(self,sizes, limAlpha, hands_on = True ):
+    def computeAlphaForWalk(self, hands_on = True ):
         angles =[]
         anglesR=[]
         anglesL=[]
         #if self.glob.SIMULATION == 2:
-        anglesR = starkit.alpha_calculation(self.xtr,self.ytr,self.ztr,self.xr,self.yr,self.zr,self.wr, sizes, limAlpha)
-        anglesL = starkit.alpha_calculation(self.xtl,-self.ytl,self.ztl,self.xl,-self.yl,self.zl,self.wl, sizes, limAlpha)
+        anglesR = starkit.alpha_calculation(self.xtr,self.ytr,self.ztr,self.xr,self.yr,self.zr,self.wr, self.SIZES, self.LIMALPHA)
+        anglesL = starkit.alpha_calculation(self.xtl,-self.ytl,self.ztl,self.xl,-self.yl,self.zl,self.wl, self.SIZES, self.LIMALPHA)
         #else:
-        #    anglesR = self.al.compute_Alpha_v3(self.xtr,self.ytr,self.ztr,self.xr,self.yr,self.zr,self.wr, sizes, limAlpha)
-        #    anglesL = self.al.compute_Alpha_v3(self.xtl,-self.ytl,self.ztl,self.xl,-self.yl,self.zl,self.wl, sizes, limAlpha)
+        #    anglesR = self.al.compute_Alpha_v3(self.xtr,self.ytr,self.ztr,self.xr,self.yr,self.zr,self.wr, self.SIZES, self.LIMALPHA)
+        #    anglesL = self.al.compute_Alpha_v3(self.xtl,-self.ytl,self.ztl,self.xl,-self.yl,self.zl,self.wl, self.SIZES, self.LIMALPHA)
         if len(anglesR)>1:
             for i in range(len(anglesR)):
                 if len(anglesR)==1: break
@@ -431,7 +441,7 @@ class Motion(Robot):
             # self.ytl =  self.d10 - j*self.amplitude/2 /self.initPoses
             self.ytr = -self.d10 - j* 32 /self.initPoses
             self.ytl =  self.d10 - j* 32 /self.initPoses
-            angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA )
+            angles = self.computeAlphaForWalk()
             #if not self.falling_Flag ==0: return
             if len(angles)==0:
                 self.exitFlag = self.exitFlag +1
@@ -510,7 +520,7 @@ class Motion(Robot):
         #for j in range (cycles):
         #    self.ytr = -self.d10 - 60 + (j +1) *dS
         #    self.ytl =  self.d10 - 60 + (j +1) *dS
-        #    angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA )
+        #    angles = self.computeAlphaForWalk()
         #    if len(angles)==0:
         #        self.exitFlag = self.exitFlag +1
         #    else:
@@ -681,7 +691,7 @@ class Motion(Robot):
                     self.wr = self.wl = (iii-(2*self.fr1+self.fr2))* rotation/(self.fr2- 2 * framestep) *2 - rotation
                 self.xtr -= dx0
                 self.ytr += dy0
-            angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA )
+            angles = self.computeAlphaForWalk()
             #print('iii = ', iii, 'xtr =', round(self.xtr,2), 'xtl =', round(self.xtl, 2))
             if not self.falling_Flag ==0: return
             if len(angles)==0:
@@ -757,6 +767,448 @@ class Motion(Robot):
         #self.first_Leg_Is_Right_Leg = tmp1
         if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
 
+    def walk_Cycle_With_Tors(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
+        self.robot_In_0_Pose = False
+        if not self.falling_Test() == 0:
+            self.local.quality =0
+            if self.falling_Flag == 3: uprint('STOP!')
+            else: uprint('FALLING!!!', self.falling_Flag)
+            return[]
+        self.stepLength = stepLength + self.motion_shift_correction_x
+        self.sideLength = sideLength - self.motion_shift_correction_y
+        self.rotation = math.degrees(rotation)
+        #tmp1 = self.first_Leg_Is_Right_Leg
+        #if rotation>0 or sideLength<0:  self.first_Leg_Is_Right_Leg = False
+        #else: self.first_Leg_Is_Right_Leg = True
+        if self.rotation <= 0: 
+            rotation = -self.rotation/222 * 0.23 / self.params['ROTATION_YIELD_RIGHT']
+        else:
+            rotation = -self.rotation/222 * 0.23 / self.params['ROTATION_YIELD_LEFT']
+        if rotation > 0.125 : rotation = 0.125
+        if rotation < -0.125 : rotation = -0.125
+        alpha = 0
+        if self.fr1 == 0:
+            alpha01 = math.pi
+        else:
+            alpha01 = math.pi/self.fr1*2
+        frameNumberPerCycle = 2*self.fr1+2*self.fr2
+        framestep = self.simThreadCycleInMs//10
+        xtl0 = self.stepLength * (1 - (self.fr1 + self.fr2 + 2 * framestep) / (2*self.fr1+self.fr2+ 2 * framestep)) * 1.5     # 1.5 - podgon
+        xtr0 = self.stepLength * (1/2 - (self.fr1 + self.fr2 + 2 * framestep ) / (2*self.fr1+self.fr2+ 2 * framestep))
+        dx0_typical = self.stepLength/(2*self.fr1+self.fr2+ 2 * framestep)*framestep        # CoM propulsion forward per framestep
+        dy0_typical = self.sideLength/(2*self.fr1+self.fr2+ 2 * framestep)*framestep        # CoM propulsion sideways per framestep
+        ugol_torsa = 0.4
+        diapazon_kachania_torsa = self.SIZES[0] * 2 * math.sin(ugol_torsa)
+        dobavka_x_ot_torsa = diapazon_kachania_torsa / self.fr2 * framestep
+
+        xr_old, xl_old, yr_old, yl_old = self.xr, self.xl, self.yr, self.yl
+        # correction of body tilt forward
+        self.xr, self.xl = self.params['BODY_TILT_AT_WALK'], self.params['BODY_TILT_AT_WALK']   #
+        # correction of sole skew depending on side angle of body when step pushes land
+        self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+            # counter = 0
+            # while True:
+            #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: 
+            #         print('Sleeping time at walk cycle: ', counter * 0.02)
+            #         break
+            #     time.sleep(0.02)
+            #     counter += 1
+        fase_offset = 0.7
+        for iii in range(0,frameNumberPerCycle,framestep):
+            if self.glob.SIMULATION == 5: start1 = time.perf_counter()
+            if 0<= iii <self.fr1 :                                              # FASA 1
+                alpha = alpha01 * (iii/2+ fase_offset*framestep)
+                #alpha = alpha01 * iii/2
+                S = (self.amplitude/2 + self.sideLength/2 )*math.cos(alpha)
+                self.ytr = S - self.d10 + self.sideLength/2 - (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                self.ytl = S + self.d10 + self.sideLength/2 + (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                self.ztl = -self.gaitHeight
+                self.ztr = -self.gaitHeight
+                if cycle ==0: continue
+                else: dx0 = dx0_typical + dobavka_x_ot_torsa
+                self.xtl = xtl0 - dx0 - dx0 * iii/framestep
+                self.xtr = xtr0 - dx0 - dx0 * iii/framestep
+
+            if self.fr1+self.fr2<=iii<2*self.fr1+self.fr2 :                     # FASA 3
+                alpha = alpha01 * ((iii-self.fr2)/2+ fase_offset*framestep)
+                #alpha = alpha01 * (iii-self.fr2)/2
+                S = (self.amplitude/2 + self.sideLength/2)*math.cos(alpha)
+                self.ytr = S - self.d10 - self.sideLength/2 - (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                self.ytl = S + self.d10 + self.sideLength/2 + (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                self.ztl = -self.gaitHeight
+                self.ztr = -self.gaitHeight
+                dx0 = dx0_typical + dobavka_x_ot_torsa
+                self.xtl -= dx0
+                self.xtr -= dx0
+
+            if self.fr1<= iii <self.fr1+self.fr2:                               # FASA 2
+                self.ztr = -self.gaitHeight + self.stepHeight
+                if cycle ==0:
+                    self.tors_angle = math.asin(dobavka_x_ot_torsa / self.SIZES[0] * ((iii - self.fr1)/ framestep + 1)/2)
+                    dx = (self.stepLength + dobavka_x_ot_torsa * self.fr1/framestep)/(self.fr2- 2 * framestep)*framestep/2
+                    dx0 = dx0_typical
+                    dy = self.sideLength/self.fr2*framestep
+                    dy0 = dy0_typical
+                else:
+                    self.tors_angle = math.asin(math.sin(- ugol_torsa) + dobavka_x_ot_torsa / self.SIZES[0] * ((iii - self.fr1)/ framestep + 1))
+                    dx = (self.stepLength + dobavka_x_ot_torsa * self.fr1/framestep)/(self.fr2- 2 * framestep)*framestep #* 0.75
+                    dx0 = dx0_typical
+                    dy = self.sideLength/self.fr2*framestep
+                    dy0 = dy0_typical
+                if iii==self.fr1:
+                    self.xtr -= dx0
+                    #self.ytr = S - 64 + dy0
+                    self.ytr = S - self.d10 + dy0 - (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                    self.ztr = -self.gaitHeight + self.stepHeight/2
+                elif iii == (self.fr1 +self.fr2 - framestep):
+                    self.xtr -= dx0
+                    self.ytr = S - self.d10 + 2*dy0 - self.sideLength - (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                else:
+                    self.xtr += dx
+                    self.ytr = S - 64 + dy0 - dy*self.fr2/(self.fr2- 2 * framestep)*((iii - self.fr1)/2) - (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                    self.wr = self.wl = rotation -(iii-self.fr1)* rotation/(self.fr2- 2 * framestep)*2
+                self.xtl -= dx0
+                self.ytl += dy0
+
+            if 2*self.fr1+self.fr2<= iii :                                         # FASA 4
+                self.ztl = -self.gaitHeight + self.stepHeight
+                self.tors_angle = math.asin(math.sin(ugol_torsa) - dobavka_x_ot_torsa / self.SIZES[0] * ((iii - 2*self.fr1 - self.fr2)/ framestep + 1))
+                if cycle == number_Of_Cycles - 1:
+                    dx0 = dx0_typical * 4 / self.fr2           # 8.75/6
+                    dx = ((self.stepLength + dobavka_x_ot_torsa * self.fr1/framestep)*(self.fr1+self.fr2)/(4*self.fr1)+2*dx0)/(self.fr2- 2 * framestep) *framestep / 1.23076941   # 1.23076941 = podgon
+                    if iii== (2*self.fr1 + 2*self.fr2 - framestep):
+                        self.ztl = -self.gaitHeight
+                        self.ytl = S + self.d10
+                else:
+                    dx = (self.stepLength + dobavka_x_ot_torsa * self.fr1/framestep)/(self.fr2- 2 * framestep) *framestep # * 0.75
+                    dx0 = dx0_typical
+                    dy = self.sideLength/(self.fr2- 2 * framestep) *framestep
+                    dy0 = dy0_typical
+                if iii== (2*self.fr1 + self.fr2 ):
+                    self.xtl -= dx0
+                    #self.ytl = S + 64 + dy0
+                    self.ytl = S + self.d10 + dy0 + (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                    self.ztl = -self.gaitHeight + self.stepHeight/2
+                elif iii== (2*self.fr1 + 2*self.fr2 - framestep):
+                    self.xtl -= dx0
+                    self.ytl = S + self.d10 + 2*dy0 - self.sideLength + (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                else:
+                    self.xtl += dx
+                    self.ytl = S + 64 + dy0 - dy * (iii -(2*self.fr1+self.fr2) )/2 + (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                    self.wr = self.wl = (iii-(2*self.fr1+self.fr2))* rotation/(self.fr2- 2 * framestep) *2 - rotation
+                self.xtr -= dx0
+                self.ytr += dy0
+            angles = self.computeAlphaForWalk()
+            #print('iii = ', iii, 'xtr =', round(self.xtr,2), 'xtl =', round(self.xtl, 2))
+            if not self.falling_Flag ==0: return
+            if len(angles)==0:
+                print('bad_ik_calc:', 'iii = ', iii, 'xtr:', self.xtr, 'ytr:', self.ytr, 'ztr:', self.ztr, 'xtl:', self.xtl, 'ytl:', self.ytl, 'ztl:', self.ztl )
+                self.exitFlag = self.exitFlag +1
+            else:
+                if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0 or self.glob.SIMULATION == 3:
+                    if self.glob.SIMULATION == 3: self.wait_sim_step()
+                    #self.sim.simxPauseCommunication(self.clientID, True)
+                    angles[10] = self.tors_angle
+                    angles[5] -= self.tors_angle
+                    angles[16] -= self.tors_angle
+                    for i in range(len(angles)):
+                        if self.keep_hands_up:
+                            if i in self.hand_joints : continue
+                        if self.glob.SIMULATION == 1 or self.glob.SIMULATION == 3:
+                           returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
+                                        self.jointHandle[i] , angles[i]*self.ACTIVESERVOS[i][3]+self.trims[i],
+                                        self.sim.simx_opmode_oneshot)
+                        elif self.glob.SIMULATION == 0:
+                           returnCode = self.sim.simxSetJointPosition(self.clientID,
+                                        self.jointHandle[i] , angles[i]*self.ACTIVESERVOS[i][3]+self.trims[i],
+                                        self.sim.simx_opmode_oneshot)
+                    #self.sim.simxPauseCommunication(self.clientID, False)
+                    if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0 or self.glob.SIMULATION == 3:
+                        time.sleep(self.slowTime)
+                        returnCode, Dummy_Hposition= self.sim.simxGetObjectPosition(self.clientID, self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
+                        self.Dummy_HData.append(Dummy_Hposition)
+                        returnCode, self.Ballposition= self.sim.simxGetObjectPosition(self.clientID, self.BallHandle , -1, self.sim.simx_opmode_buffer)
+                        self.BallData.append(self.Ballposition)
+                        #uprint(self.euler_angle)
+                        self.timeElapsed = self.timeElapsed +1
+                        #uprint(Dummy_Hposition)
+                        #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
+                        #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
+                        if self.glob.SIMULATION == 1:
+                            self.sim_simxSynchronousTrigger(self.clientID)
+                elif self.glob.SIMULATION == 5:
+                    joint_number = len(angles)
+                    servoDatas = []
+                    if self.model == 'Roki_2':
+                        for i in range(joint_number):
+                            if self.keep_hands_up:
+                                if i in self.hand_joints : continue
+                            if self.ACTIVESERVOS[i][0] == 8:
+                                pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2]/2 + 7500)
+                                servoData = self.Roki.Rcb4.ServoData()
+                                servoData.Id, servoData.Sio, servoData.Data = 13, self.ACTIVESERVOS[i][1], pos
+                                servoDatas.append(servoData)
+                            else: pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
+                            servoData = self.Roki.Rcb4.ServoData()
+                            servoData.Id, servoData.Sio, servoData.Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                            servoDatas.append(servoData)
+                    else:
+                        servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number)]
+                        for i in range(joint_number):
+                            if self.keep_hands_up:
+                                if i in self.hand_joints : continue
+                            pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
+                            servoData = self.Roki.Rcb4.ServoData()
+                            servoData.Id, servoData.Sio, servoData.Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                            servoDatas.append(servoData)
+                    a=self.rcb.setServoPosAsync(servoDatas, self.frames_per_cycle, 0)
+                    #print('calc time =',time1 - time2, 'transfer time =', time2 )
+                    time1 = time.perf_counter() - start1
+                    #time.sleep(self.frame_delay/1000 - time1)
+                #self.refresh_Orientation()
+        # returning xr, xl, yr, yl to initial value
+        self.xr, self.xl, self.yr, self.yl = xr_old, xl_old, yr_old, yl_old
+        self.local.coord_shift[0] = self.cycle_step_yield*stepLength/64/1000
+        if self.first_Leg_Is_Right_Leg:
+            self.local.coord_shift[1] = -self.side_step_right_yield * sideLength/20/1000
+        else: self.local.coord_shift[1] = self.side_step_left_yield * sideLength/20/1000
+        self.local.coordinate_record(odometry = True, shift = True)
+        self.local.refresh_odometry()
+        #self.first_Leg_Is_Right_Leg = tmp1
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+
+    def walk_Cycle_With_Tors_v2(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
+        self.walk_Cycle_With_Tors_v2_init(stepLength,sideLength, rotation)
+        self.walk_Cycle_With_Tors_v2_Phase1(cycle)
+        self.walk_Cycle_With_Tors_v2_Phase2(cycle)
+        self.walk_Cycle_With_Tors_v2_Phase3()
+        self.walk_Cycle_With_Tors_v2_Phase4(cycle, number_Of_Cycles)
+
+        self.local.coord_shift[0] = self.cycle_step_yield*stepLength/64/1000
+        if self.first_Leg_Is_Right_Leg:
+            self.local.coord_shift[1] = -self.side_step_right_yield * sideLength/20/1000
+        else: self.local.coord_shift[1] = self.side_step_left_yield * sideLength/20/1000
+        self.local.coordinate_record(odometry = True, shift = True)
+        self.local.refresh_odometry()
+        #self.first_Leg_Is_Right_Leg = tmp1
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+
+    def walk_Cycle_With_Tors_v2_init(self, stepLength,sideLength, rotation):
+        self.robot_In_0_Pose = False
+        if not self.falling_Test() == 0:
+            self.local.quality =0
+            if self.falling_Flag == 3: uprint('STOP!')
+            else: uprint('FALLING!!!', self.falling_Flag)
+            return[]
+        self.stepLength = stepLength + self.motion_shift_correction_x
+        self.sideLength = sideLength - self.motion_shift_correction_y
+        #tmp1 = self.first_Leg_Is_Right_Leg
+        #if rotation>0 or sideLength<0:  self.first_Leg_Is_Right_Leg = False
+        #else: self.first_Leg_Is_Right_Leg = True
+        if rotation <= 0: 
+            self.rotation = -self.rotation * 0.25 * 0.23 / self.params['ROTATION_YIELD_RIGHT']
+        else:
+            self.rotation = -self.rotation * 0.25 * 0.23 / self.params['ROTATION_YIELD_LEFT']
+        if self.rotation > 0.125 : self.rotation = 0.125
+        if self.rotation < -0.125 : self.rotation = -0.125
+        alpha = 0
+        if self.fr1 == 0:
+            self.alpha01 = math.pi
+        else:
+            self.alpha01 = math.pi/self.fr1*2
+        self.dx0_typical = self.stepLength/(2*self.fr1+self.fr2)        # CoM propulsion forward per framestep
+        self.dy0_typical = self.sideLength/(2*self.fr1+self.fr2)        # CoM propulsion sideways per framestep
+        self.dobavka_x_ot_torsa = self.SIZES[0] * 2 * math.sin(self.ugol_torsa) / self.fr2
+        # correction of body tilt forward
+        self.xr, self.xl = self.params['BODY_TILT_AT_WALK'], self.params['BODY_TILT_AT_WALK']   #
+        # correction of sole skew depending on side angle of body when step pushes land
+        self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+        self.fase_offset = 0.7
+
+    def walk_Cycle_With_Tors_v2_Phase1(self, cycle):
+        phase = '1'
+        for i in range(self.fr1):
+            alpha = self.alpha01 * (i/2+ self.fase_offset)
+            #alpha = alpha01 * i/2
+            self.lateral_offset = (self.amplitude/2 + self.sideLength/2 )*math.cos(alpha)
+            self.ytr = self.lateral_offset - self.d10 + self.sideLength/2 - (1-math.cos(self.tors_angle)) * self.SIZES[0]
+            self.ytl = self.lateral_offset + self.d10 + self.sideLength/2 + (1-math.cos(self.tors_angle)) * self.SIZES[0]
+            self.ztl = -self.gaitHeight
+            self.ztr = -self.gaitHeight
+            if cycle ==0: continue
+            else: dx0 = self.dx0_typical + self.dobavka_x_ot_torsa
+            #xtl_plan = self.stepLength * ( 0.5 -  self.fr1/( 2.0 * self.fr1 + self.fr2)) - self.dobavka_x_ot_torsa * self.fr1
+            xtl_plan = self.stepLength * (0.5 - self.fr1/( 2.0 * self.fr1 + self.fr2)) - self.dobavka_x_ot_torsa * self.fr1 * self.fr2 / ( 2.0 * self.fr1 + self.fr2)
+            dx1 = (xtl_plan - self.xtl) / (self.fr1 - i)
+            self.xtr += dx1
+            self.xtl += dx1
+            #self.xtl = self.xtl0 - dx0 - dx0 * i
+            #self.xtr = self.xtr0 - dx0 - dx0 * i
+            self.perform_motion(phase, i)
+
+    def walk_Cycle_With_Tors_v2_Phase3(self):
+        phase = '3'
+        for i in range(self.fr1):
+            alpha = self.alpha01 * ((i + self.fr1)/2+ self.fase_offset)
+            #alpha = alpha01 * (i+self.fr1)/2
+            self.lateral_offset = (self.amplitude/2 + self.sideLength/2)*math.cos(alpha)
+            self.ytr = self.lateral_offset - self.d10 - self.sideLength/2 - (1-math.cos(self.tors_angle)) * self.SIZES[0]
+            self.ytl = self.lateral_offset + self.d10 + self.sideLength/2 + (1-math.cos(self.tors_angle)) * self.SIZES[0]
+            self.ztl = -self.gaitHeight
+            self.ztr = -self.gaitHeight
+            #dx0 = self.dx0_typical + self.dobavka_x_ot_torsa
+            #self.xtl -= dx0
+            #self.xtr -= dx0
+            xtr_plan = self.stepLength * (0.5 - self.fr1/( 2.0 * self.fr1 + self.fr2)) - self.dobavka_x_ot_torsa * self.fr1 * self.fr2 / ( 2.0 * self.fr1 + self.fr2)
+            dx1 = (xtr_plan - self.xtr) / (self.fr1 - i)
+            self.xtr += dx1
+            self.xtl += dx1
+            self.perform_motion(phase, i)
+
+    def walk_Cycle_With_Tors_v2_Phase2(self, cycle):
+        phase = '2'
+        dy = self.sideLength/self.fr2
+        xtl_plan = self.stepLength * (0.5 - (self.fr1 + self.fr2)/( 2.0 * self.fr1 + self.fr2)) + self.dobavka_x_ot_torsa * self.fr1 * self.fr2 / ( 2.0 * self.fr1 + self.fr2)
+        xtr_plan = self.stepLength * 0.5 + self.dx0_typical + self.dobavka_x_ot_torsa
+        dy0 = self.dy0_typical
+        #segments = [1,2,2,1]
+        for i in range(self.fr2):
+            self.ztr = -self.gaitHeight + self.stepHeight
+            #dx0 = self.dx0_typical
+            dx2 = (xtl_plan - self.xtl) / (self.fr2 - i)
+            if cycle ==0:
+                self.tors_angle = math.asin(self.dobavka_x_ot_torsa / self.SIZES[0] * (i + 1)/2)
+                #dx = (self.stepLength + self.dobavka_x_ot_torsa * self.fr1)/(self.fr2- 2)/2
+            else:
+                self.tors_angle = math.asin(math.sin(- self.ugol_torsa) + self.dobavka_x_ot_torsa / self.SIZES[0] * (i + 1))
+                #dx = (self.stepLength + self.dobavka_x_ot_torsa * self.fr1)/(self.fr2- 2) #* 0.75
+            if i==0:
+                self.xtr += dx2 - self.dobavka_x_ot_torsa
+                #self.ytr = self.lateral_offset - 64 + dy0
+                self.ytr = self.lateral_offset - self.d10 + dy0 - (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                self.ztr = -self.gaitHeight + self.stepHeight/2
+            elif i == (self.fr2 - 1):
+                self.xtr += dx2 - self.dobavka_x_ot_torsa
+                self.ytr = self.lateral_offset - self.d10 + 2*dy0 - self.sideLength - (1-math.cos(self.tors_angle)) * self.SIZES[0]
+            else:
+                if i == 1: 
+                    self.ztr = -self.gaitHeight + self.stepHeight/2
+                    #dxr = (xtr_plan - self.xtr) / 6
+                dx = (xtr_plan - self.xtr) / (self.fr2 - i)
+                #dx = dxr * segments[i-1]
+                self.xtr += dx 
+                self.ytr = self.lateral_offset - 64 + dy0 - dy*self.fr2/(self.fr2- 2)*(i/2) - (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                self.wr = self.wl = self.rotation - i * self.rotation/(self.fr2- 2)*2
+            self.xtl += dx2
+            self.ytl += dy0
+            self.perform_motion(phase, i)
+
+    def walk_Cycle_With_Tors_v2_Phase4(self, cycle, number_Of_Cycles):
+        phase = '4'
+        #segments = [1,2,2,1]
+        for i in range(self.fr2):
+            self.ztl = -self.gaitHeight + self.stepHeight
+            self.tors_angle = math.asin(math.sin(self.ugol_torsa) - self.dobavka_x_ot_torsa / self.SIZES[0] * (i + 1))
+            dy0 = self.dy0_typical
+            dy = self.sideLength/(self.fr2- 2)
+            
+            if cycle == number_Of_Cycles - 1:
+                xtr_plan = xtl_plan = 0
+                if i== (self.fr2 - 1):
+                    self.ztl = -self.gaitHeight
+                    self.ytl = self.lateral_offset + self.d10
+            else:
+                xtr_plan = self.stepLength * (0.5 - (self.fr1 + self.fr2)/( 2.0 * self.fr1 + self.fr2)) + self.dobavka_x_ot_torsa * self.fr1 * self.fr2 / ( 2.0 * self.fr1 + self.fr2)
+                xtl_plan = self.stepLength * 0.5 + self.dx0_typical + self.dobavka_x_ot_torsa
+
+            dx4 = (xtr_plan - self.xtr) / (self.fr2 - i)
+            if i== 0:
+                self.xtl += dx4 - self.dobavka_x_ot_torsa
+                #self.ytl = self.lateral_offset + 64 + dy0
+                self.ytl = self.lateral_offset + self.d10 + dy0 + (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                self.ztl = -self.gaitHeight + self.stepHeight/2
+            elif i== (self.fr2 - 1):
+                self.xtl += dx4 - self.dobavka_x_ot_torsa
+                self.ytl = self.lateral_offset + self.d10 + 2*dy0 - self.sideLength + (1-math.cos(self.tors_angle)) * self.SIZES[0]
+            else:
+                if i == 1: 
+                    self.ztl = -self.gaitHeight + self.stepHeight/2
+                    dxl = (xtl_plan - self.xtl) / 6
+                dx = (xtl_plan - self.xtl) / (self.fr2 - i)
+                #dx = dxl * segments[i-1]
+                self.xtl += dx
+                self.ytl = self.lateral_offset + 64 + dy0 - dy * i /2 + (1-math.cos(self.tors_angle)) * self.SIZES[0]
+                self.wr = self.wl = i * self.rotation/(self.fr2- 2) * 2 - self.rotation
+            self.xtr += dx4
+            self.ytr += dy0
+            self.perform_motion(phase, i)
+
+    def perform_motion(self, phase, iteration):
+        angles = self.computeAlphaForWalk(hands_on = True)
+        if not self.falling_Flag ==0: return
+        if len(angles)==0:
+            print('bad_ik_calc:', 'phase:', phase, ' i = ', iteration, 'xtr:', int(self.xtr), 'ytr:', int(self.ytr), 'ztr:', self.ztr, 'xtl:', int(self.xtl), 'ytl:', int(self.ytl), 'ztl:', self.ztl )
+            self.exitFlag = self.exitFlag +1
+        else:
+            if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0 or self.glob.SIMULATION == 3:
+                if self.glob.SIMULATION == 3: self.wait_sim_step()
+                angles[10] = self.tors_angle
+                angles[5] -= self.tors_angle
+                angles[16] -= self.tors_angle
+                for i in range(len(angles)):
+                    if self.keep_hands_up:
+                        if i in self.hand_joints : continue
+                    if self.glob.SIMULATION == 1 or self.glob.SIMULATION == 3:
+                        returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
+                                    self.jointHandle[i] , angles[i]*self.ACTIVESERVOS[i][3]+self.trims[i],
+                                    self.sim.simx_opmode_oneshot)
+                    elif self.glob.SIMULATION == 0:
+                        returnCode = self.sim.simxSetJointPosition(self.clientID,
+                                    self.jointHandle[i] , angles[i]*self.ACTIVESERVOS[i][3]+self.trims[i],
+                                    self.sim.simx_opmode_oneshot)
+                if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0 or self.glob.SIMULATION == 3:
+                    time.sleep(self.slowTime)
+                    returnCode, Dummy_Hposition= self.sim.simxGetObjectPosition(self.clientID, self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
+                    self.Dummy_HData.append(Dummy_Hposition)
+                    returnCode, self.Ballposition= self.sim.simxGetObjectPosition(self.clientID, self.BallHandle , -1, self.sim.simx_opmode_buffer)
+                    self.BallData.append(self.Ballposition)
+                    #uprint(self.euler_angle)
+                    self.timeElapsed = self.timeElapsed +1
+                    #uprint(Dummy_Hposition)
+                    #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
+                    #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
+                    if self.glob.SIMULATION == 1:
+                        self.sim_simxSynchronousTrigger(self.clientID)
+            elif self.glob.SIMULATION == 5:
+                joint_number = len(angles)
+                servoDatas = []
+                if self.model == 'Roki_2':
+                    for i in range(joint_number):
+                        if self.keep_hands_up:
+                            if i in self.hand_joints : continue
+                        if self.ACTIVESERVOS[i][0] == 8:
+                            pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2]/2 + 7500)
+                            servoData = self.Roki.Rcb4.ServoData()
+                            servoData.Id, servoData.Sio, servoData.Data = 13, self.ACTIVESERVOS[i][1], pos
+                            servoDatas.append(servoData)
+                        else: pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
+                        servoData = self.Roki.Rcb4.ServoData()
+                        servoData.Id, servoData.Sio, servoData.Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                        servoDatas.append(servoData)
+                else:
+                    servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number)]
+                    for i in range(joint_number):
+                        if self.keep_hands_up:
+                            if i in self.hand_joints : continue
+                        pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
+                        servoData = self.Roki.Rcb4.ServoData()
+                        servoData.Id, servoData.Sio, servoData.Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                        servoDatas.append(servoData)
+                a=self.rcb.setServoPosAsync(servoDatas, self.frames_per_cycle, 0)
+
+
     def walk_Final_Pose(self, respect_body_tilt = False):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
@@ -780,8 +1232,8 @@ class Motion(Robot):
             self.ytr = -self.d10 - (self.initPoses-(j+1))*self.amplitude/2 /self.initPoses
             self.ytl =  self.d10 - (self.initPoses-(j+1))*self.amplitude/2 /self.initPoses
             if j == self.initPoses - 1:
-                angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA, hands_on = False)
-            else: angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA )
+                angles = self.computeAlphaForWalk(hands_on = False)
+            else: angles = self.computeAlphaForWalk()
             #if not self.falling_Flag ==0: return
             if len(angles)==0:
                 self.exitFlag = self.exitFlag +1
@@ -871,8 +1323,8 @@ class Motion(Robot):
             self.ytr = -self.d10 - (pose_taking_cycles-(j+1))*self.amplitude/2 /pose_taking_cycles
             self.ytl =  self.d10 - (pose_taking_cycles-(j+1))*self.amplitude/2 /pose_taking_cycles
             if j == pose_taking_cycles - 1:
-                angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA, hands_on = False)
-            else: angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA )
+                angles = self.computeAlphaForWalk(hands_on = False)
+            else: angles = self.computeAlphaForWalk()
             #if not self.falling_Flag ==0: return
             if len(angles)==0:
                 self.exitFlag = self.exitFlag +1
@@ -1013,7 +1465,7 @@ class Motion(Robot):
                     self.xtl += dx
                     self.ytl = S + 64
                 self.xtr -= dx0
-            angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA )
+            angles = self.computeAlphaForWalk()
             if not self.falling_Flag ==0: return
             if len(angles)==0:
                 self.exitFlag = self.exitFlag +1
@@ -1134,8 +1586,8 @@ class Motion(Robot):
             self.ytr = -self.d10 - (pose_taking_cycles-(j+1))*self.amplitude/2 /pose_taking_cycles
             self.ytl =  self.d10 - (pose_taking_cycles-(j+1))*self.amplitude/2 /pose_taking_cycles
             if j == pose_taking_cycles - 1:
-                angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA, hands_on = False)
-            else: angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA )
+                angles = self.computeAlphaForWalk(hands_on = False)
+            else: angles = self.computeAlphaForWalk()
             #if not self.falling_Flag ==0: return
             if len(angles)==0:
                 self.exitFlag = self.exitFlag +1
