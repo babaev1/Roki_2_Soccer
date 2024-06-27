@@ -174,7 +174,7 @@ try:
             ax.grid(True)
             plt.show()
             os.remove("Export_data.npy")
-            print('average timing for 3m : ', 3 / (Dummy_HDataX[-1] - Dummy_HDataX[0]) * len(Dummy_HDataX) * 0.015)
+            print('average timing for 3m : ', 3 / (Dummy_HDataX[-1] - Dummy_HDataX[0]) * len(Dummy_HDataX) * 0.010)
 
 
 

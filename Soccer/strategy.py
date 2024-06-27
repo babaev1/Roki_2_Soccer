@@ -755,23 +755,30 @@ class Player():
 
     def sprint(self, second_pressed_button):
         if self.glob.SIMULATION == 5:
-            self.motion.rcb.motionPlay(20)
+            self.motion.rcb.motionPlay(22)
             time.sleep(20)
             return
         self.motion.first_Leg_Is_Right_Leg == True
-        #self.motion.walk_Restart()
-        #return
-        #self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
-        #self.go_Around_Ball(0.5, -0.5)
-        number_Of_Cycles = 10
-        stepLength = 120 #90 #180
-        self.motion.ugol_torsa = 0.65
-        self.motion.gaitHeight = 150
-        self.motion.stepHeight = 40
-        self.motion.fr1 = 3
-        self.motion.fr2 = 6
-        self.motion.params['BODY_TILT_AT_WALK'] += 0.020
-        self.motion.amplitude = 40
+        timeStep = 1
+        number_Of_Cycles = 20
+        if timeStep == 1:                   # 10ms
+            stepLength = 40 #100
+            self.motion.ugol_torsa = 0.65 #0.65
+            self.motion.gaitHeight = 135 # 150
+            self.motion.stepHeight = 35  # 40
+            self.motion.fr1 = 4  #3
+            self.motion.fr2 = 9  #6
+            self.motion.params['BODY_TILT_AT_WALK'] += 0.020
+            self.motion.amplitude = 40
+        if timeStep == 2:                      # 20ms
+            stepLength = 80 # 200
+            self.motion.ugol_torsa = 0.6            # 0.7
+            self.motion.gaitHeight = 180
+            self.motion.stepHeight = 40
+            self.motion.fr1 = 4
+            self.motion.fr2 = 6
+            self.motion.params['BODY_TILT_AT_WALK'] += 0.020
+            self.motion.amplitude = 32
         sideLength = 0
         #self.motion.first_Leg_Is_Right_Leg = False
         if self.motion.first_Leg_Is_Right_Leg: invert = 1
@@ -782,10 +789,10 @@ class Player():
             stepLength1 = stepLength
             if cycle ==0 : stepLength1 = stepLength/3
             if cycle ==1 : stepLength1 = stepLength/3 * 2
-            self.motion.refresh_Orientation()
-            rotation = 0 - self.motion.imu_body_yaw() * 1.0
-            rotation = self.motion.normalize_rotation(rotation)
-            self.motion.walk_Cycle_With_Tors_v2(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+            #self.motion.refresh_Orientation()
+            #rotation = 0 - self.motion.imu_body_yaw() * 1.1
+            #rotation = self.motion.normalize_rotation(rotation)
+            self.motion.walk_Cycle_With_Tors_v3(stepLength1,sideLength, 0 ,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
 
     def kick_test(self, second_pressed_button):
