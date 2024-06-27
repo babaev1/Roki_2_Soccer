@@ -755,8 +755,8 @@ class Player():
 
     def sprint(self, second_pressed_button):
         if self.glob.SIMULATION == 5:
-            self.motion.rcb.motionPlay(20)
-            time.sleep(20)
+            self.motion.rcb.motionPlay(23)
+            time.sleep(22)
             return
         self.motion.first_Leg_Is_Right_Leg == True
         #self.motion.walk_Restart()
