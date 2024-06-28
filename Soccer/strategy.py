@@ -755,7 +755,12 @@ class Player():
 
     def sprint(self, second_pressed_button):
         if self.glob.SIMULATION == 5:
+            import roki2met
             self.motion.rcb.motionPlay(23)
+            labels = [[], [], [], ['start'], []]
+            pressed_button = self.motion.push_Button(labels)
+            var = roki2met.sprint_v4.pitStop
+            self.glob.stm_channel.zubr.memISet(var, 1)
             time.sleep(22)
             return
         self.motion.first_Leg_Is_Right_Leg == True

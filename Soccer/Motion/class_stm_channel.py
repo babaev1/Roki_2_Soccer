@@ -18,6 +18,7 @@ class STM_channel():
         conf.Timeout = 2
         self.mb.Configure(conf)
         self.rcb = Roki.Rcb4(self.mb)
+        self.zubr = Roki.Zubr(self.mb)
 
     def read_quaternion_from_imu_in_head(self, frame_number = None):
         if frame_number != None:
