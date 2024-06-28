@@ -364,30 +364,31 @@ class roki2met :
         frontBackFactor = 87
 
 
-    class Sprint_v4 :
+    class sprint_v4 :
         #Перечень переменных слота sprint_v4
         slowWalk = 2
         pitStop = 3
-        selfFirstLegIsRightLeg = 14
-        motion_to_right = 15
-        selfInitPoses = 17
-        selfExitFlag = 18
-        selfFallingFlag = 19
-        selfNeckPan = 20
-        framestep = 23
-        fr1 = 42
-        fr2 = 43
-        stepType = 56
-        fps = 57
-        timeStep = 58
-        hipTilt = 61
-        stepNumber = 62
-        flag = 63
-        flag_event = 64
-        torsoAdd = 68
-        j = 71
-        leftRightFactor = 87
-        frontBackFactor = 88
+        startStop = 4
+        selfFirstLegIsRightLeg = 15
+        motion_to_right = 16
+        selfInitPoses = 18
+        selfExitFlag = 19
+        selfFallingFlag = 20
+        selfNeckPan = 21
+        framestep = 24
+        fr1 = 43
+        fr2 = 44
+        stepType = 57
+        fps = 58
+        timeStep = 59
+        hipTilt = 62
+        stepNumber = 63
+        flag = 64
+        flag_event = 65
+        torsoAdd = 69
+        j = 72
+        leftRightFactor = 88
+        frontBackFactor = 89
 
 
     class roki2WalkStraight_v1 :

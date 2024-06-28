@@ -756,12 +756,15 @@ class Player():
     def sprint(self, second_pressed_button):
         if self.glob.SIMULATION == 5:
             from Robots import roki2met
+            var = roki2met.roki2met.sprint_v4
             self.motion.rcb.motionPlay(23)
+            ok, timeStep = self.glob.stm_channel.zubr.memIGet(var.timeStep)
+            if ok: print('timeStep :', timeStep)
+            else: print(self.glob.stm_channel.zubr.GetError())
+            self.glob.stm_channel.zubr.memISet(var.pitStop, 1)
             labels = [[], [], [], ['start'], []]
             pressed_button = self.motion.push_Button(labels)
-            sprint = roki2met.roki2met.Sprint_v4
-            var = sprint.pitStop
-            self.glob.stm_channel.zubr.memISet(var, 1)
+            self.glob.stm_channel.zubr.memISet(var.startStop, 1)
             time.sleep(22)
             return
         self.motion.first_Leg_Is_Right_Leg == True
