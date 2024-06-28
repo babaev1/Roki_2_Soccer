@@ -364,7 +364,7 @@ class roki2met :
         frontBackFactor = 87
 
 
-    class sprint_v4 :
+    class Sprint_v4 :
         #Перечень переменных слота sprint_v4
         slowWalk = 2
         pitStop = 3
