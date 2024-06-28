@@ -50,6 +50,8 @@ try:
         labels = [[],[],[],['regular', 'new_kick'], []]
     elif role == 'basketball':
         labels = [[],[],[],['start', 'pick_up_test', 'throw_test'], []]
+    elif role == 'sprint':
+        labels = [[],[],[],['start_attention'], []]
     else: 
         labels = [[], [], [], ['start', 'start_later'], []]
     if role == 'forward':
