@@ -765,9 +765,8 @@ class Player():
             stopFlag = False
 
             # Process for Vision Pipeline
-            cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift, stopFlag))
+            cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift, stopFlag), daemon = True)
             # start Process of Vision Pipeline
-            cam_proc.daemon()
             cam_proc.start()
 
             var = roki2met.roki2met.sprint_v4

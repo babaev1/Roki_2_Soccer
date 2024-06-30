@@ -38,21 +38,6 @@ try:
     if first_pressed_button == 'penalty_Goalkeeper':
         initial_coord = [-landmarks['FIELD_LENGTH'] / 2, 0, 0]
 
-    
-    if role == 'run_test':
-        labels = [[],['side_step_left', 'rotation_left'], [], ['short_run', 'long_run', 'spot_run', 'head_tilt_calibration'], ['side_step_right', 'rotation_right']]
-    elif role == 'kick_test':
-        labels = [[],[],[],['regular', 'new_kick'], []]
-    elif role == 'basketball':
-        labels = [[],[],[],['start', 'pick_up_test', 'throw_test'], []]
-    elif role == 'sprint':
-        labels = [[],[],[],['start_attention'], []]
-    else: 
-        labels = [[], [], [], ['start', 'start_later'], []]
-    if role == 'forward':
-        second_pressed_button = 'start'
-    else:
-        second_pressed_button = motion.push_Button(labels)
     if role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper':
         glob = Glob(SIMULATION, current_work_directory, particles_number = 100)
         glob.pf_coord = initial_coord
@@ -69,6 +54,22 @@ try:
         vision = None
         motion = Motion_real(glob, vision)
         local = None
+    
+    if role == 'run_test':
+        labels = [[],['side_step_left', 'rotation_left'], [], ['short_run', 'long_run', 'spot_run', 'head_tilt_calibration'], ['side_step_right', 'rotation_right']]
+    elif role == 'kick_test':
+        labels = [[],[],[],['regular', 'new_kick'], []]
+    elif role == 'basketball':
+        labels = [[],[],[],['start', 'pick_up_test', 'throw_test'], []]
+    elif role == 'sprint':
+        labels = [[],[],[],['start_attention'], []]
+    else: 
+        labels = [[], [], [], ['start', 'start_later'], []]
+    if role == 'forward':
+        second_pressed_button = 'start'
+    else:
+        second_pressed_button = motion.push_Button(labels)
+
     print( role, subrole, ' initial_coord = ', initial_coord)
     player = Player(role, second_pressed_button, glob, motion, local)
     player.play_game()
