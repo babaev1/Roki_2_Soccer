@@ -758,9 +758,13 @@ class Player():
             from Robots import roki2met
             var = roki2met.roki2met.sprint_v4
             self.motion.rcb.motionPlay(23)
-            ok, timeStep = self.glob.stm_channel.zubr.memIGet(var.timeStep)
-            if ok: print('timeStep :', timeStep)
-            else: print(self.glob.stm_channel.zubr.GetError())
+            while True:
+                ok, timeStep = self.glob.stm_channel.zubr.memIGet(var.timeStep)
+                if ok: print('timeStep :', timeStep)
+                else: print(self.glob.stm_channel.zubr.GetError())
+                if timeStep == 1: break
+                time.sleep(0.25)
+            
             self.glob.stm_channel.zubr.memISet(var.pitStop, 1)
             labels = [[], [], [], ['start'], []]
             pressed_button = self.motion.push_Button(labels)
