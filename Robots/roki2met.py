@@ -10,17 +10,6 @@ class roki2met :
     metalHandSlot = 4
     metalShiftSlot = 5
     metalWalkSlot = 6
-    metalTestSlot = 7
-    TripleJumpSlot = 8
-    ArcherySlot = 9
-    ArcheryShootSlot = 10
-    BasketballSlot = 11
-    basketballSecondSlot = 12
-    OpenClawSlot = 13
-    weight1Slot = 14
-    weight2Slot = 15
-    basketballFirstSlot = 16
-    ArcheryDropSlot = 17
     sprint_v1Slot = 19
     sprint_v2Slot = 20
     sprint_v3Slot = 21
@@ -377,6 +366,8 @@ class roki2met :
         fps = 9
         fr1 = 10
         fr2 = 11
+        gaitHeight = 12
+        stepHeight = 13
         slowWalk = 17
         selfFirstLegIsRightLeg = 27
         motion_to_right = 28
