@@ -38,12 +38,7 @@ try:
     if first_pressed_button == 'penalty_Goalkeeper':
         initial_coord = [-landmarks['FIELD_LENGTH'] / 2, 0, 0]
 
-    glob = Glob(SIMULATION, current_work_directory, particles_number = 100)
-    glob.pf_coord = initial_coord
-        
-    vision = Vision_RPI(glob)
-    motion = Motion_real(glob, vision)
-    motion.falling_Flag = 0
+    
     if role == 'run_test':
         labels = [[],['side_step_left', 'rotation_left'], [], ['short_run', 'long_run', 'spot_run', 'head_tilt_calibration'], ['side_step_right', 'rotation_right']]
     elif role == 'kick_test':
@@ -58,14 +53,22 @@ try:
         second_pressed_button = 'start'
     else:
         second_pressed_button = motion.push_Button(labels)
-    #if role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper':
-    motion.direction_To_Attack = -initial_coord[2]
-    motion.activation()
-    local = Local(motion, glob, vision, coord_odometry = initial_coord)
-    motion.local = local
-    local.coordinate_record(odometry = True)
-    # else:
-    #     local = None
+    if role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper':
+        glob = Glob(SIMULATION, current_work_directory, particles_number = 100)
+        glob.pf_coord = initial_coord
+        vision = Vision_RPI(glob)
+        motion = Motion_real(glob, vision)
+        motion.falling_Flag = 0
+        motion.direction_To_Attack = -initial_coord[2]
+        motion.activation()
+        local = Local(motion, glob, vision, coord_odometry = initial_coord)
+        motion.local = local
+        local.coordinate_record(odometry = True)
+    else:
+        glob = Glob(SIMULATION, current_work_directory, particles_number = 100)
+        vision = None
+        motion = Motion_real(glob, vision)
+        local = None
     print( role, subrole, ' initial_coord = ', initial_coord)
     player = Player(role, second_pressed_button, glob, motion, local)
     player.play_game()

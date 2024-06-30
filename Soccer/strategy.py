@@ -8,6 +8,7 @@ import Soccer.utility
 import random
 #from Soccer.Motion.class_stm_channel import STM_channel
 #from Soccer.Vision.class_Vision_RPI import Vision_RPI
+from multiprocessing import Process, Value
 
 
 def coord2yaw(x, y):
@@ -756,8 +757,23 @@ class Player():
     def sprint(self, second_pressed_button):
         if self.glob.SIMULATION == 5:
             from Robots import roki2met
+            from Soccer.Vision import lookARUCO
+
+            # Pipeline variables
+            size = Value('i', 0)
+            side_shift = Value('i', 0)
+            stopFlag = False
+
+            # Process for Vision Pipeline
+            cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift, stopFlag))
+            # start Process of Vision Pipeline
+            cam_proc.daemon()
+            cam_proc.start()
+
             var = roki2met.roki2met.sprint_v4
-            self.motion.rcb.motionPlay(23)
+            self.glob.rcb.motionPlay(23)
+
+            # wait until motion paramenetrs initiated 
             while True:
                 ok, timeStep = self.glob.stm_channel.zubr.memIGet(var.timeStep)
                 if ok: print('timeStep :', timeStep)
@@ -765,11 +781,25 @@ class Player():
                 if timeStep == 1: break
                 time.sleep(0.25)
             
+            # write motion parameters to zubr-controller motion
             self.glob.stm_channel.zubr.memISet(var.pitStop, 1)
             labels = [[], [], [], ['start'], []]
             pressed_button = self.motion.push_Button(labels)
             self.glob.stm_channel.zubr.memISet(var.startStop, 1)
-            time.sleep(22)
+            while not stopFlag:
+                aruco_size = size.value
+                aruco_shift = side_shift.value
+                if aruco_size > 90:
+                    print('Reverse')
+                else:
+                    if aruco_shift > 0:
+                        print('Go Left')
+                    elif aruco_shift < 0:
+                        print('Go Right')
+                    else:
+                        print('Go Straight')
+                time.sleep(0.05)
+
             return
         self.motion.first_Leg_Is_Right_Leg == True
         timeStep = 1
