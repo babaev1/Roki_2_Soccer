@@ -701,18 +701,35 @@ class Player():
 
     def basketball_main_cycle(self, pressed_button):
         throw = [
-                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 540, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
-                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 540, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
+                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 450, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
+                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 450, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
                 [ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2000, 0, 4700, 0, 0, 0, 0, 0, 0, 0 ],
                 [ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2000, 0, 4700, 0, 0, 0, 0, 0, 0, 0 ],
                 [ 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
                 ]
         throw[2][18] -= int(self.motion.params['BASKETBALL_DISTANCE'])
         throw[3][18] -= int(self.motion.params['BASKETBALL_DISTANCE'])
+        pickUp = [
+                [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+                [ 100, 0, -900, 0, -3300, 0, 0, 0, 2667, 0, -3500, 0, 0, 900, 0, 3300, 0, 0, 0, -2667, 0, 3500, 0, 0, 0, 0, 0, 0 ],
+                [ 50, 0, -900, 0, -3300, 0, 0, 600, 2300, 385, -3500, 0, 0, 900, 0, 3300, 0, 0, -600, -2300, -385, 3500, 0, 0, 0, 0, 0, 0 ],
+                [ 50, 0, 0, 0, 0, 0, 0, 600, 2667, 385, -2667, 0, 0, 0, 0, 0, 0, 0, -600, -2667, -385, 2667, 0, 0, 0, 0, 0, 0 ],
+                [ 50, 0, 0, 0, 0, 0, 0, 600, 3000, 385, -3000, 0, 0, 0, 0, 0, 0, 0, -700, -2000, -385, 2500, 0, 0 ],
+                [ 50, 0, 0, 0, 0, 0, 0, 700, 3425, 385, -3300, 0, 0, 0, 0, 0, 0, 0, -900, -1500, -385, 2200, 0, 0, 0, 0, 0, 0 ],
+                [ 50, 0, 0, 0, 0, 0, 0, 910, 2667, 600, -2600, 0, 0, 0, 0, 0, 0, 0, -2100, -600, -680, 1000, 0, 0, 0, 0, 0, 0 ],
+                [ 50, 0, 0, 0, 0, 0, 0, 0, 2667, 600, -2600, 0, 0, 0, 0, 0, 0, 0, -2100, 0, -680, 1000, 0, 0 ],
+                [ 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1100, 0, -680, 2000, 0, 0, 0, 0, 0, 0 ],
+                [ 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -433, 0, -680, 2667, 0, 0, 0, 0, 0, 0 ],
+                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -433, 0, 2500, 2667, 0, 0, 0, 0, 0, 0 ],
+                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -350, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ]
+                ]
+        for i in range(2, 8,1):
+            pickUp[i][9] += int(self.motion.params['BASKETBALL_CLAMPING'])
+            pickUp[i][20] -= int(self.motion.params['BASKETBALL_CLAMPING'])
         for i in range(4):
             throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
         if pressed_button != 'throw_test':
-            self.motion.play_Soft_Motion_Slot( name = 'Basketball_PickUp')
+            self.motion.play_Soft_Motion_Slot( name = 'pickUp', motion_list = pickUp)
         if pressed_button != 'pick_up_test':
             print("voltage = ", round(self.motion.stm_channel.read_voltage_from_body()[1]/270.2, 2), " 'BASKETBALL_DISTANCE': ", 
                   int(self.motion.params['BASKETBALL_DISTANCE']))
@@ -770,33 +787,47 @@ class Player():
             cam_proc.start()
 
             var = roki2met.roki2met.sprint_v4
+            intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
             self.glob.rcb.motionPlay(23)
 
             # wait until motion paramenetrs initiated 
             while True:
-                ok, timeStep = self.glob.stm_channel.zubr.memIGet(var.timeStep)
+                ok, timeStep = intercom.memIGet(var.timeStep)
                 if ok: print('timeStep :', timeStep)
-                else: print(self.glob.stm_channel.zubr.GetError())
+                else: print(intercom.GetError())
                 if timeStep == 1: break
                 time.sleep(0.25)
             
             # write motion parameters to zubr-controller motion
-            self.glob.stm_channel.zubr.memISet(var.pitStop, 1)
+            intercom.memISet(var.orderFromHead, 0)              #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
+            intercom.memISet(var.cycle_number, 33)
+            intercom.memISet(var.hipTilt, 80)
+            intercom.memISet(var.fps, 2)
+            intercom.memISet(var.stepLengthOrder, 40)
+            intercom.memISet(var.gaitHeight, 135)
+            intercom.memISet(var.stepHeight, 35)
+            intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
             labels = [[], [], [], ['start'], []]
             pressed_button = self.motion.push_Button(labels)
-            self.glob.stm_channel.zubr.memISet(var.startStop, 1)
+            intercom.memISet(var.startStop, 1)
             while not stopFlag:
                 aruco_size = size.value
                 aruco_shift = side_shift.value
                 if aruco_size > 90:
                     print('Reverse')
+                    intercom.memISet(var.orderFromHead, 4)   
+                elif aruco_size == 0:
+                    intercom.memISet(var.orderFromHead, 0) 
                 else:
                     if aruco_shift > 0:
                         print('Go Left')
+                        intercom.memISet(var.orderFromHead, 2)
                     elif aruco_shift < 0:
                         print('Go Right')
+                        intercom.memISet(var.orderFromHead, 3)
                     else:
                         print('Go Straight')
+                        intercom.memISet(var.orderFromHead, 1)
                 time.sleep(0.05)
 
             return
