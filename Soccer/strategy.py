@@ -9,6 +9,8 @@ import random
 #from Soccer.Motion.class_stm_channel import STM_channel
 #from Soccer.Vision.class_Vision_RPI import Vision_RPI
 from multiprocessing import Process, Value
+from Robots import roki2met
+import datetime
 
 
 def coord2yaw(x, y):
@@ -700,6 +702,9 @@ class Player():
         self.motion.first_Leg_Is_Right_Leg = True
 
     def basketball_main_cycle(self, pressed_button):
+        var = roki2met.roki2met.sprint_v4
+        intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
+
         throw = [
                 [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 450, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
                 [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 450, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
@@ -729,11 +734,46 @@ class Player():
         for i in range(4):
             throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
         if pressed_button != 'throw_test':
-            self.motion.play_Soft_Motion_Slot( name = 'pickUp', motion_list = pickUp)
+            #self.motion.play_Soft_Motion_Slot( name = 'pickUp', motion_list = pickUp)
+            self.glob.rcb.motionPlay(10)                                # Basketball_PickUp
+            while True:
+                ok, frameCount = intercom.memIGet(var.frameCount)
+                if ok: print('frameCount :', frameCount)
+                else: print(intercom.GetError())
+                if frameCount == 1: break
+                time.sleep(0.25)
+            intercom.memISet(var.clamping, int(self.motion.params['BASKETBALL_CLAMPING']))         # clamping gap for ball gripping -50 best value
+            intercom.memISet(var.steps, int(self.motion.params['BASKETBALL_SIDE_SHIFT_STEPS']))    # side shift steps to provide 80mm shifting to right. 17 is the best value
+            intercom.memISet(var.pitStop, 1)                                                       # ignition
+
         if pressed_button != 'pick_up_test':
-            print("voltage = ", round(self.motion.stm_channel.read_voltage_from_body()[1]/270.2, 2), " 'BASKETBALL_DISTANCE': ", 
+            for i in range(100):
+                result, displacement = self.glob.vision.detect_Basket_in_One_Shot()
+            int_voltage = self.motion.stm_channel.read_voltage_from_body()[1]
+            print("voltage = ", round(int_voltage/270.2, 2), " 'BASKETBALL_DISTANCE': ", 
                   int(self.motion.params['BASKETBALL_DISTANCE']))
-            self.motion.play_Soft_Motion_Slot( name = 'throw', motion_list = throw)
+            #self.motion.play_Soft_Motion_Slot( name = 'throw', motion_list = throw)
+            self.glob.rcb.motionPlay(9)                                # Basketball_Throw
+            while True:
+                ok, frameCount = intercom.memIGet(var.frameCount)
+                if ok: print('frameCount :', frameCount)
+                else: print(intercom.GetError())
+                if frameCount == 1: break
+                time.sleep(0.25)
+            intercom.memISet(var.distance, int(self.motion.params['BASKETBALL_DISTANCE']))         # start acceleration angle -350 best value
+            intercom.memISet(var.direction, int(self.motion.params['BASKETBALL_DIRECTION']))       # direction to correct 200 best value
+            intercom.memISet(var.pitStop, 1)                                                       # ignition
+            labels = [[], [], [], ['good', 'Not good'], []]
+            pressed_button = self.motion.push_Button(labels, message = "'Give me feed back'")
+            if pressed_button == 'good':
+                today = datetime.date.today()
+                try:
+                    records = np.load("basketball_records.npy")
+                except Exception:
+                    records = np.zeros((1,5), dtype = np.int16)
+                record = np.array([[int(today.year), int(today.month), int(today.day), int_voltage, int(self.motion.params['BASKETBALL_DISTANCE'])]], dtype = np.int16)
+                new_records = np.append(records, record, axis=0)
+                np.save("basketball_records.npy", new_records)
 
 
     def dance_main_cycle(self):
@@ -777,8 +817,8 @@ class Player():
             from Soccer.Vision import lookARUCO
 
             # Pipeline variables
-            size = Value('i', 0)
-            side_shift = Value('i', 0)
+            size = Value('i', 0)       # horizontal size of ARUCO code on picture
+            side_shift = Value('i', 0) # horizontal shift of ARUCO code from center of picture 
             stopFlag = False
 
             # Process for Vision Pipeline

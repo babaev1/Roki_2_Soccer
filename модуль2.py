@@ -3,14 +3,16 @@ import json
 from Robots.class_Robot_Roki_2 import Robot
 import os
 from pathlib import Path
+import datetime
 
-cwd = os.getcwd()
-p = Path(cwd + "\\Soccer\\Motion\\motion_slots")
-print(p)
-for file in list(p.glob('**/*.json')):
-    print(file)
-print(file.name)
-print(file.parent)
+today = datetime.date.today()
 
-
-#print(cppText)
+#print(int(today.year), int(today.month), int(today.day))
+try:
+    records = np.load("basketball_records.npy")
+except Exception:
+    records = np.zeros((1,5), dtype = np.int16)
+record = np.array([[int(today.year), int(today.month), int(today.day), 1, 1]], dtype = np.int16)
+new_records = np.append(records, record, axis=0)
+np.save("basketball_records.npy", new_records)
+print(new_records)

@@ -170,10 +170,10 @@ class Motion(Robot):
         euler_angle['roll'] = math.radians(X)
         return euler_angle
 
-    def push_Button(self, labels):
+    def push_Button(self, labels, message = "'Waiting for button'"):
         from button_test import Button_Test
         button = Button_Test(labels)
-        pressed_button = button.wait_for_button_pressing()
+        pressed_button = button.wait_for_button_pressing(message = message)
         uprint("нажато")
         return pressed_button
         #ala = 0

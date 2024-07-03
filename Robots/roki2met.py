@@ -10,6 +10,9 @@ class roki2met :
     metalHandSlot = 4
     metalShiftSlot = 5
     metalWalkSlot = 6
+    Basketball_ThrowSlot = 8
+    Basketball_PickUp_v2Slot = 9
+    sprint_start_poseSlot = 18
     sprint_v1Slot = 19
     sprint_v2Slot = 20
     sprint_v3Slot = 21
@@ -281,6 +284,28 @@ class roki2met :
         index = 22
         posFront = 23
         posHeight = 24
+
+
+    class Basketball_Throw :
+        #Перечень переменных слота Basketball_Throw
+        pitStop = 2
+        distance = 3
+        direction = 4
+        frameCount = 5
+
+
+    class Basketball_PickUp_v2 :
+        #Перечень переменных слота Basketball_PickUp_v2
+        pitStop = 2
+        clamping = 3
+        steps = 4
+        frameCount = 5
+        rotation = 6
+
+
+    class sprint_start_pose :
+        #Перечень переменных слота sprint_start_pose
+        frameCount = 2
 
 
     class sprint_v1 :
