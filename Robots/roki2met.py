@@ -289,9 +289,10 @@ class roki2met :
     class Basketball_Throw :
         #Перечень переменных слота Basketball_Throw
         pitStop = 2
-        distance = 3
-        direction = 4
-        frameCount = 5
+        startStop = 3
+        distance = 4
+        direction = 5
+        frameCount = 6
 
 
     class Basketball_PickUp_v2 :

@@ -750,8 +750,7 @@ class Player():
 
         if pressed_button != 'pick_up_test':
             var = roki2met.roki2met.Basketball_Throw
-            for i in range(100):
-                result, displacement = self.glob.vision.detect_Basket_in_One_Shot()
+            
             int_voltage = self.motion.stm_channel.read_voltage_from_body()[1]
             print("voltage = ", round(int_voltage/270.2, 2), " 'BASKETBALL_DISTANCE': ", 
                   int(self.motion.params['BASKETBALL_DISTANCE']))
@@ -766,6 +765,16 @@ class Player():
             intercom.memISet(var.distance, int(self.motion.params['BASKETBALL_DISTANCE']))         # start acceleration angle -350 best value
             intercom.memISet(var.direction, int(self.motion.params['BASKETBALL_DIRECTION']))       # direction to correct 200 best value
             intercom.memISet(var.pitStop, 1)                                                       # ignition
+            time.sleep(3)
+            for i in range(100):
+                result, displacement = self.glob.vision.detect_Basket_in_One_Shot()
+                if result: break
+            if result:
+                os.system("espeak -ven-m1 -a"+ '200' + " " + "'I see basket'")
+            else: os.system("espeak -ven-m1 -a"+ '200' + " " + "'I don't see basket'")
+            time.sleep(3)
+            intercom.memISet(var.startStop, 1)                                                       # ignition
+            time.sleep(3)
             labels = [[], [], [], ['good', 'Bad'], []]
             pressed_button = self.motion.push_Button(labels, message = "'Give me feed back'")
             if pressed_button == 'good':

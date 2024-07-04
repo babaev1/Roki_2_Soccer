@@ -337,6 +337,7 @@ class Vision_General:
                 img.draw_rectangle(rect)
                 self.display_camera_image(img.img, 'Ball')
             else: result = False
+        else: result = False
         return result, displacement
 
 
