@@ -11,6 +11,7 @@ import random
 from multiprocessing import Process, Value
 from Robots import roki2met
 import datetime
+import numpy as np
 
 
 def coord2yaw(x, y):
@@ -702,7 +703,7 @@ class Player():
         self.motion.first_Leg_Is_Right_Leg = True
 
     def basketball_main_cycle(self, pressed_button):
-        var = roki2met.roki2met.sprint_v4
+        
         intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
 
         throw = [
@@ -735,6 +736,7 @@ class Player():
             throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
         if pressed_button != 'throw_test':
             #self.motion.play_Soft_Motion_Slot( name = 'pickUp', motion_list = pickUp)
+            var = roki2met.roki2met.Basketball_PickUp_v2
             self.glob.rcb.motionPlay(10)                                # Basketball_PickUp
             while True:
                 ok, frameCount = intercom.memIGet(var.frameCount)
@@ -747,6 +749,7 @@ class Player():
             intercom.memISet(var.pitStop, 1)                                                       # ignition
 
         if pressed_button != 'pick_up_test':
+            var = roki2met.roki2met.Basketball_Throw
             for i in range(100):
                 result, displacement = self.glob.vision.detect_Basket_in_One_Shot()
             int_voltage = self.motion.stm_channel.read_voltage_from_body()[1]
@@ -763,7 +766,7 @@ class Player():
             intercom.memISet(var.distance, int(self.motion.params['BASKETBALL_DISTANCE']))         # start acceleration angle -350 best value
             intercom.memISet(var.direction, int(self.motion.params['BASKETBALL_DIRECTION']))       # direction to correct 200 best value
             intercom.memISet(var.pitStop, 1)                                                       # ignition
-            labels = [[], [], [], ['good', 'Not good'], []]
+            labels = [[], [], [], ['good', 'Bad'], []]
             pressed_button = self.motion.push_Button(labels, message = "'Give me feed back'")
             if pressed_button == 'good':
                 today = datetime.date.today()
