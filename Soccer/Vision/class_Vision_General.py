@@ -306,11 +306,12 @@ class Vision_General:
         see_ball = 0
         position = []
         displacement = 0
+        frame_number = 0
         #result, self.camera_elevation = self.glob.motion.camera_elevation()
         #if result:
             #result, img1, self.pitch, self.roll, yaw, pan = self.snapshot()
         img1, frame_number = self.camera.snapshot()
-        if img1 != None:
+        if frame_number != 0:
             result = True
             img = Image(img1)
             #self.display_camera_image(self.image, window = 'Original')

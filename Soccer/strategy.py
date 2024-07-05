@@ -734,7 +734,7 @@ class Player():
             pickUp[i][20] -= int(self.motion.params['BASKETBALL_CLAMPING'])
         for i in range(4):
             throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
-        if pressed_button != 'throw_test':
+        if pressed_button == 'start' or pressed_button == 'pick_up_test' :
             #self.motion.play_Soft_Motion_Slot( name = 'pickUp', motion_list = pickUp)
             var = roki2met.roki2met.Basketball_PickUp_v2
             self.glob.rcb.motionPlay(10)                                # Basketball_PickUp
@@ -748,7 +748,7 @@ class Player():
             intercom.memISet(var.steps, int(self.motion.params['BASKETBALL_SIDE_SHIFT_STEPS']))    # side shift steps to provide 80mm shifting to right. 17 is the best value
             intercom.memISet(var.pitStop, 1)                                                       # ignition
 
-        if pressed_button != 'pick_up_test':
+        if pressed_button == 'start' or pressed_button == 'throw_test':
             var = roki2met.roki2met.Basketball_Throw
             
             int_voltage = self.motion.stm_channel.read_voltage_from_body()[1]
@@ -762,8 +762,7 @@ class Player():
                 else: print(intercom.GetError())
                 if frameCount == 1: break
                 time.sleep(0.25)
-            intercom.memISet(var.distance, int(self.motion.params['BASKETBALL_DISTANCE']))         # start acceleration angle -350 best value
-            intercom.memISet(var.direction, int(self.motion.params['BASKETBALL_DIRECTION']))       # direction to correct 200 best value
+            
             intercom.memISet(var.pitStop, 1)                                                       # ignition
             time.sleep(3)
             for i in range(100):
@@ -773,6 +772,9 @@ class Player():
                 os.system("espeak -ven-m1 -a"+ '200' + " " + "'I see basket'")
             else: os.system("espeak -ven-m1 -a"+ '200' + " " + "'I don't see basket'")
             time.sleep(3)
+            corrected_direction = int(self.motion.params['BASKETBALL_DIRECTION']) + int(displacement/10 /360 * 16384)
+            intercom.memISet(var.distance, int(self.motion.params['BASKETBALL_DISTANCE']))         # start acceleration angle -350 best value
+            intercom.memISet(var.direction, corrected_direction)       # direction to correct 200 best value
             intercom.memISet(var.startStop, 1)                                                       # ignition
             time.sleep(3)
             labels = [[], [], [], ['good', 'Bad'], []]
@@ -782,8 +784,10 @@ class Player():
                 try:
                     records = np.load("basketball_records.npy")
                 except Exception:
-                    records = np.zeros((1,5), dtype = np.int16)
-                record = np.array([[int(today.year), int(today.month), int(today.day), int_voltage, int(self.motion.params['BASKETBALL_DISTANCE'])]], dtype = np.int16)
+                    records = np.zeros((1,6), dtype = np.int16)
+                record = np.array([[int(today.year), int(today.month), int(today.day),
+                                    self.motion.params['BASKETBALL_BATTERY_NUMBER'], int_voltage,
+                                    int(self.motion.params['BASKETBALL_DISTANCE'])]], dtype = np.int16)
                 new_records = np.append(records, record, axis=0)
                 np.save("basketball_records.npy", new_records)
 

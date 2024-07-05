@@ -18,7 +18,7 @@ current_work_directory += '/'
 try:
     from button_test import Button_Test
     labels = [[],
-              ['triple_jump', 'weight_lifting', 'basketball', 'kick_test'],
+              ['basketball', 'triple_jump', 'weight_lifting',  'kick_test'],
               #['basketball', 'kick_test'],
               [],
               ['sprint', 'marathon', 'forward'],
@@ -61,7 +61,7 @@ try:
     elif role == 'kick_test':
         labels = [[],[],[],['regular', 'new_kick'], []]
     elif role == 'basketball':
-        labels = [[],[],[],['start', 'pick_up_test', 'throw_test'], []]
+        labels = [[],[],[],['start', 'throw_test', 'pick_up_test'], []]
         #labels = [[],[],[],['throw_test', 'start'], []]
     elif role == 'sprint':
         labels = [[],[],[],['start_attention'], []]
