@@ -39,7 +39,7 @@ try:
     if first_pressed_button == 'penalty_Goalkeeper':
         initial_coord = [-landmarks['FIELD_LENGTH'] / 2, 0, 0]
 
-    if role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper' or role == 'basketball':
+    if role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper' or role == 'basketball' or role == 'marathon':
         glob = Glob(SIMULATION, current_work_directory, particles_number = 100)
         glob.pf_coord = initial_coord
         vision = Vision_RPI(glob)

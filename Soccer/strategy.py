@@ -1003,8 +1003,10 @@ class Player():
         self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
 
     def marathon_main_cycle(self):
+        self.glob.rcb.motionPlay(26)
+        time.sleep(3600)
         self.motion.head_Return(0, self.motion.neck_play_pose)
-        stepLength = 64
+        stepLength = 0
         self.motion.gaitHeight = 190
         number_Of_Cycles = 20000
         self.motion.amplitude = 32
