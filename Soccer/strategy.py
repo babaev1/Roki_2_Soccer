@@ -216,7 +216,7 @@ class Player():
         if self.role == 'side_to_side': self.side_to_side_main_cycle()
         if self.role == 'forward': self.forward_main_cycle(self.second_pressed_button)
         if self.role == 'forward_v2': self.forward_v2_main_cycle()
-        if self.role == 'forward1': self.forward1_main_cycle()
+        if self.role == 'marathon': self.marathon_main_cycle()
         if self.role == 'penalty_Shooter': self.penalty_Shooter_main_cycle()
         if self.role == 'run_test': self.run_test_main_cycle(self.second_pressed_button)
         if self.role == 'rotation_test': self.rotation_test_main_cycle()
@@ -1001,6 +1001,30 @@ class Player():
         self.glob.stm_channel.mb.SetBodyQueuePeriod(15)
         time.sleep(10)
         self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
+
+    def marathon_main_cycle(self):
+        self.motion.head_Return(0, self.motion.neck_play_pose)
+        stepLength = 64
+        self.motion.gaitHeight = 190
+        number_Of_Cycles = 20000
+        self.motion.amplitude = 32
+        sideLength = 0
+        #self.motion.first_Leg_Is_Right_Leg = False
+        if self.motion.first_Leg_Is_Right_Leg: invert = -1
+        else: invert = 1
+        self.motion.walk_Initial_Pose()
+        number_Of_Cycles += 1
+        for cycle in range(number_Of_Cycles):
+            stepLength1 = stepLength
+            if cycle ==0 : stepLength1 = stepLength/3
+            if cycle ==1 : stepLength1 = stepLength/3 * 2
+            self.motion.refresh_Orientation()
+            rotation = 0 + invert * self.motion.imu_body_yaw() * 1.1
+            #if rotation > 0: rotation *= 1.5
+            rotation = self.motion.normalize_rotation(rotation)
+            #rotation = 0
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+        self.motion.walk_Final_Pose()
         
 
 
