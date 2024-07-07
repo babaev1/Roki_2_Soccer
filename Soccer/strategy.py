@@ -777,9 +777,9 @@ class Player():
             time.sleep(3)
             corrected_direction = int(self.motion.params['BASKETBALL_DIRECTION']) + int(displacement/10 /360 * 16384)
             if pressed_button == 'start' or pressed_button == 'throw_control':
-                if int(self.motion.params['BASKETBALL_DISTANCE']) == 1:
+                if int(self.motion.params['BASKETBALL_BATTERY_NUMBER']) == 1:
                     voltage_correction = 26276.11326 + -4111.47394 * voltage + 162.35441 * voltage ** 2
-                elif int(self.motion.params['BASKETBALL_DISTANCE']) == 3:
+                elif int(self.motion.params['BASKETBALL_BATTERY_NUMBER']) == 3:
                     voltage_correction = 50435.37775 + -7951.56631 * voltage + 314.69345 * voltage ** 2
                 else: voltage_correction = 0
                 corrected_distance = int(self.motion.params['BASKETBALL_DISTANCE_CORRECTION'] + int(voltage_correction))
