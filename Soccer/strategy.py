@@ -706,34 +706,34 @@ class Player():
         
         intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
 
-        throw = [
-                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 450, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
-                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 450, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
-                [ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2000, 0, 4700, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2000, 0, 4700, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
-                ]
-        throw[2][18] -= int(self.motion.params['BASKETBALL_DISTANCE'])
-        throw[3][18] -= int(self.motion.params['BASKETBALL_DISTANCE'])
-        pickUp = [
-                [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-                [ 100, 0, -900, 0, -3300, 0, 0, 0, 2667, 0, -3500, 0, 0, 900, 0, 3300, 0, 0, 0, -2667, 0, 3500, 0, 0, 0, 0, 0, 0 ],
-                [ 50, 0, -900, 0, -3300, 0, 0, 600, 2300, 385, -3500, 0, 0, 900, 0, 3300, 0, 0, -600, -2300, -385, 3500, 0, 0, 0, 0, 0, 0 ],
-                [ 50, 0, 0, 0, 0, 0, 0, 600, 2667, 385, -2667, 0, 0, 0, 0, 0, 0, 0, -600, -2667, -385, 2667, 0, 0, 0, 0, 0, 0 ],
-                [ 50, 0, 0, 0, 0, 0, 0, 600, 3000, 385, -3000, 0, 0, 0, 0, 0, 0, 0, -700, -2000, -385, 2500, 0, 0 ],
-                [ 50, 0, 0, 0, 0, 0, 0, 700, 3425, 385, -3300, 0, 0, 0, 0, 0, 0, 0, -900, -1500, -385, 2200, 0, 0, 0, 0, 0, 0 ],
-                [ 50, 0, 0, 0, 0, 0, 0, 910, 2667, 600, -2600, 0, 0, 0, 0, 0, 0, 0, -2100, -600, -680, 1000, 0, 0, 0, 0, 0, 0 ],
-                [ 50, 0, 0, 0, 0, 0, 0, 0, 2667, 600, -2600, 0, 0, 0, 0, 0, 0, 0, -2100, 0, -680, 1000, 0, 0 ],
-                [ 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1100, 0, -680, 2000, 0, 0, 0, 0, 0, 0 ],
-                [ 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -433, 0, -680, 2667, 0, 0, 0, 0, 0, 0 ],
-                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -433, 0, 2500, 2667, 0, 0, 0, 0, 0, 0 ],
-                [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -350, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ]
-                ]
-        for i in range(2, 8,1):
-            pickUp[i][9] += int(self.motion.params['BASKETBALL_CLAMPING'])
-            pickUp[i][20] -= int(self.motion.params['BASKETBALL_CLAMPING'])
-        for i in range(4):
-            throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
+        #throw = [
+        #        [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 450, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
+        #        [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 450, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ],
+        #        [ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2000, 0, 4700, 0, 0, 0, 0, 0, 0, 0 ],
+        #        [ 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2000, 0, 4700, 0, 0, 0, 0, 0, 0, 0 ],
+        #        [ 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ]
+        #        ]
+        #throw[2][18] -= int(self.motion.params['BASKETBALL_DISTANCE'])
+        #throw[3][18] -= int(self.motion.params['BASKETBALL_DISTANCE'])
+        #pickUp = [
+        #        [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
+        #        [ 100, 0, -900, 0, -3300, 0, 0, 0, 2667, 0, -3500, 0, 0, 900, 0, 3300, 0, 0, 0, -2667, 0, 3500, 0, 0, 0, 0, 0, 0 ],
+        #        [ 50, 0, -900, 0, -3300, 0, 0, 600, 2300, 385, -3500, 0, 0, 900, 0, 3300, 0, 0, -600, -2300, -385, 3500, 0, 0, 0, 0, 0, 0 ],
+        #        [ 50, 0, 0, 0, 0, 0, 0, 600, 2667, 385, -2667, 0, 0, 0, 0, 0, 0, 0, -600, -2667, -385, 2667, 0, 0, 0, 0, 0, 0 ],
+        #        [ 50, 0, 0, 0, 0, 0, 0, 600, 3000, 385, -3000, 0, 0, 0, 0, 0, 0, 0, -700, -2000, -385, 2500, 0, 0 ],
+        #        [ 50, 0, 0, 0, 0, 0, 0, 700, 3425, 385, -3300, 0, 0, 0, 0, 0, 0, 0, -900, -1500, -385, 2200, 0, 0, 0, 0, 0, 0 ],
+        #        [ 50, 0, 0, 0, 0, 0, 0, 910, 2667, 600, -2600, 0, 0, 0, 0, 0, 0, 0, -2100, -600, -680, 1000, 0, 0, 0, 0, 0, 0 ],
+        #        [ 50, 0, 0, 0, 0, 0, 0, 0, 2667, 600, -2600, 0, 0, 0, 0, 0, 0, 0, -2100, 0, -680, 1000, 0, 0 ],
+        #        [ 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1100, 0, -680, 2000, 0, 0, 0, 0, 0, 0 ],
+        #        [ 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -433, 0, -680, 2667, 0, 0, 0, 0, 0, 0 ],
+        #        [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -433, 0, 2500, 2667, 0, 0, 0, 0, 0, 0 ],
+        #        [ 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -350, 0, 4700, 2667, 0, 0, 0, 0, 0, 0 ]
+        #        ]
+        #for i in range(2, 8,1):
+        #    pickUp[i][9] += int(self.motion.params['BASKETBALL_CLAMPING'])
+        #    pickUp[i][20] -= int(self.motion.params['BASKETBALL_CLAMPING'])
+        #for i in range(4):
+        #    throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
         if pressed_button == 'start' or pressed_button == 'pick_up_test' :
             #self.motion.play_Soft_Motion_Slot( name = 'pickUp', motion_list = pickUp)
             var = roki2met.roki2met.Basketball_PickUp_v2
@@ -747,12 +747,14 @@ class Player():
             intercom.memISet(var.clamping, int(self.motion.params['BASKETBALL_CLAMPING']))         # clamping gap for ball gripping -50 best value
             intercom.memISet(var.steps, int(self.motion.params['BASKETBALL_SIDE_SHIFT_STEPS']))    # side shift steps to provide 80mm shifting to right. 17 is the best value
             intercom.memISet(var.pitStop, 1)                                                       # ignition
+            time.sleep(35)
 
-        if pressed_button == 'start' or pressed_button == 'throw_test':
+        if pressed_button == 'start' or pressed_button == 'throw_test' or pressed_button == 'throw_control':
             var = roki2met.roki2met.Basketball_Throw
             
             int_voltage = self.motion.stm_channel.read_voltage_from_body()[1]
-            print("voltage = ", round(int_voltage/270.2, 2), " 'BASKETBALL_DISTANCE': ", 
+            voltage = int_voltage / 270.2
+            print("voltage = ", round(voltage, 2), " 'BASKETBALL_DISTANCE': ", 
                   int(self.motion.params['BASKETBALL_DISTANCE']))
             #self.motion.play_Soft_Motion_Slot( name = 'throw', motion_list = throw)
             self.glob.rcb.motionPlay(9)                                # Basketball_Throw
@@ -770,26 +772,37 @@ class Player():
                 if result: break
             if result:
                 os.system("espeak -ven-m1 -a"+ '200' + " " + "'I see basket'")
-            else: os.system("espeak -ven-m1 -a"+ '200' + " " + "'I don't see basket'")
+            else: 
+                os.system("espeak -ven-m1 -a"+ '200' + " " + "'I don't see basket'")
             time.sleep(3)
             corrected_direction = int(self.motion.params['BASKETBALL_DIRECTION']) + int(displacement/10 /360 * 16384)
-            intercom.memISet(var.distance, int(self.motion.params['BASKETBALL_DISTANCE']))         # start acceleration angle -350 best value
+            if pressed_button == 'start' or pressed_button == 'throw_control':
+                if int(self.motion.params['BASKETBALL_DISTANCE']) == 1:
+                    voltage_correction = 26276.11326 + -4111.47394 * voltage + 162.35441 * voltage ** 2
+                elif int(self.motion.params['BASKETBALL_DISTANCE']) == 3:
+                    voltage_correction = 50435.37775 + -7951.56631 * voltage + 314.69345 * voltage ** 2
+                else: voltage_correction = 0
+                corrected_distance = int(self.motion.params['BASKETBALL_DISTANCE_CORRECTION'] + int(voltage_correction))
+            else:
+                corrected_distance = int(self.motion.params['BASKETBALL_DISTANCE'])
+            intercom.memISet(var.distance, corrected_distance)         # start acceleration angle -350 best value
             intercom.memISet(var.direction, corrected_direction)       # direction to correct 200 best value
             intercom.memISet(var.startStop, 1)                                                       # ignition
             time.sleep(3)
-            labels = [[], [], [], ['good', 'Bad'], []]
-            pressed_button = self.motion.push_Button(labels, message = "'Give me feed back'")
-            if pressed_button == 'good':
-                today = datetime.date.today()
-                try:
-                    records = np.load("basketball_records.npy")
-                except Exception:
-                    records = np.zeros((1,6), dtype = np.int16)
-                record = np.array([[int(today.year), int(today.month), int(today.day),
-                                    self.motion.params['BASKETBALL_BATTERY_NUMBER'], int_voltage,
-                                    int(self.motion.params['BASKETBALL_DISTANCE'])]], dtype = np.int16)
-                new_records = np.append(records, record, axis=0)
-                np.save("basketball_records.npy", new_records)
+            if pressed_button == 'throw_test':
+                labels = [[], [], [], ['good', 'Bad'], []]
+                pressed_button = self.motion.push_Button(labels, message = "'Give me feed back'")
+                if pressed_button == 'good':
+                    today = datetime.date.today()
+                    try:
+                        records = np.load("basketball_records.npy")
+                    except Exception:
+                        records = np.zeros((1,6), dtype = np.int16)
+                    record = np.array([[int(today.year), int(today.month), int(today.day),
+                                        self.motion.params['BASKETBALL_BATTERY_NUMBER'], int_voltage,
+                                        int(self.motion.params['BASKETBALL_DISTANCE'])]], dtype = np.int16)
+                    new_records = np.append(records, record, axis=0)
+                    np.save("basketball_records.npy", new_records)
 
 
     def dance_main_cycle(self):
