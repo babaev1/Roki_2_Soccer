@@ -946,6 +946,7 @@ class Player():
             self.motion.sim_Progress(10)
         
     def weight_lifting(self, pressed_button):
+        self.motion.with_Vision = False
         def walk_straight(number_Of_Cycles = 0, stepLength = 0, sideLength = 0, respect_body_tilt = False):
             self.motion.walk_Initial_Pose()
             number_Of_Cycles += 2
@@ -984,7 +985,9 @@ class Player():
             self.motion.fr2 = fr2 
 
         if pressed_button == 'start':  
-            walk_straight(number_Of_Cycles = 9, stepLength = 32)
+            #walk_straight(number_Of_Cycles = 9, stepLength = 32)
+            walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_INITIAL_STEPS_NUMBER'],
+                       stepLength = self.motion.params['WEIGHTLIFTING_INITIAL_STEPLENGTH'])
             self.motion.jump_turn(0)
 
         self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')   
@@ -994,20 +997,24 @@ class Player():
         self.motion.ztl0 = - 180
         self.motion.zt0 = - 180
         self.motion.gaitHeight = 170
-        self.motion.params['BODY_TILT_AT_WALK'] += 0.0                                  #22222222222222222222222222222222222
+        self.motion.params['BODY_TILT_AT_WALK'] += self.motion.params['WEIGHTLIFTING_NEXT_BODYTILT']  #22222222222222222222222222222222222
         self.motion.first_Leg_Is_Right_Leg = True
         self.motion.stepHeight = 20
-        walk_straight(number_Of_Cycles = 16, stepLength = 30, respect_body_tilt = True)
+        #walk_straight(number_Of_Cycles = 16, stepLength = 30, respect_body_tilt = True)
+        walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_NEXT_STEPS_NUMBER'],
+                       stepLength = self.motion.params['WEIGHTLIFTING_NEXT_STEPLENGTH'])
+        self.motion.params['BODY_TILT_AT_WALK'] -= self.motion.params['WEIGHTLIFTING_NEXT_BODYTILT']
 
         self.motion.play_Soft_Motion_Slot(name = 'Shtanga_2')          # Weight_Lift_2-2023
         self.motion.keep_hands_up = True
         self.motion.ztr0 = - 170
         self.motion.ztl0 = - 170
         self.motion.zt0 = - 170
-        self.motion.params['BODY_TILT_AT_WALK'] += -0.03                                    #333333333333333333333333333333333333333
+        self.motion.params['BODY_TILT_AT_WALK'] += self.motion.params['WEIGHTLIFTING_LAST_BODYTILT']  #333333333333333333333333333333333333333
         #if self.glob.SIMULATION != 5 :  self.motion.params['BODY_TILT_AT_WALK'] = 0
-        self.motion.stepHeight = 10
-        walk_straight(number_Of_Cycles = 500, stepLength = 20)
+        self.motion.stepHeight = self.motion.params['WEIGHTLIFTING_LAST_STEPHEIGHT']
+        walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_LAST_STEPS_NUMBER'],
+                       stepLength = self.motion.params['WEIGHTLIFTING_LAST_STEPLENGTH'])
         return
     
     def triple_jump_main_cycle(self):

@@ -62,6 +62,7 @@ class Motion(Robot):
         self.body_euler_angle ={}
         self.local = 0 # Local
         self.vision = vision
+        self.with_Vision = True
         self.p = PathPlan(self.glob)
         self.old_neck_tilt = 0
         self.direction_To_Attack = 0
@@ -601,7 +602,7 @@ class Motion(Robot):
         self.xr, self.xl = self.params['BODY_TILT_AT_WALK'], self.params['BODY_TILT_AT_WALK']   #
         # correction of sole skew depending on side angle of body when step pushes land
         self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
-        if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
             # counter = 0
             # while True:
             #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: 
@@ -758,14 +759,15 @@ class Motion(Robot):
                 #self.refresh_Orientation()
         # returning xr, xl, yr, yl to initial value
         self.xr, self.xl, self.yr, self.yl = xr_old, xl_old, yr_old, yl_old
-        self.local.coord_shift[0] = self.cycle_step_yield*stepLength/64/1000
-        if self.first_Leg_Is_Right_Leg:
-            self.local.coord_shift[1] = -self.side_step_right_yield * sideLength/20/1000
-        else: self.local.coord_shift[1] = self.side_step_left_yield * sideLength/20/1000
-        self.local.coordinate_record(odometry = True, shift = True)
-        self.local.refresh_odometry()
+        if self.with_Vision:
+            self.local.coord_shift[0] = self.cycle_step_yield*stepLength/64/1000
+            if self.first_Leg_Is_Right_Leg:
+                self.local.coord_shift[1] = -self.side_step_right_yield * sideLength/20/1000
+            else: self.local.coord_shift[1] = self.side_step_left_yield * sideLength/20/1000
+            self.local.coordinate_record(odometry = True, shift = True)
+            self.local.refresh_odometry()
         #self.first_Leg_Is_Right_Leg = tmp1
-        if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
 
     
 
@@ -783,7 +785,7 @@ class Motion(Robot):
         self.local.coordinate_record(odometry = True, shift = True)
         self.local.refresh_odometry()
         #self.first_Leg_Is_Right_Leg = tmp1
-        if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
 
     def walk_Cycle_With_Tors_v2_init(self, stepLength,sideLength, rotation):
         self.robot_In_0_Pose = False
@@ -815,7 +817,7 @@ class Motion(Robot):
         self.xr, self.xl = self.params['BODY_TILT_AT_WALK'], self.params['BODY_TILT_AT_WALK']   #
         # correction of sole skew depending on side angle of body when step pushes land
         self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
-        if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
         self.fase_offset = 1.25
 
     def walk_Cycle_With_Tors_v2_Phase1(self, cycle):
@@ -955,7 +957,7 @@ class Motion(Robot):
         self.local.coordinate_record(odometry = True, shift = True)
         self.local.refresh_odometry()
         #self.first_Leg_Is_Right_Leg = tmp1
-        if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
 
     def stabilize_rotation(self, direction):
         self.refresh_Orientation()
@@ -991,7 +993,7 @@ class Motion(Robot):
         self.xr, self.xl = self.params['BODY_TILT_AT_WALK'], self.params['BODY_TILT_AT_WALK']   #
         # correction of sole skew depending on side angle of body when step pushes land
         self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
-        if self.glob.SIMULATION == 5: self.wait_for_gueue_end()
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
         self.fase_offset = 1.25
 
     def walk_Cycle_With_Tors_v3_Phase1(self, cycle, direction):
@@ -1205,7 +1207,7 @@ class Motion(Robot):
             return[]
         framestep = self.simThreadCycleInMs//10
         if self.glob.SIMULATION == 5:
-            self.wait_for_gueue_end()
+            self.wait_for_gueue_end(self.with_Vision)
             # while True:
             #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
             #     time.sleep(0.02)
@@ -1299,7 +1301,7 @@ class Motion(Robot):
         framestep = self.simThreadCycleInMs//10
         pose_taking_cycles = 2
         if self.glob.SIMULATION == 5:
-            self.wait_for_gueue_end()
+            self.wait_for_gueue_end(self.with_Vision)
             # while True:
             #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
             #     time.sleep(0.02)
@@ -1394,7 +1396,7 @@ class Motion(Robot):
         self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
         fase_offset = 0.7
         if self.glob.SIMULATION == 5:
-            self.wait_for_gueue_end()
+            self.wait_for_gueue_end(self.with_Vision)
             # while True:
             #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
             #     time.sleep(0.02)
@@ -1561,7 +1563,7 @@ class Motion(Robot):
             return[]
         pose_taking_cycles = 2
         if self.glob.SIMULATION == 5:
-            self.wait_for_gueue_end()
+            self.wait_for_gueue_end(self.with_Vision)
             # while True:
             #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
             #     time.sleep(0.02)
