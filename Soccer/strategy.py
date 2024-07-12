@@ -222,7 +222,7 @@ class Player():
         if self.role == 'rotation_test': self.rotation_test_main_cycle()
         if self.role == 'sidestep_test': self.sidestep_test_main_cycle()
         if self.role == 'obstacle_runner': self.obstacle_runner_main_cycle()
-        if self.role == 'dribbling': self.dribbling_main_cycle()
+        if self.role == 'test_walk': self.test_walk_main_cycle()
         if self.role == 'ball_moving': self.ball_moving_main_cycle()
         if self.role == 'dance': self.dance_main_cycle()
         if self.role == 'basketball': self.basketball_main_cycle(self.second_pressed_button)
@@ -1073,6 +1073,29 @@ class Player():
         stepLength = 0
         self.motion.gaitHeight = 190
         number_Of_Cycles = 20000
+        self.motion.amplitude = 32
+        sideLength = 0
+        #self.motion.first_Leg_Is_Right_Leg = False
+        if self.motion.first_Leg_Is_Right_Leg: invert = -1
+        else: invert = 1
+        self.motion.walk_Initial_Pose()
+        number_Of_Cycles += 1
+        for cycle in range(number_Of_Cycles):
+            stepLength1 = stepLength
+            if cycle ==0 : stepLength1 = stepLength/3
+            if cycle ==1 : stepLength1 = stepLength/3 * 2
+            self.motion.refresh_Orientation()
+            rotation = 0 + invert * self.motion.imu_body_yaw() * 1.1
+            #if rotation > 0: rotation *= 1.5
+            rotation = self.motion.normalize_rotation(rotation)
+            #rotation = 0
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+        self.motion.walk_Final_Pose()
+
+    def test_walk_main_cycle(self):
+        stepLength = 0
+        self.motion.gaitHeight = 190
+        number_Of_Cycles = 20
         self.motion.amplitude = 32
         sideLength = 0
         #self.motion.first_Leg_Is_Right_Leg = False
