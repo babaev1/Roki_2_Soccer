@@ -1,0 +1,3963 @@
+//====================================================================
+//      SvCompiler V6.06
+//By A.Sibilev
+//====================================================================
+//cblock
+
+;sfVpuVersion <int()>
+;sfCreateTask <int(,*<void()>,int)>
+;sfLog <void(,cstring,int,int,int)>
+;sfLogOpen <void(,cstring)>
+;sfLogClose <void()>
+;sfWaitFrameOut <void(,int)>
+;sfIsFrameOut <int(,int)>
+;sfWaitNextFrame <void()>
+;sfSlotIndex <int(,cstring)>
+;sfAbs <int(,int)>
+;sfIMin <int(,int,int)>
+;sfIMax <int(,int,int)>
+;sfUMin <int(,int,int)>
+;sfUMax <int(,int,int)>
+;sfILimit <int(,int,int,int)>
+;sfStop <void()>
+;sfStartSlot <void(,int)>
+;sfBip <void(,int,int)>
+;sfFreeGroup <void(,int)>
+;sfPoseGroup <void(,int,int,int)>
+;sfPoseGroupDelay <void(,int,int,int,int)>
+;sfPoseCorrect <void(,int,int)>
+;sfQueueGroup <void(,int,int,int)>
+;sfPoseIdx <void(,int,int,int)>
+;sfPoseGroupLin <void(,int,int,int)>
+;sfStrainGroup <void(,int)>
+;sfPlaySamples <void(,int,*cblock,int)>
+;sfAccumSetup1 <void(,*int)>
+;sfAccumSetup2 <void(,*int,*int)>
+;sfAccumSetup3 <void(,*int,*int,*int)>
+;sfAccumSetup4 <void(,*int,*int,*int,*int)>
+;sfAccumTrigger <void()>
+;sfAccumReset <void()>
+;sfMathAcos <int(,int,int)>
+;sfMathSqrti <int(,int)>
+;sfMathAngleOfTriangle <int(,int,int,int)>
+;sfMathAngleOfKnee <int(,int,int,int)>
+;sfMathCathetOfSquareTriangle <int(,int,int)>
+;sfMathHypotenuseOfSquareTriangle <int(,int,int)>
+;sfMathTableSin <int(,int,int)>
+;sfHumoModelSetup <void()>
+;sfHumoModelFootAtFloor <void(,int,int,int)>
+;sfHumoModelFootPush <void(,int,int,int)>
+;sfIndexOfMask <int(,int)>
+;sfQueueIdxAppend <int(,int,int,int)>
+;sfQueueIdxOffsets <int(,int,int,*cblock,int)>
+;sfQueueIdxSinMove <int(,int,int,int,int)>
+;sfQueueIdxLast <int(,int)>
+;sfQueueIdxCount <int(,int)>
+;sfQueueMax <int()>
+;sfIkSetup <void()>
+;sfIkAngle <void(,float,float,float,float,float,float,float)>
+;sfMathCos <float(,float)>
+;sfMathSin <float(,float)>
+;sfQuaternionToEuler <void(,float,float,float,float)>
+;sfQuaternionToEulerImu <void()>
+;sfFMathACos <float(,float)>
+;sfFMathASin <float(,float)>
+;sfFMathATan <float(,float)>
+;sfFMathATan2 <float(,float,float)>
+;sfFMathCos <float(,float)>
+;sfFMathSin <float(,float)>
+;sfFMathTan <float(,float)>
+;sfFMathCosh <float(,float)>
+;sfFMathSinh <float(,float)>
+;sfFMathTanh <float(,float)>
+;sfFMathExp <float(,float)>
+;sfFMathFrExp <float(,float,*int)>
+;sfFMathLdExp <float(,float,int)>
+;sfFMathLog <float(,float)>
+;sfFMathLog10 <float(,float)>
+;sfFMathModf <float(,float,*float)>
+;sfFMathPow <float(,float,float)>
+;sfFMathSqrt <float(,float)>
+;sfFMathCeil <float(,float)>
+;sfFMathFAbs <float(,float)>
+;sfFMathFloor <float(,float)>
+;sfFMathFMod <float(,float,float)>
+;sfWaitFrame <void(,int)>
+[3:348] ;sfWaitFrameOut( frame + svFrameCount );
+VBC5_PUSH_CONST 17 | 0x80000000 //import func index sfWaitFrameOut
+VBC2_PUSH_LOCAL 2 //frame
+VBC3_PUSH_GLOBAL 1 //svFrameCount
+VBC1_ADD
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[2:10] ;
+VBC1_RETURN
+;setup <void()>
+[1:98] ;flag_event = 0;
+VBC2_PUSH_CONST 64 //flag_event
+VBC1_PUSH_0 
+VBC1_POP
+[1:99] ;timeStep = 1;
+VBC2_PUSH_CONST 59 //timeStep
+VBC1_PUSH_1 
+VBC1_POP
+[1:100] ;rotationYieldRight = 0.23;
+VBC2_PUSH_CONST 22 //rotationYieldRight
+VBC5_PUSH_CONST 1047233823 
+VBC1_POP
+[1:101] ;rotationYieldLeft = 0.23;
+VBC2_PUSH_CONST 23 //rotationYieldLeft
+VBC5_PUSH_CONST 1047233823 
+VBC1_POP
+[1:103] ;svIkA5 = 40.2; 
+VBC3_PUSH_CONST 1215 //svIkA5
+VBC5_PUSH_CONST 1109445837 
+VBC1_POP
+[1:104] ;svIkB5 = 0;    
+VBC3_PUSH_CONST 1216 //svIkB5
+VBC1_PUSH_0 
+VBC1_POP_CF
+[1:105] ;svIkC5 = 0;    
+VBC3_PUSH_CONST 1217 //svIkC5
+VBC1_PUSH_0 
+VBC1_POP_CF
+[1:106] ;svIkA6 = 0;    
+VBC3_PUSH_CONST 1218 //svIkA6
+VBC1_PUSH_0 
+VBC1_POP_CF
+[1:107] ;svIkA7 = 99;   
+VBC3_PUSH_CONST 1219 //svIkA7
+VBC2_PUSH_CONST 99 
+VBC1_POP_CF
+[1:108] ;svIkA8 = 99;   
+VBC3_PUSH_CONST 1220 //svIkA8
+VBC2_PUSH_CONST 99 
+VBC1_POP_CF
+[1:109] ;svIkA9 = 0;    
+VBC3_PUSH_CONST 1221 //svIkA9
+VBC1_PUSH_0 
+VBC1_POP_CF
+[1:110] ;svIkA10 = 13.7;  
+VBC3_PUSH_CONST 1222 //svIkA10
+VBC5_PUSH_CONST 1096495923 
+VBC1_POP
+[1:111] ;svIkB10 = 23.8;  
+VBC3_PUSH_CONST 1223 //svIkB10
+VBC5_PUSH_CONST 1102997094 
+VBC1_POP
+[1:112] ;svIkC10 = 0;   
+VBC3_PUSH_CONST 1224 //svIkC10
+VBC1_PUSH_0 
+VBC1_POP_CF
+[1:114] ;e10 = 55;      
+VBC2_PUSH_CONST 39 //e10
+VBC2_PUSH_CONST 55 
+VBC1_POP_CF
+[1:115] ;d10 = 62;      
+VBC2_PUSH_CONST 40 //d10
+VBC2_PUSH_CONST 62 
+VBC1_POP_CF
+[1:118] ;svIkLimA5min = -90 * 0.017453293;
+VBC3_PUSH_CONST 1225 //svIkLimA5min
+VBC5_PUSH_CONST -1077342245 
+VBC1_POP
+[1:119] ;svIkLimA5max = 90 * 0.017453293;
+VBC3_PUSH_CONST 1226 //svIkLimA5max
+VBC5_PUSH_CONST 1070141403 
+VBC1_POP
+[1:122] ;svIkLimA6min = -108 * 0.017453293;
+VBC3_PUSH_CONST 1227 //svIkLimA6min
+VBC5_PUSH_CONST -1074706887 
+VBC1_POP
+[1:123] ;svIkLimA6max = 15 * 0.017453293;
+VBC3_PUSH_CONST 1228 //svIkLimA6max
+VBC5_PUSH_CONST 1048971922 
+VBC1_POP
+[1:125] ;svIkLimA7min = -130 * 0.017453293;
+VBC3_PUSH_CONST 1229 //svIkLimA7min
+VBC5_PUSH_CONST -1072613858 
+VBC1_POP
+[1:126] ;svIkLimA7max = 50 * 0.017453293;
+VBC3_PUSH_CONST 1230 //svIkLimA7max
+VBC5_PUSH_CONST 1063216883 
+VBC1_POP
+[1:129] ;svIkLimA8min = -180 * 0.017453293;
+VBC3_PUSH_CONST 1231 //svIkLimA8min
+VBC5_PUSH_CONST -1068953637 
+VBC1_POP
+[1:130] ;svIkLimA8max = 8 * 0.017453293;
+VBC3_PUSH_CONST 1232 //svIkLimA8max
+VBC5_PUSH_CONST 1041168949 
+VBC1_POP
+[1:133] ;svIkLimA9min = -45 * 0.017453293;
+VBC3_PUSH_CONST 1233 //svIkLimA9min
+VBC5_PUSH_CONST -1085730853 
+VBC1_POP
+[1:134] ;svIkLimA9max = 78 * 0.017453293;
+VBC3_PUSH_CONST 1234 //svIkLimA9max
+VBC5_PUSH_CONST 1068384497 
+VBC1_POP
+[1:137] ;svIkLimA10min = -24 * 0.017453293;
+VBC3_PUSH_CONST 1235 //svIkLimA10min
+VBC5_PUSH_CONST -1093241008 
+VBC1_POP
+[1:138] ;svIkLimA10max = 24 * 0.017453293;
+VBC3_PUSH_CONST 1236 //svIkLimA10max
+VBC5_PUSH_CONST 1054242640 
+VBC1_POP
+[1:139] ;sfIkSetup();
+VBC5_PUSH_CONST 200 | 0x80000000 //import func index sfIkSetup
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:141] ;framestep = 2;
+VBC2_PUSH_CONST 24 //framestep
+VBC1_PUSH_2 
+VBC1_POP
+[1:143] ;gaitHeight = 180; 
+VBC2_PUSH_CONST 45 //gaitHeight
+VBC3_PUSH_CONST 180 
+VBC1_POP_CF
+[1:144] ;stepHeight = 32; 
+VBC2_PUSH_CONST 46 //stepHeight
+VBC2_PUSH_CONST 32 
+VBC1_POP_CF
+[1:146] ;selfMotionShiftCorrectionX = -50.0 / 21.0;
+VBC2_PUSH_CONST 9 //selfMotionShiftCorrectionX
+VBC5_PUSH_CONST -1072143994 
+VBC1_POP
+[1:147] ;selfMotionShiftCorrectionY = 70.0 / 21.0;
+VBC2_PUSH_CONST 10 //selfMotionShiftCorrectionY
+VBC5_PUSH_CONST 1079334229 
+VBC1_POP
+[1:151] ;ztr0 = -(svIkC5+svIkA6+svIkA7+svIkA8+svIkA9+svIkB10 - 1); 
+VBC2_PUSH_CONST 51 //ztr0
+VBC3_PUSH_GLOBAL 1217 //svIkC5
+VBC3_PUSH_GLOBAL 1218 //svIkA6
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1219 //svIkA7
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1220 //svIkA8
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1221 //svIkA9
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1223 //svIkB10
+VBC1_ADD_FF
+VBC1_PUSH_1 
+VBC1_SUB_FI
+VBC1_NEG_F
+VBC1_POP
+[1:152] ;ztl0 = -(svIkC5+svIkA6+svIkA7+svIkA8+svIkA9+svIkB10 - 1); 
+VBC2_PUSH_CONST 52 //ztl0
+VBC3_PUSH_GLOBAL 1217 //svIkC5
+VBC3_PUSH_GLOBAL 1218 //svIkA6
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1219 //svIkA7
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1220 //svIkA8
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1221 //svIkA9
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1223 //svIkB10
+VBC1_ADD_FF
+VBC1_PUSH_1 
+VBC1_SUB_FI
+VBC1_NEG_F
+VBC1_POP
+[1:154] ;zr = zl = -1;
+VBC2_PUSH_CONST 30 //zr
+VBC2_PUSH_CONST 37 //zl
+VBC2_PUSH_CONST -1 // -
+VBC1_STORE_CF
+VBC1_POP
+[1:157] ;selfInitPoses = 10;
+VBC2_PUSH_CONST 18 //selfInitPoses
+VBC2_PUSH_CONST 10 
+VBC1_POP
+[1:159] ;selfTIK2RAD = 0.00058909;
+VBC2_PUSH_CONST 7 //selfTIK2RAD
+VBC5_PUSH_CONST 974810409 
+VBC1_POP
+[1:160] ;stepLength = 0.0;    
+VBC2_PUSH_CONST 3 //stepLength
+VBC1_PUSH_0 
+VBC1_POP
+[1:161] ;sideLength = 0.0;    
+VBC2_PUSH_CONST 4 //sideLength
+VBC1_PUSH_0 
+VBC1_POP
+[1:162] ;rotation = 0;        
+VBC2_PUSH_CONST 5 //rotation
+VBC1_PUSH_0 
+VBC1_POP_CF
+[1:163] ;selfFirstLegIsRightLeg = -1; 
+VBC2_PUSH_CONST 15 //selfFirstLegIsRightLeg
+VBC2_PUSH_CONST -1 // -
+VBC1_POP
+[1:164] ;motion_to_right = 1;
+VBC2_PUSH_CONST 16 //motion_to_right
+VBC1_PUSH_1 
+VBC1_POP
+[1:165] ;side_motion = 0.0;
+VBC2_PUSH_CONST 17 //side_motion
+VBC1_PUSH_0 
+VBC1_POP
+[1:166] ;selfInitPoses = 20; 
+VBC2_PUSH_CONST 18 //selfInitPoses
+VBC2_PUSH_CONST 20 
+VBC1_POP
+[1:168] ;stepZtr = (ztr0 + gaitHeight) / selfInitPoses;
+VBC2_PUSH_CONST 53 //stepZtr
+VBC3_PUSH_GLOBAL 51 //ztr0
+VBC3_PUSH_GLOBAL 45 //gaitHeight
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 18 //selfInitPoses
+VBC1_DIV_FI
+VBC1_POP
+[1:169] ;stepZtl = (ztl0 + gaitHeight) / selfInitPoses;
+VBC2_PUSH_CONST 54 //stepZtl
+VBC3_PUSH_GLOBAL 52 //ztl0
+VBC3_PUSH_GLOBAL 45 //gaitHeight
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 18 //selfInitPoses
+VBC1_DIV_FI
+VBC1_POP
+[1:170] ;bodyTiltAtWalk = 0.02;
+VBC2_PUSH_CONST 60 //bodyTiltAtWalk
+VBC5_PUSH_CONST 1017370378 
+VBC1_POP
+[1:171] ;solyLandingSkew = 0.00;
+VBC2_PUSH_CONST 61 //solyLandingSkew
+VBC1_PUSH_0 
+VBC1_POP
+[1:173] ;if( slowWalk ) {
+VBC3_PUSH_GLOBAL 2 //slowWalk
+VBC4_FALSE_JUMP LAB489 //if to false
+;
+[1:174] ;fr1 = 50; 
+VBC2_PUSH_CONST 43 //fr1
+VBC2_PUSH_CONST 50 
+VBC1_POP
+[1:175] ;fr2 = 20; 
+VBC2_PUSH_CONST 44 //fr2
+VBC2_PUSH_CONST 20 
+VBC1_POP
+[1:176] ;amplitude = 110;    
+VBC2_PUSH_CONST 41 //amplitude
+VBC2_PUSH_CONST 110 
+VBC1_POP_CF
+VBC4_JUMP LAB504 //if to exit
+LAB489: //if else
+;
+[1:179] ;fr1 = 8;           
+VBC2_PUSH_CONST 43 //fr1
+VBC2_PUSH_CONST 8 
+VBC1_POP
+[1:180] ;fr2 = 12;          
+VBC2_PUSH_CONST 44 //fr2
+VBC2_PUSH_CONST 12 
+VBC1_POP
+[1:181] ;amplitude = 32;    
+VBC2_PUSH_CONST 41 //amplitude
+VBC2_PUSH_CONST 32 
+VBC1_POP_CF
+LAB504: //if exit
+[1:183] ;stepYtr = amplitude / 2.0 / selfInitPoses;
+VBC2_PUSH_CONST 55 //stepYtr
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC5_PUSH_CONST 1073741824 
+VBC1_DIV_FF
+VBC3_PUSH_GLOBAL 18 //selfInitPoses
+VBC1_DIV_FI
+VBC1_POP
+[1:184] ;stepYtl = amplitude / 2.0 / selfInitPoses;
+VBC2_PUSH_CONST 56 //stepYtl
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC5_PUSH_CONST 1073741824 
+VBC1_DIV_FF
+VBC3_PUSH_GLOBAL 18 //selfInitPoses
+VBC1_DIV_FI
+VBC1_POP
+[1:189] ;alpha01 = 3.141592654;
+VBC2_PUSH_CONST 42 //alpha01
+VBC5_PUSH_CONST 1078530011 
+VBC1_POP
+[1:190] ;if( fr1 != 0 )
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_PUSH_0 
+VBC1_NOT_EQU
+VBC4_FALSE_JUMP LAB565 //if to false
+;alpha01 = alpha01 * 2 / fr1;
+VBC2_PUSH_CONST 42 //alpha01
+VBC3_PUSH_GLOBAL 42 //alpha01
+VBC1_PUSH_2 
+VBC1_MUL_FI
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_DIV_FI
+VBC1_POP
+LAB565: //if else
+[1:197] ;fps = 8;
+VBC2_PUSH_CONST 58 //fps
+VBC2_PUSH_CONST 8 
+VBC1_POP
+[1:198] ;stepLengthOrder = 100;
+VBC2_PUSH_CONST 6 //stepLengthOrder
+VBC2_PUSH_CONST 100 
+VBC1_POP_CF
+[1:199] ;if (timeStep == 1){
+VBC3_PUSH_GLOBAL 59 //timeStep
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB612 //if to false
+;
+[1:200] ;stepLengthOrder = 40;
+VBC2_PUSH_CONST 6 //stepLengthOrder
+VBC2_PUSH_CONST 40 
+VBC1_POP_CF
+[1:201] ;fps = 2; 
+VBC2_PUSH_CONST 58 //fps
+VBC1_PUSH_2 
+VBC1_POP
+[1:202] ;bodyTiltAtWalk = -0.02; 
+VBC2_PUSH_CONST 60 //bodyTiltAtWalk
+VBC5_PUSH_CONST -1130113270 // -
+VBC1_POP
+[1:203] ;gaitHeight = 150;
+VBC2_PUSH_CONST 45 //gaitHeight
+VBC3_PUSH_CONST 150 
+VBC1_POP_CF
+[1:204] ;stepHeight = 40;
+VBC2_PUSH_CONST 46 //stepHeight
+VBC2_PUSH_CONST 40 
+VBC1_POP_CF
+LAB612: //if else
+[1:215] ;
+VBC1_RETURN
+;computeAlphaForWalk <int()>
+[1:219] ;flag = 0;
+VBC2_PUSH_CONST 63 //flag
+VBC1_PUSH_0 
+VBC1_POP
+[1:220] ;sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
+VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
+VBC3_PUSH_GLOBAL 25 //xtr
+VBC3_PUSH_GLOBAL 26 //ytr
+VBC3_PUSH_GLOBAL 27 //ztr
+VBC3_PUSH_GLOBAL 28 //xr
+VBC3_PUSH_GLOBAL 29 //yr
+VBC3_PUSH_GLOBAL 30 //zr
+VBC3_PUSH_GLOBAL 31 //wr
+VBC1_CALL7
+VBC1_STACK_UP8//remove result, call address and params
+[1:221] ;if( svIkOutPresent ) {
+VBC3_PUSH_GLOBAL 1237 //svIkOutPresent
+VBC4_FALSE_JUMP LAB881 //if to false
+;
+[1:222] ;flag = flag + 1;
+VBC2_PUSH_CONST 63 //flag
+VBC3_PUSH_GLOBAL 63 //flag
+VBC1_PUSH_1 
+VBC1_ADD
+VBC1_POP
+[1:224] ;if (selfFirstLegIsRightLeg == 1){
+VBC3_PUSH_GLOBAL 15 //selfFirstLegIsRightLeg
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB777 //if to false
+;
+[1:225] ;sfPoseGroupLin( 1024 , -svIkEncA5, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 1024 
+VBC3_PUSH_GLOBAL 1238 //svIkEncA5
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:226] ;sfPoseGroupLin( 4096 , -svIkEncA6, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 4096 
+VBC3_PUSH_GLOBAL 1239 //svIkEncA6
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:227] ;sfPoseGroupLin( 16384 , -svIkEncA7, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 16384 
+VBC3_PUSH_GLOBAL 1240 //svIkEncA7
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:228] ;sfPoseGroupLin( 65536 , -svIkEncA8, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 65536 
+VBC3_PUSH_GLOBAL 1241 //svIkEncA8
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:229] ;sfPoseGroupLin( 262144 , svIkEncA9, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 262144 
+VBC3_PUSH_GLOBAL 1242 //svIkEncA9
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:230] ;sfPoseGroupLin( 1048576 , -svIkEncA10, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 1048576 
+VBC3_PUSH_GLOBAL 1243 //svIkEncA10
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+VBC4_JUMP LAB881 //if to exit
+LAB777: //if else
+;
+[1:234] ;sfPoseGroupLin( 2048 , svIkEncA5, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 2048 
+VBC3_PUSH_GLOBAL 1238 //svIkEncA5
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:235] ;sfPoseGroupLin( 8192 , -svIkEncA6, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 8192 
+VBC3_PUSH_GLOBAL 1239 //svIkEncA6
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:236] ;sfPoseGroupLin( 32768 , -svIkEncA7, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 32768 
+VBC3_PUSH_GLOBAL 1240 //svIkEncA7
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:237] ;sfPoseGroupLin( 131072 , -svIkEncA8, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 131072 
+VBC3_PUSH_GLOBAL 1241 //svIkEncA8
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:238] ;sfPoseGroupLin( 524288 , svIkEncA9, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 524288 
+VBC3_PUSH_GLOBAL 1242 //svIkEncA9
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:239] ;sfPoseGroupLin( 2097152 , -svIkEncA10, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 2097152 
+VBC3_PUSH_GLOBAL 1243 //svIkEncA10
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+LAB881: //if exit
+LAB881: //if else
+[1:246] ;sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
+VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
+VBC3_PUSH_GLOBAL 32 //xtl
+VBC3_PUSH_GLOBAL 33 //ytl
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 34 //ztl
+VBC3_PUSH_GLOBAL 35 //xl
+VBC3_PUSH_GLOBAL 36 //yl
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 37 //zl
+VBC3_PUSH_GLOBAL 38 //wl
+VBC1_CALL7
+VBC1_STACK_UP8//remove result, call address and params
+[1:247] ;if( svIkOutPresent ) {
+VBC3_PUSH_GLOBAL 1237 //svIkOutPresent
+VBC4_FALSE_JUMP LAB1147 //if to false
+;
+[1:248] ;flag = flag + 1;
+VBC2_PUSH_CONST 63 //flag
+VBC3_PUSH_GLOBAL 63 //flag
+VBC1_PUSH_1 
+VBC1_ADD
+VBC1_POP
+[1:250] ;if (selfFirstLegIsRightLeg == 1){
+VBC3_PUSH_GLOBAL 15 //selfFirstLegIsRightLeg
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB1044 //if to false
+;
+[1:251] ;sfPoseGroupLin( 2048 , -svIkEncA5, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 2048 
+VBC3_PUSH_GLOBAL 1238 //svIkEncA5
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:252] ;sfPoseGroupLin( 8192 , -svIkEncA6, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 8192 
+VBC3_PUSH_GLOBAL 1239 //svIkEncA6
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:253] ;sfPoseGroupLin( 32768 , -svIkEncA7, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 32768 
+VBC3_PUSH_GLOBAL 1240 //svIkEncA7
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:254] ;sfPoseGroupLin( 131072 , -svIkEncA8, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 131072 
+VBC3_PUSH_GLOBAL 1241 //svIkEncA8
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:255] ;sfPoseGroupLin( 524288 , svIkEncA9, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 524288 
+VBC3_PUSH_GLOBAL 1242 //svIkEncA9
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:256] ;sfPoseGroupLin( 2097152 , -svIkEncA10, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 2097152 
+VBC3_PUSH_GLOBAL 1243 //svIkEncA10
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+VBC4_JUMP LAB1147 //if to exit
+LAB1044: //if else
+;
+[1:260] ;sfPoseGroupLin( 1024 , svIkEncA5, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 1024 
+VBC3_PUSH_GLOBAL 1238 //svIkEncA5
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:261] ;sfPoseGroupLin( 4096 , -svIkEncA6, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 4096 
+VBC3_PUSH_GLOBAL 1239 //svIkEncA6
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:262] ;sfPoseGroupLin( 16384 , -svIkEncA7, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 16384 
+VBC3_PUSH_GLOBAL 1240 //svIkEncA7
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:263] ;sfPoseGroupLin( 65536 , -svIkEncA8, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 65536 
+VBC3_PUSH_GLOBAL 1241 //svIkEncA8
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:264] ;sfPoseGroupLin( 262144 , svIkEncA9, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 262144 
+VBC3_PUSH_GLOBAL 1242 //svIkEncA9
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:265] ;sfPoseGroupLin( 1048576 , -svIkEncA10, fps );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 1048576 
+VBC3_PUSH_GLOBAL 1243 //svIkEncA10
+VBC1_NEG
+VBC3_PUSH_GLOBAL 58 //fps
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+LAB1147: //if exit
+LAB1147: //if else
+[1:270] ;sfWaitFrame( timeStep );
+VBC2_PUSH_CONST 56  //func address sfWaitFrame
+VBC3_PUSH_GLOBAL 59 //timeStep
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:271] ;if (flag < 2) flag_event = flag_event + 1;
+VBC3_PUSH_GLOBAL 63 //flag
+VBC1_PUSH_2 
+VBC1_LESS
+VBC4_FALSE_JUMP LAB1171 //if to false
+;if (flag < 2) flag_event = flag_event + 1;
+VBC2_PUSH_CONST 64 //flag_event
+VBC3_PUSH_GLOBAL 64 //flag_event
+VBC1_PUSH_1 
+VBC1_ADD
+VBC1_POP
+LAB1171: //if else
+[1:272] ;return 1;
+VBC1_PUSH_1 
+VBC2_POP_RESULT 2
+VBC1_RETURN
+;computeAlphaForWalkFine <void(,int)>
+[1:287] ;sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
+VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
+VBC3_PUSH_GLOBAL 25 //xtr
+VBC3_PUSH_GLOBAL 26 //ytr
+VBC3_PUSH_GLOBAL 27 //ztr
+VBC3_PUSH_GLOBAL 28 //xr
+VBC3_PUSH_GLOBAL 29 //yr
+VBC3_PUSH_GLOBAL 30 //zr
+VBC3_PUSH_GLOBAL 31 //wr
+VBC1_CALL7
+VBC1_STACK_UP8//remove result, call address and params
+[1:289] ;if( svIkOutPresent ) {
+VBC3_PUSH_GLOBAL 1237 //svIkOutPresent
+VBC4_FALSE_JUMP LAB1419 //if to false
+;
+[1:291] ;if (selfFirstLegIsRightLeg == 1){
+VBC3_PUSH_GLOBAL 15 //selfFirstLegIsRightLeg
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB1321 //if to false
+;
+[1:292] ;sfPoseGroupLin( 1024 , -svIkEncA5, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 1024 
+VBC3_PUSH_GLOBAL 1238 //svIkEncA5
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:293] ;sfPoseGroupLin( 4096 , -svIkEncA6, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 4096 
+VBC3_PUSH_GLOBAL 1239 //svIkEncA6
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:294] ;sfPoseGroupLin( 16384 , -svIkEncA7, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 16384 
+VBC3_PUSH_GLOBAL 1240 //svIkEncA7
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:295] ;sfPoseGroupLin( 65536 , -svIkEncA8, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 65536 
+VBC3_PUSH_GLOBAL 1241 //svIkEncA8
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:296] ;sfPoseGroupLin( 262144 , svIkEncA9, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 262144 
+VBC3_PUSH_GLOBAL 1242 //svIkEncA9
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:297] ;sfPoseGroupLin( 1048576 , -svIkEncA10, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 1048576 
+VBC3_PUSH_GLOBAL 1243 //svIkEncA10
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+VBC4_JUMP LAB1419 //if to exit
+LAB1321: //if else
+;
+[1:300] ;sfPoseGroupLin( 2048 , svIkEncA5, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 2048 
+VBC3_PUSH_GLOBAL 1238 //svIkEncA5
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:301] ;sfPoseGroupLin( 8192 , -svIkEncA6, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 8192 
+VBC3_PUSH_GLOBAL 1239 //svIkEncA6
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:302] ;sfPoseGroupLin( 32768 , -svIkEncA7, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 32768 
+VBC3_PUSH_GLOBAL 1240 //svIkEncA7
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:303] ;sfPoseGroupLin( 131072 , -svIkEncA8, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 131072 
+VBC3_PUSH_GLOBAL 1241 //svIkEncA8
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:304] ;sfPoseGroupLin( 524288 , svIkEncA9, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 524288 
+VBC3_PUSH_GLOBAL 1242 //svIkEncA9
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:305] ;sfPoseGroupLin( 2097152 , -svIkEncA10, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 2097152 
+VBC3_PUSH_GLOBAL 1243 //svIkEncA10
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+LAB1419: //if exit
+LAB1419: //if else
+[1:311] ;sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
+VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
+VBC3_PUSH_GLOBAL 32 //xtl
+VBC3_PUSH_GLOBAL 33 //ytl
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 34 //ztl
+VBC3_PUSH_GLOBAL 35 //xl
+VBC3_PUSH_GLOBAL 36 //yl
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 37 //zl
+VBC3_PUSH_GLOBAL 38 //wl
+VBC1_CALL7
+VBC1_STACK_UP8//remove result, call address and params
+[1:312] ;if( svIkOutPresent ) {
+VBC3_PUSH_GLOBAL 1237 //svIkOutPresent
+VBC4_FALSE_JUMP LAB1665 //if to false
+;
+[1:314] ;if (selfFirstLegIsRightLeg == 1){
+VBC3_PUSH_GLOBAL 15 //selfFirstLegIsRightLeg
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB1568 //if to false
+;
+[1:315] ;sfPoseGroupLin( 2048 , -svIkEncA5, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 2048 
+VBC3_PUSH_GLOBAL 1238 //svIkEncA5
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:316] ;sfPoseGroupLin( 8192 , -svIkEncA6, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 8192 
+VBC3_PUSH_GLOBAL 1239 //svIkEncA6
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:317] ;sfPoseGroupLin( 32768 , -svIkEncA7, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 32768 
+VBC3_PUSH_GLOBAL 1240 //svIkEncA7
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:318] ;sfPoseGroupLin( 131072 , -svIkEncA8, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 131072 
+VBC3_PUSH_GLOBAL 1241 //svIkEncA8
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:319] ;sfPoseGroupLin( 524288 , svIkEncA9, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 524288 
+VBC3_PUSH_GLOBAL 1242 //svIkEncA9
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:320] ;sfPoseGroupLin( 2097152 , -svIkEncA10, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 2097152 
+VBC3_PUSH_GLOBAL 1243 //svIkEncA10
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+VBC4_JUMP LAB1665 //if to exit
+LAB1568: //if else
+;
+[1:323] ;sfPoseGroupLin( 1024 , svIkEncA5, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 1024 
+VBC3_PUSH_GLOBAL 1238 //svIkEncA5
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:324] ;sfPoseGroupLin( 4096 , -svIkEncA6, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 4096 
+VBC3_PUSH_GLOBAL 1239 //svIkEncA6
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:325] ;sfPoseGroupLin( 16384 , -svIkEncA7, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 16384 
+VBC3_PUSH_GLOBAL 1240 //svIkEncA7
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:326] ;sfPoseGroupLin( 65536 , -svIkEncA8, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 65536 
+VBC3_PUSH_GLOBAL 1241 //svIkEncA8
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:327] ;sfPoseGroupLin( 262144 , svIkEncA9, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 262144 
+VBC3_PUSH_GLOBAL 1242 //svIkEncA9
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:328] ;sfPoseGroupLin( 1048576 , -svIkEncA10, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 1048576 
+VBC3_PUSH_GLOBAL 1243 //svIkEncA10
+VBC1_NEG
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+LAB1665: //if exit
+LAB1665: //if else
+[1:332] ;sfPoseGroupLin( 256  | 512 , 4540, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 768 
+VBC3_PUSH_CONST 4540 
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:333] ;sfPoseGroupLin( 4  | 8 , 1400, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC2_PUSH_CONST 12 
+VBC3_PUSH_CONST 1400 
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:334] ;sfPoseGroupLin( 64  | 128 , 700, frameCount );
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 192 
+VBC3_PUSH_CONST 700 
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:335] ;sfWaitFrame( frameCount );
+VBC2_PUSH_CONST 56  //func address sfWaitFrame
+VBC2_PUSH_LOCAL 2 //frameCount
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:342] ;
+VBC1_RETURN
+;testDrop <void()>
+[1:343] ;if( sfAbs(svImuAccX) > 50000 || sfAbs(svImuAccZ) > 50000 ) {
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1000 //svImuAccX
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC4_PUSH_CONST 50000 
+VBC1_GREAT
+VBC4_TRUE_JUMP_KEEP LAB1755
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1002 //svImuAccZ
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC4_PUSH_CONST 50000 
+VBC1_GREAT
+VBC4_TRUE_JUMP_KEEP LAB1755
+VBC1_PUSH_0
+LAB1755:
+VBC4_FALSE_JUMP LAB1765 //if to false
+;
+[1:348] ;sfWaitFrame(100);
+VBC2_PUSH_CONST 56  //func address sfWaitFrame
+VBC2_PUSH_CONST 100 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+LAB1765: //if else
+[1:354] ;
+VBC1_RETURN
+;walkInitialPose <void()>
+[1:359] ;xtr = xtl = 0;
+VBC2_PUSH_CONST 25 //xtr
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_0 
+VBC1_STORE_CF
+VBC1_POP
+[1:360] ;for( j = 0; j < selfInitPoses; j++ ) {
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_0 
+VBC1_POP
+LAB1777: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 18 //selfInitPoses
+VBC1_LESS
+VBC4_FALSE_JUMP LAB1862 //to for exit
+;
+[1:362] ;ztr = ztr0 - j * stepZtr;
+VBC2_PUSH_CONST 27 //ztr
+VBC3_PUSH_GLOBAL 51 //ztr0
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 53 //stepZtr
+VBC1_MUL_IF
+VBC1_SUB_FF
+VBC1_POP
+[1:363] ;ztl = ztl0 - j * stepZtl;
+VBC2_PUSH_CONST 34 //ztl
+VBC3_PUSH_GLOBAL 52 //ztl0
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 54 //stepZtl
+VBC1_MUL_IF
+VBC1_SUB_FF
+VBC1_POP
+[1:364] ;ytr = -d10 - j * stepYtr;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 55 //stepYtr
+VBC1_MUL_IF
+VBC1_SUB_FF
+VBC1_POP
+[1:365] ;ytl =  d10 - j * stepYtl;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 40 //d10
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 56 //stepYtl
+VBC1_MUL_IF
+VBC1_SUB_FF
+VBC1_POP
+[1:367] ;if( !computeAlphaForWalk() )
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB1855 //if to false
+;return;
+VBC1_RETURN
+LAB1855: //if else
+LAB1855: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_INC
+VBC4_JUMP LAB1777 //to condition
+LAB1862: //for exit
+[1:377] ;
+VBC1_RETURN
+;walkInitialPoseFine <void()>
+[1:378] ;xtr = xtl = 0;
+VBC2_PUSH_CONST 25 //xtr
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_0 
+VBC1_STORE_CF
+VBC1_POP
+[1:379] ;ztr = ztl = -gaitHeight;
+VBC2_PUSH_CONST 27 //ztr
+VBC2_PUSH_CONST 34 //ztl
+VBC3_PUSH_GLOBAL 45 //gaitHeight
+VBC1_NEG_F
+VBC1_STORE
+VBC1_POP
+[1:380] ;ytr = -d10 - amplitude / 2.0;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC5_PUSH_CONST 1073741824 
+VBC1_DIV_FF
+VBC1_SUB_FF
+VBC1_POP
+[1:381] ;ytl =  d10 - amplitude / 2.0;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 40 //d10
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC5_PUSH_CONST 1073741824 
+VBC1_DIV_FF
+VBC1_SUB_FF
+VBC1_POP
+[1:382] ;computeAlphaForWalkFine( 40 );
+VBC3_PUSH_CONST 1175  //func address computeAlphaForWalkFine
+VBC2_PUSH_CONST 40 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:386] ;
+VBC1_RETURN
+;walkFinalPose <void()>
+[1:387] ;for( j = 0; j < selfInitPoses; j++ ) {
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_0 
+VBC1_POP
+LAB1925: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 18 //selfInitPoses
+VBC1_LESS
+VBC4_FALSE_JUMP LAB2028 //to for exit
+;
+[1:389] ;ztr = -gaitHeight + (j+1) * stepZtr;
+VBC2_PUSH_CONST 27 //ztr
+VBC3_PUSH_GLOBAL 45 //gaitHeight
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_1 
+VBC1_ADD
+VBC3_PUSH_GLOBAL 53 //stepZtr
+VBC1_MUL_IF
+VBC1_ADD_FF
+VBC1_POP
+[1:390] ;ztl = -gaitHeight + (j+1) * stepZtr;
+VBC2_PUSH_CONST 34 //ztl
+VBC3_PUSH_GLOBAL 45 //gaitHeight
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_1 
+VBC1_ADD
+VBC3_PUSH_GLOBAL 53 //stepZtr
+VBC1_MUL_IF
+VBC1_ADD_FF
+VBC1_POP
+[1:391] ;ytr = -d10 + (selfInitPoses - (j+1)) * stepYtr;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 18 //selfInitPoses
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_1 
+VBC1_ADD
+VBC1_SUB
+VBC3_PUSH_GLOBAL 55 //stepYtr
+VBC1_MUL_IF
+VBC1_ADD_FF
+VBC1_POP
+[1:392] ;ytl =  d10 + (selfInitPoses - (j+1)) * stepYtl;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 40 //d10
+VBC3_PUSH_GLOBAL 18 //selfInitPoses
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_1 
+VBC1_ADD
+VBC1_SUB
+VBC3_PUSH_GLOBAL 56 //stepYtl
+VBC1_MUL_IF
+VBC1_ADD_FF
+VBC1_POP
+[1:394] ;if( !computeAlphaForWalk() )
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB2021 //if to false
+;return;
+VBC1_RETURN
+LAB2021: //if else
+LAB2021: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_INC
+VBC4_JUMP LAB1925 //to condition
+LAB2028: //for exit
+[1:405] ;
+VBC1_RETURN
+;walkFinalPoseFine <void()>
+[1:406] ;xtr = xtl = 0;
+VBC2_PUSH_CONST 25 //xtr
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_0 
+VBC1_STORE_CF
+VBC1_POP
+[1:407] ;ztr = ztl = -(svIkC5+svIkA6+svIkA7+svIkA8+svIkA9+svIkB10 - 1);
+VBC2_PUSH_CONST 27 //ztr
+VBC2_PUSH_CONST 34 //ztl
+VBC3_PUSH_GLOBAL 1217 //svIkC5
+VBC3_PUSH_GLOBAL 1218 //svIkA6
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1219 //svIkA7
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1220 //svIkA8
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1221 //svIkA9
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 1223 //svIkB10
+VBC1_ADD_FF
+VBC1_PUSH_1 
+VBC1_SUB_FI
+VBC1_NEG_F
+VBC1_STORE
+VBC1_POP
+[1:408] ;ytr = -d10;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_NEG_F
+VBC1_POP
+[1:409] ;ytl =  d10;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_POP
+[1:410] ;computeAlphaForWalkFine( 40 );
+VBC3_PUSH_CONST 1175  //func address computeAlphaForWalkFine
+VBC2_PUSH_CONST 40 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:413] ;
+VBC1_RETURN
+;walkInit <void()>
+[1:424] ;correctedStepLenght = stepLength + selfMotionShiftCorrectionX;
+VBC2_PUSH_CONST 47 //correctedStepLenght
+VBC3_PUSH_GLOBAL 3 //stepLength
+VBC3_PUSH_GLOBAL 9 //selfMotionShiftCorrectionX
+VBC1_ADD_FF
+VBC1_POP
+[1:425] ;correctedStepLenghtHalf = correctedStepLenght / 2;
+VBC2_PUSH_CONST 48 //correctedStepLenghtHalf
+VBC3_PUSH_GLOBAL 47 //correctedStepLenght
+VBC1_PUSH_2 
+VBC1_DIV_FI
+VBC1_POP
+[1:426] ;correctedSideLenght = sideLength - selfMotionShiftCorrectionY;
+VBC2_PUSH_CONST 49 //correctedSideLenght
+VBC3_PUSH_GLOBAL 4 //sideLength
+VBC3_PUSH_GLOBAL 10 //selfMotionShiftCorrectionY
+VBC1_SUB_FF
+VBC1_POP
+[1:427] ;correctedSideLenghtHalf = correctedSideLenght / 2;
+VBC2_PUSH_CONST 50 //correctedSideLenghtHalf
+VBC3_PUSH_GLOBAL 49 //correctedSideLenght
+VBC1_PUSH_2 
+VBC1_DIV_FI
+VBC1_POP
+[1:430] ;correctedRotation = -rotation *0.25 * 0.23 / ( rotation <= 0 ? rotationYieldRight : rotationYieldLeft);
+VBC2_PUSH_CONST 70 //correctedRotation
+VBC3_PUSH_GLOBAL 5 //rotation
+VBC1_NEG_F
+VBC5_PUSH_CONST 1048576000 
+VBC1_MUL_FF
+VBC5_PUSH_CONST 1047233823 
+VBC1_MUL_FF
+VBC3_PUSH_GLOBAL 5 //rotation
+VBC1_PUSH_0 
+VBC1_LESS_EQU_FI
+VBC4_FALSE_JUMP LAB2159
+VBC3_PUSH_GLOBAL 22 //rotationYieldRight
+VBC4_JUMP LAB2162
+LAB2159:
+VBC3_PUSH_GLOBAL 23 //rotationYieldLeft
+LAB2162:
+VBC1_DIV_FF
+VBC1_POP
+[1:432] ;xtl0 = correctedStepLenght * (1 - (fr1 + fr2 + 2.0 * framestep) / (2 * fr1 + fr2 + 2.0 * framestep)) * 1.5;
+VBC2_PUSH_CONST 66 //xtl0
+VBC3_PUSH_GLOBAL 47 //correctedStepLenght
+VBC1_PUSH_1 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_ADD_IF
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_ADD_IF
+VBC1_DIV_FF
+VBC1_SUB_IF
+VBC1_MUL_FF
+VBC5_PUSH_CONST 1069547520 
+VBC1_MUL_FF
+VBC1_POP
+[1:433] ;xtr0 = correctedStepLenght * (0.5 - (fr1 + fr2 + 2.0 * framestep) / (2 * fr1 + fr2 + 2.0 * framestep));
+VBC2_PUSH_CONST 67 //xtr0
+VBC3_PUSH_GLOBAL 47 //correctedStepLenght
+VBC5_PUSH_CONST 1056964608 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_ADD_IF
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_ADD_IF
+VBC1_DIV_FF
+VBC1_SUB_FF
+VBC1_MUL_FF
+VBC1_POP
+[1:434] ;dx0Typical = correctedStepLenght / (2 * fr1 + fr2 + 2.0 * framestep) * framestep;
+VBC2_PUSH_CONST 68 //dx0Typical
+VBC3_PUSH_GLOBAL 47 //correctedStepLenght
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_ADD_IF
+VBC1_DIV_FF
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_POP
+[1:435] ;dy0Typical = correctedSideLenght / (2.0 * fr2) * framestep;
+VBC2_PUSH_CONST 69 //dy0Typical
+VBC3_PUSH_GLOBAL 49 //correctedSideLenght
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_MUL_FI
+VBC1_DIV_FF
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_POP
+[1:438] ;xr = xl = bodyTiltAtWalk;
+VBC2_PUSH_CONST 28 //xr
+VBC2_PUSH_CONST 35 //xl
+VBC3_PUSH_GLOBAL 60 //bodyTiltAtWalk
+VBC1_STORE
+VBC1_POP
+[1:439] ;yl =  solyLandingSkew;
+VBC2_PUSH_CONST 36 //yl
+VBC3_PUSH_GLOBAL 61 //solyLandingSkew
+VBC1_POP
+[1:440] ;yr = -solyLandingSkew;
+VBC2_PUSH_CONST 29 //yr
+VBC3_PUSH_GLOBAL 61 //solyLandingSkew
+VBC1_NEG_F
+VBC1_POP
+[1:441] ;fase_offset = 0.7;
+VBC2_PUSH_CONST 72 //fase_offset
+VBC5_PUSH_CONST 1060320051 
+VBC1_POP
+[1:446] ;
+VBC1_RETURN
+;walkPhasa1 <void()>
+[1:447] ;ztl = ztr = -gaitHeight;
+VBC2_PUSH_CONST 34 //ztl
+VBC2_PUSH_CONST 27 //ztr
+VBC3_PUSH_GLOBAL 45 //gaitHeight
+VBC1_NEG_F
+VBC1_STORE
+VBC1_POP
+[1:448] ;for( j = 0; j < fr1; j += framestep ) {
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_0 
+VBC1_POP
+LAB2361: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_LESS
+VBC4_FALSE_JUMP LAB2517 //to for exit
+;
+[1:450] ;s = (amplitude / 2 + correctedSideLenghtHalf) * sfMathCos(alpha01 * (j / 2 + fase_offset * framestep));
+VBC2_PUSH_CONST 71 //s
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC1_PUSH_2 
+VBC1_DIV_FI
+VBC3_PUSH_GLOBAL 50 //correctedSideLenghtHalf
+VBC1_ADD_FF
+VBC5_PUSH_CONST 300 | 0x80000000 //import func index sfMathCos
+//alloc addon amount for result
+VBC3_PUSH_GLOBAL 42 //alpha01
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_2 
+VBC1_DIV
+VBC3_PUSH_GLOBAL 72 //fase_offset
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_ADD_IF
+VBC1_MUL_FF
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC1_MUL_FF
+VBC1_POP
+[1:451] ;ytr = s - d10 + correctedSideLenghtHalf;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_SUB_FF
+VBC3_PUSH_GLOBAL 50 //correctedSideLenghtHalf
+VBC1_ADD_FF
+VBC1_POP
+[1:452] ;ytl = s + d10 + correctedSideLenghtHalf;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 50 //correctedSideLenghtHalf
+VBC1_ADD_FF
+VBC1_POP
+[1:453] ;if( stepType == 0 ) continue;
+VBC3_PUSH_GLOBAL 57 //stepType
+VBC1_PUSH_0 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB2450 //if to false
+;if( stepType == 0 ) continue;
+VBC4_JUMP LAB2504 //to loop condition
+LAB2450: //if else
+[1:454] ;xtl = xtl0 - dx0Typical - dx0Typical * j / framestep;
+VBC2_PUSH_CONST 32 //xtl
+VBC3_PUSH_GLOBAL 66 //xtl0
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC1_SUB_FF
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_MUL_FI
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_DIV_FI
+VBC1_SUB_FF
+VBC1_POP
+[1:455] ;xtr = xtr0 - dx0Typical - dx0Typical * j / framestep;
+VBC2_PUSH_CONST 25 //xtr
+VBC3_PUSH_GLOBAL 67 //xtr0
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC1_SUB_FF
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_MUL_FI
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_DIV_FI
+VBC1_SUB_FF
+VBC1_POP
+[1:457] ;if( !computeAlphaForWalk() )
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB2504 //if to false
+;return;
+VBC1_RETURN
+LAB2504: //if else
+LAB2504: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_ADD
+VBC1_POP
+VBC4_JUMP LAB2361 //to condition
+LAB2517: //for exit
+[1:464] ;
+VBC1_RETURN
+;walkPhasa3 <void()>
+[1:465] ;ztl = ztr = -gaitHeight;
+VBC2_PUSH_CONST 34 //ztl
+VBC2_PUSH_CONST 27 //ztr
+VBC3_PUSH_GLOBAL 45 //gaitHeight
+VBC1_NEG_F
+VBC1_STORE
+VBC1_POP
+[1:466] ;for( j = 0; j < fr1; j += framestep ) {
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_0 
+VBC1_POP
+LAB2532: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_LESS
+VBC4_FALSE_JUMP LAB2653 //to for exit
+;
+[1:468] ;s = (amplitude / 2 + correctedSideLenghtHalf) * sfMathCos(alpha01 * ((j -fr2) / 2 + fase_offset * framestep));
+VBC2_PUSH_CONST 71 //s
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC1_PUSH_2 
+VBC1_DIV_FI
+VBC3_PUSH_GLOBAL 50 //correctedSideLenghtHalf
+VBC1_ADD_FF
+VBC5_PUSH_CONST 300 | 0x80000000 //import func index sfMathCos
+//alloc addon amount for result
+VBC3_PUSH_GLOBAL 42 //alpha01
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_SUB
+VBC1_PUSH_2 
+VBC1_DIV
+VBC3_PUSH_GLOBAL 72 //fase_offset
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_ADD_IF
+VBC1_MUL_FF
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC1_MUL_FF
+VBC1_POP
+[1:469] ;ytr = s - d10 - correctedSideLenghtHalf;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_SUB_FF
+VBC3_PUSH_GLOBAL 50 //correctedSideLenghtHalf
+VBC1_SUB_FF
+VBC1_POP
+[1:470] ;ytl = s + d10 + correctedSideLenghtHalf;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 50 //correctedSideLenghtHalf
+VBC1_ADD_FF
+VBC1_POP
+[1:471] ;xtl -= dx0Typical;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC1_SUB_FF
+VBC1_POP
+[1:472] ;xtr -= dx0Typical;
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC1_SUB_FF
+VBC1_POP
+[1:474] ;if( !computeAlphaForWalk() )
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB2640 //if to false
+;return;
+VBC1_RETURN
+LAB2640: //if else
+LAB2640: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_ADD
+VBC1_POP
+VBC4_JUMP LAB2532 //to condition
+LAB2653: //for exit
+[1:480] ;
+VBC1_RETURN
+;walkPhasa2 <void()>
+[1:485] ;ztr = -gaitHeight + stepHeight;
+VBC2_PUSH_CONST 27 //ztr
+VBC3_PUSH_GLOBAL 45 //gaitHeight
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 46 //stepHeight
+VBC1_ADD_FF
+VBC1_POP
+[1:498] ;dy = correctedSideLenght * framestep / (fr2 - 2.0 * framestep);
+VBC2_PUSH_CONST 74 //dy
+VBC3_PUSH_GLOBAL 49 //correctedSideLenght
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_SUB_IF
+VBC1_DIV_FF
+VBC1_POP
+[1:502] ;stepRotation = correctedRotation / (fr2 - 2.0 * framestep) * 2;
+VBC2_PUSH_CONST 75 //stepRotation
+VBC3_PUSH_GLOBAL 70 //correctedRotation
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_SUB_IF
+VBC1_DIV_FF
+VBC1_PUSH_2 
+VBC1_MUL_FI
+VBC1_POP
+[1:504] ;if( stepType == 0 )
+VBC3_PUSH_GLOBAL 57 //stepType
+VBC1_PUSH_0 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB2750 //if to false
+;dx = correctedStepLenght / (fr2 - 2.0 * framestep) * framestep / 2;
+VBC2_PUSH_CONST 73 //dx
+VBC3_PUSH_GLOBAL 47 //correctedStepLenght
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_SUB_IF
+VBC1_DIV_FF
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_PUSH_2 
+VBC1_DIV_FI
+VBC1_POP
+VBC4_JUMP LAB2774 //if to exit
+LAB2750: //if else
+;dx = correctedStepLenght / (fr2 - 2.0 * framestep) * framestep;
+VBC2_PUSH_CONST 73 //dx
+VBC3_PUSH_GLOBAL 47 //correctedStepLenght
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_SUB_IF
+VBC1_DIV_FF
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_POP
+LAB2774: //if exit
+[1:509] ;for( j = 0; j < fr2; j += framestep ) {
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_0 
+VBC1_POP
+LAB2778: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_LESS
+VBC4_FALSE_JUMP LAB2966 //to for exit
+;
+[1:510] ;if( j == 0 ) {
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_0 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB2825 //if to false
+;
+[1:511] ;xtr -= dx0Typical;
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC1_SUB_FF
+VBC1_POP
+[1:512] ;ytr  = s - d10 + dy0Typical;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_SUB_FF
+VBC3_PUSH_GLOBAL 69 //dy0Typical
+VBC1_ADD_FF
+VBC1_POP
+VBC4_JUMP LAB2925 //if to exit
+LAB2825: //if else
+;else if( j == (fr2 - framestep) ) {
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_SUB
+VBC1_EQU
+VBC4_FALSE_JUMP LAB2873 //if to false
+;
+[1:515] ;xtr -= dx0Typical;
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC1_SUB_FF
+VBC1_POP
+[1:516] ;ytr  = s - d10 + 2 * dy0Typical - correctedSideLenght;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_SUB_FF
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 69 //dy0Typical
+VBC1_MUL_IF
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 49 //correctedSideLenght
+VBC1_SUB_FF
+VBC1_POP
+VBC4_JUMP LAB2925 //if to exit
+LAB2873: //if else
+;
+[1:519] ;xtr += dx;
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 73 //dx
+VBC1_ADD_FF
+VBC1_POP
+[1:520] ;ytr  = s - 64 + dy0Typical - dy * (j / 2);
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 71 //s
+VBC2_PUSH_CONST 64 
+VBC1_SUB_FI
+VBC3_PUSH_GLOBAL 69 //dy0Typical
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 74 //dy
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_2 
+VBC1_DIV
+VBC1_MUL_FI
+VBC1_SUB_FF
+VBC1_POP
+[1:521] ;wr = correctedRotation - j * stepRotation;
+VBC2_PUSH_CONST 31 //wr
+VBC3_PUSH_GLOBAL 70 //correctedRotation
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 75 //stepRotation
+VBC1_MUL_IF
+VBC1_SUB_FF
+VBC1_POP
+[1:522] ;wl = wr;
+VBC2_PUSH_CONST 38 //wl
+VBC3_PUSH_GLOBAL 31 //wr
+VBC1_POP
+LAB2925: //if exit
+LAB2925: //if exit
+[1:524] ;xtl -= dx0Typical;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC1_SUB_FF
+VBC1_POP
+[1:525] ;ytl += dy0Typical;
+VBC2_PUSH_CONST 33 //ytl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 69 //dy0Typical
+VBC1_ADD_FF
+VBC1_POP
+[1:528] ;if( !computeAlphaForWalk() )
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB2953 //if to false
+;return;
+VBC1_RETURN
+LAB2953: //if else
+LAB2953: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_ADD
+VBC1_POP
+VBC4_JUMP LAB2778 //to condition
+LAB2966: //for exit
+[1:534] ;
+VBC1_RETURN
+;walkPhasa4 <void()>
+[1:538] ;stepRotation = correctedRotation / (fr2 - 2.0 * framestep) * 2;
+VBC2_PUSH_CONST 75 //stepRotation
+VBC3_PUSH_GLOBAL 70 //correctedRotation
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_SUB_IF
+VBC1_DIV_FF
+VBC1_PUSH_2 
+VBC1_MUL_FI
+VBC1_POP
+[1:539] ;ztl = -gaitHeight + stepHeight;
+VBC2_PUSH_CONST 34 //ztl
+VBC3_PUSH_GLOBAL 45 //gaitHeight
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 46 //stepHeight
+VBC1_ADD_FF
+VBC1_POP
+[1:540] ;if( stepType == 1 ) {
+VBC3_PUSH_GLOBAL 57 //stepType
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB3081 //if to false
+;
+[1:541] ;dx0 = dx0Typical * 4 / fr2;
+VBC2_PUSH_CONST 76 //dx0
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC2_PUSH_CONST 4 
+VBC1_MUL_FI
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_DIV_FI
+VBC1_POP
+[1:542] ;dx = (correctedStepLenght * (fr1 + fr2) / (4 * fr1) + 2.0 * dx0) / (fr2 - 2.0 * framestep) * framestep / 1.23076941;
+VBC2_PUSH_CONST 73 //dx
+VBC3_PUSH_GLOBAL 47 //correctedStepLenght
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC1_MUL_FI
+VBC2_PUSH_CONST 4 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC1_DIV_FI
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_MUL_FF
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_SUB_IF
+VBC1_DIV_FF
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC5_PUSH_CONST 1067289050 
+VBC1_DIV_FF
+VBC1_POP
+VBC4_JUMP LAB3111 //if to exit
+LAB3081: //if else
+;
+[1:545] ;dx = correctedStepLenght / (fr2 - 2.0 * framestep) * framestep;
+VBC2_PUSH_CONST 73 //dx
+VBC3_PUSH_GLOBAL 47 //correctedStepLenght
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_SUB_IF
+VBC1_DIV_FF
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_POP
+[1:546] ;dx0 = dx0Typical;
+VBC2_PUSH_CONST 76 //dx0
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC1_POP
+LAB3111: //if exit
+[1:548] ;for( j = 0; j < fr2; j += framestep ) {
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_0 
+VBC1_POP
+LAB3115: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_LESS
+VBC4_FALSE_JUMP LAB3332 //to for exit
+;
+[1:549] ;if( stepType == 1 && j == (fr2 - framestep) ) {
+VBC3_PUSH_GLOBAL 57 //stepType
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP_KEEP LAB3151
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_SUB
+VBC1_EQU
+VBC4_FALSE_JUMP_KEEP LAB3151
+VBC1_PUSH_1
+LAB3151:
+VBC4_FALSE_JUMP LAB3172 //if to false
+;
+[1:550] ;ztl = -gaitHeight;
+VBC2_PUSH_CONST 34 //ztl
+VBC3_PUSH_GLOBAL 45 //gaitHeight
+VBC1_NEG_F
+VBC1_POP
+[1:551] ;ytl = s + d10;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_ADD_FF
+VBC1_POP
+LAB3172: //if else
+[1:553] ;if( j == 0 ) {
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_0 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB3207 //if to false
+;
+[1:554] ;xtl -= dx0;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_SUB_FF
+VBC1_POP
+[1:555] ;ytl  = s + 64 + correctedSideLenghtHalf;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 71 //s
+VBC2_PUSH_CONST 64 
+VBC1_ADD_FI
+VBC3_PUSH_GLOBAL 50 //correctedSideLenghtHalf
+VBC1_ADD_FF
+VBC1_POP
+VBC4_JUMP LAB3291 //if to exit
+LAB3207: //if else
+;else if( j == (fr2 - framestep) ) {
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_SUB
+VBC1_EQU
+VBC4_FALSE_JUMP LAB3249 //if to false
+;
+[1:558] ;xtl -= dx0;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_SUB_FF
+VBC1_POP
+[1:559] ;ytl  = s + d10 + correctedSideLenghtHalf;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 50 //correctedSideLenghtHalf
+VBC1_ADD_FF
+VBC1_POP
+VBC4_JUMP LAB3291 //if to exit
+LAB3249: //if else
+;
+[1:562] ;xtl += dx;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 73 //dx
+VBC1_ADD_FF
+VBC1_POP
+[1:563] ;ytl  = s + 64 + correctedSideLenghtHalf;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 71 //s
+VBC2_PUSH_CONST 64 
+VBC1_ADD_FI
+VBC3_PUSH_GLOBAL 50 //correctedSideLenghtHalf
+VBC1_ADD_FF
+VBC1_POP
+[1:564] ;wr = j * stepRotation - correctedRotation;
+VBC2_PUSH_CONST 31 //wr
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 75 //stepRotation
+VBC1_MUL_IF
+VBC3_PUSH_GLOBAL 70 //correctedRotation
+VBC1_SUB_FF
+VBC1_POP
+[1:565] ;wl = wr;
+VBC2_PUSH_CONST 38 //wl
+VBC3_PUSH_GLOBAL 31 //wr
+VBC1_POP
+LAB3291: //if exit
+LAB3291: //if exit
+[1:567] ;xtr -= dx0;
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_SUB_FF
+VBC1_POP
+[1:568] ;ytr += dy0Typical;
+VBC2_PUSH_CONST 26 //ytr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 69 //dy0Typical
+VBC1_ADD_FF
+VBC1_POP
+[1:571] ;if( !computeAlphaForWalk() )
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB3319 //if to false
+;return;
+VBC1_RETURN
+LAB3319: //if else
+LAB3319: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_ADD
+VBC1_POP
+VBC4_JUMP LAB3115 //to condition
+LAB3332: //for exit
+[1:581] ;
+VBC1_RETURN
+;walkCycle <void(,int)>
+VBC2_STACK -4//local vars 4
+[1:588] ;
+[1:588] ;float xrOld = xr;
+VBC2_PUSH_B_OFFSET -1 //xrOld
+VBC3_PUSH_GLOBAL 28 //xr
+VBC1_POP
+[1:589] ;
+[1:589] ;float yrOld = yr;
+VBC2_PUSH_B_OFFSET -2 //yrOld
+VBC3_PUSH_GLOBAL 29 //yr
+VBC1_POP
+[1:590] ;
+[1:590] ;float xlOld = xl;
+VBC2_PUSH_B_OFFSET -3 //xlOld
+VBC3_PUSH_GLOBAL 35 //xl
+VBC1_POP
+[1:591] ;
+[1:591] ;float ylOld = yl;
+VBC2_PUSH_B_OFFSET -4 //ylOld
+VBC3_PUSH_GLOBAL 36 //yl
+VBC1_POP
+[1:605] ;walkInit();
+VBC3_PUSH_CONST 2089  //func address walkInit
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:606] ;walkPhasa1();
+VBC3_PUSH_CONST 2347  //func address walkPhasa1
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:607] ;walkPhasa2();
+VBC3_PUSH_CONST 2654  //func address walkPhasa2
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:608] ;if (half == 0){
+VBC2_PUSH_LOCAL 2 //half
+VBC1_PUSH_0 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB3392 //if to false
+;
+[1:609] ;walkPhasa3();
+VBC3_PUSH_CONST 2518  //func address walkPhasa3
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:610] ;walkPhasa4();
+VBC3_PUSH_CONST 2967  //func address walkPhasa4
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+LAB3392: //if else
+[1:615] ;xr = xrOld;
+VBC2_PUSH_CONST 28 //xr
+VBC2_PUSH_LOCAL -1 //xrOld
+VBC1_POP
+[1:616] ;yr = yrOld;
+VBC2_PUSH_CONST 29 //yr
+VBC2_PUSH_LOCAL -2 //yrOld
+VBC1_POP
+[1:617] ;xl = xlOld;
+VBC2_PUSH_CONST 35 //xl
+VBC2_PUSH_LOCAL -3 //xlOld
+VBC1_POP
+[1:618] ;yl = ylOld;
+VBC2_PUSH_CONST 36 //yl
+VBC2_PUSH_LOCAL -4 //ylOld
+VBC1_POP
+[1:621] ;
+VBC1_RETURN
+;stabilizeRotationByIMU <void()>
+[1:623] ;sfQuaternionToEulerImu();
+VBC5_PUSH_CONST 303 | 0x80000000 //import func index sfQuaternionToEulerImu
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:624] ;rotation = -(svEulerYaw - forwardDirection);
+VBC2_PUSH_CONST 5 //rotation
+VBC3_PUSH_GLOBAL 1025 //svEulerYaw
+VBC3_PUSH_GLOBAL 77 //forwardDirection
+VBC1_SUB_FF
+VBC1_NEG_F
+VBC1_POP
+[1:625] ;if( rotation > 3.141592654 ) rotation -= 2 * 3.141592654;
+VBC3_PUSH_GLOBAL 5 //rotation
+VBC5_PUSH_CONST 1078530011 
+VBC1_GREAT_FF
+VBC4_FALSE_JUMP LAB3455 //if to false
+;if( rotation > 3.141592654 ) rotation -= 2 * 3.141592654;
+VBC2_PUSH_CONST 5 //rotation
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC5_PUSH_CONST 1086918619 
+VBC1_SUB_FF
+VBC1_POP
+LAB3455: //if else
+[1:626] ;if( rotation < -3.141592654 ) rotation += 2 * 3.141592654;
+VBC3_PUSH_GLOBAL 5 //rotation
+VBC5_PUSH_CONST -1068953637 // -
+VBC1_LESS_FF
+VBC4_FALSE_JUMP LAB3479 //if to false
+;if( rotation < -3.141592654 ) rotation += 2 * 3.141592654;
+VBC2_PUSH_CONST 5 //rotation
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC5_PUSH_CONST 1086918619 
+VBC1_ADD_FF
+VBC1_POP
+LAB3479: //if else
+[1:627] ;if( rotation > 0.7 ) rotation = 0.7;
+VBC3_PUSH_GLOBAL 5 //rotation
+VBC5_PUSH_CONST 1060320051 
+VBC1_GREAT_FF
+VBC4_FALSE_JUMP LAB3500 //if to false
+;if( rotation > 0.7 ) rotation = 0.7;
+VBC2_PUSH_CONST 5 //rotation
+VBC5_PUSH_CONST 1060320051 
+VBC1_POP
+LAB3500: //if else
+[1:628] ;if( rotation < -0.7 ) rotation = -0.7;
+VBC3_PUSH_GLOBAL 5 //rotation
+VBC5_PUSH_CONST -1087163597 // -
+VBC1_LESS_FF
+VBC4_FALSE_JUMP LAB3521 //if to false
+;if( rotation < -0.7 ) rotation = -0.7;
+VBC2_PUSH_CONST 5 //rotation
+VBC5_PUSH_CONST -1087163597 // -
+VBC1_POP
+LAB3521: //if else
+[1:636] ;
+VBC1_RETURN
+;mixing <void()>
+[1:641] ;leftRightFactor = 100;
+VBC2_PUSH_CONST 78 //leftRightFactor
+VBC2_PUSH_CONST 100 
+VBC1_POP
+[1:642] ;frontBackFactor = 100;
+VBC2_PUSH_CONST 79 //frontBackFactor
+VBC2_PUSH_CONST 100 
+VBC1_POP
+[1:644] ;while(1) {
+LAB3532: //while condition
+;
+[1:646] ;leftFootSideAddonMix = -svImuGyroZ * leftRightFactor >> 10;
+VBC3_PUSH_CONST 1117 //leftFootSideAddonMix
+VBC3_PUSH_GLOBAL 1008 //svImuGyroZ
+VBC1_NEG
+VBC3_PUSH_GLOBAL 78 //leftRightFactor
+VBC1_MUL
+VBC2_PUSH_CONST 10 
+VBC1_RSHIFT
+VBC1_POP
+[1:647] ;rightFootSideAddonMix = svImuGyroZ * leftRightFactor >> 10;
+VBC3_PUSH_CONST 1113 //rightFootSideAddonMix
+VBC3_PUSH_GLOBAL 1008 //svImuGyroZ
+VBC3_PUSH_GLOBAL 78 //leftRightFactor
+VBC1_MUL
+VBC2_PUSH_CONST 10 
+VBC1_RSHIFT
+VBC1_POP
+[1:650] ;rightFootFrontAddonMix = leftFootFrontAddonMix = -svImuGyroX * frontBackFactor >> 10;
+VBC3_PUSH_CONST 1105 //rightFootFrontAddonMix
+VBC3_PUSH_CONST 1109 //leftFootFrontAddonMix
+VBC3_PUSH_GLOBAL 1006 //svImuGyroX
+VBC1_NEG
+VBC3_PUSH_GLOBAL 79 //frontBackFactor
+VBC1_MUL
+VBC2_PUSH_CONST 10 
+VBC1_RSHIFT
+VBC1_STORE
+VBC1_POP
+[1:653] ;sfWaitNextFrame();
+VBC1_WAIT
+VBC4_JUMP LAB3532 //while forever loop
+LAB3585: //while exit
+[1:663] ;
+VBC1_RETURN
+;runTest <void()>
+VBC1_STACK_DN1//local vars 1
+[1:665] ;walkInitialPoseFine();
+VBC3_PUSH_CONST 1863  //func address walkInitialPoseFine
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:667] ;stepType = 0;
+VBC2_PUSH_CONST 57 //stepType
+VBC1_PUSH_0 
+VBC1_POP
+[1:668] ;stepLength = stepLengthOrder/ 3.0;
+VBC2_PUSH_CONST 3 //stepLength
+VBC3_PUSH_GLOBAL 6 //stepLengthOrder
+VBC5_PUSH_CONST 1077936128 
+VBC1_DIV_FF
+VBC1_POP
+[1:669] ;walkCycle(0);
+VBC3_PUSH_CONST 3333  //func address walkCycle
+VBC1_PUSH_0 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:672] ;stepType = 2;
+VBC2_PUSH_CONST 57 //stepType
+VBC1_PUSH_2 
+VBC1_POP
+[1:673] ;stepLength = stepLengthOrder * 2.0 / 3.0;
+VBC2_PUSH_CONST 3 //stepLength
+VBC3_PUSH_GLOBAL 6 //stepLengthOrder
+VBC5_PUSH_CONST 1073741824 
+VBC1_MUL_FF
+VBC5_PUSH_CONST 1077936128 
+VBC1_DIV_FF
+VBC1_POP
+[1:674] ;walkCycle(0);
+VBC3_PUSH_CONST 3333  //func address walkCycle
+VBC1_PUSH_0 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:677] ;stepLength = stepLengthOrder;
+VBC2_PUSH_CONST 3 //stepLength
+VBC3_PUSH_GLOBAL 6 //stepLengthOrder
+VBC1_POP
+[1:678] ;
+[1:679] ;for( i = 0; i < 50 ; i++ ){
+VBC2_PUSH_B_OFFSET -1 //i
+VBC1_PUSH_0 
+VBC1_POP
+LAB3652: //for condition
+VBC2_PUSH_LOCAL -1 //i
+VBC2_PUSH_CONST 50 
+VBC1_LESS
+VBC4_FALSE_JUMP LAB3679 //to for exit
+;
+[1:680] ;stabilizeRotationByIMU();
+VBC3_PUSH_CONST 3413  //func address stabilizeRotationByIMU
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:681] ;walkCycle(0);
+VBC3_PUSH_CONST 3333  //func address walkCycle
+VBC1_PUSH_0 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+LAB3672: //for step
+VBC2_PUSH_B_OFFSET -1 //i
+VBC1_INC
+VBC4_JUMP LAB3652 //to condition
+LAB3679: //for exit
+[1:684] ;stepType = 1;
+VBC2_PUSH_CONST 57 //stepType
+VBC1_PUSH_1 
+VBC1_POP
+[1:685] ;walkCycle(0);
+VBC3_PUSH_CONST 3333  //func address walkCycle
+VBC1_PUSH_0 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:688] ;walkFinalPoseFine();
+VBC3_PUSH_CONST 2029  //func address walkFinalPoseFine
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:695] ;
+VBC1_RETURN
+;joystickToStepLength <int()>
+[1:697] ;return -svRemoteRightJoystickY * 50 / 100;
+VBC3_PUSH_GLOBAL 1197 //svRemoteRightJoystickY
+VBC1_NEG
+VBC2_PUSH_CONST 50 
+VBC1_MUL
+VBC2_PUSH_CONST 100 
+VBC1_DIV
+VBC2_POP_RESULT 2
+VBC1_RETURN
+;joystickToSideLength <int()>
+[1:703] ;side_motion = - svRemoteRightJoystickX * 20.0 / 100.0;
+VBC2_PUSH_CONST 17 //side_motion
+VBC3_PUSH_GLOBAL 1196 //svRemoteRightJoystickX
+VBC1_NEG
+VBC5_PUSH_CONST 1101004800 
+VBC1_MUL_IF
+VBC5_PUSH_CONST 1120403456 
+VBC1_DIV_FF
+VBC1_POP
+[1:704] ;motion_to_right = (side_motion <= 0 ? 1:0);
+VBC2_PUSH_CONST 16 //motion_to_right
+VBC3_PUSH_GLOBAL 17 //side_motion
+VBC1_PUSH_0 
+VBC1_LESS_EQU_FI
+VBC4_FALSE_JUMP LAB3743
+VBC1_PUSH_1 
+VBC4_JUMP LAB3744
+LAB3743:
+VBC1_PUSH_0 
+LAB3744:
+VBC1_POP
+[1:705] ;return sfAbs (side_motion);
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 17 //side_motion
+VBC1_F_TO_I
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_POP_RESULT 2
+VBC1_RETURN
+;joystickToRotation <int()>
+[1:711] ;return -svRemoteLeftJoystickX * 260 / 100;
+VBC3_PUSH_GLOBAL 1193 //svRemoteLeftJoystickX
+VBC1_NEG
+VBC3_PUSH_CONST 260 
+VBC1_MUL
+VBC2_PUSH_CONST 100 
+VBC1_DIV
+VBC2_POP_RESULT 2
+VBC1_RETURN
+;walkLoop <void()>
+VBC1_STACK_DN1//local vars 1
+[1:716] ;
+[1:718] ;stepType = 0;
+VBC2_PUSH_CONST 57 //stepType
+VBC1_PUSH_0 
+VBC1_POP
+[1:719] ;stepLength = joystickToStepLength() / 3.0;
+VBC2_PUSH_CONST 3 //stepLength
+VBC3_PUSH_CONST 3695  //func address joystickToStepLength
+VBC1_CALL0
+//remove call address and params
+VBC5_PUSH_CONST 1077936128 
+VBC1_DIV_IF
+VBC1_POP
+[1:720] ;sideLength = joystickToSideLength();
+VBC2_PUSH_CONST 4 //sideLength
+VBC3_PUSH_CONST 3708  //func address joystickToSideLength
+VBC1_CALL0
+//remove call address and params
+VBC1_POP_CF
+[1:721] ;selfFirstLegIsRightLeg = motion_to_right;
+VBC2_PUSH_CONST 15 //selfFirstLegIsRightLeg
+VBC3_PUSH_GLOBAL 16 //motion_to_right
+VBC1_POP
+[1:722] ;forwardDirection += joystickToRotation() / 1000.0;
+VBC2_PUSH_CONST 77 //forwardDirection
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_CONST 3759  //func address joystickToRotation
+VBC1_CALL0
+//remove call address and params
+VBC5_PUSH_CONST 1148846080 
+VBC1_DIV_IF
+VBC1_ADD_FF
+VBC1_POP
+[1:723] ;stabilizeRotationByIMU();
+VBC3_PUSH_CONST 3413  //func address stabilizeRotationByIMU
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:724] ;walkCycle(0);
+VBC3_PUSH_CONST 3333  //func address walkCycle
+VBC1_PUSH_0 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:725] ;stepNumber -= 1;
+VBC2_PUSH_CONST 62 //stepNumber
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC1_PUSH_1 
+VBC1_SUB
+VBC1_POP
+[1:728] ;if( sfAbs( svRemoteRightJoystickX ) < 10 
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1196 //svRemoteRightJoystickX
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB3929
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1197 //svRemoteRightJoystickY
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB3929
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1193 //svRemoteLeftJoystickX
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB3929
+VBC3_PUSH_GLOBAL 1194 //svRemoteLeftJoystickY
+VBC1_PUSH_0 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB3914
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC3_PUSH_CONST 2048 
+VBC1_DIV
+VBC1_PUSH_2 
+VBC1_MOD
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP_KEEP LAB3914
+VBC1_PUSH_1
+LAB3914:
+VBC1_LNOT
+VBC4_FALSE_JUMP_KEEP LAB3929
+VBC3_PUSH_GLOBAL 62 //stepNumber
+VBC1_PUSH_1 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB3929
+VBC1_PUSH_1
+LAB3929:
+VBC4_FALSE_JUMP LAB3934 //if to false
+;return;
+VBC1_RETURN
+LAB3934: //if else
+[1:738] ;stepType = 2;
+VBC2_PUSH_CONST 57 //stepType
+VBC1_PUSH_2 
+VBC1_POP
+[1:739] ;stepLength = joystickToStepLength() * 2.0 / 3.0;
+VBC2_PUSH_CONST 3 //stepLength
+VBC3_PUSH_CONST 3695  //func address joystickToStepLength
+VBC1_CALL0
+//remove call address and params
+VBC5_PUSH_CONST 1073741824 
+VBC1_MUL_IF
+VBC5_PUSH_CONST 1077936128 
+VBC1_DIV_FF
+VBC1_POP
+[1:740] ;sideLength = joystickToSideLength();
+VBC2_PUSH_CONST 4 //sideLength
+VBC3_PUSH_CONST 3708  //func address joystickToSideLength
+VBC1_CALL0
+//remove call address and params
+VBC1_POP_CF
+[1:741] ;selfFirstLegIsRightLeg = motion_to_right;
+VBC2_PUSH_CONST 15 //selfFirstLegIsRightLeg
+VBC3_PUSH_GLOBAL 16 //motion_to_right
+VBC1_POP
+[1:742] ;forwardDirection += joystickToRotation() / 1000.0;
+VBC2_PUSH_CONST 77 //forwardDirection
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_CONST 3759  //func address joystickToRotation
+VBC1_CALL0
+//remove call address and params
+VBC5_PUSH_CONST 1148846080 
+VBC1_DIV_IF
+VBC1_ADD_FF
+VBC1_POP
+[1:743] ;stabilizeRotationByIMU();
+VBC3_PUSH_CONST 3413  //func address stabilizeRotationByIMU
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:744] ;walkCycle(0);
+VBC3_PUSH_CONST 3333  //func address walkCycle
+VBC1_PUSH_0 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:745] ;stepNumber -= 1;
+VBC2_PUSH_CONST 62 //stepNumber
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC1_PUSH_1 
+VBC1_SUB
+VBC1_POP
+[1:748] ;if( sfAbs( svRemoteRightJoystickX ) < 10 
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1196 //svRemoteRightJoystickX
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB4095
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1197 //svRemoteRightJoystickY
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB4095
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1193 //svRemoteLeftJoystickX
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB4095
+VBC3_PUSH_GLOBAL 1194 //svRemoteLeftJoystickY
+VBC1_PUSH_0 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB4080
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC3_PUSH_CONST 2048 
+VBC1_DIV
+VBC1_PUSH_2 
+VBC1_MOD
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP_KEEP LAB4080
+VBC1_PUSH_1
+LAB4080:
+VBC1_LNOT
+VBC4_FALSE_JUMP_KEEP LAB4095
+VBC3_PUSH_GLOBAL 62 //stepNumber
+VBC1_PUSH_1 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB4095
+VBC1_PUSH_1
+LAB4095:
+VBC4_FALSE_JUMP LAB4100 //if to false
+;return;
+VBC1_RETURN
+LAB4100: //if else
+[1:757] ;while( sfAbs( svRemoteRightJoystickX ) >= 10 || sfAbs( svRemoteRightJoystickY ) >= 10 || sfAbs( svRemoteLeftJoystickX ) >= 10) {
+LAB4100: //while condition
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1196 //svRemoteRightJoystickX
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_GREAT_EQU
+VBC4_TRUE_JUMP_KEEP LAB4152
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1197 //svRemoteRightJoystickY
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_GREAT_EQU
+VBC4_TRUE_JUMP_KEEP LAB4152
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1193 //svRemoteLeftJoystickX
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_GREAT_EQU
+VBC4_TRUE_JUMP_KEEP LAB4152
+VBC1_PUSH_0
+LAB4152:
+VBC4_FALSE_JUMP LAB4342 //while to exit
+;
+[1:759] ;stepLength = joystickToStepLength();
+VBC2_PUSH_CONST 3 //stepLength
+VBC3_PUSH_CONST 3695  //func address joystickToStepLength
+VBC1_CALL0
+//remove call address and params
+VBC1_POP_CF
+[1:760] ;sideLength = joystickToSideLength();
+VBC2_PUSH_CONST 4 //sideLength
+VBC3_PUSH_CONST 3708  //func address joystickToSideLength
+VBC1_CALL0
+//remove call address and params
+VBC1_POP_CF
+[1:761] ;forwardDirection += joystickToRotation() / 1000.0;
+VBC2_PUSH_CONST 77 //forwardDirection
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_CONST 3759  //func address joystickToRotation
+VBC1_CALL0
+//remove call address and params
+VBC5_PUSH_CONST 1148846080 
+VBC1_DIV_IF
+VBC1_ADD_FF
+VBC1_POP
+[1:762] ;stabilizeRotationByIMU();
+VBC3_PUSH_CONST 3413  //func address stabilizeRotationByIMU
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:763] ;if (selfFirstLegIsRightLeg != motion_to_right) walkCycle(1); 
+VBC3_PUSH_GLOBAL 15 //selfFirstLegIsRightLeg
+VBC3_PUSH_GLOBAL 16 //motion_to_right
+VBC1_NOT_EQU
+VBC4_FALSE_JUMP LAB4208 //if to false
+;if (selfFirstLegIsRightLeg != motion_to_right) walkCycle(1); 
+VBC3_PUSH_CONST 3333  //func address walkCycle
+VBC1_PUSH_1 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+LAB4208: //if else
+[1:764] ;selfFirstLegIsRightLeg = motion_to_right;
+VBC2_PUSH_CONST 15 //selfFirstLegIsRightLeg
+VBC3_PUSH_GLOBAL 16 //motion_to_right
+VBC1_POP
+[1:765] ;walkCycle(0);
+VBC3_PUSH_CONST 3333  //func address walkCycle
+VBC1_PUSH_0 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:766] ;stepNumber -= 1;
+VBC2_PUSH_CONST 62 //stepNumber
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC1_PUSH_1 
+VBC1_SUB
+VBC1_POP
+[1:767] ;if ((svRemoteLeftJoystickY < 0 && ((svRemoteButton / 2048) % 2 == 1)) || stepNumber > 0){
+VBC3_PUSH_GLOBAL 1194 //svRemoteLeftJoystickY
+VBC1_PUSH_0 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB4252
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC3_PUSH_CONST 2048 
+VBC1_DIV
+VBC1_PUSH_2 
+VBC1_MOD
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP_KEEP LAB4252
+VBC1_PUSH_1
+LAB4252:
+VBC4_TRUE_JUMP_KEEP LAB4266
+VBC3_PUSH_GLOBAL 62 //stepNumber
+VBC1_PUSH_0 
+VBC1_GREAT
+VBC4_TRUE_JUMP_KEEP LAB4266
+VBC1_PUSH_0
+LAB4266:
+VBC4_FALSE_JUMP LAB4338 //if to false
+;
+[1:768] ;if (svRemoteLeftJoystickY < 0 && ((svRemoteButton / 2048) % 2 == 1)) stepNumber = -svRemoteLeftJoystickY;
+VBC3_PUSH_GLOBAL 1194 //svRemoteLeftJoystickY
+VBC1_PUSH_0 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB4295
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC3_PUSH_CONST 2048 
+VBC1_DIV
+VBC1_PUSH_2 
+VBC1_MOD
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP_KEEP LAB4295
+VBC1_PUSH_1
+LAB4295:
+VBC4_FALSE_JUMP LAB4306 //if to false
+;if (svRemoteLeftJoystickY < 0 && ((svRemoteButton / 2048) % 2 == 1)) stepNumber = -svRemoteLeftJoystickY;
+VBC2_PUSH_CONST 62 //stepNumber
+VBC3_PUSH_GLOBAL 1194 //svRemoteLeftJoystickY
+VBC1_NEG
+VBC1_POP
+LAB4306: //if else
+[1:769] ;for( i = 0; i < stepNumber ; i++ ){
+VBC2_PUSH_B_OFFSET -1 //i
+VBC1_PUSH_0 
+VBC1_POP
+LAB4310: //for condition
+VBC2_PUSH_LOCAL -1 //i
+VBC3_PUSH_GLOBAL 62 //stepNumber
+VBC1_LESS
+VBC4_FALSE_JUMP LAB4338 //to for exit
+;
+[1:770] ;stabilizeRotationByIMU();
+VBC3_PUSH_CONST 3413  //func address stabilizeRotationByIMU
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:771] ;walkCycle(0);
+VBC3_PUSH_CONST 3333  //func address walkCycle
+VBC1_PUSH_0 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+LAB4331: //for step
+VBC2_PUSH_B_OFFSET -1 //i
+VBC1_INC
+VBC4_JUMP LAB4310 //to condition
+LAB4338: //for exit
+LAB4338: //if else
+VBC4_JUMP LAB4100 //while forever loop
+LAB4342: //while exit
+[1:777] ;
+VBC1_RETURN
+;kick <void(,int,int)>
+VBC2_STACK -11//local vars 11
+[1:778] ;
+[1:778] ;float gaitHeightKick = 200;
+VBC2_PUSH_B_OFFSET -1 //gaitHeightKick
+VBC3_PUSH_CONST 200 
+VBC1_POP_CF
+[1:779] ;
+[1:779] ;float stepHeightKick = 40;
+VBC2_PUSH_B_OFFSET -2 //stepHeightKick
+VBC2_PUSH_CONST 40 
+VBC1_POP_CF
+[1:780] ;
+[1:780] ;float stepLengthKick = 50;
+VBC2_PUSH_B_OFFSET -3 //stepLengthKick
+VBC2_PUSH_CONST 50 
+VBC1_POP_CF
+[1:781] ;
+[1:781] ;float kick_size = 100;
+VBC2_PUSH_B_OFFSET -4 //kick_size
+VBC2_PUSH_CONST 100 
+VBC1_POP_CF
+[1:782] ;
+[1:782] ;float bodyTiltAtKick = 0.04;
+VBC2_PUSH_B_OFFSET -5 //bodyTiltAtKick
+VBC5_PUSH_CONST 1025758986 
+VBC1_POP
+[1:783] ;
+[1:783] ;int pose_taking_cycles = 20;
+VBC2_PUSH_B_OFFSET -6 //pose_taking_cycles
+VBC2_PUSH_CONST 20 
+VBC1_POP
+[1:785] ;
+[1:785] ;float xrOld = xr;
+VBC2_PUSH_B_OFFSET -7 //xrOld
+VBC3_PUSH_GLOBAL 28 //xr
+VBC1_POP
+[1:786] ;
+[1:786] ;float yrOld = yr;
+VBC2_PUSH_B_OFFSET -8 //yrOld
+VBC3_PUSH_GLOBAL 29 //yr
+VBC1_POP
+[1:787] ;
+[1:787] ;float xlOld = xl;
+VBC2_PUSH_B_OFFSET -9 //xlOld
+VBC3_PUSH_GLOBAL 35 //xl
+VBC1_POP
+[1:788] ;
+[1:788] ;float ylOld = yl;
+VBC2_PUSH_B_OFFSET -10 //ylOld
+VBC3_PUSH_GLOBAL 36 //yl
+VBC1_POP
+[1:789] ;if (small == 1) kick_size = -10;
+VBC2_PUSH_LOCAL 2 //small
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB4416 //if to false
+;if (small == 1) kick_size = -10;
+VBC2_PUSH_B_OFFSET -4 //kick_size
+VBC2_PUSH_CONST -10 // -
+VBC1_POP_CF
+LAB4416: //if else
+[1:790] ;selfFirstLegIsRightLeg = kickByRight;
+VBC2_PUSH_CONST 15 //selfFirstLegIsRightLeg
+VBC2_PUSH_LOCAL 3 //kickByRight
+VBC1_POP
+[1:791] ;dx0Typical = stepLengthKick / (2 * fr1 + fr2 + 2.0 * framestep) * framestep;
+VBC2_PUSH_CONST 68 //dx0Typical
+VBC2_PUSH_LOCAL -3 //stepLengthKick
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC5_PUSH_CONST 1073741824 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_ADD_IF
+VBC1_DIV_FF
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_POP
+[1:792] ;xr = xl = bodyTiltAtKick;
+VBC2_PUSH_CONST 28 //xr
+VBC2_PUSH_CONST 35 //xl
+VBC2_PUSH_LOCAL -5 //bodyTiltAtKick
+VBC1_STORE
+VBC1_POP
+[1:793] ;yl =  solyLandingSkew;
+VBC2_PUSH_CONST 36 //yl
+VBC3_PUSH_GLOBAL 61 //solyLandingSkew
+VBC1_POP
+[1:794] ;yr = -solyLandingSkew;
+VBC2_PUSH_CONST 29 //yr
+VBC3_PUSH_GLOBAL 61 //solyLandingSkew
+VBC1_NEG_F
+VBC1_POP
+[1:795] ;s = (amplitude / 2 ) * sfMathCos(alpha01 * (fr1 / 2 + 0.5 * framestep));
+VBC2_PUSH_CONST 71 //s
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC1_PUSH_2 
+VBC1_DIV_FI
+VBC5_PUSH_CONST 300 | 0x80000000 //import func index sfMathCos
+//alloc addon amount for result
+VBC3_PUSH_GLOBAL 42 //alpha01
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_PUSH_2 
+VBC1_DIV
+VBC5_PUSH_CONST 1056964608 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_ADD_IF
+VBC1_MUL_FF
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC1_MUL_FF
+VBC1_POP
+[1:796] ;xtr = xtl = 0;
+VBC2_PUSH_CONST 25 //xtr
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_0 
+VBC1_STORE_CF
+VBC1_POP
+[1:799] ;ztr = ztl = -gaitHeightKick;
+VBC2_PUSH_CONST 27 //ztr
+VBC2_PUSH_CONST 34 //ztl
+VBC2_PUSH_LOCAL -1 //gaitHeightKick
+VBC1_NEG_F
+VBC1_STORE
+VBC1_POP
+[1:803] ;for( j = 0; j < pose_taking_cycles; j += 1 ){
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_0 
+VBC1_POP
+LAB4526: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC2_PUSH_LOCAL -6 //pose_taking_cycles
+VBC1_LESS
+VBC4_FALSE_JUMP LAB4612 //to for exit
+;
+[1:804] ;ztr = ztr0 + j * (-ztr0 - gaitHeightKick) / pose_taking_cycles;
+VBC2_PUSH_CONST 27 //ztr
+VBC3_PUSH_GLOBAL 51 //ztr0
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 51 //ztr0
+VBC1_NEG_F
+VBC2_PUSH_LOCAL -1 //gaitHeightKick
+VBC1_SUB_FF
+VBC1_MUL_IF
+VBC2_PUSH_LOCAL -6 //pose_taking_cycles
+VBC1_DIV_FI
+VBC1_ADD_FF
+VBC1_POP
+[1:805] ;ztl = ztr;
+VBC2_PUSH_CONST 34 //ztl
+VBC3_PUSH_GLOBAL 27 //ztr
+VBC1_POP
+[1:806] ;ytr = -d10 - j * amplitude * 3 /pose_taking_cycles;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC1_MUL_IF
+VBC2_PUSH_CONST 3 
+VBC1_MUL_FI
+VBC2_PUSH_LOCAL -6 //pose_taking_cycles
+VBC1_DIV_FI
+VBC1_SUB_FF
+VBC1_POP
+[1:807] ;ytl =  ytr + 2 * d10;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 26 //ytr
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_MUL_IF
+VBC1_ADD_FF
+VBC1_POP
+[1:808] ;computeAlphaForWalk();
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+LAB4601: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC1_PUSH_1 
+VBC1_ADD
+VBC1_POP
+VBC4_JUMP LAB4526 //to condition
+LAB4612: //for exit
+[1:811] ;ztr = ztl = -gaitHeightKick;
+VBC2_PUSH_CONST 27 //ztr
+VBC2_PUSH_CONST 34 //ztl
+VBC2_PUSH_LOCAL -1 //gaitHeightKick
+VBC1_NEG_F
+VBC1_STORE
+VBC1_POP
+[1:812] ;ytr = s - d10;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_SUB_FF
+VBC1_POP
+[1:813] ;ytl = s + d10;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_ADD_FF
+VBC1_POP
+[1:815] ;for( j = fr1; j < fr1 + fr2; j += framestep ){
+VBC2_PUSH_CONST 65 //j
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_POP
+LAB4647: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC1_LESS
+VBC4_FALSE_JUMP LAB4875 //to for exit
+;
+[1:816] ;ztr = -gaitHeightKick + stepHeightKick;
+VBC2_PUSH_CONST 27 //ztr
+VBC2_PUSH_LOCAL -1 //gaitHeightKick
+VBC1_NEG_F
+VBC2_PUSH_LOCAL -2 //stepHeightKick
+VBC1_ADD_FF
+VBC1_POP
+[1:817] ;dx = stepLengthKick / fr2;
+VBC2_PUSH_CONST 73 //dx
+VBC2_PUSH_LOCAL -3 //stepLengthKick
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_DIV_FI
+VBC1_POP
+[1:818] ;dx0 = stepLengthKick/( 2 * fr1 + fr2 + 4 ) * framestep;
+VBC2_PUSH_CONST 76 //dx0
+VBC2_PUSH_LOCAL -3 //stepLengthKick
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC2_PUSH_CONST 4 
+VBC1_ADD
+VBC1_DIV_FI
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_POP
+[1:819] ;if (j == fr1 || j == fr1 + fr2 - 2){
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_EQU
+VBC4_TRUE_JUMP_KEEP LAB4731
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC1_PUSH_2 
+VBC1_SUB
+VBC1_EQU
+VBC4_TRUE_JUMP_KEEP LAB4731
+VBC1_PUSH_0
+LAB4731:
+VBC4_FALSE_JUMP LAB4757 //if to false
+;
+[1:820] ;xtr -= dx0;
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_SUB_FF
+VBC1_POP
+[1:821] ;ytr = s - 64;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 71 //s
+VBC2_PUSH_CONST 64 
+VBC1_SUB_FI
+VBC1_POP
+VBC4_JUMP LAB4780 //if to exit
+LAB4757: //if else
+;xtr += dx * fr2 / (fr2 - 2 * framestep);
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 73 //dx
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_MUL_FI
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL
+VBC1_SUB
+VBC1_DIV_FI
+VBC1_ADD_FF
+VBC1_POP
+LAB4780: //if exit
+[1:825] ;if (j == fr1 + fr2 - 10)
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC2_PUSH_CONST 10 
+VBC1_SUB
+VBC1_EQU
+VBC4_FALSE_JUMP LAB4806 //if to false
+;xtr += kick_size;
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC2_PUSH_LOCAL -4 //kick_size
+VBC1_ADD_FF
+VBC1_POP
+LAB4806: //if else
+[1:827] ;xtl -= kick_size;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC2_PUSH_LOCAL -4 //kick_size
+VBC1_SUB_FF
+VBC1_POP
+[1:828] ;if (j == fr1 + fr2 - 4)
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC2_PUSH_CONST 4 
+VBC1_SUB
+VBC1_EQU
+VBC4_FALSE_JUMP LAB4840 //if to false
+;xtr -= kick_size;
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC2_PUSH_LOCAL -4 //kick_size
+VBC1_SUB_FF
+VBC1_POP
+LAB4840: //if else
+[1:830] ;xtl += kick_size;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC2_PUSH_LOCAL -4 //kick_size
+VBC1_ADD_FF
+VBC1_POP
+[1:831] ;xtl -= dx0;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_SUB_FF
+VBC1_POP
+[1:832] ;computeAlphaForWalk();
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+LAB4862: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_ADD
+VBC1_POP
+VBC4_JUMP LAB4647 //to condition
+LAB4875: //for exit
+[1:834] ;for( j = fr1 + fr2; j < 2 * fr1 + fr2; j += framestep ){
+VBC2_PUSH_CONST 65 //j
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC1_POP
+LAB4885: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC1_LESS
+VBC4_FALSE_JUMP LAB5009 //to for exit
+;
+[1:835] ;s = (amplitude / 2 ) * sfMathCos(alpha01 * (j - fr2 + framestep) / 2);
+VBC2_PUSH_CONST 71 //s
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC1_PUSH_2 
+VBC1_DIV_FI
+VBC5_PUSH_CONST 300 | 0x80000000 //import func index sfMathCos
+//alloc addon amount for result
+VBC3_PUSH_GLOBAL 42 //alpha01
+VBC3_PUSH_GLOBAL 65 //j
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_SUB
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_ADD
+VBC1_MUL_FI
+VBC1_PUSH_2 
+VBC1_DIV_FI
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC1_MUL_FF
+VBC1_POP
+[1:836] ;ytr = s - d10;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_SUB_FF
+VBC1_POP
+[1:837] ;ytl = s + d10;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_ADD_FF
+VBC1_POP
+[1:838] ;ztl = -gaitHeightKick;
+VBC2_PUSH_CONST 34 //ztl
+VBC2_PUSH_LOCAL -1 //gaitHeightKick
+VBC1_NEG_F
+VBC1_POP
+[1:839] ;ztr = -gaitHeightKick;
+VBC2_PUSH_CONST 27 //ztr
+VBC2_PUSH_LOCAL -1 //gaitHeightKick
+VBC1_NEG_F
+VBC1_POP
+[1:840] ;dx0 = dx0Typical;
+VBC2_PUSH_CONST 76 //dx0
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC1_POP
+[1:841] ;xtl -= dx0;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_SUB_FF
+VBC1_POP
+[1:842] ;xtr -= dx0;
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_SUB_FF
+VBC1_POP
+[1:843] ;computeAlphaForWalk();
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+LAB4996: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_ADD
+VBC1_POP
+VBC4_JUMP LAB4885 //to condition
+LAB5009: //for exit
+[1:845] ;for( j = 2 * fr1 + fr2; j < 2 * (fr1 + fr2); j += framestep ){
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC1_POP
+LAB5021: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC1_MUL
+VBC1_LESS
+VBC4_FALSE_JUMP LAB5240 //to for exit
+;
+[1:846] ;ztl = -gaitHeightKick + stepHeightKick;
+VBC2_PUSH_CONST 34 //ztl
+VBC2_PUSH_LOCAL -1 //gaitHeightKick
+VBC1_NEG_F
+VBC2_PUSH_LOCAL -2 //stepHeightKick
+VBC1_ADD_FF
+VBC1_POP
+[1:847] ;dx0 = dx0Typical * 4 / fr2;
+VBC2_PUSH_CONST 76 //dx0
+VBC3_PUSH_GLOBAL 68 //dx0Typical
+VBC2_PUSH_CONST 4 
+VBC1_MUL_FI
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_DIV_FI
+VBC1_POP
+[1:848] ;dx = (stepLengthKick * (fr1 + fr2) / (4 * fr1) + 2 * dx0) / (fr2 - 2 * framestep) * framestep;
+VBC2_PUSH_CONST 73 //dx
+VBC2_PUSH_LOCAL -3 //stepLengthKick
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC1_MUL_FI
+VBC2_PUSH_CONST 4 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC1_DIV_FI
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_MUL_IF
+VBC1_ADD_FF
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL
+VBC1_SUB
+VBC1_DIV_FI
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_MUL_FI
+VBC1_POP
+[1:849] ;if (j == (2 * fr1 + 2 * fr2 - framestep)){
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_MUL
+VBC1_ADD
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_SUB
+VBC1_EQU
+VBC4_FALSE_JUMP LAB5139 //if to false
+;
+[1:850] ;ztl = -gaitHeightKick;
+VBC2_PUSH_CONST 34 //ztl
+VBC2_PUSH_LOCAL -1 //gaitHeightKick
+VBC1_NEG_F
+VBC1_POP
+[1:851] ;ytl = s + d10;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 71 //s
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_ADD_FF
+VBC1_POP
+LAB5139: //if else
+[1:853] ;if (j == (2 * fr1 + fr2 ) || j == (2 * (fr1 + fr2) - framestep)){
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC1_MUL
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC1_EQU
+VBC4_TRUE_JUMP_KEEP LAB5178
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_2 
+VBC3_PUSH_GLOBAL 43 //fr1
+VBC3_PUSH_GLOBAL 44 //fr2
+VBC1_ADD
+VBC1_MUL
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_SUB
+VBC1_EQU
+VBC4_TRUE_JUMP_KEEP LAB5178
+VBC1_PUSH_0
+LAB5178:
+VBC4_FALSE_JUMP LAB5204 //if to false
+;
+[1:854] ;xtl -= dx0;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_SUB_FF
+VBC1_POP
+[1:855] ;ytl = s + 64;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 71 //s
+VBC2_PUSH_CONST 64 
+VBC1_ADD_FI
+VBC1_POP
+VBC4_JUMP LAB5213 //if to exit
+LAB5204: //if else
+;xtl += dx;
+VBC2_PUSH_CONST 32 //xtl
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 73 //dx
+VBC1_ADD_FF
+VBC1_POP
+LAB5213: //if exit
+[1:859] ;xtr -= dx0;
+VBC2_PUSH_CONST 25 //xtr
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 76 //dx0
+VBC1_SUB_FF
+VBC1_POP
+[1:860] ;computeAlphaForWalk();
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+LAB5227: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 24 //framestep
+VBC1_ADD
+VBC1_POP
+VBC4_JUMP LAB5021 //to condition
+LAB5240: //for exit
+[1:864] ;pose_taking_cycles = 2;
+VBC2_PUSH_B_OFFSET -6 //pose_taking_cycles
+VBC1_PUSH_2 
+VBC1_POP
+[1:865] ;
+[1:865] ;int pose_hight_after_kick = ztr0;
+VBC2_PUSH_B_OFFSET -11 //pose_hight_after_kick
+VBC3_PUSH_GLOBAL 51 //ztr0
+VBC1_POP_CI
+[1:866] ;for( j = 0; j < pose_taking_cycles; j += 1 ){
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_0 
+VBC1_POP
+LAB5254: //for condition
+VBC3_PUSH_GLOBAL 65 //j
+VBC2_PUSH_LOCAL -6 //pose_taking_cycles
+VBC1_LESS
+VBC4_FALSE_JUMP LAB5356 //to for exit
+;
+[1:867] ;ztr = -gaitHeightKick + (j + 1 )*(pose_hight_after_kick + gaitHeightKick) / pose_taking_cycles;
+VBC2_PUSH_CONST 27 //ztr
+VBC2_PUSH_LOCAL -1 //gaitHeightKick
+VBC1_NEG_F
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_1 
+VBC1_ADD
+VBC2_PUSH_LOCAL -11 //pose_hight_after_kick
+VBC2_PUSH_LOCAL -1 //gaitHeightKick
+VBC1_ADD_IF
+VBC1_MUL_IF
+VBC2_PUSH_LOCAL -6 //pose_taking_cycles
+VBC1_DIV_FI
+VBC1_ADD_FF
+VBC1_POP
+[1:868] ;ztl = ztr;
+VBC2_PUSH_CONST 34 //ztl
+VBC3_PUSH_GLOBAL 27 //ztr
+VBC1_POP
+[1:869] ;ytr = -d10 - (pose_taking_cycles - (j + 1)) * amplitude / 2 / pose_taking_cycles;
+VBC2_PUSH_CONST 26 //ytr
+VBC3_PUSH_GLOBAL 40 //d10
+VBC1_NEG_F
+VBC2_PUSH_LOCAL -6 //pose_taking_cycles
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_1 
+VBC1_ADD
+VBC1_SUB
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC1_MUL_IF
+VBC1_PUSH_2 
+VBC1_DIV_FI
+VBC2_PUSH_LOCAL -6 //pose_taking_cycles
+VBC1_DIV_FI
+VBC1_SUB_FF
+VBC1_POP
+[1:870] ;ytl = d10 - (pose_taking_cycles - (j + 1)) * amplitude / 2 / pose_taking_cycles;
+VBC2_PUSH_CONST 33 //ytl
+VBC3_PUSH_GLOBAL 40 //d10
+VBC2_PUSH_LOCAL -6 //pose_taking_cycles
+VBC3_PUSH_GLOBAL 65 //j
+VBC1_PUSH_1 
+VBC1_ADD
+VBC1_SUB
+VBC3_PUSH_GLOBAL 41 //amplitude
+VBC1_MUL_IF
+VBC1_PUSH_2 
+VBC1_DIV_FI
+VBC2_PUSH_LOCAL -6 //pose_taking_cycles
+VBC1_DIV_FI
+VBC1_SUB_FF
+VBC1_POP
+[1:871] ;computeAlphaForWalk();
+VBC3_PUSH_CONST 613  //func address computeAlphaForWalk
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+LAB5345: //for step
+VBC2_PUSH_CONST 65 //j
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC1_PUSH_1 
+VBC1_ADD
+VBC1_POP
+VBC4_JUMP LAB5254 //to condition
+LAB5356: //for exit
+[1:874] ;xr = xrOld;
+VBC2_PUSH_CONST 28 //xr
+VBC2_PUSH_LOCAL -7 //xrOld
+VBC1_POP
+[1:875] ;yr = yrOld;
+VBC2_PUSH_CONST 29 //yr
+VBC2_PUSH_LOCAL -8 //yrOld
+VBC1_POP
+[1:876] ;xl = xlOld;
+VBC2_PUSH_CONST 35 //xl
+VBC2_PUSH_LOCAL -9 //xlOld
+VBC1_POP
+[1:877] ;yl = ylOld;
+VBC2_PUSH_CONST 36 //yl
+VBC2_PUSH_LOCAL -10 //ylOld
+VBC1_POP
+[1:880] ;
+VBC1_RETURN
+;turn <void(,int)>
+VBC1_STACK_DN1//local vars 1
+[1:881] ;
+[1:881] ;int frameCount = 4;
+VBC2_PUSH_B_OFFSET -1 //frameCount
+VBC2_PUSH_CONST 4 
+VBC1_POP
+[1:882] ;if (direction == 1){
+VBC2_PUSH_LOCAL 2 //direction
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB5421 //if to false
+;
+[1:883] ;sfPoseGroup( 1024 , -2000, frameCount );
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC3_PUSH_CONST 1024 
+VBC3_PUSH_CONST -2000 // -
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:884] ;sfPoseGroup( 2048 , 2000, frameCount );
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC3_PUSH_CONST 2048 
+VBC3_PUSH_CONST 2000 
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+LAB5421: //if else
+[1:886] ;if (direction == -1){
+VBC2_PUSH_LOCAL 2 //direction
+VBC2_PUSH_CONST -1 // -
+VBC1_EQU
+VBC4_FALSE_JUMP LAB5460 //if to false
+;
+[1:887] ;sfPoseGroup( 1024 , 2000, frameCount );
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC3_PUSH_CONST 1024 
+VBC3_PUSH_CONST 2000 
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:888] ;sfPoseGroup( 2048 , -2000, frameCount );
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC3_PUSH_CONST 2048 
+VBC3_PUSH_CONST -2000 // -
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+LAB5460: //if else
+[1:890] ;sfPoseGroup( 1048576 , 2000, frameCount );
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC4_PUSH_CONST 1048576 
+VBC3_PUSH_CONST 2000 
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:891] ;sfPoseGroup( 2097152 , 2000, frameCount );
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC4_PUSH_CONST 2097152 
+VBC3_PUSH_CONST 2000 
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:892] ;sfWaitFrame( frameCount );
+VBC2_PUSH_CONST 56  //func address sfWaitFrame
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:893] ;sfPoseGroup( 1024 , 0, frameCount );
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC3_PUSH_CONST 1024 
+VBC1_PUSH_0 
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:894] ;sfPoseGroup( 2048 , 0, frameCount );
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC3_PUSH_CONST 2048 
+VBC1_PUSH_0 
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:895] ;sfPoseGroup( 1048576 , 0, frameCount );
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC4_PUSH_CONST 1048576 
+VBC1_PUSH_0 
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:896] ;sfPoseGroup( 2097152 , 0, frameCount );
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC4_PUSH_CONST 2097152 
+VBC1_PUSH_0 
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:897] ;sfWaitFrame( frameCount );
+VBC2_PUSH_CONST 56  //func address sfWaitFrame
+VBC2_PUSH_LOCAL -1 //frameCount
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:898] ;sfWaitFrame( 6 );
+VBC2_PUSH_CONST 56  //func address sfWaitFrame
+VBC2_PUSH_CONST 6 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:901] ;
+VBC1_RETURN
+;movingRemoteControl <void()>
+[1:903] ;while(1) {
+LAB5565: //while condition
+;
+[1:905] ;while( sfAbs( svRemoteRightJoystickX ) < 10  
+LAB5565: //while condition
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1196 //svRemoteRightJoystickX
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB5647
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1197 //svRemoteRightJoystickY
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB5647
+VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
+VBC3_PUSH_GLOBAL 1193 //svRemoteLeftJoystickX
+VBC1_CALL1
+VBC1_STACK_UP1//remove call address and params
+VBC2_PUSH_CONST 10 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB5647
+VBC3_PUSH_GLOBAL 1194 //svRemoteLeftJoystickY
+VBC1_PUSH_0 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB5641
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC3_PUSH_CONST 2048 
+VBC1_DIV
+VBC1_PUSH_2 
+VBC1_MOD
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP_KEEP LAB5641
+VBC1_PUSH_1
+LAB5641:
+VBC1_LNOT
+VBC4_FALSE_JUMP_KEEP LAB5647
+VBC1_PUSH_1
+LAB5647:
+VBC4_FALSE_JUMP LAB5757 //while to exit
+;
+[1:910] ;if (svRemoteButton == 262144 || svRemoteButton == 128) kick(1,0); 
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC4_PUSH_CONST 262144 
+VBC1_EQU
+VBC4_TRUE_JUMP_KEEP LAB5675
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC3_PUSH_CONST 128 
+VBC1_EQU
+VBC4_TRUE_JUMP_KEEP LAB5675
+VBC1_PUSH_0
+LAB5675:
+VBC4_FALSE_JUMP LAB5686 //if to false
+;if (svRemoteButton == 262144 || svRemoteButton == 128) kick(1,0); 
+VBC3_PUSH_CONST 4343  //func address kick
+VBC1_PUSH_1 
+VBC1_PUSH_0 
+VBC1_CALL2
+VBC1_STACK_UP3//remove result, call address and params
+LAB5686: //if else
+[1:911] ;if (svRemoteButton == 524288 || svRemoteButton == 64) kick(0,0); 
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC4_PUSH_CONST 524288 
+VBC1_EQU
+VBC4_TRUE_JUMP_KEEP LAB5709
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC2_PUSH_CONST 64 
+VBC1_EQU
+VBC4_TRUE_JUMP_KEEP LAB5709
+VBC1_PUSH_0
+LAB5709:
+VBC4_FALSE_JUMP LAB5720 //if to false
+;if (svRemoteButton == 524288 || svRemoteButton == 64) kick(0,0); 
+VBC3_PUSH_CONST 4343  //func address kick
+VBC1_PUSH_0 
+VBC1_PUSH_0 
+VBC1_CALL2
+VBC1_STACK_UP3//remove result, call address and params
+LAB5720: //if else
+[1:912] ;if (svRemoteButton == 1) turn(1); 
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB5735 //if to false
+;if (svRemoteButton == 1) turn(1); 
+VBC3_PUSH_CONST 5377  //func address turn
+VBC1_PUSH_1 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+LAB5735: //if else
+[1:913] ;if (svRemoteButton == 8) turn(-1); 
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC2_PUSH_CONST 8 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB5752 //if to false
+;if (svRemoteButton == 8) turn(-1); 
+VBC3_PUSH_CONST 5377  //func address turn
+VBC2_PUSH_CONST -1 // -
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+LAB5752: //if else
+[1:914] ;sfWaitNextFrame();
+VBC1_WAIT
+VBC4_JUMP LAB5565 //while forever loop
+LAB5757: //while exit
+[1:918] ;sideLength = joystickToSideLength();
+VBC2_PUSH_CONST 4 //sideLength
+VBC3_PUSH_CONST 3708  //func address joystickToSideLength
+VBC1_CALL0
+//remove call address and params
+VBC1_POP_CF
+[1:919] ;selfFirstLegIsRightLeg = motion_to_right;
+VBC2_PUSH_CONST 15 //selfFirstLegIsRightLeg
+VBC3_PUSH_GLOBAL 16 //motion_to_right
+VBC1_POP
+[1:920] ;if (svRemoteLeftJoystickY < 0 && ((svRemoteButton / 2048) % 2 == 1)) stepNumber = -svRemoteLeftJoystickY;
+VBC3_PUSH_GLOBAL 1194 //svRemoteLeftJoystickY
+VBC1_PUSH_0 
+VBC1_LESS
+VBC4_FALSE_JUMP_KEEP LAB5795
+VBC3_PUSH_GLOBAL 1191 //svRemoteButton
+VBC3_PUSH_CONST 2048 
+VBC1_DIV
+VBC1_PUSH_2 
+VBC1_MOD
+VBC1_PUSH_1 
+VBC1_EQU
+VBC4_FALSE_JUMP_KEEP LAB5795
+VBC1_PUSH_1
+LAB5795:
+VBC4_FALSE_JUMP LAB5806 //if to false
+;if (svRemoteLeftJoystickY < 0 && ((svRemoteButton / 2048) % 2 == 1)) stepNumber = -svRemoteLeftJoystickY;
+VBC2_PUSH_CONST 62 //stepNumber
+VBC3_PUSH_GLOBAL 1194 //svRemoteLeftJoystickY
+VBC1_NEG
+VBC1_POP
+LAB5806: //if else
+[1:922] ;walkInitialPoseFine();
+VBC3_PUSH_CONST 1863  //func address walkInitialPoseFine
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:923] ;walkLoop();
+VBC3_PUSH_CONST 3773  //func address walkLoop
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:926] ;stepType = 1;
+VBC2_PUSH_CONST 57 //stepType
+VBC1_PUSH_1 
+VBC1_POP
+[1:927] ;walkCycle(0);
+VBC3_PUSH_CONST 3333  //func address walkCycle
+VBC1_PUSH_0 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:929] ;walkFinalPoseFine();
+VBC3_PUSH_CONST 2029  //func address walkFinalPoseFine
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+VBC4_JUMP LAB5565 //while forever loop
+LAB5835: //while exit
+[1:933] ;walkFinalPoseFine();
+VBC3_PUSH_CONST 2029  //func address walkFinalPoseFine
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:936] ;
+VBC1_RETURN
+;main <void()>
+[1:937] ;slowWalk = 0;
+VBC1_PUSH_2 //slowWalk
+VBC1_PUSH_0 
+VBC1_POP
+[1:938] ;setup();
+VBC2_PUSH_CONST 70  //func address setup
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:939] ;sideLength = 0;
+VBC2_PUSH_CONST 4 //sideLength
+VBC1_PUSH_0 
+VBC1_POP_CF
+[1:940] ;rotation = 0;
+VBC2_PUSH_CONST 5 //rotation
+VBC1_PUSH_0 
+VBC1_POP_CF
+[1:943] ;sfWaitFrame( 100 );
+VBC2_PUSH_CONST 56  //func address sfWaitFrame
+VBC2_PUSH_CONST 100 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:946] ;sfQuaternionToEulerImu();
+VBC5_PUSH_CONST 303 | 0x80000000 //import func index sfQuaternionToEulerImu
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:947] ;forwardDirection = svEulerYaw;
+VBC2_PUSH_CONST 77 //forwardDirection
+VBC3_PUSH_GLOBAL 1025 //svEulerYaw
+VBC1_POP
+[1:950] ;sfCreateTask( mixing, 20 );
+VBC5_PUSH_CONST 2 | 0x80000000 //import func index sfCreateTask
+VBC3_PUSH_CONST 3522  //func address mixing
+VBC2_PUSH_CONST 20 
+VBC1_CALL2
+VBC1_STACK_UP3//remove result, call address and params
+[1:953] ;runTest(); 
+VBC3_PUSH_CONST 3586  //func address runTest
+VBC1_CALL0
+VBC1_STACK_UP1//remove result, call address and params
+[1:958] ;
+VBC1_RETURN
+//Init table
+//Variables
+svFrameCount : 1
+svImuAccX : 1000
+svImuAccY : 1001
+svImuAccZ : 1002
+svImuAccRawX : 1003
+svImuAccRawY : 1004
+svImuAccRawZ : 1005
+svImuGyroX : 1006
+svImuGyroY : 1007
+svImuGyroZ : 1008
+svImuGyroRawX : 1009
+svImuGyroRawY : 1010
+svImuGyroRawZ : 1011
+svImuQuaterX : 1012
+svImuQuaterY : 1013
+svImuQuaterZ : 1014
+svImuQuaterW : 1015
+svImuQuaterAcc : 1016
+svImuAccSlowX : 1017
+svImuAccSlowY : 1018
+svImuAccSlowZ : 1019
+svAdc : 1020
+svButtonLeft : 1021
+svButtonRight : 1022
+svButtonPress : 1023
+svHeadControlMask : 1024
+svEulerYaw F: 1025
+svEulerPitch F: 1026
+svEulerRoll F: 1027
+svRemoteStatus : 1190
+svRemoteButton : 1191
+svRemoteLeftJoystick : 1192
+svRemoteLeftJoystickX : 1193
+svRemoteLeftJoystickY : 1194
+svRemoteRightJoystick : 1195
+svRemoteRightJoystickX : 1196
+svRemoteRightJoystickY : 1197
+svHumoModelDistPelvic : 1204
+svHumoModelLengthPelvicHip : 1205
+svHumoModelLengthHipHip : 1206
+svHumoModelLengthHipKnee : 1207
+svHumoModelLengthKneeFoot : 1208
+svHumoModelLengthFootFoot : 1209
+svHumoModelDistFootFloor : 1210
+svHumoModelFootLength : 1211
+svHumoModelFootWidth : 1212
+svHumoModelFootCenterBack : 1213
+svHumoModelFootCenterInner : 1214
+svHumoModelAngPelvic : 1198
+svHumoModelAngHipSide : 1200
+svHumoModelAngHip : 1199
+svHumoModelAngKnee : 1201
+svHumoModelAngFoot : 1202
+svHumoModelAngFootSide : 1203
+svIkA5 F: 1215
+svIkB5 F: 1216
+svIkC5 F: 1217
+svIkA6 F: 1218
+svIkA7 F: 1219
+svIkA8 F: 1220
+svIkA9 F: 1221
+svIkA10 F: 1222
+svIkB10 F: 1223
+svIkC10 F: 1224
+svIkLimA5min F: 1225
+svIkLimA5max F: 1226
+svIkLimA6min F: 1227
+svIkLimA6max F: 1228
+svIkLimA7min F: 1229
+svIkLimA7max F: 1230
+svIkLimA8min F: 1231
+svIkLimA8max F: 1232
+svIkLimA9min F: 1233
+svIkLimA9max F: 1234
+svIkLimA10min F: 1235
+svIkLimA10max F: 1236
+svIkOutPresent : 1237
+svIkEncA5 : 1238
+svIkEncA6 : 1239
+svIkEncA7 : 1240
+svIkEncA8 : 1241
+svIkEncA9 : 1242
+svIkEncA10 : 1243
+headRotateTarget : 1030
+headRotateCurrent : 1031
+headRotatePwm : 1032
+headRotateAddonMix : 1033
+torsoRotateTarget : 1034
+torsoRotateCurrent : 1035
+torsoRotatePwm : 1036
+torsoRotateAddonMix : 1037
+rightClavicleTarget : 1038
+rightClavicleCurrent : 1039
+rightClaviclePwm : 1040
+rightClavicleAddonMix : 1041
+leftClavicleTarget : 1042
+leftClavicleCurrent : 1043
+leftClaviclePwm : 1044
+leftClavicleAddonMix : 1045
+rightShoulderTarget : 1046
+rightShoulderCurrent : 1047
+rightShoulderPwm : 1048
+rightShoulderAddonMix : 1049
+leftShoulderTarget : 1050
+leftShoulderCurrent : 1051
+leftShoulderPwm : 1052
+leftShoulderAddonMix : 1053
+rightElbowSideTarget : 1054
+rightElbowSideCurrent : 1055
+rightElbowSidePwm : 1056
+rightElbowSideAddonMix : 1057
+leftElbowSideTarget : 1058
+leftElbowSideCurrent : 1059
+leftElbowSidePwm : 1060
+leftElbowSideAddonMix : 1061
+rightElbowTarget : 1062
+rightElbowCurrent : 1063
+rightElbowPwm : 1064
+rightElbowAddonMix : 1065
+leftElbowTarget : 1066
+leftElbowCurrent : 1067
+leftElbowPwm : 1068
+leftElbowAddonMix : 1069
+rightPelvicTarget : 1070
+rightPelvicCurrent : 1071
+rightPelvicPwm : 1072
+rightPelvicAddonMix : 1073
+leftPelvicTarget : 1074
+leftPelvicCurrent : 1075
+leftPelvicPwm : 1076
+leftPelvicAddonMix : 1077
+rightHipSideTarget : 1078
+rightHipSideCurrent : 1079
+rightHipSidePwm : 1080
+rightHipSideAddonMix : 1081
+leftHipSideTarget : 1082
+leftHipSideCurrent : 1083
+leftHipSidePwm : 1084
+leftHipSideAddonMix : 1085
+rightHipTarget : 1086
+rightHipCurrent : 1087
+rightHipPwm : 1088
+rightHipAddonMix : 1089
+leftHipTarget : 1090
+leftHipCurrent : 1091
+leftHipPwm : 1092
+leftHipAddonMix : 1093
+rightKneeTarget : 1094
+rightKneeCurrent : 1095
+rightKneePwm : 1096
+rightKneeAddonMix : 1097
+leftKneeTarget : 1098
+leftKneeCurrent : 1099
+leftKneePwm : 1100
+leftKneeAddonMix : 1101
+rightFootFrontTarget : 1102
+rightFootFrontCurrent : 1103
+rightFootFrontPwm : 1104
+rightFootFrontAddonMix : 1105
+leftFootFrontTarget : 1106
+leftFootFrontCurrent : 1107
+leftFootFrontPwm : 1108
+leftFootFrontAddonMix : 1109
+rightFootSideTarget : 1110
+rightFootSideCurrent : 1111
+rightFootSidePwm : 1112
+rightFootSideAddonMix : 1113
+leftFootSideTarget : 1114
+leftFootSideCurrent : 1115
+leftFootSidePwm : 1116
+leftFootSideAddonMix : 1117
+rightHandTarget : 1118
+rightHandCurrent : 1119
+rightHandPwm : 1120
+rightHandAddonMix : 1121
+leftHandTarget : 1122
+leftHandCurrent : 1123
+leftHandPwm : 1124
+leftHandAddonMix : 1125
+headTiltTarget : 1130
+headTiltCurrent : 1131
+headTiltPwm : 1132
+headTiltAddonMix : 1133
+rightKneeBotTarget : 1134
+rightKneeBotCurrent : 1135
+rightKneeBotPwm : 1136
+rightKneeBotAddonMix : 1137
+leftKneeBotTarget : 1138
+leftKneeBotCurrent : 1139
+leftKneeBotPwm : 1140
+leftKneeBotAddonMix : 1141
+rightClawTarget : 1142
+rightClawCurrent : 1143
+rightClawPwm : 1144
+rightClawAddonMix : 1145
+leftClawTarget : 1146
+leftClawCurrent : 1147
+leftClawPwm : 1148
+leftClawAddonMix : 1149
+slowWalk : 2
+stepLength F: 3
+sideLength F: 4
+rotation F: 5
+stepLengthOrder F: 6
+selfTIK2RAD F: 7
+selfFrameDelay F: 8
+selfMotionShiftCorrectionX F: 9
+selfMotionShiftCorrectionY F: 10
+selfFirstStepYield F: 11
+selfCycleStepYield F: 12
+selfSideStepRightYield F: 13
+selfSideStepLeftYield F: 14
+selfFirstLegIsRightLeg : 15
+motion_to_right : 16
+side_motion F: 17
+selfInitPoses : 18
+selfExitFlag : 19
+selfFallingFlag : 20
+selfNeckPan : 21
+rotationYieldRight F: 22
+rotationYieldLeft F: 23
+framestep : 24
+xtr F: 25
+ytr F: 26
+ztr F: 27
+xr F: 28
+yr F: 29
+zr F: 30
+wr F: 31
+xtl F: 32
+ytl F: 33
+ztl F: 34
+xl F: 35
+yl F: 36
+zl F: 37
+wl F: 38
+e10 F: 39
+d10 F: 40
+amplitude F: 41
+alpha01 F: 42
+fr1 : 43
+fr2 : 44
+gaitHeight F: 45
+stepHeight F: 46
+correctedStepLenght F: 47
+correctedStepLenghtHalf F: 48
+correctedSideLenght F: 49
+correctedSideLenghtHalf F: 50
+ztr0 F: 51
+ztl0 F: 52
+stepZtr F: 53
+stepZtl F: 54
+stepYtr F: 55
+stepYtl F: 56
+stepType : 57
+fps : 58
+timeStep : 59
+bodyTiltAtWalk F: 60
+solyLandingSkew F: 61
+stepNumber : 62
+flag : 63
+flag_event : 64
+j : 65
+xtl0 F: 66
+xtr0 F: 67
+dx0Typical F: 68
+dy0Typical F: 69
+correctedRotation F: 70
+s F: 71
+fase_offset F: 72
+dx F: 73
+dy F: 74
+stepRotation F: 75
+dx0 F: 76
+forwardDirection F: 77
+leftRightFactor : 78
+frontBackFactor : 79

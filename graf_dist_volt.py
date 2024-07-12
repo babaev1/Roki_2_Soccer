@@ -121,7 +121,7 @@ def cubic_ransac_curve_fit(x, y):
     
 
 if __name__=="__main__":
-    battery_number = 1
+    battery_number = 3
     #voltage = 12
     #a = dist_angle_from_voltage(battery_number, voltage)
     #plt.show()
