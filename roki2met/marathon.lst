@@ -2022,7 +2022,7 @@ function declare void main(
  int 2:stackSize
 ) end function declare
 > 
-  ( <int 1022:svButtonRight> ) = ( -(1) ) 
+ loop  ( <int 1022:svButtonRight> ) = ( -(1) ) 
   ( <int 1021:svButtonLeft> ) = ( -(1) ) 
  call  <function declare void sfBip(
  int 3:bipCount

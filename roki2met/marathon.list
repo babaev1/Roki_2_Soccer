@@ -3077,6 +3077,19 @@ VBC3_PUSH_CONST 4688  //func address mixing
 VBC2_PUSH_CONST 20 
 VBC1_CALL2
 VBC1_STACK_UP3//remove result, call address and params
+[1:792] ;while (pitStop == 0) sfWaitFrame(1); 
+LAB5150: //while condition
+VBC3_PUSH_GLOBAL 5 //pitStop
+VBC1_PUSH_0 
+VBC1_EQU
+VBC4_FALSE_JUMP LAB5168 //while to exit
+;while (pitStop == 0) sfWaitFrame(1); 
+VBC2_PUSH_CONST 56  //func address sfWaitFrame
+VBC1_PUSH_1 
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+VBC4_JUMP LAB5150 //while forever loop
+LAB5168: //while exit
 [1:794] ;svButtonRight = -1 ;
 VBC3_PUSH_CONST 1022 //svButtonRight
 VBC2_PUSH_CONST -1 // -
@@ -3092,18 +3105,18 @@ VBC1_PUSH_1
 VBC1_CALL2
 VBC1_STACK_UP3//remove result, call address and params
 [1:797] ;while (svButtonPress != 2 ) sfWaitFrame(1); 
-LAB5171: //while condition
+LAB5189: //while condition
 VBC3_PUSH_GLOBAL 1023 //svButtonPress
 VBC1_PUSH_2 
 VBC1_NOT_EQU
-VBC4_FALSE_JUMP LAB5189 //while to exit
+VBC4_FALSE_JUMP LAB5207 //while to exit
 ;while (svButtonPress != 2 ) sfWaitFrame(1); 
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC1_PUSH_1 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-VBC4_JUMP LAB5171 //while forever loop
-LAB5189: //while exit
+VBC4_JUMP LAB5189 //while forever loop
+LAB5207: //while exit
 [1:798] ;svButtonRight = 66 ;
 VBC3_PUSH_CONST 1022 //svButtonRight
 VBC2_PUSH_CONST 66 
