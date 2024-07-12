@@ -8,7 +8,8 @@ class Camera:
         self.picam2 = None
         self.last_frame_number = 0   
         self.last_frame_time = 0    # frame timestamp in us
-
+        self.camera_lores = (800, 650)
+ 
     class Frame_number_counter:
         def __init__(self):
             self.list_of_Timestamps = []
@@ -36,7 +37,7 @@ class Camera:
         self.frame_number_counter.target_frame_duration = frame_duration_us
         self.picam2.pre_callback = self.frame_number_counter.add_farme_number
         #self.picam2.configure(self.picam2.create_still_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)}))
-        self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)}))
+        self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": self.camera_lores}))
         if exposure != None:
             self.picam2.set_controls({"ExposureTime": exposure})		# exposure limits: 11 ~ 199953
         if gain != None:
@@ -82,7 +83,8 @@ class Camera:
         request.release()
         image = cv2.cvtColor(image, cv2.COLOR_YUV2BGR_I420)
         #image = cv2.cvtColor(image, cv2.COLOR_YUV420p2RGB)
-        image = image[0:650,0:800,0:3]
+        width, height = self.camera_lores
+        image = image[0:height,0:width,0:3]
         #cv2.imshow("Camera", image)
         #cv2.waitKey(10)
         return image, frame_number

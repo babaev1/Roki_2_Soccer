@@ -1023,8 +1023,52 @@ class Player():
         self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
 
     def marathon_main_cycle(self):
-        self.glob.rcb.motionPlay(26)
-        time.sleep(3600)
+        if self.glob.SIMULATION == 5:
+            from Robots import roki2met
+            var = roki2met.roki2met.sprint_v4
+            intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
+            self.glob.rcb.motionPlay(24)
+
+            # wait until motion paramenetrs initiated 
+            while True:
+                ok, restart_flag = intercom.memIGet(var.restart_flag)
+                if ok: print('restart_flag :', restart_flag)
+                else: print(intercom.GetError())
+                if restart_flag == 0: break
+                time.sleep(0.25)
+            
+            # write motion parameters to zubr-controller motion
+            intercom.memISet(var.orderFromHead, 0)              #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
+            intercom.memISet(var.cycle_number, 20000)
+            intercom.memISet(var.hipTilt, 0)
+            intercom.memISet(var.fps, 4)
+            intercom.memISet(var.stepLengthOrder, 0)
+            intercom.memISet(var.gaitHeight, 180)
+            intercom.memISet(var.stepHeight, 40)
+            intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
+            labels = [[], [], [], ['start'], []]
+            pressed_button = self.motion.push_Button(labels)
+            intercom.memISet(var.startStop, 1)
+            # while not stopFlag:
+            #     aruco_size = size.value
+            #     aruco_shift = side_shift.value
+            #     if aruco_size > 90:
+            #         print('Reverse')
+            #         intercom.memISet(var.orderFromHead, 4)   
+            #     elif aruco_size == 0:
+            #         intercom.memISet(var.orderFromHead, 0) 
+            #     else:
+            #         if aruco_shift > 0:
+            #             print('Go Left')
+            #             intercom.memISet(var.orderFromHead, 2)
+            #         elif aruco_shift < 0:
+            #             print('Go Right')
+            #             intercom.memISet(var.orderFromHead, 3)
+            #         else:
+            #             print('Go Straight')
+            #             intercom.memISet(var.orderFromHead, 1)
+            #     time.sleep(0.05)
+            time.sleep(3600)
         self.motion.head_Return(0, self.motion.neck_play_pose)
         stepLength = 0
         self.motion.gaitHeight = 190
