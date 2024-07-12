@@ -9,7 +9,7 @@ import random
 #from Soccer.Motion.class_stm_channel import STM_channel
 #from Soccer.Vision.class_Vision_RPI import Vision_RPI
 from multiprocessing import Process, Value
-from Robots import roki2met
+from roki2met import roki2met
 import datetime
 import numpy as np
 
@@ -842,7 +842,6 @@ class Player():
 
     def sprint(self, second_pressed_button):
         if self.glob.SIMULATION == 5:
-            from Robots import roki2met
             from Soccer.Vision import lookARUCO
 
             # Pipeline variables
@@ -1024,8 +1023,7 @@ class Player():
 
     def marathon_main_cycle(self):
         if self.glob.SIMULATION == 5:
-            from Robots import roki2met
-            var = roki2met.roki2met.sprint_v4
+            var = roki2met.roki2met.marathon
             intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
             self.glob.rcb.motionPlay(24)
 
@@ -1043,12 +1041,14 @@ class Player():
             intercom.memISet(var.hipTilt, 0)
             intercom.memISet(var.fps, 4)
             intercom.memISet(var.stepLengthOrder, 0)
-            intercom.memISet(var.gaitHeight, 180)
+            intercom.memISet(var.gaitHeight, 195)
             intercom.memISet(var.stepHeight, 40)
+            intercom.memFSet(var.ugol_torsa, 0)
+            intercom.memFSet(var.bodyTiltAtWalk, 0.04)
             intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
-            labels = [[], [], [], ['start'], []]
-            pressed_button = self.motion.push_Button(labels)
-            intercom.memISet(var.startStop, 1)
+            # labels = [[], [], [], ['start'], []]
+            # pressed_button = self.motion.push_Button(labels)
+            # intercom.memISet(var.startStop, 1)
             # while not stopFlag:
             #     aruco_size = size.value
             #     aruco_shift = side_shift.value
