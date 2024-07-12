@@ -208,7 +208,7 @@ void setup() {
   amplitude = 32;    // mm side amplitude (maximum distance between most right and most left position of Center of Mass) 62 * 2
   
   if (timeStep == 1){
-    stepLengthOrder = 40;
+    stepLengthOrder = 30;
     ugol_torsa = 0.65;
     bodyTiltAtWalk = -0.02; 
     hipTilt = 80;

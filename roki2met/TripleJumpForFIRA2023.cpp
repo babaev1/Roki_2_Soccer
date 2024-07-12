@@ -44,6 +44,7 @@ void page_2() {
 	sfPoseGroup(MASK_FOOT_FRONT, 3394, frameCount);
   	sfPoseGroup(MASK_FOOT_FRONT, 2680, frameCount);
 	sfPoseGroup(MASK_HIP, 3900, frameCount);
+  	sfPoseGroup(MASK_HIP, 4100, frameCount);
   	//sfPoseGroup(MASK_KNEE, 3400, frameCount);
 	sfWaitFrame(frameCount);
 }
@@ -140,6 +141,7 @@ void page_8(int i) {
   	sfPoseGroupLin(MASK_FOOT_FRONT, 3000 + i, frameCount);
 	//sfPoseGroup(MASK_HIP, 3072, frameCount);
   	sfPoseGroupLin(MASK_HIP, 5600 + i, frameCount);
+  	sfPoseGroupLin(MASK_HIP, 5000 + i, frameCount);
 	sfPoseGroupLin(MASK_ELBOW, -921 + i, frameCount);
 	sfPoseGroupLin(MASK_CLAVICLE, -4094 + i, frameCount);
   	sfPoseGroup(MASK_HEAD_TILT, 4000+ i, frameCount);
@@ -147,10 +149,20 @@ void page_8(int i) {
 }
 
 void page_9() {
-	frameCount = 75;
+	frameCount = 175;
   	frameCount *= factor;
 	sfWaitFrame(frameCount);
+
 }
+
+void page_9_1() {
+	frameCount = 175;
+  	frameCount *= factor;
+  	sfPoseGroup(MASK_HIP, 5072, frameCount);
+	sfWaitFrame(frameCount);
+
+}
+
 void page_10(){
   frameCount = 75;
   frameCount *= factor;
@@ -195,6 +207,7 @@ void main() {
 	//page_7();
 	for( i = 0; i < 6 * factor; i++ ) page_8(i);
 	page_9();
+  	page_9_1();
   	page_0();
 	//page_10();
 }

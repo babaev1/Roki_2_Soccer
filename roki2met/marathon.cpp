@@ -789,7 +789,7 @@ void main() {
   
   //Запускаем миксинг
   sfCreateTask( mixing, 20 );
-  //while (pitStop == 0) sfWaitFrame(1); // waithing to change parameters
+  while (pitStop == 0) sfWaitFrame(1); // waithing to change parameters
 
   svButtonRight = SV_SLOT_INACTIVE;
   svButtonLeft = SV_SLOT_INACTIVE;
