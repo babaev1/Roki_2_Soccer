@@ -216,7 +216,7 @@ class Player():
         if self.role == 'side_to_side': self.side_to_side_main_cycle()
         if self.role == 'forward': self.forward_main_cycle(self.second_pressed_button)
         if self.role == 'forward_v2': self.forward_v2_main_cycle()
-        if self.role == 'marathon': self.marathon_main_cycle()
+        if self.role == 'marathon':  self.test_walk_main_cycle() #self.marathon_main_cycle()
         if self.role == 'penalty_Shooter': self.penalty_Shooter_main_cycle()
         if self.role == 'run_test': self.run_test_main_cycle(self.second_pressed_button)
         if self.role == 'rotation_test': self.rotation_test_main_cycle()
@@ -1093,9 +1093,13 @@ class Player():
         self.motion.walk_Final_Pose()
 
     def test_walk_main_cycle(self):
-        stepLength = 0
-        self.motion.gaitHeight = 190
-        number_Of_Cycles = 20
+        self.motion.fr1 = 40 #40 #50
+        self.motion.fr2 = 12 #20
+        self.motion.amplitude = 110
+        stepLength = 64
+        self.motion.gaitHeight = 210
+        #self.motion.stepHeight = 40
+        number_Of_Cycles = 10
         self.motion.amplitude = 32
         sideLength = 0
         #self.motion.first_Leg_Is_Right_Leg = False

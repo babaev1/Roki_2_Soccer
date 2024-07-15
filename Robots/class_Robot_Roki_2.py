@@ -72,8 +72,8 @@ class Robot:
         self.LIMALPHA[3][1]=0
  #  end of  paramenetrs Not recommended for change
 
-        self.ztr0 = -(c5+a6+a7+a8+a9+b10 -1) # -223.1
-        self.ztl0 = -(c5+a6+a7+a8+a9+b10 -1) # -223.1
+        self.ztr0 = -(c5+a6+a7+a8+a9+b10 -1) # -220.8
+        self.ztl0 = -(c5+a6+a7+a8+a9+b10 -1) # -220.8
 
         self.ACTIVEJOINTS = ['Leg_right_10','Leg_right_9','Leg_right_8','Leg_right_7','Leg_right_6','Leg_right_5','hand_right_4',
             'hand_right_3','hand_right_2','hand_right_1','Tors1','Leg_left_10','Leg_left_9','Leg_left_8',
