@@ -405,9 +405,9 @@ VBC1_PUSH_1
 VBC1_EQU
 VBC4_FALSE_JUMP LAB621 //if to false
 ;
-[1:211] ;stepLengthOrder = 40;
+[1:211] ;stepLengthOrder = 30;
 VBC2_PUSH_CONST 8 //stepLengthOrder
-VBC2_PUSH_CONST 40 
+VBC2_PUSH_CONST 30 
 VBC1_POP
 [1:212] ;ugol_torsa = 0.65;
 VBC2_PUSH_CONST 16 //ugol_torsa
