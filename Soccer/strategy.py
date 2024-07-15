@@ -1093,14 +1093,14 @@ class Player():
         self.motion.walk_Final_Pose()
 
     def test_walk_main_cycle(self):
-        self.motion.fr1 = 40 #40 #50
-        self.motion.fr2 = 12 #20
-        self.motion.amplitude = 110
+        self.motion.fr1 = 50 #40 #50
+        self.motion.fr2 = 20 #12 #20
+        self.motion.amplitude = 90 #110
         stepLength = 64
         self.motion.gaitHeight = 210
         #self.motion.stepHeight = 40
         number_Of_Cycles = 10
-        self.motion.amplitude = 32
+        #self.motion.amplitude = 32
         sideLength = 0
         #self.motion.first_Leg_Is_Right_Leg = False
         if self.motion.first_Leg_Is_Right_Leg: invert = -1
@@ -1116,7 +1116,7 @@ class Player():
             #if rotation > 0: rotation *= 1.5
             rotation = self.motion.normalize_rotation(rotation)
             #rotation = 0
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+            self.motion.walk_Cycle_slow(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
         
 
