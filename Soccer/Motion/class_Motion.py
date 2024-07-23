@@ -9,7 +9,7 @@ import starkit
 from math import pi
 from scipy.spatial.transform import Rotation
 from Robots.class_Robot_Roki_2 import Robot
-from class_Motion_extention_1 import Motion_extention_1
+from Soccer.Motion.class_Motion_extention_1 import Motion_extention_1
 
 #from ball_Approach_Steps_Seq import *
 #from compute_Alpha_v3 import Alpha

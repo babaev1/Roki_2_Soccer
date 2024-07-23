@@ -79,7 +79,7 @@ class Motion_extention_1:
             alpha01 = math.pi
         else:
             alpha01 = math.pi/self.fr1*2
-        fading = 32
+        fading = self.fr1 /2 #32
         skew = 0.1
         swing_leg_distance_max = 120
         frameNumberPerCycle = 2*self.fr1+2*self.fr2
@@ -93,6 +93,7 @@ class Motion_extention_1:
         self.xr, self.xl = self.params['BODY_TILT_AT_WALK'], self.params['BODY_TILT_AT_WALK']   #
         # correction of sole skew depending on side angle of body when step pushes land
         self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
         for iii in range(0,frameNumberPerCycle ,framestep):
             if half and iii == (frameNumberPerCycle/2 - framestep): break
             self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
@@ -243,16 +244,13 @@ class Motion_extention_1:
                             self.sim_simxSynchronousTrigger(self.clientID)
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
+                    servoDatas = []
                     if self.model == 'Roki_2':
-                        #servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number + 2)]
-                        servoDatas = []
                         for i in range(joint_number):
                             if self.keep_hands_up:
                                 if i in self.hand_joints : continue
                             if self.ACTIVESERVOS[i][0] == 8:
-                                #n = joint_number - 1 + self.ACTIVESERVOS[i][1]
                                 pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2]/2 + 7500)
-                                #servoDatas[n].Id, servoDatas[n].Sio, servoDatas[n].Data = 13, self.ACTIVESERVOS[i][1], pos
                                 servoData = self.Roki.Rcb4.ServoData()
                                 servoData.Id, servoData.Sio, servoData.Data = 13, self.ACTIVESERVOS[i][1], pos
                                 servoDatas.append(servoData)
@@ -260,10 +258,8 @@ class Motion_extention_1:
                             servoData = self.Roki.Rcb4.ServoData()
                             servoData.Id, servoData.Sio, servoData.Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
                             servoDatas.append(servoData)
-                            #servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
                     else:
-                        #servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number)]
-                        servoDatas = []
+                        servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number)]
                         for i in range(joint_number):
                             if self.keep_hands_up:
                                 if i in self.hand_joints : continue
@@ -271,11 +267,7 @@ class Motion_extention_1:
                             servoData = self.Roki.Rcb4.ServoData()
                             servoData.Id, servoData.Sio, servoData.Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
                             servoDatas.append(servoData)
-                            #servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
-                    if j == 0:
-                        a=self.rcb.setServoPosAsync(servoDatas, 10, 9)
-                    else:
-                        a=self.rcb.setServoPosAsync(servoDatas, self.frames_per_cycle, 0)
+                    a=self.rcb.setServoPosAsync(servoDatas, self.frames_per_cycle, 0)
         # returning xr, xl, yr, yl to initial value
         self.xr, self.xl, self.yr, self.yl = xr_old, xl_old, yr_old, yl_old
         self.local.coord_shift[0] = self.cycle_step_yield*stepLength/64/1000
@@ -283,5 +275,6 @@ class Motion_extention_1:
             self.local.coord_shift[1] = -self.side_step_right_yield * abs(sideLength)/20/1000
         else: self.local.coord_shift[1] = self.side_step_left_yield * abs(sideLength)/20/1000
         self.local.coordinate_record(odometry = True, shift = True)
+        if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
 
 

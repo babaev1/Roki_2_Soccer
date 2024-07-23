@@ -1093,9 +1093,9 @@ class Player():
         self.motion.walk_Final_Pose()
 
     def test_walk_main_cycle(self):
-        self.motion.fr1 = 50 #40 #50
+        self.motion.fr1 = 40 #40 #50
         self.motion.fr2 = 20 #12 #20
-        self.motion.amplitude = 90 #110
+        self.motion.amplitude = 110 #110
         stepLength = 64
         self.motion.gaitHeight = 210
         #self.motion.stepHeight = 40
