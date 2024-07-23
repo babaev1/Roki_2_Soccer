@@ -1,5 +1,5 @@
 from picamera2 import Picamera2
-rom libcamera import controls
+from libcamera import controls
 import cv2
 import time
 import numpy as np
@@ -35,7 +35,7 @@ def camera_process(size, side_shift, stopFlag):
     picam2 = Picamera2(camera_num=0)
     led = Led()
     picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)})) 
-    self.picam2.set_controls({"AeExposureMode":  controls.AeExposureModeEnum.Short})
+    picam2.set_controls({"AeExposureMode":  controls.AeExposureModeEnum.Short})
     picam2.start()
     count = 0
     start_time = time.perf_counter()
@@ -45,8 +45,8 @@ def camera_process(size, side_shift, stopFlag):
         request.release()
         im = cv2.cvtColor(im, cv2.COLOR_YUV420p2GRAY)
         im, size.value, side_shift.value = detect_aruco_markers(im, led)     # Обнаружение аруко маркеров
-        #cv2.imshow("Camera", im)
-        #cv2.waitKey(10)
+        cv2.imshow("Camera", im)
+        cv2.waitKey(10)
         count += 1
         if count == 100:
             count = 0

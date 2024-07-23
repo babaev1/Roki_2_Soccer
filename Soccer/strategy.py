@@ -869,11 +869,11 @@ class Player():
             # write motion parameters to zubr-controller motion
             intercom.memISet(var.orderFromHead, 0)              #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
             intercom.memISet(var.cycle_number, 33)
-            intercom.memISet(var.hipTilt, 80)
+            intercom.memISet(var.hipTilt, 300)
             intercom.memISet(var.fps, 2)
-            intercom.memISet(var.stepLengthOrder, 40)
+            intercom.memISet(var.stepLengthOrder, 30)
             intercom.memISet(var.gaitHeight, 135)
-            intercom.memISet(var.stepHeight, 35)
+            intercom.memISet(var.stepHeight, 30)
             intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
             labels = [[], [], [], ['start'], []]
             pressed_button = self.motion.push_Button(labels)
@@ -1093,9 +1093,9 @@ class Player():
         self.motion.walk_Final_Pose()
 
     def test_walk_main_cycle(self):
-        self.motion.fr1 = 50 #40 #50
+        self.motion.fr1 = 40 #40 #50
         self.motion.fr2 = 20 #12 #20
-        self.motion.amplitude = 90 #110
+        self.motion.amplitude = 110 #110
         stepLength = 64
         self.motion.gaitHeight = 210
         #self.motion.stepHeight = 40
