@@ -675,6 +675,8 @@ function declare void stabilizeRotationByIMU(
 ) end function declare
 function declare void mixing(
 ) end function declare
+function declare void setup_final(
+) end function declare
 function declare void runTest(
 ) end function declare
 function declare void main(
@@ -1447,15 +1449,15 @@ function declare void setup(
   ( <float 47:ztl0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
   ( <float 25:zr> ) = ( ( <float 32:zl> ) = ( -(1) ) ) 
   ( <int 13:selfInitPoses> ) = (10) 
-  ( <float 3:stepLength> ) = (0) 
+  ( <float 3:stepLength> ) = (10) 
   ( <float 4:sideLength> ) = (0) 
   ( <float 5:rotation> ) = (0) 
   ( <int 12:selfFirstLegIsRightLeg> ) = (1) 
   ( <int 13:selfInitPoses> ) = (20) 
   ( <float 48:stepZtr> ) = ( ( ( <float 46:ztr0> ) + ( <float 40:gaitHeight> ) ) / ( <int 13:selfInitPoses> ) ) 
   ( <float 49:stepZtl> ) = ( ( ( <float 47:ztl0> ) + ( <float 40:gaitHeight> ) ) / ( <int 13:selfInitPoses> ) ) 
-  ( <float 57:bodyTiltAtWalk> ) = (0.04) 
-  ( <float 58:solyLandingSkew> ) = (0) 
+  ( <float 57:bodyTiltAtWalk> ) = (0.01) 
+  ( <float 58:solyLandingSkew> ) = (0.05) 
  if   ( <float 50:stepYtr> ) = ( ( ( <float 36:amplitude> ) / (2) ) / ( <int 13:selfInitPoses> ) ) 
   ( <float 51:stepYtl> ) = ( ( ( <float 36:amplitude> ) / (2) ) / ( <int 13:selfInitPoses> ) ) 
   ( <float 37:alpha01> ) = (3.14159) 
@@ -1666,6 +1668,21 @@ function declare void mixing(
 
 
 
+function declare void setup_final(
+) end function declare
+{
+ {
+  ( <int 38:fr1> ) = (20) 
+  ( <int 39:fr2> ) = (20) 
+  ( <float 36:amplitude> ) = (20) 
+  ( <float 57:bodyTiltAtWalk> ) = (0.01) 
+  ( <float 58:solyLandingSkew> ) = (0.08) 
+ return
+ }
+}
+
+
+
 function declare void runTest(
 ) end function declare
 {
@@ -1675,16 +1692,16 @@ function declare void runTest(
 ) end function declare
 > 
   ( <int 52:stepType> ) = (0) 
-  ( <float 3:stepLength> ) = ( ( -(10) ) / (3) ) 
+  ( <float 3:stepLength> ) = ( (50) / (3) ) 
  call  <function declare void walkCycle(
 ) end function declare
 > 
   ( <int 52:stepType> ) = (2) 
-  ( <float 3:stepLength> ) = ( ( ( -(10) ) * (2) ) / (3) ) 
+  ( <float 3:stepLength> ) = ( ( (50) * (2) ) / (3) ) 
  call  <function declare void walkCycle(
 ) end function declare
 > 
-  ( <float 3:stepLength> ) = ( -(10) ) 
+  ( <float 3:stepLength> ) = (50) 
   {
   }
  loop  ( <int 52:stepType> ) = (1) 
@@ -1706,6 +1723,9 @@ function declare void main(
  {
   ( <int 2:slowWalk> ) = (0) 
  call  <function declare void setup(
+) end function declare
+> 
+ call  <function declare void setup_final(
 ) end function declare
 > 
   ( <float 4:sideLength> ) = ( -(5) ) 
