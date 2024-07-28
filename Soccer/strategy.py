@@ -860,6 +860,8 @@ class Player():
             # start Process of Vision Pipeline
             cam_proc.start()
             cam_proc.join()
+            with open('/dev/shm/process.txt', 'a') as process_file:
+                print(str(cam_proc.id), file= process_file)
 
             var = roki2met.roki2met.sprint_v4
             intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
