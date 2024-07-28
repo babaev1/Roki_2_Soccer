@@ -1,6 +1,7 @@
 from genericpath import isfile
 import sys
 import os
+import signal
 import math
 import json
 import time
@@ -61,9 +62,11 @@ try:
                 if os.path.isfile('/dev/shm/btn2'):
                     os.system("espeak -ven-m1 -a200 'Process re-load'")
                     p01.terminate()
-                    with open('/dev/shm/process.txt', 'r') as process_file:
-                        pid = process_file.reads()
-                        os.kill(pid)
+                    if os.path.isfile('/dev/shm/process.txt'):
+                        with open('/dev/shm/process.txt', 'r') as process_file:
+                            pid = int(process_file.read())
+                            os.kill(pid, signal.SIGTERM)
+                        os.remove('/dev/shm/process.txt')
                     p01.poll()
                     print('returncode =', p01.returncode)
                     timer1 = time.perf_counter()
