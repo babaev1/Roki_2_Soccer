@@ -859,6 +859,7 @@ class Player():
             cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift, stopFlag), daemon = True)
             # start Process of Vision Pipeline
             cam_proc.start()
+            cam_proc.join()
 
             var = roki2met.roki2met.sprint_v4
             intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
@@ -902,6 +903,7 @@ class Player():
                         intercom.memISet(var.orderFromHead, 4)   
                     elif aruco_size == 0:
                         intercom.memISet(var.orderFromHead, 0) 
+                        print('No marker')
                     else:
                         if aruco_shift > 0:
                             print('Go Left')
