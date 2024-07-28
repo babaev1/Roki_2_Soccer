@@ -4,7 +4,7 @@ import math
 import json
 import time
 import Soccer.utility
-#import threading
+import threading
 import random
 #from Soccer.Motion.class_stm_channel import STM_channel
 #from Soccer.Vision.class_Vision_RPI import Vision_RPI
@@ -216,7 +216,7 @@ class Player():
         if self.role == 'side_to_side': self.side_to_side_main_cycle()
         if self.role == 'forward': self.forward_main_cycle(self.second_pressed_button)
         if self.role == 'forward_v2': self.forward_v2_main_cycle()
-        if self.role == 'marathon':  self.test_walk_main_cycle() #self.marathon_main_cycle()
+        if self.role == 'marathon':  self.marathon_main_cycle()
         if self.role == 'penalty_Shooter': self.penalty_Shooter_main_cycle()
         if self.role == 'run_test': self.run_test_main_cycle(self.second_pressed_button)
         if self.role == 'rotation_test': self.rotation_test_main_cycle()
@@ -841,6 +841,12 @@ class Player():
             self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
 
     def sprint(self, second_pressed_button):
+        self.motion.params['SPRINT_HIP_TILT'] = 300
+        self.motion.params['SPRINT_STEP_LENGTH'] = 30
+        self.motion.params['SPRINT_GAIT_HEIGHT'] = 135
+        self.motion.params['SPRINT_STEP_HEIGHT'] = 30
+        self.motion.params['SPRINT_FPS'] = 2
+        self.motion.params['SPRINT_UGOL_TORSA'] = 0.3
         if self.glob.SIMULATION == 5:
             from Soccer.Vision import lookARUCO
 
@@ -858,53 +864,63 @@ class Player():
             intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
             self.glob.rcb.motionPlay(23)
 
-            # wait until motion paramenetrs initiated 
             while True:
-                ok, timeStep = intercom.memIGet(var.timeStep)
-                if ok: print('timeStep :', timeStep)
-                else: print(intercom.GetError())
-                if timeStep == 1: break
-                time.sleep(0.25)
+                # wait until motion paramenetrs initiated 
+                while True:
+                    ok, restart_flag = intercom.memIGet(var.restart_flag)
+                    if ok: print('restart_flag :', restart_flag)
+                    else: print(intercom.GetError())
+                    if restart_flag == 0: break
+                    time.sleep(0.25)
             
-            # write motion parameters to zubr-controller motion
-            intercom.memISet(var.orderFromHead, 0)              #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
-            intercom.memISet(var.cycle_number, 33)
-            intercom.memISet(var.hipTilt, 300)
-            intercom.memISet(var.fps, 2)
-            intercom.memISet(var.stepLengthOrder, 30)
-            intercom.memISet(var.gaitHeight, 135)
-            intercom.memISet(var.stepHeight, 30)
-            intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
-            labels = [[], [], [], ['start'], []]
-            pressed_button = self.motion.push_Button(labels)
-            intercom.memISet(var.startStop, 1)
-            while not stopFlag:
-                aruco_size = size.value
-                aruco_shift = side_shift.value
-                if aruco_size > 90:
-                    print('Reverse')
-                    intercom.memISet(var.orderFromHead, 4)   
-                elif aruco_size == 0:
-                    intercom.memISet(var.orderFromHead, 0) 
-                else:
-                    if aruco_shift > 0:
-                        print('Go Left')
-                        intercom.memISet(var.orderFromHead, 2)
-                    elif aruco_shift < 0:
-                        print('Go Right')
-                        intercom.memISet(var.orderFromHead, 3)
+                # write motion parameters to zubr-controller motion
+                intercom.memISet(var.orderFromHead, 0)              #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
+                intercom.memISet(var.cycle_number, 33)
+                intercom.memISet(var.hipTilt, self.motion.params['SPRINT_HIP_TILT'])
+                intercom.memISet(var.fps, self.motion.params['SPRINT_FPS'])
+                intercom.memISet(var.stepLengthOrder, self.motion.params['SPRINT_STEP_LENGTH'])
+                intercom.memISet(var.gaitHeight, self.motion.params['SPRINT_GAIT_HEIGHT'])
+                intercom.memISet(var.stepHeight, self.motion.params['SPRINT_STEP_HEIGHT'])
+                intercom.memFSet(var.ugol_torsa, self.motion.params['SPRINT_UGOL_TORSA'])
+                intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
+                #labels = [[], [], [], ['start'], []]
+                #pressed_button = self.motion.push_Button(labels)
+                #intercom.memISet(var.startStop, 1)
+                while True:
+                    ok, restart_flag = intercom.memIGet(var.restart_flag)
+                    if ok: print('restart_flag :', restart_flag)
+                    else: print(intercom.GetError())
+                    if restart_flag == 1: break
+                    time.sleep(0.25)
+                while not stopFlag:
+                    ok, restart_flag = intercom.memIGet(var.restart_flag)
+                    if restart_flag == 0: break
+                    aruco_size = size.value
+                    aruco_shift = side_shift.value
+                    if aruco_size > 90:
+                        print('Reverse')
+                        intercom.memISet(var.orderFromHead, 4)   
+                    elif aruco_size == 0:
+                        intercom.memISet(var.orderFromHead, 0) 
                     else:
-                        print('Go Straight')
-                        intercom.memISet(var.orderFromHead, 1)
-                time.sleep(0.05)
+                        if aruco_shift > 0:
+                            print('Go Left')
+                            intercom.memISet(var.orderFromHead, 2)
+                        elif aruco_shift < 0:
+                            print('Go Right')
+                            intercom.memISet(var.orderFromHead, 3)
+                        else:
+                            print('Go Straight')
+                            intercom.memISet(var.orderFromHead, 1)
+                    time.sleep(0.05)
 
             return
         self.motion.first_Leg_Is_Right_Leg == True
         timeStep = 1
         number_Of_Cycles = 20
         if timeStep == 1:                   # 10ms
-            stepLength = 40 #100
-            self.motion.ugol_torsa = 0.65 #0.65
+            stepLength = 30 #100
+            self.motion.ugol_torsa = 0.3 #0.65
             self.motion.gaitHeight = 135 # 150
             self.motion.stepHeight = 35  # 40
             self.motion.fr1 = 4  #3
@@ -1022,57 +1038,82 @@ class Player():
         self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
 
     def marathon_main_cycle(self):
+        self.motion.params['MARATHON_STEP_LENGTH'] = 0
+        self.motion.params['MARATHON_GAIT_HEIGHT'] = 195
+        self.motion.params['MARATHON_STEP_HEIGHT'] = 40
+        self.motion.params['MARATHON_FPS'] = 4
+        self.motion.params['MARATHON_UGOL_TORSA'] = 0
+        self.motion.params['MARATHON_BODY_TILT_AT_WALK'] = 0.04
         if self.glob.SIMULATION == 5:
+            from Soccer.Vision import lookAtLine
+
+            # Pipeline variables
+            turn_shift = Value('i', 0)       #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
+                                             #  0X - no shift, 2X - shift to left, 3X - shift to right
+
+            # Process for Vision Pipeline
+            cam_proc = Process(target=lookAtLine.camera_process, args=(turn_shift), daemon = True)
+            # start Process of Vision Pipeline
+            cam_proc.start()
+
             var = roki2met.roki2met.marathon
             intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
             self.glob.rcb.motionPlay(24)
 
-            # wait until motion paramenetrs initiated 
             while True:
-                ok, restart_flag = intercom.memIGet(var.restart_flag)
-                if ok: print('restart_flag :', restart_flag)
-                else: print(intercom.GetError())
-                if restart_flag == 0: break
-                time.sleep(0.25)
+                # wait until motion paramenetrs initiated 
+                while True:
+                    ok, restart_flag = intercom.memIGet(var.restart_flag)
+                    if ok: print('restart_flag :', restart_flag)
+                    else: print(intercom.GetError())
+                    if restart_flag == 0: break
+                    time.sleep(0.25)
             
-            # write motion parameters to zubr-controller motion
-            intercom.memISet(var.orderFromHead, 0)              #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
-            intercom.memISet(var.cycle_number, 20000)
-            intercom.memISet(var.hipTilt, 0)
-            intercom.memISet(var.fps, 4)
-            intercom.memISet(var.stepLengthOrder, 0)
-            intercom.memISet(var.gaitHeight, 195)
-            intercom.memISet(var.stepHeight, 40)
-            intercom.memFSet(var.ugol_torsa, 0)
-            intercom.memFSet(var.bodyTiltAtWalk, 0.04)
-            intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
-            # labels = [[], [], [], ['start'], []]
-            # pressed_button = self.motion.push_Button(labels)
-            # intercom.memISet(var.startStop, 1)
-            # while not stopFlag:
-            #     aruco_size = size.value
-            #     aruco_shift = side_shift.value
-            #     if aruco_size > 90:
-            #         print('Reverse')
-            #         intercom.memISet(var.orderFromHead, 4)   
-            #     elif aruco_size == 0:
-            #         intercom.memISet(var.orderFromHead, 0) 
-            #     else:
-            #         if aruco_shift > 0:
-            #             print('Go Left')
-            #             intercom.memISet(var.orderFromHead, 2)
-            #         elif aruco_shift < 0:
-            #             print('Go Right')
-            #             intercom.memISet(var.orderFromHead, 3)
-            #         else:
-            #             print('Go Straight')
-            #             intercom.memISet(var.orderFromHead, 1)
-            #     time.sleep(0.05)
-            time.sleep(3600)
+                # write motion parameters to zubr-controller motion
+                intercom.memISet(var.orderFromHead, 0)              #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
+                                                                    #  0X - no shift, 2X - shift to left, 3X - shift to right
+                intercom.memISet(var.cycle_number, 20000)
+                intercom.memISet(var.hipTilt, 0)
+                intercom.memISet(var.fps, self.motion.params['MARATHON_FPS'])
+                intercom.memISet(var.stepLengthOrder, self.motion.params['MARATHON_STEP_LENGTH'])
+                intercom.memISet(var.gaitHeight, self.motion.params['MARATHON_GAIT_HEIGHT'])
+                intercom.memISet(var.stepHeight, self.motion.params['MARATHON_STEP_HEIGHT'])
+                intercom.memFSet(var.ugol_torsa, self.motion.params['MARATHON_UGOL_TORSA'])
+                intercom.memFSet(var.bodyTiltAtWalk, self.motion.params['MARATHON_BODY_TILT_AT_WALK'])
+                intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
+
+                while True:
+                    ok, restart_flag = intercom.memIGet(var.restart_flag)
+                    if ok: print('restart_flag :', restart_flag)
+                    else: print(intercom.GetError())
+                    if restart_flag == 1: break
+                    time.sleep(0.25)
+                while True:
+                    ok, restart_flag = intercom.memIGet(var.restart_flag)
+                    if restart_flag == 0: break
+                    intercom.memISet(var.orderFromHead, turn_shift.value)
+                    time.sleep(0.05)
+        # simulation:
+
+        # Pipeline variables
+        turn_shift = Value('i', 0)       #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
+                                            #  0X - no shift, 2X - shift to left, 3X - shift to right
+        """
+        stop_flag = Value('i', 0)
+        # Process for Vision Pipeline
+        cam_proc = Process(target= self.glob.vision.detect_Line_Follow_Stream, args=(turn_shift, stop_flag), daemon = True)
+        # start Process of Vision Pipeline
+        cam_proc.start()
+        """
+        event = threading.Event()
+        camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift))
+        camera_thread.setDaemon(True)
+        camera_thread.start()
+
         self.motion.head_Return(0, self.motion.neck_play_pose)
-        stepLength = 0
+        stepLength = 50
         self.motion.gaitHeight = 190
-        number_Of_Cycles = 20000
+        number_Of_Cycles = 100
         self.motion.amplitude = 32
         sideLength = 0
         #self.motion.first_Leg_Is_Right_Leg = False
@@ -1080,17 +1121,31 @@ class Player():
         else: invert = 1
         self.motion.walk_Initial_Pose()
         number_Of_Cycles += 1
+        direction = 0
         for cycle in range(number_Of_Cycles):
+            order_from_Head = self.glob.vision.turn_shift
+            print('order_from_Head: ', order_from_Head)
+            shift = order_from_Head // 10
+            turn = order_from_Head % 10
+            if shift == 2 : sideLength = -20
+            elif shift == 3 : sideLength = 20
+            else: sideLength = 0
             stepLength1 = stepLength
             if cycle ==0 : stepLength1 = stepLength/3
             if cycle ==1 : stepLength1 = stepLength/3 * 2
             self.motion.refresh_Orientation()
-            rotation = 0 + invert * self.motion.imu_body_yaw() * 1.1
+            
+            if turn == 2: direction += 0.2
+            elif turn == 3: direction -= 0.2
+            #elif turn == 1: rotation = 0
+            rotation = direction + invert * self.motion.imu_body_yaw() * 1.1
             #if rotation > 0: rotation *= 1.5
             rotation = self.motion.normalize_rotation(rotation)
+
             #rotation = 0
             self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
+        event.set()
 
     def test_walk_main_cycle(self):
         self.motion.fr1 = 40 #40 #50

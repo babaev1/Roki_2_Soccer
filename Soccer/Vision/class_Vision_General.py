@@ -6,6 +6,9 @@ from scipy.spatial.transform import Rotation
 import numpy as np
 from Soccer.Vision.ransac_line_segments_simulation import build_line_segments
 import threading
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn import linear_model
 
 class Vision_General:
     def __init__(self, glob):
@@ -144,6 +147,7 @@ class Vision_General:
 
     def image_point_to_relative_coord_on_floor(self, column, row, for_ball = False, absolute = False):
         if for_ball: triangulation_base  = self.camera_elevation - self.glob.params['DIAMETER_OF_BALL'] / 2
+        else: triangulation_base  = self.camera_elevation
         #print('triangulation_base = ', triangulation_base)
         u, v = self.undistort_points(column, row)
         point_angle_horizontal = (self.undistort_cx -u)/ self.focal_length_horizontal        # argument of math.atan
@@ -341,8 +345,167 @@ class Vision_General:
         else: result = False
         return result, displacement
 
+    def detect_Line_Follow_Stream(self, event, turn_shift):
+        x_size = 200
+        y_size = 80
+        self.turn_shift = 0
+        while True:
+            turn = 0
+            shift = 0
+            if event.is_set(): break
+            result, self.camera_elevation = self.glob.motion.camera_elevation()
+            camera_result, img1, self.pitch, self.roll, yaw, pan = self.snapshot()
+            if camera_result:
+                th = self.TH['orange ball']['th']
+                low_th = (int(th[0] * 2.55), th[2] + 128, th[4] + 128)
+                high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
+                image = cv2.resize(img1[79:][:][:],(x_size, y_size))
+                labimg = cv2.cvtColor (image, cv2.COLOR_BGR2LAB)
+                mask = cv2.inRange (labimg, low_th, high_th)
+                #self.display_camera_image(mask, 'Line')
+                x_list = []
+                y_list = []
+                for x in range(x_size):
+                    for y in range(y_size):
+                        if mask[y][x] : 
+                            x_list.append(x)
+                            y_list.append(y_size - y)
+                if len(x_list) == 0: continue
+                try:
+                    coeff = self.quadratic_ransac_curve_fit(np.array(x_list), np.array(y_list))
+                except Exception: continue
+                if (coeff[1]**2 - 4 * coeff[0] * coeff[2]) >= 0:
+                    bottom_root1 = (- coeff[1] + math.sqrt(coeff[1]**2 - 4 * coeff[0] * coeff[2]))/(2 * coeff[2])
+                    bottom_root2 = (- coeff[1] - math.sqrt(coeff[1]**2 - 4 * coeff[0] * coeff[2]))/(2 * coeff[2])
+                    #print('bottom_root1 :', bottom_root1, 'bottom_root2 :', bottom_root2)
+                    if 0 <= bottom_root1 <= x_size: bottom_root = bottom_root1
+                    if 0 <= bottom_root2 <= x_size: bottom_root = bottom_root2
+                    #print('bottom_root :', bottom_root)
+                    result, relative_x_on_floor, relative_y0_on_floor = self.image_point_to_relative_coord_on_floor(int(bottom_root), 160,
+                                                                for_ball = False)
+                    print('relative_y0_on_floor :', relative_y0_on_floor)
+                    if relative_y0_on_floor > 100: shift = 20
+                    elif relative_y0_on_floor < -100: shift = 30
+                    else: shift = 10
+                else: shift = 0
+                if (coeff[1]**2 - 4 * (coeff[0] - y_size) * coeff[2]) >= 0:
+                    bottom_root1 = (- coeff[1] + math.sqrt(coeff[1]**2 - 4 * (coeff[0] - y_size) * coeff[2]))/(2 * coeff[2])
+                    bottom_root2 = (- coeff[1] - math.sqrt(coeff[1]**2 - 4 * (coeff[0] - y_size) * coeff[2]))/(2 * coeff[2])
+                    #print('bottom_root1 :', bottom_root1, 'bottom_root2 :', bottom_root2)
+                    if 0 <= bottom_root1 <= x_size: bottom_root = bottom_root1
+                    if 0 <= bottom_root2 <= x_size: bottom_root = bottom_root2
+                    #print('bottom_root :', bottom_root)
+                    result, relative_x_on_floor, relative_y1_on_floor = self.image_point_to_relative_coord_on_floor(int(bottom_root), y_size,
+                                                                for_ball = False)
+                    print('relative_y1_on_floor :', relative_y1_on_floor)
+                    if relative_y1_on_floor > 100: turn = 2
+                    elif relative_y1_on_floor < -100: turn = 3
+                    else: turn = 1
+                else: turn = 0
+                self.turn_shift = turn + shift
+                #print('number of detected points: ', np.sum(mask/255))
+            time.sleep(0.5)
 
 
+                #img = Image(img1)
+                ##self.display_camera_image(self.image, window = 'Original')
+                #blobs = img.find_blobs([self.TH['orange ball']['th']],
+                #                    pixels_threshold=self.TH['orange ball']['pixel'],
+                #                    area_threshold=self.TH['orange ball']['area'],
+                #                    merge=True)
+                #len_blobs = len(blobs)
+                #height = self.glob.params["CAMERA_VERTICAL_RESOLUTION"]
+                #order = []
+                #for i in range(len_blobs):
+                #    order.append([height - blobs[i].cy(), i,0,0])
+                #sorted_order = sorted(order)
+                #new_order_len = min(10, len_blobs)
+                #new_order = sorted_order[:new_order_len]
+                #for i in range(new_order_len):
+                #    ball_column = blobs[new_order[i][1]].cx()
+                #    ball_row = blobs[new_order[i][1]].cy()
+                #    result, relative_x_on_floor, relative_y_on_floor = self.image_point_to_relative_coord_on_floor(ball_column, ball_row,
+                #                                                for_ball = True)
+                #    new_order[i][0] = int(math.sqrt(relative_x_on_floor *relative_x_on_floor + relative_y_on_floor * relative_y_on_floor))
+                #    new_order[i][2] = int(relative_x_on_floor)
+                #    new_order[i][3] = int(relative_y_on_floor)
+                #sorted_new_order = sorted(new_order)
+                #if new_order_len != 0:
+                #    for i in range(new_order_len):
+                #        if sorted_new_order[i][0] == 0 : continue
+                #        if sorted_new_order[i][0] > 5000 : break            # getting off if distances more than 5m.
+                #        ball_blob = blobs[sorted_new_order[i][1]]
+                #        if self.orange_ball_is_on_green_field(ball_blob, img, distance_mm = sorted_new_order[i][0]): 
+                #            self.visible_reaction_ball()
+                #            print('relative coord of ball on floor (x,y)= ', sorted_new_order[i][2], sorted_new_order[i][3])
+                #            img.draw_rectangle(ball_blob.rect())
+                #            self.display_camera_image(img.img, 'Ball')
+                #            distance = sorted_new_order[i][0] / 1000
+                #            course = math.atan2(sorted_new_order[i][3], sorted_new_order[i][2])
+                #            position.append([course, distance])
+                #            see_ball += 1
+                #            break
+
+    def quadratic_ransac_curve_fit(self, x, y):
+
+        x1 = x.reshape((-1, 1))
+        y1 = y.reshape((-1, 1))
+
+        xi = np.linspace(min(x), max(x), 500).reshape((-1, 1))
+
+        poly_2 = PolynomialFeatures(degree=2)
+        x_2 = poly_2.fit_transform(x1)
+        xi_2 = poly_2.fit_transform(xi)
+
+        reg = linear_model.RANSACRegressor(linear_model.LinearRegression())
+        reg.fit(x_2, y1)
+        yi = reg.predict(xi_2)
+        coeff = reg.estimator_.coef_
+        intercept = reg.estimator_.intercept_[0]
+        coeff = np.array([intercept, coeff[0, 1], coeff[0, 2]])
+
+        inliers = reg.inlier_mask_
+        outliers = np.logical_not(inliers)
+
+        #plt.plot(x[inliers], y[inliers], 'k.', label='inliers')
+        #plt.plot(x[outliers], y[outliers], 'r.', label='outliers')
+        #plt.plot(xi, yi, label='Quadratic Curve')
+
+        #plt.xlabel('x')
+        #plt.ylabel('y')
+        #plt.title('Quadratic')
+        #print('Equation: {0:.5f} + {1:.5f}x + {2:.5f}x^2'.format(coeff[0], coeff[1], coeff[2]))
+        #print('Y-intercept: {}'.format(coeff[0]))
+        #plt.legend()
+        #plt.show()
+        return coeff
+
+    def linear_ransac_curve_fit(self, x, y):
+        x1 = np.array(x).reshape((-1, 1))
+        y1 = np.array(y).reshape((-1, 1))
+        xi = np.linspace(min(x), max(x), 500).reshape((-1, 1))
+    
+        reg = linear_model.RANSACRegressor(linear_model.LinearRegression())
+        reg.fit(x1, y1)
+        yi = reg.predict(xi)
+        coeff = reg.estimator_.coef_
+        intercept = reg.estimator_.intercept_[0]
+        coeff = np.array([intercept, coeff[0, 0]])
+
+        inliers = reg.inlier_mask_
+        outliers = np.logical_not(inliers)
+
+        plt.plot(x[inliers], y[inliers], 'k.', label='inliers')
+        plt.plot(x[outliers], y[outliers], 'r.', label='outliers')
+        plt.plot(xi, yi, label='Linear Regression')
+    
+        plt.xlabel('x')
+        plt.ylabel('y')
+        plt.title('Linear')
+        print('Equation: {0:.5f} + {1:.5f}x'.format(coeff[0], coeff[1]))
+        print('Y-intercept: {}'.format(coeff[0]))
+        plt.legend()
+        plt.show()
 
 if __name__=="__main__":
     pass

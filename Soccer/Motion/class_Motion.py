@@ -1125,18 +1125,18 @@ class Motion(Robot, Motion_extention_1):
     def perform_motion(self, phase, iteration, direction):
         self.stabilize_rotation(direction)
         if self.rotation > 0: 
-            self.xtr *= 1.2
-            self.xtl *= 0.8
+            self.xtr *= 1.0
+            self.xtl *= 0.3
         if self.rotation < 0: 
-            self.xtl *= 1.2
-            self.xtr *= 0.8
+            self.xtl *= 1.0
+            self.xtr *= 0.3
         angles = self.computeAlphaForWalk(hands_on = True)
         if self.rotation > 0: 
-            self.xtr /= 1.2
-            self.xtl /= 0.8
+            self.xtr /= 1.3
+            self.xtl /= 0.7
         if self.rotation < 0: 
-            self.xtl /= 1.2
-            self.xtr /= 0.8
+            self.xtl /= 1.3
+            self.xtr /= 0.7
         if not self.falling_Flag ==0: return
         if len(angles)==0:
             print('bad_ik_calc:', 'phase:', phase, ' i = ', iteration, 'xtr:', int(self.xtr), 'ytr:', int(self.ytr), 'ztr:', self.ztr, 'xtl:', int(self.xtl), 'ytl:', int(self.ytl), 'ztl:', self.ztl )

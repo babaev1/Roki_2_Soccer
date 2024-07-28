@@ -7,7 +7,8 @@
 */
 #include <roki2met.h>
 
-int slowWalk;
+int restart_flag;
+int pitStop;
 
 float stepLength; // = 0.0    # -50 - +70. Best choise 64 for forward. Maximum safe value for backward step -50.
 float sideLength; // = 0.0         # -20 - +20. Side step length to right (+) and to left (-)
@@ -32,9 +33,6 @@ float rotationYieldLeft;
 
 int   framestep;
 
-//        self.body_euler_angle ={}
-//        self.head_quaternion = None
-//        self.activePose = []
 float xtr; // = 0
 float ytr; // = -self.d10   #-53.4
 float ztr; // = -self.gaitHeight
@@ -83,8 +81,6 @@ int fps;
 int frames_per_cycle;
 int relaxFootR;
 int relaxFootL;
-//relaxFootR = 0;
-//relaxFootL = 0;
 float bodyTiltAtWalk;
 float solyLandingSkew;
 int segments_num;
@@ -209,13 +205,11 @@ void setup() {
 
   ztr0 = -(svIkC5+svIkA6+svIkA7+svIkA8+svIkA9+svIkB10 - 1); // -223.1
   ztl0 = -(svIkC5+svIkA6+svIkA7+svIkA8+svIkA9+svIkB10 - 1); // -223.1
-  
+
   zr = zl = -1;
-  
-  
+
   selfInitPoses = 10;
-  
- // selfTIK2RAD = 0.00058909;
+
   stepLength = 10.0;    // -50 - +70. Best choise 64 for forward. Maximum safe value for backward step -50.
   sideLength = 0.0;    // -20 - +20. Side step length to right (+) and to left (-)
   rotation = 0;        // -45 - +45 degrees Centigrade per step + CW, - CCW.
@@ -228,16 +222,10 @@ void setup() {
   bodyTiltAtWalk = 0.01;
   solyLandingSkew = 0.05;
   
-  if( slowWalk ) {
-    fr1 = 50; //8;           // frame number for 1-st phase of gait ( two legs on floor)
-    fr2 = 20; //12;          // frame number for 2-nd phase of gait ( one leg in air)
-    amplitude = 110;    // mm side amplitude (maximum distance between most right and most left position of Center of Mass) 53.4*2
-    }
-  else {
     fr1 = 20; //8;           // frame number for 1-st phase of gait ( two legs on floor)
     fr2 = 20;  //16;          // frame number for 2-nd phase of gait ( one leg in air)
     amplitude = 20; //10;    // mm side amplitude (maximum distance between most right and most left position of Center of Mass) 53.4*2
-    }
+
   stepYtr = amplitude / 2.0 / selfInitPoses;
   stepYtl = amplitude / 2.0 / selfInitPoses;
 //        if self.fr1 == 0:
@@ -633,6 +621,10 @@ void setup_final(){
   amplitude = 20; //10; 
   bodyTiltAtWalk = 0.01;
   solyLandingSkew = 0.08;
+  relaxFootR = 0;
+  relaxFootL = 0;
+  sideLength = 0;
+  rotation = 0;
 }
 
 void runTest() {
@@ -666,16 +658,15 @@ void runTest() {
 
 
 void main() {
-  slowWalk = 0;
+  restart_flag = 0;
+  pitStop = 0;
   setup();
   setup_final();
-  sideLength = -5;
-  rotation = 0;
-  relaxFootR = 0;
-  relaxFootL = 0;
 
-  //Процесс запускаем не сразу, а через некоторое время (100 фреймов - 1 сек)
-  sfWaitFrame( 100 );
+  int frameCount = 80;
+  sfPoseGroup(MASK_ALL, 0, frameCount);
+  sfWaitFrame(frameCount);
+
   //testDrop();
   //Фиксируем направление "вперед"
   sfQuaternionToEulerImu();
@@ -683,6 +674,16 @@ void main() {
   
   //Запускаем миксинг
   sfCreateTask( mixing, 20 );
+
+  while (pitStop == 0) sfWaitFrame(1); // waithing to change parameters
+
+  svButtonRight = SV_SLOT_INACTIVE;
+  svButtonLeft = SV_SLOT_INACTIVE;
+  sfBip(1, 1);
+  while (svButtonPress != SV_BUTTON_RIGHT_PRESS) sfWaitFrame(1); // waithing to change parameters
+  svButtonRight = SV_SLOT_RESTART_RUN;
+  svButtonLeft = SV_SLOT_RELAX;
+  restart_flag = 1;
 
   runTest();
   //Переходим к срипту "Напряжен"

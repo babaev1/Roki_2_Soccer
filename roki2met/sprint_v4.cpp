@@ -100,6 +100,7 @@ int flag_event;
 
 float dobavka_x_ot_torsa;
 float tors_angle;
+float reducer;
 
 void setup() {
   orderFromHead = 0;
@@ -196,6 +197,8 @@ void setup() {
 
   timeStep = 1;
   
+  reducer = 0.5;
+  
   stepLengthOrder = 60;
   ugol_torsa = 0.7;  	// tors maximum turning angle in radians
   bodyTiltAtWalk = 0.055;
@@ -209,7 +212,7 @@ void setup() {
   
   if (timeStep == 1){
     stepLengthOrder = 30;
-    ugol_torsa = 0.65;
+    ugol_torsa = 0.3;
     bodyTiltAtWalk = -0.02; 
     hipTilt = 80;
     gaitHeight = 135;
@@ -264,10 +267,12 @@ void stabilizeRotationByIMU(){
   if( rotation < -MATH_PI ) rotation += 2 * MATH_PI;
   if( rotation > 0.3 ) rotation = 0.3;
   if( rotation < -0.3 ) rotation = -0.3;
-  correctedRotation = rotation * 0.25 * 0.23 / (rotation <= 0 ? rotationYieldRight : rotationYieldLeft);
+  //correctedRotation = rotation * 0.25 * 0.23 / (rotation <= 0 ? rotationYieldRight : rotationYieldLeft);
   if (orderFromHead == 1)correctedRotation = 0;
   else if (orderFromHead == 2) correctedRotation = 0.3;
   else if (orderFromHead == 3) correctedRotation = -0.3;
+  else correctedRotation = -rotation;
+  
   //rotation = 0;
 }
 
@@ -277,14 +282,16 @@ int computeAlphaForWalk() {
   //else sfIkAngle( xtr, ytr, ztr, xr, yr, zr, -wr );
   flag = 0;
   torsoAdd = tors_angle * ENC_PER_RADIAN;
-  stabilizeRotationByIMU();
+  //stabilizeRotationByIMU();
   if (correctedRotation > 0) {
-    xtr *= 1.3;
-    xtl *= 0.7;
+    //xtr *= 1.0;
+    //xtl *= 0.5;
+    xtl *= reducer;
     }
   if (correctedRotation < 0) {
-    xtr *= 0.7;
-    xtl *= 1.3;
+    //xtr *= 0.5;
+    //xtl *= 1.0;
+    xtr *= reducer;
     }
   sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
   if( svIkOutPresent ) {
@@ -530,6 +537,7 @@ void walkInit() {
   yl =  solyLandingSkew;
   yr = -solyLandingSkew;
   fase_offset = 0.7; // 1.25; //0.7;
+  stabilizeRotationByIMU();
   }
 
 
@@ -740,6 +748,7 @@ void runTest() {
     stabilizeRotationByIMU();
     walkCycle(0);
     if(orderFromHead == 4) break;
+    orderFromHead = 0;
     }
   //Финальный шаг
   stepType = STEP_LAST;
