@@ -874,6 +874,7 @@ class Player():
             intercom.memISet(var.stepLengthOrder, 30)
             intercom.memISet(var.gaitHeight, 135)
             intercom.memISet(var.stepHeight, 30)
+            intercom.memFSet(var.ugol_torsa, 0.3)
             intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
             labels = [[], [], [], ['start'], []]
             pressed_button = self.motion.push_Button(labels)
