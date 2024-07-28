@@ -7,7 +7,7 @@
 */
 #include <roki2met.h>
 
-
+int restart_flag;
 int timeStep;
 int orderFromHead; // 0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back.
 int pitStop;
@@ -214,7 +214,7 @@ void setup() {
     stepLengthOrder = 30;
     ugol_torsa = 0.3;
     bodyTiltAtWalk = -0.02; 
-    hipTilt = 80;
+    hipTilt = 300;
     gaitHeight = 135;
     stepHeight = 35;
     fps = 2;
@@ -284,14 +284,14 @@ int computeAlphaForWalk() {
   torsoAdd = tors_angle * ENC_PER_RADIAN;
   //stabilizeRotationByIMU();
   if (correctedRotation > 0) {
-    //xtr *= 1.0;
-    //xtl *= 0.5;
-    xtl *= reducer;
+    xtr *= 1.5;
+    xtl *= 0.5;
+    //xtl *= reducer;
     }
   if (correctedRotation < 0) {
-    //xtr *= 0.5;
-    //xtl *= 1.0;
-    xtr *= reducer;
+    xtr *= 0.5;
+    xtl *= 1.5;
+    //xtr *= reducer;
     }
   sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
   if( svIkOutPresent ) {
@@ -325,12 +325,12 @@ int computeAlphaForWalk() {
   //else sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, -wl );
   sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
   if (correctedRotation > 0) {
-    xtr /= 1.3;
-    xtl /= 0.7;
+    xtr /= 1.5;
+    xtl /= 0.5;
     }
   if (correctedRotation < 0) {
-    xtr /= 0.7;
-    xtl /= 1.3;
+    xtr /= 0.5;
+    xtl /= 1.5;
     }
   if( svIkOutPresent ) {
     flag = flag + 1;
@@ -802,7 +802,11 @@ void main() {
   rotation = 0;
 
   //Процесс запускаем не сразу, а через некоторое время (100 фреймов - 1 сек)
-  sfWaitFrame( 100 );
+  //sfWaitFrame( 100 );
+
+  int frameCount = 80;
+  sfPoseGroup(MASK_ALL, 0, frameCount);
+  sfWaitFrame(frameCount);
   
   //Фиксируем направление "вперед"
   sfQuaternionToEulerImu();
@@ -811,6 +815,14 @@ void main() {
   //Запускаем миксинг
   sfCreateTask( mixing, 20 );
   while (pitStop == 0) sfWaitFrame(1); // waithing to change parameters
+
+  svButtonRight = SV_SLOT_INACTIVE;
+  svButtonLeft = SV_SLOT_INACTIVE;
+  sfBip(1, 1);
+  while (svButtonPress != SV_BUTTON_RIGHT_PRESS) sfWaitFrame(1); // waithing to change parameters
+  svButtonRight = SV_SLOT_RESTART_RUN;
+  svButtonLeft = SV_SLOT_RELAX;
+  restart_flag = 1;
   
   runTest(); // 
   

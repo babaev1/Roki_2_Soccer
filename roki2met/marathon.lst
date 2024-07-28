@@ -248,89 +248,87 @@ int 1147:leftClawCurrent
 int 1148:leftClawPwm
 int 1149:leftClawAddonMix
 int 2:restart_flag
-int 3:timeStep
-int 4:orderFromHead
-int 5:pitStop
-int 6:startStop
-int 7:cycle_number
-int 8:hipTilt
-int 9:stepLengthOrder
-int 10:fps
-int 11:fr1
-int 12:fr2
-int 13:gaitHeight
-int 14:stepHeight
-float 15:bodyTiltAtWalk
-float 16:solyLandingSkew
-float 17:ugol_torsa
-int 18:slowWalk
-float 19:stepLength
-float 20:sideLength
-float 21:rotation
-int 22:selfFirstLegIsRightLeg
-int 23:motion_to_right
-float 24:side_motion
-int 25:selfInitPoses
-int 26:selfExitFlag
-int 27:selfFallingFlag
-int 28:selfNeckPan
-float 29:rotationYieldRight
-float 30:rotationYieldLeft
-int 31:framestep
-float 32:xtr
-float 33:ytr
-float 34:ztr
-float 35:xr
-float 36:yr
-float 37:zr
-float 38:wr
-float 39:xtl
-float 40:ytl
-float 41:ztl
-float 42:xl
-float 43:yl
-float 44:zl
-float 45:wl
-float 46:e10
-float 47:d10
-float 48:amplitude
-float 49:alpha01
-float 50:correctedStepLenght
-float 51:correctedStepLenghtHalf
-float 52:correctedSideLenght
-float 53:correctedSideLenghtHalf
-float 54:ztr0
-float 55:ztl0
-float 56:stepZtr
-float 57:stepZtl
-float 58:stepYtr
-float 59:stepYtl
-int 60:stepType
-int 61:flag
-int 62:flag_event
-float 63:dobavka_x_ot_torsa
-float 64:tors_angle
-int 65:torsoAdd
-float 66:forwardDirection
-float 67:correctedRotation
-int 68:j
-float 69:xtl0
-float 70:xtr0
-float 71:dx0Typical
-float 72:dy0Typical
-float 73:s
-float 74:fase_offset
-float 75:dx
-float 76:dy
-float 77:dx1
-float 78:dx2
-float 79:dx4
-float 80:stepRotation
-float 81:xtl_plan
-float 82:xtr_plan
-float 83:dx0
-int 84:leftRightFactor
-int 85:frontBackFactor
+int 3:pitStop
+int 4:timeStep
+int 5:orderFromHead
+int 6:cycle_number
+int 7:hipTilt
+int 8:stepLengthOrder
+int 9:fps
+int 10:fr1
+int 11:fr2
+int 12:gaitHeight
+int 13:stepHeight
+float 14:bodyTiltAtWalk
+float 15:solyLandingSkew
+float 16:ugol_torsa
+float 17:stepLength
+float 18:sideLength
+float 19:rotation
+int 20:selfFirstLegIsRightLeg
+int 21:motion_to_right
+float 22:side_motion
+int 23:selfInitPoses
+int 24:selfExitFlag
+int 25:selfFallingFlag
+int 26:selfNeckPan
+float 27:rotationYieldRight
+float 28:rotationYieldLeft
+int 29:framestep
+float 30:xtr
+float 31:ytr
+float 32:ztr
+float 33:xr
+float 34:yr
+float 35:zr
+float 36:wr
+float 37:xtl
+float 38:ytl
+float 39:ztl
+float 40:xl
+float 41:yl
+float 42:zl
+float 43:wl
+float 44:e10
+float 45:d10
+float 46:amplitude
+float 47:alpha01
+float 48:correctedStepLenght
+float 49:correctedStepLenghtHalf
+float 50:correctedSideLenght
+float 51:correctedSideLenghtHalf
+float 52:ztr0
+float 53:ztl0
+float 54:stepZtr
+float 55:stepZtl
+float 56:stepYtr
+float 57:stepYtl
+int 58:stepType
+int 59:flag
+int 60:flag_event
+float 61:dobavka_x_ot_torsa
+float 62:tors_angle
+int 63:torsoAdd
+float 64:forwardDirection
+float 65:correctedRotation
+int 66:j
+float 67:xtl0
+float 68:xtr0
+float 69:dx0Typical
+float 70:dy0Typical
+float 71:s
+float 72:fase_offset
+float 73:dx
+float 74:dy
+float 75:dx1
+float 76:dx2
+float 77:dx4
+float 78:stepRotation
+float 79:xtl_plan
+float 80:xtr_plan
+float 81:dx0
+int 82:leftRightFactor
+int 83:frontBackFactor
 
 //==================
 //  functions
@@ -1367,11 +1365,11 @@ function declare void setup(
 ) end function declare
 {
  {
-  ( <int 4:orderFromHead> ) = (0) 
-  ( <int 62:flag_event> ) = (0) 
-  ( <int 7:cycle_number> ) = (10) 
-  ( <float 29:rotationYieldRight> ) = (0.23) 
-  ( <float 30:rotationYieldLeft> ) = (0.23) 
+  ( <int 5:orderFromHead> ) = (0) 
+  ( <int 60:flag_event> ) = (0) 
+  ( <int 6:cycle_number> ) = (10) 
+  ( <float 27:rotationYieldRight> ) = (0.23) 
+  ( <float 28:rotationYieldLeft> ) = (0.23) 
   ( <float 1215:svIkA5> ) = (40.2) 
   ( <float 1216:svIkB5> ) = (0) 
   ( <float 1217:svIkC5> ) = (0) 
@@ -1382,8 +1380,8 @@ function declare void setup(
   ( <float 1222:svIkA10> ) = (13.7) 
   ( <float 1223:svIkB10> ) = (23.8) 
   ( <float 1224:svIkC10> ) = (0) 
-  ( <float 46:e10> ) = (55) 
-  ( <float 47:d10> ) = (62) 
+  ( <float 44:e10> ) = (55) 
+  ( <float 45:d10> ) = (62) 
   ( <float 1225:svIkLimA5min> ) = ( ( -(90) ) * (0.0174533) ) 
   ( <float 1226:svIkLimA5max> ) = ( (90) * (0.0174533) ) 
   ( <float 1227:svIkLimA6min> ) = ( ( -(108) ) * (0.0174533) ) 
@@ -1399,36 +1397,36 @@ function declare void setup(
  call  <function declare void sfIkSetup(
 ) end function declare
 > 
-  ( <int 31:framestep> ) = (2) 
-  ( <float 54:ztr0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
-  ( <float 55:ztl0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
-  ( <float 37:zr> ) = ( ( <float 44:zl> ) = ( -(1) ) ) 
-  ( <int 25:selfInitPoses> ) = (10) 
-  ( <float 19:stepLength> ) = (0) 
-  ( <float 20:sideLength> ) = (0) 
-  ( <float 21:rotation> ) = (0) 
-  ( <int 22:selfFirstLegIsRightLeg> ) = (1) 
-  ( <int 23:motion_to_right> ) = (1) 
-  ( <float 24:side_motion> ) = (0) 
-  ( <int 25:selfInitPoses> ) = (20) 
-  ( <float 56:stepZtr> ) = ( ( ( <float 54:ztr0> ) + ( <int 13:gaitHeight> ) ) / ( <int 25:selfInitPoses> ) ) 
-  ( <float 57:stepZtl> ) = ( ( ( <float 55:ztl0> ) + ( <int 13:gaitHeight> ) ) / ( <int 25:selfInitPoses> ) ) 
-  ( <float 16:solyLandingSkew> ) = (0) 
-  ( <float 64:tors_angle> ) = (0) 
-  ( <float 58:stepYtr> ) = ( ( ( <float 48:amplitude> ) / (2) ) / ( <int 25:selfInitPoses> ) ) 
-  ( <float 59:stepYtl> ) = ( ( ( <float 48:amplitude> ) / (2) ) / ( <int 25:selfInitPoses> ) ) 
-  ( <float 49:alpha01> ) = (3.14159) 
- if   ( <int 3:timeStep> ) = (2) 
-  ( <int 9:stepLengthOrder> ) = (50) 
-  ( <float 17:ugol_torsa> ) = (0.3) 
-  ( <float 15:bodyTiltAtWalk> ) = (0.055) 
-  ( <int 8:hipTilt> ) = (0) 
-  ( <int 13:gaitHeight> ) = (190) 
-  ( <int 14:stepHeight> ) = (40) 
-  ( <int 10:fps> ) = (4) 
-  ( <int 11:fr1> ) = (5) 
-  ( <int 12:fr2> ) = (7) 
-  ( <float 48:amplitude> ) = (32) 
+  ( <int 29:framestep> ) = (2) 
+  ( <float 52:ztr0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
+  ( <float 53:ztl0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
+  ( <float 35:zr> ) = ( ( <float 42:zl> ) = ( -(1) ) ) 
+  ( <int 23:selfInitPoses> ) = (10) 
+  ( <float 17:stepLength> ) = (0) 
+  ( <float 18:sideLength> ) = (0) 
+  ( <float 19:rotation> ) = (0) 
+  ( <int 20:selfFirstLegIsRightLeg> ) = (1) 
+  ( <int 21:motion_to_right> ) = (1) 
+  ( <float 22:side_motion> ) = (0) 
+  ( <int 23:selfInitPoses> ) = (20) 
+  ( <float 54:stepZtr> ) = ( ( ( <float 52:ztr0> ) + ( <int 12:gaitHeight> ) ) / ( <int 23:selfInitPoses> ) ) 
+  ( <float 55:stepZtl> ) = ( ( ( <float 53:ztl0> ) + ( <int 12:gaitHeight> ) ) / ( <int 23:selfInitPoses> ) ) 
+  ( <float 15:solyLandingSkew> ) = (0) 
+  ( <float 62:tors_angle> ) = (0) 
+  ( <float 56:stepYtr> ) = ( ( ( <float 46:amplitude> ) / (2) ) / ( <int 23:selfInitPoses> ) ) 
+  ( <float 57:stepYtl> ) = ( ( ( <float 46:amplitude> ) / (2) ) / ( <int 23:selfInitPoses> ) ) 
+  ( <float 47:alpha01> ) = (3.14159) 
+ if   ( <int 4:timeStep> ) = (2) 
+  ( <int 8:stepLengthOrder> ) = (50) 
+  ( <float 16:ugol_torsa> ) = (0.3) 
+  ( <float 14:bodyTiltAtWalk> ) = (0.055) 
+  ( <int 7:hipTilt> ) = (0) 
+  ( <int 12:gaitHeight> ) = (190) 
+  ( <int 13:stepHeight> ) = (40) 
+  ( <int 9:fps> ) = (4) 
+  ( <int 10:fr1> ) = (5) 
+  ( <int 11:fr2> ) = (7) 
+  ( <float 46:amplitude> ) = (32) 
  if  return
  }
 }
@@ -1442,8 +1440,8 @@ function declare void stabilizeRotationByIMU(
  call  <function declare void sfQuaternionToEulerImu(
 ) end function declare
 > 
-  ( <float 21:rotation> ) = ( ( ( <float 66:forwardDirection> ) - ( <float 1025:svEulerYaw> ) ) * (1.1) ) 
- if  if  if  if   ( <float 67:correctedRotation> ) = ( ( ( ( <float 21:rotation> ) * (0.25) ) * (0.23) ) / ( ( ( <float 21:rotation> ) <= (0)  ?  <float 29:rotationYieldRight>  :  <float 30:rotationYieldLeft> ) ) ) 
+  ( <float 19:rotation> ) = ( ( ( <float 64:forwardDirection> ) - ( <float 1025:svEulerYaw> ) ) * (1.1) ) 
+ if  if  if  if   ( <float 65:correctedRotation> ) = ( ( ( ( <float 19:rotation> ) * (0.25) ) * (0.23) ) / ( ( ( <float 19:rotation> ) <= (0)  ?  <float 27:rotationYieldRight>  :  <float 28:rotationYieldLeft> ) ) ) 
  if  return
  }
 }
@@ -1454,8 +1452,8 @@ function declare int computeAlphaForWalk(
 ) end function declare
 {
  {
-  ( <int 61:flag> ) = (0) 
-  ( <int 65:torsoAdd> ) = ( ( <float 64:tors_angle> ) * (2607.59) ) 
+  ( <int 59:flag> ) = (0) 
+  ( <int 63:torsoAdd> ) = ( ( <float 62:tors_angle> ) * (2607.59) ) 
  call  <function declare void stabilizeRotationByIMU(
 ) end function declare
 > 
@@ -1556,7 +1554,7 @@ function declare void walkInitialPose(
 ) end function declare
 {
  {
-  ( <float 32:xtr> ) = ( ( <float 39:xtl> ) = (0) ) 
+  ( <float 30:xtr> ) = ( ( <float 37:xtl> ) = (0) ) 
  loop return
  }
 }
@@ -1567,10 +1565,10 @@ function declare void walkInitialPoseFine(
 ) end function declare
 {
  {
-  ( <float 32:xtr> ) = ( ( <float 39:xtl> ) = (0) ) 
-  ( <float 34:ztr> ) = ( ( <float 41:ztl> ) = ( -( <int 13:gaitHeight> ) ) ) 
-  ( <float 33:ytr> ) = ( ( -( <float 47:d10> ) ) - ( ( <float 48:amplitude> ) / (2) ) ) 
-  ( <float 40:ytl> ) = ( ( <float 47:d10> ) - ( ( <float 48:amplitude> ) / (2) ) ) 
+  ( <float 30:xtr> ) = ( ( <float 37:xtl> ) = (0) ) 
+  ( <float 32:ztr> ) = ( ( <float 39:ztl> ) = ( -( <int 12:gaitHeight> ) ) ) 
+  ( <float 31:ytr> ) = ( ( -( <float 45:d10> ) ) - ( ( <float 46:amplitude> ) / (2) ) ) 
+  ( <float 38:ytl> ) = ( ( <float 45:d10> ) - ( ( <float 46:amplitude> ) / (2) ) ) 
  call  <function declare void computeAlphaForWalkFine(
  int 2:frameCount
 ) end function declare
@@ -1595,10 +1593,10 @@ function declare void walkFinalPoseFine(
 ) end function declare
 {
  {
-  ( <float 32:xtr> ) = ( ( <float 39:xtl> ) = (0) ) 
-  ( <float 34:ztr> ) = ( ( <float 41:ztl> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) ) 
-  ( <float 33:ytr> ) = ( -( <float 47:d10> ) ) 
-  ( <float 40:ytl> ) = ( <float 47:d10> ) 
+  ( <float 30:xtr> ) = ( ( <float 37:xtl> ) = (0) ) 
+  ( <float 32:ztr> ) = ( ( <float 39:ztl> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) ) 
+  ( <float 31:ytr> ) = ( -( <float 45:d10> ) ) 
+  ( <float 38:ytl> ) = ( <float 45:d10> ) 
  call  <function declare void computeAlphaForWalkFine(
  int 2:frameCount
 ) end function declare
@@ -1613,21 +1611,21 @@ function declare void walkInit(
 ) end function declare
 {
  {
-  ( <float 50:correctedStepLenght> ) = ( <float 19:stepLength> ) 
-  ( <float 51:correctedStepLenghtHalf> ) = ( ( <float 50:correctedStepLenght> ) / (2) ) 
-  ( <float 52:correctedSideLenght> ) = ( <float 20:sideLength> ) 
-  ( <float 53:correctedSideLenghtHalf> ) = ( ( <float 52:correctedSideLenght> ) / (2) ) 
-  ( <float 80:stepRotation> ) = ( ( ( <float 67:correctedRotation> ) / ( ( <int 12:fr2> ) - (2) ) ) * (2) ) 
-  ( <float 71:dx0Typical> ) = ( ( <float 50:correctedStepLenght> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) 
-  ( <float 72:dy0Typical> ) = ( ( <float 52:correctedSideLenght> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) 
-  ( <float 63:dobavka_x_ot_torsa> ) = ( ( ( ( <float 1215:svIkA5> ) * (2) ) * (call  <function declare float sfMathSin(
+ if   ( <float 48:correctedStepLenght> ) = ( <float 17:stepLength> ) 
+  ( <float 49:correctedStepLenghtHalf> ) = ( ( <float 48:correctedStepLenght> ) / (2) ) 
+  ( <float 50:correctedSideLenght> ) = ( <float 18:sideLength> ) 
+  ( <float 51:correctedSideLenghtHalf> ) = ( ( <float 50:correctedSideLenght> ) / (2) ) 
+  ( <float 78:stepRotation> ) = ( ( ( <float 65:correctedRotation> ) / ( ( <int 11:fr2> ) - (2) ) ) * (2) ) 
+  ( <float 69:dx0Typical> ) = ( ( <float 48:correctedStepLenght> ) / ( ( (2) * ( <int 10:fr1> ) ) + ( <int 11:fr2> ) ) ) 
+  ( <float 70:dy0Typical> ) = ( ( <float 50:correctedSideLenght> ) / ( ( (2) * ( <int 10:fr1> ) ) + ( <int 11:fr2> ) ) ) 
+  ( <float 61:dobavka_x_ot_torsa> ) = ( ( ( ( <float 1215:svIkA5> ) * (2) ) * (call  <function declare float sfMathSin(
  float 2:r
 ) end function declare
-> ) ) / ( <int 12:fr2> ) ) 
-  ( <float 35:xr> ) = ( ( <float 42:xl> ) = ( <float 15:bodyTiltAtWalk> ) ) 
-  ( <float 43:yl> ) = ( <float 16:solyLandingSkew> ) 
-  ( <float 36:yr> ) = ( -( <float 16:solyLandingSkew> ) ) 
-  ( <float 74:fase_offset> ) = (0.7) 
+> ) ) / ( <int 11:fr2> ) ) 
+  ( <float 33:xr> ) = ( ( <float 40:xl> ) = ( <float 14:bodyTiltAtWalk> ) ) 
+  ( <float 41:yl> ) = ( <float 15:solyLandingSkew> ) 
+  ( <float 34:yr> ) = ( -( <float 15:solyLandingSkew> ) ) 
+  ( <float 72:fase_offset> ) = (0.7) 
  return
  }
 }
@@ -1638,8 +1636,8 @@ function declare void walkPhasa1(
 ) end function declare
 {
  {
-  ( <float 41:ztl> ) = ( ( <float 34:ztr> ) = ( -( <int 13:gaitHeight> ) ) ) 
-  ( <float 81:xtl_plan> ) = ( ( ( <float 50:correctedStepLenght> ) * ( (0.5) - ( ( <int 11:fr1> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) ) - ( ( ( ( <float 63:dobavka_x_ot_torsa> ) * ( <int 11:fr1> ) ) * ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) 
+  ( <float 39:ztl> ) = ( ( <float 32:ztr> ) = ( -( <int 12:gaitHeight> ) ) ) 
+  ( <float 79:xtl_plan> ) = ( ( ( <float 48:correctedStepLenght> ) * ( (0.5) - ( ( <int 10:fr1> ) / ( ( (2) * ( <int 10:fr1> ) ) + ( <int 11:fr2> ) ) ) ) ) - ( ( ( ( <float 61:dobavka_x_ot_torsa> ) * ( <int 10:fr1> ) ) * ( <int 11:fr2> ) ) / ( ( (2) * ( <int 10:fr1> ) ) + ( <int 11:fr2> ) ) ) ) 
  loop return
  }
 }
@@ -1650,8 +1648,8 @@ function declare void walkPhasa3(
 ) end function declare
 {
  {
-  ( <float 41:ztl> ) = ( ( <float 34:ztr> ) = ( -( <int 13:gaitHeight> ) ) ) 
-  ( <float 82:xtr_plan> ) = ( ( ( <float 50:correctedStepLenght> ) * ( (0.5) - ( ( <int 11:fr1> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) ) - ( ( ( ( <float 63:dobavka_x_ot_torsa> ) * ( <int 11:fr1> ) ) * ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) 
+  ( <float 39:ztl> ) = ( ( <float 32:ztr> ) = ( -( <int 12:gaitHeight> ) ) ) 
+  ( <float 80:xtr_plan> ) = ( ( ( <float 48:correctedStepLenght> ) * ( (0.5) - ( ( <int 10:fr1> ) / ( ( (2) * ( <int 10:fr1> ) ) + ( <int 11:fr2> ) ) ) ) ) - ( ( ( ( <float 61:dobavka_x_ot_torsa> ) * ( <int 10:fr1> ) ) * ( <int 11:fr2> ) ) / ( ( (2) * ( <int 10:fr1> ) ) + ( <int 11:fr2> ) ) ) ) 
  loop return
  }
 }
@@ -1662,11 +1660,11 @@ function declare void walkPhasa2(
 ) end function declare
 {
  {
-  ( <float 38:wr> ) = (0) 
-  ( <float 45:wl> ) = (0) 
-  ( <float 76:dy> ) = ( ( <float 52:correctedSideLenght> ) / ( <int 12:fr2> ) ) 
-  ( <float 81:xtl_plan> ) = ( ( ( <float 50:correctedStepLenght> ) * ( (0.5) - ( ( ( <int 11:fr1> ) + ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) ) + ( ( ( ( <float 63:dobavka_x_ot_torsa> ) * ( <int 11:fr1> ) ) * ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) 
-  ( <float 82:xtr_plan> ) = ( ( ( ( <float 50:correctedStepLenght> ) * (0.5) ) + ( <float 71:dx0Typical> ) ) + ( <float 63:dobavka_x_ot_torsa> ) ) 
+  ( <float 36:wr> ) = (0) 
+  ( <float 43:wl> ) = (0) 
+  ( <float 74:dy> ) = ( ( <float 50:correctedSideLenght> ) / ( <int 11:fr2> ) ) 
+  ( <float 79:xtl_plan> ) = ( ( ( <float 48:correctedStepLenght> ) * ( (0.5) - ( ( ( <int 10:fr1> ) + ( <int 11:fr2> ) ) / ( ( (2) * ( <int 10:fr1> ) ) + ( <int 11:fr2> ) ) ) ) ) + ( ( ( ( <float 61:dobavka_x_ot_torsa> ) * ( <int 10:fr1> ) ) * ( <int 11:fr2> ) ) / ( ( (2) * ( <int 10:fr1> ) ) + ( <int 11:fr2> ) ) ) ) 
+  ( <float 80:xtr_plan> ) = ( ( ( ( <float 48:correctedStepLenght> ) * (0.5) ) + ( <float 69:dx0Typical> ) ) + ( <float 61:dobavka_x_ot_torsa> ) ) 
  loop return
  }
 }
@@ -1677,9 +1675,9 @@ function declare void walkPhasa4(
 ) end function declare
 {
  {
-  ( <float 38:wr> ) = (0) 
-  ( <float 45:wl> ) = (0) 
-  ( <float 76:dy> ) = ( ( <float 52:correctedSideLenght> ) / ( ( <int 12:fr2> ) - (2) ) ) 
+  ( <float 36:wr> ) = (0) 
+  ( <float 43:wl> ) = (0) 
+  ( <float 74:dy> ) = ( ( <float 50:correctedSideLenght> ) / ( ( <int 11:fr2> ) - (2) ) ) 
  if  loop return
  }
 }
@@ -1696,16 +1694,16 @@ function declare void walkCycle(
  float -3:xlOld
  float -4:ylOld
   {
-   ( <float -1:xrOld> ) = ( <float 35:xr> ) 
+   ( <float -1:xrOld> ) = ( <float 33:xr> ) 
   }
   {
-   ( <float -2:yrOld> ) = ( <float 36:yr> ) 
+   ( <float -2:yrOld> ) = ( <float 34:yr> ) 
   }
   {
-   ( <float -3:xlOld> ) = ( <float 42:xl> ) 
+   ( <float -3:xlOld> ) = ( <float 40:xl> ) 
   }
   {
-   ( <float -4:ylOld> ) = ( <float 43:yl> ) 
+   ( <float -4:ylOld> ) = ( <float 41:yl> ) 
   }
  call  <function declare void walkInit(
 ) end function declare
@@ -1716,10 +1714,10 @@ function declare void walkCycle(
  call  <function declare void walkPhasa2(
 ) end function declare
 > 
- if   ( <float 35:xr> ) = ( <float -1:xrOld> ) 
-  ( <float 36:yr> ) = ( <float -2:yrOld> ) 
-  ( <float 42:xl> ) = ( <float -3:xlOld> ) 
-  ( <float 43:yl> ) = ( <float -4:ylOld> ) 
+ if   ( <float 33:xr> ) = ( <float -1:xrOld> ) 
+  ( <float 34:yr> ) = ( <float -2:yrOld> ) 
+  ( <float 40:xl> ) = ( <float -3:xlOld> ) 
+  ( <float 41:yl> ) = ( <float -4:ylOld> ) 
  return
  }
 }
@@ -1730,8 +1728,8 @@ function declare void mixing(
 ) end function declare
 {
  {
-  ( <int 84:leftRightFactor> ) = (100) 
-  ( <int 85:frontBackFactor> ) = (180) 
+  ( <int 82:leftRightFactor> ) = (100) 
+  ( <int 83:frontBackFactor> ) = (180) 
  loop return
  }
 }
@@ -1746,22 +1744,22 @@ function declare void runTest(
  call  <function declare void walkInitialPoseFine(
 ) end function declare
 > 
-  ( <int 60:stepType> ) = (0) 
-  ( <float 19:stepLength> ) = ( ( <int 9:stepLengthOrder> ) / (3) ) 
+  ( <int 58:stepType> ) = (0) 
+  ( <float 17:stepLength> ) = ( ( <int 8:stepLengthOrder> ) / (3) ) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
 > 
-  ( <int 60:stepType> ) = (2) 
-  ( <float 19:stepLength> ) = ( ( ( <int 9:stepLengthOrder> ) * (2) ) / (3) ) 
+  ( <int 58:stepType> ) = (2) 
+  ( <float 17:stepLength> ) = ( ( ( <int 8:stepLengthOrder> ) * (2) ) / (3) ) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
 > 
-  ( <float 19:stepLength> ) = ( ( <int 9:stepLengthOrder> ) * (1) ) 
+  ( <float 17:stepLength> ) = ( ( <int 8:stepLengthOrder> ) * (1) ) 
   {
   }
- loop  ( <int 60:stepType> ) = (1) 
+ loop  ( <int 58:stepType> ) = (1) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
@@ -1781,14 +1779,10 @@ function declare void main(
  {
  int -1:frameCount
   ( <int 2:restart_flag> ) = (0) 
-  ( <int 5:pitStop> ) = (0) 
-  ( <int 6:startStop> ) = (0) 
-  ( <int 18:slowWalk> ) = (0) 
+  ( <int 3:pitStop> ) = (0) 
  call  <function declare void setup(
 ) end function declare
 > 
-  ( <float 20:sideLength> ) = (0) 
-  ( <float 21:rotation> ) = (0) 
   {
    ( <int -1:frameCount> ) = (80) 
   }
@@ -1805,7 +1799,7 @@ function declare void main(
  call  <function declare void sfQuaternionToEulerImu(
 ) end function declare
 > 
-  ( <float 66:forwardDirection> ) = ( <float 1025:svEulerYaw> ) 
+  ( <float 64:forwardDirection> ) = ( <float 1025:svEulerYaw> ) 
  call  <function declare int sfCreateTask(
  *<void()> 3:fun
  int 2:stackSize

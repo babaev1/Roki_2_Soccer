@@ -197,7 +197,7 @@ void setup() {
 
   timeStep = 1;
   
-  reducer = 0.3;
+  reducer = 0.1;
   
   stepLengthOrder = 60;
   ugol_torsa = 0.7;  	// tors maximum turning angle in radians
@@ -214,7 +214,7 @@ void setup() {
     stepLengthOrder = 30;
     ugol_torsa = 0.3;
     bodyTiltAtWalk = -0.02; 
-    hipTilt = 80;
+    hipTilt = 300;
     gaitHeight = 135;
     stepHeight = 35;
     fps = 2;
@@ -271,7 +271,7 @@ void stabilizeRotationByIMU(){
   if (orderFromHead == 1)correctedRotation = 0;
   else if (orderFromHead == 2) correctedRotation = 0.3;
   else if (orderFromHead == 3) correctedRotation = -0.3;
-  else correctedRotation = rotation;
+  else correctedRotation = - rotation;
   
   //rotation = 0;
 }
@@ -284,14 +284,14 @@ int computeAlphaForWalk() {
   torsoAdd = tors_angle * ENC_PER_RADIAN;
   //stabilizeRotationByIMU();
   if (correctedRotation > 0) {
-    //xtr *= 1.0;
-    //xtl *= 0.5;
-    xtl *= reducer;
+    xtr *= 1.5;
+    xtl *= 0.5;
+    //xtl *= reducer;
     }
   if (correctedRotation < 0) {
-    //xtr *= 0.5;
-    //xtl *= 1.0;
-    xtr *= reducer;
+    xtr *= 0.5;
+    xtl *= 1.5;
+    //xtr *= reducer;
     }
   sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
   if( svIkOutPresent ) {
@@ -325,12 +325,14 @@ int computeAlphaForWalk() {
   //else sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, -wl );
   sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
   if (correctedRotation > 0) {
-    //xtr /= 1.3;
-    xtl /= reducer;
+    xtr /= 1.5;
+    xtl /= 0.5;
+    //xtl /= reducer;
     }
   if (correctedRotation < 0) {
-    xtr /= reducer;
-    //xtl /= 1.3;
+    //xtr /= reducer;
+    xtr /= 0.5;
+    xtl /= 1.5;
     }
   if( svIkOutPresent ) {
     flag = flag + 1;

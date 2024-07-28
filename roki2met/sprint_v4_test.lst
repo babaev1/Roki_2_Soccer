@@ -302,42 +302,41 @@ float 53:d10
 float 54:amplitude
 float 55:alpha01
 float 56:correctedStepLenght
-float 57:correctedStepLenghtHalf
-float 58:correctedSideLenght
-float 59:correctedSideLenghtHalf
-float 60:ztr0
-float 61:ztl0
-float 62:stepZtr
-float 63:stepZtl
-float 64:stepYtr
-float 65:stepYtl
-int 66:stepType
-int 67:flag
-int 68:flag_event
-float 69:dobavka_x_ot_torsa
-float 70:tors_angle
-float 71:reducer
-int 72:torsoAdd
-float 73:forwardDirection
-float 74:correctedRotation
-int 75:j
-float 76:xtl0
-float 77:xtr0
-float 78:dx0Typical
-float 79:dy0Typical
-float 80:s
-float 81:fase_offset
-float 82:dx
-float 83:dy
-float 84:dx1
-float 85:dx2
-float 86:dx4
-float 87:stepRotation
-float 88:xtl_plan
-float 89:xtr_plan
-float 90:dx0
-int 91:leftRightFactor
-int 92:frontBackFactor
+float 57:correctedSideLenght
+float 58:correctedSideLenghtHalf
+float 59:ztr0
+float 60:ztl0
+float 61:stepZtr
+float 62:stepZtl
+float 63:stepYtr
+float 64:stepYtl
+int 65:stepType
+int 66:flag
+int 67:flag_event
+float 68:dobavka_x_ot_torsa
+float 69:tors_angle
+float 70:reducer
+int 71:torsoAdd
+float 72:forwardDirection
+float 73:correctedRotation
+int 74:j
+float 75:xtl0
+float 76:xtr0
+float 77:dx0Typical
+float 78:dy0Typical
+float 79:s
+float 80:fase_offset
+float 81:dx
+float 82:dy
+float 83:dx1
+float 84:dx2
+float 85:dx4
+float 86:stepRotation
+float 87:xtl_plan
+float 88:xtr_plan
+float 89:dx0
+int 90:leftRightFactor
+int 91:frontBackFactor
 
 //==================
 //  functions
@@ -1381,7 +1380,7 @@ function declare void setup(
 {
  {
   ( <int 4:orderFromHead> ) = (0) 
-  ( <int 68:flag_event> ) = (0) 
+  ( <int 67:flag_event> ) = (0) 
   ( <int 7:cycle_number> ) = (30) 
   ( <float 35:rotationYieldRight> ) = (0.23) 
   ( <float 36:rotationYieldLeft> ) = (0.23) 
@@ -1415,8 +1414,8 @@ function declare void setup(
   ( <int 37:framestep> ) = (2) 
   ( <float 22:selfMotionShiftCorrectionX> ) = (0) 
   ( <float 23:selfMotionShiftCorrectionY> ) = (0) 
-  ( <float 60:ztr0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
-  ( <float 61:ztl0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
+  ( <float 59:ztr0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
+  ( <float 60:ztl0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
   ( <float 43:zr> ) = ( ( <float 50:zl> ) = ( -(1) ) ) 
   ( <int 31:selfInitPoses> ) = (10) 
   ( <float 19:stepLength> ) = (0) 
@@ -1426,15 +1425,15 @@ function declare void setup(
   ( <int 29:motion_to_right> ) = (1) 
   ( <float 30:side_motion> ) = (0) 
   ( <int 31:selfInitPoses> ) = (20) 
-  ( <float 62:stepZtr> ) = ( ( ( <float 60:ztr0> ) + ( <int 13:gaitHeight> ) ) / ( <int 31:selfInitPoses> ) ) 
-  ( <float 63:stepZtl> ) = ( ( ( <float 61:ztl0> ) + ( <int 13:gaitHeight> ) ) / ( <int 31:selfInitPoses> ) ) 
+  ( <float 61:stepZtr> ) = ( ( ( <float 59:ztr0> ) + ( <int 13:gaitHeight> ) ) / ( <int 31:selfInitPoses> ) ) 
+  ( <float 62:stepZtl> ) = ( ( ( <float 60:ztl0> ) + ( <int 13:gaitHeight> ) ) / ( <int 31:selfInitPoses> ) ) 
   ( <float 16:solyLandingSkew> ) = (0) 
-  ( <float 70:tors_angle> ) = (0) 
-  ( <float 64:stepYtr> ) = ( ( ( <float 54:amplitude> ) / (2) ) / ( <int 31:selfInitPoses> ) ) 
-  ( <float 65:stepYtl> ) = ( ( ( <float 54:amplitude> ) / (2) ) / ( <int 31:selfInitPoses> ) ) 
+  ( <float 69:tors_angle> ) = (0) 
+  ( <float 63:stepYtr> ) = ( ( ( <float 54:amplitude> ) / (2) ) / ( <int 31:selfInitPoses> ) ) 
+  ( <float 64:stepYtl> ) = ( ( ( <float 54:amplitude> ) / (2) ) / ( <int 31:selfInitPoses> ) ) 
   ( <float 55:alpha01> ) = (3.14159) 
  if   ( <int 3:timeStep> ) = (1) 
-  ( <float 71:reducer> ) = (0.3) 
+  ( <float 70:reducer> ) = (0.1) 
   ( <int 9:stepLengthOrder> ) = (60) 
   ( <float 17:ugol_torsa> ) = (0.7) 
   ( <float 15:bodyTiltAtWalk> ) = (0.055) 
@@ -1592,7 +1591,7 @@ function declare void stabilizeRotationByIMU(
  call  <function declare void sfQuaternionToEulerImu(
 ) end function declare
 > 
-  ( <float 21:rotation> ) = ( ( ( <float 73:forwardDirection> ) - ( <float 1025:svEulerYaw> ) ) * (1.1) ) 
+  ( <float 21:rotation> ) = ( ( ( <float 72:forwardDirection> ) - ( <float 1025:svEulerYaw> ) ) * (1.1) ) 
  if  if  if  if  if  return
  }
 }
@@ -1603,8 +1602,8 @@ function declare int computeAlphaForWalk(
 ) end function declare
 {
  {
-  ( <int 67:flag> ) = (0) 
-  ( <int 72:torsoAdd> ) = ( ( <float 70:tors_angle> ) * (2607.59) ) 
+  ( <int 66:flag> ) = (0) 
+  ( <int 71:torsoAdd> ) = ( ( <float 69:tors_angle> ) * (2607.59) ) 
  if  if  call  <function declare void sfIkAngle(
  float 8:xt
  float 7:yt
@@ -1760,20 +1759,19 @@ function declare void walkInit(
 {
  {
   ( <float 56:correctedStepLenght> ) = ( ( <float 19:stepLength> ) + ( <float 22:selfMotionShiftCorrectionX> ) ) 
-  ( <float 57:correctedStepLenghtHalf> ) = ( ( <float 56:correctedStepLenght> ) / (2) ) 
-  ( <float 58:correctedSideLenght> ) = ( ( <float 20:sideLength> ) - ( <float 23:selfMotionShiftCorrectionY> ) ) 
-  ( <float 59:correctedSideLenghtHalf> ) = ( ( <float 58:correctedSideLenght> ) / (2) ) 
-  ( <float 87:stepRotation> ) = ( ( ( <float 74:correctedRotation> ) / ( ( <int 12:fr2> ) - (2) ) ) * (2) ) 
-  ( <float 78:dx0Typical> ) = ( ( <float 56:correctedStepLenght> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) 
-  ( <float 79:dy0Typical> ) = ( ( <float 58:correctedSideLenght> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) 
-  ( <float 69:dobavka_x_ot_torsa> ) = ( ( ( ( <float 1215:svIkA5> ) * (2) ) * (call  <function declare float sfMathSin(
+  ( <float 57:correctedSideLenght> ) = ( ( <float 20:sideLength> ) - ( <float 23:selfMotionShiftCorrectionY> ) ) 
+  ( <float 58:correctedSideLenghtHalf> ) = ( ( <float 57:correctedSideLenght> ) / (2) ) 
+  ( <float 86:stepRotation> ) = ( ( ( <float 73:correctedRotation> ) / ( ( <int 12:fr2> ) - (2) ) ) * (2) ) 
+  ( <float 77:dx0Typical> ) = ( ( <float 56:correctedStepLenght> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) 
+  ( <float 78:dy0Typical> ) = ( ( <float 57:correctedSideLenght> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) 
+  ( <float 68:dobavka_x_ot_torsa> ) = ( ( ( ( <float 1215:svIkA5> ) * (2) ) * (call  <function declare float sfMathSin(
  float 2:r
 ) end function declare
 > ) ) / ( <int 12:fr2> ) ) 
   ( <float 41:xr> ) = ( ( <float 48:xl> ) = ( <float 15:bodyTiltAtWalk> ) ) 
   ( <float 49:yl> ) = ( <float 16:solyLandingSkew> ) 
   ( <float 42:yr> ) = ( -( <float 16:solyLandingSkew> ) ) 
-  ( <float 81:fase_offset> ) = (0.7) 
+  ( <float 80:fase_offset> ) = (0.7) 
  call  <function declare void stabilizeRotationByIMU(
 ) end function declare
 > 
@@ -1788,7 +1786,7 @@ function declare void walkPhasa1(
 {
  {
   ( <float 47:ztl> ) = ( ( <float 40:ztr> ) = ( -( <int 13:gaitHeight> ) ) ) 
-  ( <float 88:xtl_plan> ) = ( ( ( <float 56:correctedStepLenght> ) * ( (0.5) - ( ( <int 11:fr1> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) ) - ( ( ( ( <float 69:dobavka_x_ot_torsa> ) * ( <int 11:fr1> ) ) * ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) 
+  ( <float 87:xtl_plan> ) = ( ( ( <float 56:correctedStepLenght> ) * ( (0.5) - ( ( <int 11:fr1> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) ) - ( ( ( ( <float 68:dobavka_x_ot_torsa> ) * ( <int 11:fr1> ) ) * ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) 
  loop return
  }
 }
@@ -1800,7 +1798,7 @@ function declare void walkPhasa3(
 {
  {
   ( <float 47:ztl> ) = ( ( <float 40:ztr> ) = ( -( <int 13:gaitHeight> ) ) ) 
-  ( <float 89:xtr_plan> ) = ( ( ( <float 56:correctedStepLenght> ) * ( (0.5) - ( ( <int 11:fr1> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) ) - ( ( ( ( <float 69:dobavka_x_ot_torsa> ) * ( <int 11:fr1> ) ) * ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) 
+  ( <float 88:xtr_plan> ) = ( ( ( <float 56:correctedStepLenght> ) * ( (0.5) - ( ( <int 11:fr1> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) ) - ( ( ( ( <float 68:dobavka_x_ot_torsa> ) * ( <int 11:fr1> ) ) * ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) 
  loop return
  }
 }
@@ -1813,9 +1811,9 @@ function declare void walkPhasa2(
  {
   ( <float 44:wr> ) = (0) 
   ( <float 51:wl> ) = (0) 
-  ( <float 83:dy> ) = ( ( <float 58:correctedSideLenght> ) / ( <int 12:fr2> ) ) 
-  ( <float 88:xtl_plan> ) = ( ( ( <float 56:correctedStepLenght> ) * ( (0.5) - ( ( ( <int 11:fr1> ) + ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) ) + ( ( ( ( <float 69:dobavka_x_ot_torsa> ) * ( <int 11:fr1> ) ) * ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) 
-  ( <float 89:xtr_plan> ) = ( ( ( ( <float 56:correctedStepLenght> ) * (0.5) ) + ( <float 78:dx0Typical> ) ) + ( <float 69:dobavka_x_ot_torsa> ) ) 
+  ( <float 82:dy> ) = ( ( <float 57:correctedSideLenght> ) / ( <int 12:fr2> ) ) 
+  ( <float 87:xtl_plan> ) = ( ( ( <float 56:correctedStepLenght> ) * ( (0.5) - ( ( ( <int 11:fr1> ) + ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) ) + ( ( ( ( <float 68:dobavka_x_ot_torsa> ) * ( <int 11:fr1> ) ) * ( <int 12:fr2> ) ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) ) 
+  ( <float 88:xtr_plan> ) = ( ( ( ( <float 56:correctedStepLenght> ) * (0.5) ) + ( <float 77:dx0Typical> ) ) + ( <float 68:dobavka_x_ot_torsa> ) ) 
  loop return
  }
 }
@@ -1828,7 +1826,7 @@ function declare void walkPhasa4(
  {
   ( <float 44:wr> ) = (0) 
   ( <float 51:wl> ) = (0) 
-  ( <float 83:dy> ) = ( ( <float 58:correctedSideLenght> ) / ( ( <int 12:fr2> ) - (2) ) ) 
+  ( <float 82:dy> ) = ( ( <float 57:correctedSideLenght> ) / ( ( <int 12:fr2> ) - (2) ) ) 
  if  loop return
  }
 }
@@ -1879,8 +1877,8 @@ function declare void mixing(
 ) end function declare
 {
  {
-  ( <int 91:leftRightFactor> ) = (100) 
-  ( <int 92:frontBackFactor> ) = (180) 
+  ( <int 90:leftRightFactor> ) = (100) 
+  ( <int 91:frontBackFactor> ) = (180) 
  loop return
  }
 }
@@ -1895,23 +1893,13 @@ function declare void runTest(
  call  <function declare void walkInitialPoseFine(
 ) end function declare
 > 
-  ( <int 1022:svButtonRight> ) = ( -(1) ) 
-  ( <int 1021:svButtonLeft> ) = ( -(1) ) 
- call  <function declare void sfBip(
- int 3:bipCount
- int 2:seriesCount
-) end function declare
-> 
- loop  ( <int 1022:svButtonRight> ) = (66) 
-  ( <int 1021:svButtonLeft> ) = (69) 
-  ( <int 2:restart_flag> ) = (1) 
-  ( <int 66:stepType> ) = (0) 
+  ( <int 65:stepType> ) = (0) 
   ( <float 19:stepLength> ) = ( ( <int 9:stepLengthOrder> ) / (3) ) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
 > 
-  ( <int 66:stepType> ) = (2) 
+  ( <int 65:stepType> ) = (2) 
   ( <float 19:stepLength> ) = ( ( ( <int 9:stepLengthOrder> ) * (2) ) / (3) ) 
  call  <function declare void walkCycle(
  int 2:half
@@ -1920,7 +1908,7 @@ function declare void runTest(
   ( <float 19:stepLength> ) = ( ( <int 9:stepLengthOrder> ) * (1) ) 
   {
   }
- loop  ( <int 66:stepType> ) = (1) 
+ loop  ( <int 65:stepType> ) = (1) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
@@ -1933,13 +1921,13 @@ function declare void runTest(
  call  <function declare void walkInitialPoseFine(
 ) end function declare
 > 
-  ( <int 66:stepType> ) = (0) 
+  ( <int 65:stepType> ) = (0) 
   ( <float 19:stepLength> ) = ( ( <int 9:stepLengthOrder> ) / (3) ) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
 > 
-  ( <int 66:stepType> ) = (2) 
+  ( <int 65:stepType> ) = (2) 
   ( <float 19:stepLength> ) = ( ( ( <int 9:stepLengthOrder> ) * (2) ) / (3) ) 
  call  <function declare void walkCycle(
  int 2:half
@@ -2019,6 +2007,7 @@ function declare void main(
 ) end function declare
 {
  {
+ int -1:frameCount
   ( <int 2:restart_flag> ) = (0) 
   ( <int 5:pitStop> ) = (0) 
   ( <int 6:startStop> ) = (0) 
@@ -2028,6 +2017,15 @@ function declare void main(
 > 
   ( <float 20:sideLength> ) = (0) 
   ( <float 21:rotation> ) = (0) 
+  {
+   ( <int -1:frameCount> ) = (80) 
+  }
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
  call  <function declare void sfWaitFrame(
  int 2:frame
 ) end function declare
@@ -2035,12 +2033,22 @@ function declare void main(
  call  <function declare void sfQuaternionToEulerImu(
 ) end function declare
 > 
-  ( <float 73:forwardDirection> ) = ( <float 1025:svEulerYaw> ) 
+  ( <float 72:forwardDirection> ) = ( <float 1025:svEulerYaw> ) 
  call  <function declare int sfCreateTask(
  *<void()> 3:fun
  int 2:stackSize
 ) end function declare
 > 
+  ( <int 1022:svButtonRight> ) = ( -(1) ) 
+  ( <int 1021:svButtonLeft> ) = ( -(1) ) 
+ call  <function declare void sfBip(
+ int 3:bipCount
+ int 2:seriesCount
+) end function declare
+> 
+ loop  ( <int 1022:svButtonRight> ) = (66) 
+  ( <int 1021:svButtonLeft> ) = (69) 
+  ( <int 2:restart_flag> ) = (1) 
  call  <function declare void runTest(
 ) end function declare
 > 
