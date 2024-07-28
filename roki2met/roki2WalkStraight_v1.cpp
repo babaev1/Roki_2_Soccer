@@ -216,7 +216,7 @@ void setup() {
   selfInitPoses = 10;
   
  // selfTIK2RAD = 0.00058909;
-  stepLength = 0.0;    // -50 - +70. Best choise 64 for forward. Maximum safe value for backward step -50.
+  stepLength = 10.0;    // -50 - +70. Best choise 64 for forward. Maximum safe value for backward step -50.
   sideLength = 0.0;    // -20 - +20. Side step length to right (+) and to left (-)
   rotation = 0;        // -45 - +45 degrees Centigrade per step + CW, - CCW.
   selfFirstLegIsRightLeg = 1; // = True
@@ -225,8 +225,8 @@ void setup() {
   stepZtr = (ztr0 + gaitHeight) / selfInitPoses;
   stepZtl = (ztl0 + gaitHeight) / selfInitPoses;
   
-  bodyTiltAtWalk = 0.04;
-  solyLandingSkew = 0.0;
+  bodyTiltAtWalk = 0.01;
+  solyLandingSkew = 0.05;
   
   if( slowWalk ) {
     fr1 = 50; //8;           // frame number for 1-st phase of gait ( two legs on floor)
@@ -234,9 +234,9 @@ void setup() {
     amplitude = 110;    // mm side amplitude (maximum distance between most right and most left position of Center of Mass) 53.4*2
     }
   else {
-    fr1 = 8;           // frame number for 1-st phase of gait ( two legs on floor)
-    fr2 = 16;          // frame number for 2-nd phase of gait ( one leg in air)
-    amplitude = 10;    // mm side amplitude (maximum distance between most right and most left position of Center of Mass) 53.4*2
+    fr1 = 20; //8;           // frame number for 1-st phase of gait ( two legs on floor)
+    fr2 = 20;  //16;          // frame number for 2-nd phase of gait ( one leg in air)
+    amplitude = 20; //10;    // mm side amplitude (maximum distance between most right and most left position of Center of Mass) 53.4*2
     }
   stepYtr = amplitude / 2.0 / selfInitPoses;
   stepYtl = amplitude / 2.0 / selfInitPoses;
@@ -624,8 +624,16 @@ void mixing() {
     }
   }
   
-#define CYCLE_COUNT 20000 //Количество шагов. Общее количество шагов будет +3
-#define STEP_LENGHT -10
+#define CYCLE_COUNT 5 //Количество шагов. Общее количество шагов будет +3
+#define STEP_LENGHT 50
+
+void setup_final(){
+  fr1 = 20; //8;       
+  fr2 = 20;  //16;         
+  amplitude = 20; //10; 
+  bodyTiltAtWalk = 0.01;
+  solyLandingSkew = 0.08;
+}
 
 void runTest() {
   //Стали в начальную позу
@@ -660,6 +668,7 @@ void runTest() {
 void main() {
   slowWalk = 0;
   setup();
+  setup_final();
   sideLength = -5;
   rotation = 0;
   relaxFootR = 0;

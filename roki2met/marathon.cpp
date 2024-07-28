@@ -33,14 +33,6 @@ float stepLength;
 float sideLength; // = 0.0         # -20 - +20. Side step length to right (+) and to left (-)
 float rotation; // = 0           # -45 - +45 degrees Centigrade per step + CW, - CCW.
 
-//int   selfFramesPerCycle; // = self.glob.params['FRAMES_PER_CYCLE']
-float selfMotionShiftCorrectionX; // = -self.glob.params['MOTION_SHIFT_TEST_X'] / 21
-float selfMotionShiftCorrectionY; // = -self.glob.params['MOTION_SHIFT_TEST_Y'] / 21
-float selfFirstStepYield; // = self.glob.first_step_yield
-float selfCycleStepYield; // = self.glob.cycle_step_yield
-float selfSideStepRightYield; // = self.glob.side_step_right_yield
-float selfSideStepLeftYield; // = self.glob.side_step_left_yield
-//        self.imu_drift_speed = math.radians(self.glob.params['IMU_DRIFT_IN_DEGREES_DURING_6_MIN_MEASUREMENT'])/360
 int   selfFirstLegIsRightLeg; // = True
 int   motion_to_right;
 float   side_motion;
@@ -149,9 +141,6 @@ void setup() {
   framestep = 2;
   
   
-  
-  selfMotionShiftCorrectionX = 0.0;
-  selfMotionShiftCorrectionY = 0.0;
 
   //self.LIMALPHA[3][1]=0
 
@@ -181,10 +170,6 @@ void setup() {
 
   stepYtr = amplitude / 2.0 / selfInitPoses;
   stepYtl = amplitude / 2.0 / selfInitPoses;
-//        if self.fr1 == 0:
-//            alpha01 = math.pi
-//        else:
-//            alpha01 = math.pi/self.fr1*2
   alpha01 = MATH_PI;
   if( fr1 != 0 )
     alpha01 = alpha01 * 2 / fr1;
@@ -230,31 +215,6 @@ void setup() {
 int torsoAdd;
 float forwardDirection;
 float correctedRotation;
-
-void sitToStart(int frameCount){
-  frameCount = 80;
-  sfPoseGroup( MASK_HEAD_TILT, 700, frameCount );
-  sfPoseGroup( MASK_RIGHT_CLAVICLE, 1370, frameCount );
-  sfPoseGroup( MASK_LEFT_CLAVICLE, 1370, frameCount );
-  sfPoseGroup( MASK_RIGHT_ELBOW_SIDE, 700, frameCount );
-  sfPoseGroup( MASK_LEFT_ELBOW_SIDE, 700, frameCount );
-  sfPoseGroup( MASK_RIGHT_ELBOW, 4500, frameCount );
-  sfPoseGroup( MASK_LEFT_ELBOW, 4500, frameCount );
-  sfPoseGroup( MASK_RIGHT_HIP_SIDE, 410, frameCount );
-  sfPoseGroup( MASK_LEFT_HIP_SIDE, -174, frameCount );
-  sfPoseGroup( MASK_RIGHT_HIP, 4350, frameCount );
-  sfPoseGroup( MASK_LEFT_HIP, 4240, frameCount );
-  sfPoseGroup( MASK_RIGHT_KNEE, 4800, frameCount );
-  sfPoseGroup( MASK_LEFT_KNEE, 5400, frameCount );
-  sfPoseGroup( MASK_RIGHT_FOOT_FRONT, 2518, frameCount );
-  sfPoseGroup( MASK_LEFT_FOOT_FRONT, 2550, frameCount );
-  sfPoseGroup( MASK_RIGHT_FOOT_SIDE, 430, frameCount );
-  sfPoseGroup( MASK_LEFT_FOOT_SIDE, -174, frameCount );
-  sfPoseGroup( MASK_RIGHT_KNEE_BOT, 2050, frameCount );
-  sfPoseGroup( MASK_LEFT_KNEE_BOT, 1380, frameCount );
-  sfWaitFrame( frameCount );
-  sfFreeGroup( MASK_RIGHT_KNEE| MASK_LEFT_KNEE );
-}
 
 void stabilizeRotationByIMU(){
   //Корректировать направление
@@ -511,9 +471,9 @@ float xtl_plan, xtr_plan;
 //Настроить следующий цикл хотьбы
 void walkInit() {
   //Корректируем длину шага и движение в сторону
-  correctedStepLenght = stepLength + selfMotionShiftCorrectionX;
+  correctedStepLenght = stepLength;
   correctedStepLenghtHalf = correctedStepLenght / 2;
-  correctedSideLenght = sideLength - selfMotionShiftCorrectionY;
+  correctedSideLenght = sideLength;
   correctedSideLenghtHalf = correctedSideLenght / 2;
   
   //Корректируем поворот
@@ -666,10 +626,6 @@ void walkPhasa4() {
     }
   }
 
-//Здесь отдельно алгоритм медленной ходьбы
-//#include <roki3ASlowWalk.cpp>
-
-
 //Универсальный (для быстрой и медленной) ходьбы цикл
 // if half == 1 then just half of cycle executed
 // if half == 0 then full cycle executed
@@ -749,27 +705,6 @@ void runTest() {
   walkFinalPoseFine();
   }
 
-void turn(int direction){
-  int frameCount = 4;
-  if (direction == 1){
-    sfPoseGroup( MASK_RIGHT_PELVIC, -2000, frameCount );
-    sfPoseGroup( MASK_LEFT_PELVIC, 2000, frameCount );
-    }
-  if (direction == -1){
-    sfPoseGroup( MASK_RIGHT_PELVIC, 2000, frameCount );
-    sfPoseGroup( MASK_LEFT_PELVIC, -2000, frameCount );
-    }
-  sfPoseGroup( MASK_RIGHT_FOOT_SIDE, 2000, frameCount );
-  sfPoseGroup( MASK_LEFT_FOOT_SIDE, 2000, frameCount );
-  sfWaitFrame( frameCount );
-  sfPoseGroup( MASK_RIGHT_PELVIC, 0, frameCount );
-  sfPoseGroup( MASK_LEFT_PELVIC, 0, frameCount );
-  sfPoseGroup( MASK_RIGHT_FOOT_SIDE, 0, frameCount );
-  sfPoseGroup( MASK_LEFT_FOOT_SIDE, 0, frameCount );
-  sfWaitFrame( frameCount );
-  sfWaitFrame( 6 );
-}
-
 void main() {
   restart_flag = 0;
   pitStop = 0;
@@ -801,7 +736,5 @@ void main() {
   
   runTest(); // 
   
-  //Переходим к срипту "Напряжен"
-  //sfStartSlot( sfSlotIndex("androSotTenseUp.cpp") );
   }
 
