@@ -1895,7 +1895,7 @@ function declare void runTest(
  call  <function declare void walkInitialPoseFine(
 ) end function declare
 > 
- loop  ( <int 66:stepType> ) = (0) 
+  ( <int 66:stepType> ) = (0) 
   ( <float 19:stepLength> ) = ( ( <int 9:stepLengthOrder> ) / (3) ) 
  call  <function declare void walkCycle(
  int 2:half
@@ -2010,6 +2010,7 @@ function declare void main(
 {
  {
  int -1:frameCount
+  ( <int 2:restart_flag> ) = (0) 
   ( <int 5:pitStop> ) = (0) 
   ( <int 6:startStop> ) = (0) 
   ( <int 18:slowWalk> ) = (0) 

@@ -730,7 +730,7 @@ void runTest() {
   //Стали в начальную позу
   walkInitialPoseFine();
   // waiting for push button at head
-  while (startStop == 0) sfWaitFrame(1);
+  //while (startStop == 0) sfWaitFrame(1);
   //Выполняем первый шаг
   stepType = STEP_FIRST;
   stepLength = stepLengthOrder/ 3.0;
@@ -794,6 +794,7 @@ void turn(int direction){
 }
 
 void main() {
+  restart_flag = 0;
   pitStop = 0;
   startStop = 0;
   slowWalk = 0;
