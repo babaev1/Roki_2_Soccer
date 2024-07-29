@@ -12,6 +12,7 @@ from multiprocessing import Process, Value
 from roki2met import roki2met
 import datetime
 import numpy as np
+from ctypes import c_bool
 
 
 def coord2yaw(x, y):
@@ -853,7 +854,7 @@ class Player():
             # Pipeline variables
             size = Value('i', 0)       # horizontal size of ARUCO code on picture
             side_shift = Value('i', 0) # horizontal shift of ARUCO code from center of picture 
-            stopFlag = False
+            stopFlag = Value(c_bool, False)
 
             # Process for Vision Pipeline
             cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift, stopFlag), daemon = True)
@@ -897,7 +898,7 @@ class Player():
                     else: print(intercom.GetError())
                     if restart_flag == 1: break
                     time.sleep(0.25)
-                while not stopFlag:
+                while not stopFlag.value :
                     ok, restart_flag = intercom.memIGet(var.restart_flag)
                     if restart_flag == 0: break
                     aruco_size = size.value
@@ -923,7 +924,7 @@ class Player():
             return
         self.motion.first_Leg_Is_Right_Leg == True
         timeStep = 1
-        number_Of_Cycles = 20
+        number_Of_Cycles = 40
         if timeStep == 1:                   # 10ms
             stepLength = 30 #100
             self.motion.ugol_torsa = 0.3 #0.65

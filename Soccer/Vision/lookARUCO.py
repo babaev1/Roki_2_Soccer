@@ -24,14 +24,17 @@ def detect_aruco_markers(frame, led):
                 corner = corners[i][0]
                 top_left = tuple(corner[0].astype(int))
                 top_right = tuple(corner[1].astype(int))
+                bottom_left = tuple(corner[2].astype(int))
                 size = top_right[0] - top_left[0]
+                cx = int((top_right[0] + top_left[0])/2)
+                cy = int((top_left[1] + bottom_left[1])/2)
                 side_shift =  400 - int((top_right[0] + top_left[0])/2)
                 #print('size = ', size, 'side_shift = ', side_shift )
     else:
         size = side_shift = 0
-    return frame , size, side_shift
+    return frame , size, side_shift, cx, cy
 
-def camera_process(size, side_shift, stopFlag):
+def camera_process(size, side_shift, cx, cy, stopFlag):
     picam2 = Picamera2(camera_num=0)
     led = Led()
     picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)})) 
@@ -39,12 +42,12 @@ def camera_process(size, side_shift, stopFlag):
     picam2.start()
     count = 0
     start_time = time.perf_counter()
-    while not stopFlag:
+    while not stopFlag.value:
         request = picam2.capture_request()
         im = request.make_array("lores")  
         request.release()
         im = cv2.cvtColor(im, cv2.COLOR_YUV420p2GRAY)
-        im, size.value, side_shift.value = detect_aruco_markers(im, led)     # Обнаружение аруко маркеров
+        im, size.value, side_shift.value, cx.value, cy.value = detect_aruco_markers(im, led)     # Обнаружение аруко маркеров
         cv2.imshow("Camera", im)
         cv2.waitKey(10)
         count += 1
@@ -54,26 +57,30 @@ def camera_process(size, side_shift, stopFlag):
             print('Rate : ', int(100 / time_elapsed), ' FPS')
             start_time = time.perf_counter()
         if size.value > 180 : 
-            stopFlag = True
+            stopFlag.value = True
             break
     cv2.destroyAllWindows()
 
 if __name__== "__main__":
     from multiprocessing import Value, Process
     from led_blink import Led
+    from ctypes import c_bool
     size = Value('i', 0)
     side_shift = Value('i', 0)
-    stopFlag = False
+    cx = Value('i', 0)
+    cy = Value('i', 0)
+    stopFlag = Value(c_bool, False)
     # Process for Vision Pipeline
-    cam_proc = Process(target= camera_process, args=(size, side_shift, stopFlag), daemon = True)
+    cam_proc = Process(target= camera_process, args=(size, side_shift, cx, cy, stopFlag), daemon = True)
     # start Process of Vision Pipeline
     cam_proc.start()
-    while not stopFlag:
+    while not stopFlag.value:
         aruco_size = size.value
         aruco_shift = side_shift.value
+        print("cx, cy : ", cx.value, cy.value)
         if aruco_size > 90:
             print('Reverse')
-            stopFlag = True
+            stopFlag.value = True
         else:
             if aruco_shift > 0:
                 print('Go Left')

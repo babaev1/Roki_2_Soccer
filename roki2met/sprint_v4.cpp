@@ -62,6 +62,7 @@ float xr; // = 0
 float yr; // = 0
 float zr; // = -1
 float wr; // = 0
+float wr0;
 
 float xtl; // = 0
 float ytl; // = self.d10   # 53.4
@@ -71,6 +72,7 @@ float xl; // = 0
 float yl; // = 0
 float zl; // = -1
 float wl; // = 0
+float wl0;
 
 float e10;
 float d10;
@@ -214,7 +216,7 @@ void setup() {
     stepLengthOrder = 30;
     ugol_torsa = 0.3;
     bodyTiltAtWalk = -0.02; 
-    hipTilt = 300;
+    hipTilt = 500;
     gaitHeight = 135;
     stepHeight = 35;
     fps = 2;
@@ -282,6 +284,7 @@ int computeAlphaForWalk() {
   //else sfIkAngle( xtr, ytr, ztr, xr, yr, zr, -wr );
   flag = 0;
   torsoAdd = tors_angle * ENC_PER_RADIAN;
+  /*
   //stabilizeRotationByIMU();
   if (correctedRotation > 0) {
     xtr *= 1.5;
@@ -293,6 +296,7 @@ int computeAlphaForWalk() {
     xtl *= 1.5;
     //xtr *= reducer;
     }
+    */
   sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
   if( svIkOutPresent ) {
     flag = flag + 1;
@@ -324,6 +328,7 @@ int computeAlphaForWalk() {
   //if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
   //else sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, -wl );
   sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
+  /*
   if (correctedRotation > 0) {
     xtr /= 1.5;
     xtl /= 0.5;
@@ -332,6 +337,7 @@ int computeAlphaForWalk() {
     xtr /= 0.5;
     xtl /= 1.5;
     }
+    */
   if( svIkOutPresent ) {
     flag = flag + 1;
     //Записать новые значения в сервы
@@ -473,7 +479,7 @@ void walkInitialPoseFine() {
   ztr = ztl = -gaitHeight;
   ytr = -d10 - amplitude / 2.0;
   ytl =  d10 - amplitude / 2.0;
-  computeAlphaForWalkFine( 40 );
+  computeAlphaForWalkFine( 80 );
   }
 
 //Установить исходную позу (ровный на высоте ztr0)
@@ -582,7 +588,9 @@ void walkPhasa3() {
   
 //Исполнить фазу 2
 void walkPhasa2() {
-  wr = 0; wl = 0;
+  wr0 = wr;
+  wl0 = wl;
+  //wr = 0; wl = 0;
   dy = correctedSideLenght / fr2;
   xtl_plan = correctedStepLenght * (0.5 - (fr1 + fr2) / (2.0 * fr1 + fr2)) + dobavka_x_ot_torsa * fr1 * fr2 / (2.0 * fr1 + fr2);
   xtr_plan = correctedStepLenght * 0.5 + dx0Typical + dobavka_x_ot_torsa;
@@ -610,7 +618,14 @@ void walkPhasa2() {
       // wr = correctedRotation - j * stepRotation;
       // wl = wr;
       }
-    //if (correctedRotation < 0) wl = j * correctedRotation / (fr2 - 1);
+    if (correctedRotation < 0){
+      wl = j * correctedRotation / (fr2 - 1);
+      wr = wr0 - (correctedRotation - wr0) * j / fr2;
+      }
+    else{
+      wr = wr0 - wr0 * j / fr2;
+      wl = wl0 - wl0 * j / fr2;
+      }
     xtl += dx2;
     ytl += dy0Typical;
 
@@ -625,7 +640,9 @@ float dx0;
 
 //Исполнить фазу 4
 void walkPhasa4() {
-  wr = 0; wl = 0;
+  wr0 = wr;
+  wl0 = wl;
+  //wr = 0; wl = 0;
   dy = correctedSideLenght / (fr2 - 2.0);
   if( stepType == STEP_LAST ) {
     xtr_plan = 0;
@@ -663,7 +680,14 @@ void walkPhasa4() {
       // wr = j * stepRotation - correctedRotation;
       // wl = wr;
       }
-    //if (correctedRotation > 0) wr = -j * correctedRotation / (fr2 - 1);
+    if (correctedRotation > 0){
+      wr = -j * correctedRotation / (fr2 - 1);
+      wl = wr;
+      }
+    else{
+      wr = wr0 - wr0 * j / fr2;
+      wl = wl0 - wl0 * j / fr2;
+      }
     xtr += dx4;
     ytr += dy0Typical;
     

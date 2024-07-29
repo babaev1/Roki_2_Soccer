@@ -944,11 +944,11 @@ class Motion(Robot, Motion_extention_1):
         self.walk_Cycle_With_Tors_v3_init(stepLength,sideLength)
         self.stabilize_rotation(direction)
         self.walk_Cycle_With_Tors_v3_Phase1(cycle, direction)
-        self.stabilize_rotation(direction)
+        #self.stabilize_rotation(direction)
         self.walk_Cycle_With_Tors_v3_Phase2(cycle, direction)
-        self.stabilize_rotation(direction)
+        #self.stabilize_rotation(direction)
         self.walk_Cycle_With_Tors_v3_Phase3(direction)
-        self.stabilize_rotation(direction)
+        #self.stabilize_rotation(direction)
         self.walk_Cycle_With_Tors_v3_Phase4(cycle, number_Of_Cycles, direction)
 
         self.local.coord_shift[0] = self.cycle_step_yield*stepLength/64/1000
@@ -967,8 +967,8 @@ class Motion(Robot, Motion_extention_1):
             self.rotation = rotation * 0.25 * 0.23 / self.params['ROTATION_YIELD_RIGHT']
         else:
             self.rotation = rotation * 0.25 * 0.23 / self.params['ROTATION_YIELD_LEFT']
-        if self.rotation > 0.3 : self.rotation = 0.3
-        if self.rotation < -0.3 : self.rotation = -0.3
+        if self.rotation > 0.6 : self.rotation = 0.6
+        if self.rotation < -0.6 : self.rotation = -0.6
 
     def walk_Cycle_With_Tors_v3_init(self, stepLength,sideLength):
         self.robot_In_0_Pose = False
@@ -1044,7 +1044,9 @@ class Motion(Robot, Motion_extention_1):
         xtr_plan = self.stepLength * 0.5 + self.dx0_typical + self.dobavka_x_ot_torsa
         dy0 = self.dy0_typical
         #segments = [1,2,2,1]
-        self.wr = self.wl = 0
+        wr0 = self.wr
+        wl0 = self.wl
+        #self.wr = self.wl = 0
         for i in range(self.fr2):
             self.ztr = -self.gaitHeight + self.stepHeight
             #dx0 = self.dx0_typical
@@ -1073,7 +1075,12 @@ class Motion(Robot, Motion_extention_1):
                 self.ytr = self.lateral_offset - 64 + dy0 - dy*self.fr2/(self.fr2- 2)*(i/2)# - (1-math.cos(self.tors_angle)) * self.SIZES[0]
                 #self.wr = self.wl = self.rotation - i * self.rotation/(self.fr2)*2
             #if i >= self.fr2 - 3 : self.wl = self.rotation * 4
-            #if self.rotation < 0: self.wl = i * self.rotation/(self.fr2 - 1)
+            if self.rotation < 0: 
+                self.wl = i * self.rotation/(self.fr2 - 1)
+                self.wr = wr0 - (self.rotation - wr0) * i / self.fr2
+            else:
+                self.wl = wl0 - wl0 * i / self.fr2
+                self.wr = wr0 - wr0 * i / self.fr2
             self.xtl += dx2
             self.ytl += dy0
             self.perform_motion(phase, i, direction)
@@ -1083,7 +1090,9 @@ class Motion(Robot, Motion_extention_1):
         #segments = [1,2,2,1]
         dy0 = self.dy0_typical
         dy = self.sideLength/(self.fr2- 2)
-        self.wr = self.wl = 0
+        wr0 = self.wr
+        wl0 = self.wl
+        #self.wr = self.wl = 0
         for i in range(self.fr2):
             self.ztl = -self.gaitHeight + self.stepHeight
             
@@ -1117,26 +1126,31 @@ class Motion(Robot, Motion_extention_1):
                 self.ytl = self.lateral_offset + 64 + dy0 - dy * i /2# + (1-math.cos(self.tors_angle)) * self.SIZES[0]
                 #self.wr = self.wl = i * self.rotation/(self.fr2) * 2 - self.rotation
             #if i >= self.fr2 - 3 : self.wr = - self.rotation * 4
-            #if self.rotation > 0: self.wr = - i * self.rotation/(self.fr2 - 1)
+            if self.rotation > 0: 
+                self.wr = - i * self.rotation/(self.fr2 - 1)
+                self.wl = self.wr
+            else:
+                self.wr = wr0 - wr0 * i / self.fr2
+                self.wl = wl0 - wl0 * i / self.fr2
             self.xtr += dx4
             self.ytr += dy0
             self.perform_motion(phase, i, direction)
 
     def perform_motion(self, phase, iteration, direction):
-        self.stabilize_rotation(direction)
-        if self.rotation > 0: 
-            self.xtr *= 1.0
-            self.xtl *= 0.3
-        if self.rotation < 0: 
-            self.xtl *= 1.0
-            self.xtr *= 0.3
+        #self.stabilize_rotation(direction)
+        #if self.rotation > 0: 
+        #    self.xtr *= 1.5
+        #    self.xtl *= 0.5
+        #if self.rotation < 0: 
+        #    self.xtl *= 1.5
+        #    self.xtr *= 0.5
         angles = self.computeAlphaForWalk(hands_on = True)
-        if self.rotation > 0: 
-            self.xtr /= 1.3
-            self.xtl /= 0.7
-        if self.rotation < 0: 
-            self.xtl /= 1.3
-            self.xtr /= 0.7
+        #if self.rotation > 0: 
+        #    self.xtr /= 1.5
+        #    self.xtl /= 0.5
+        #if self.rotation < 0: 
+        #    self.xtl /= 1.5
+        #    self.xtr /= 0.5
         if not self.falling_Flag ==0: return
         if len(angles)==0:
             print('bad_ik_calc:', 'phase:', phase, ' i = ', iteration, 'xtr:', int(self.xtr), 'ytr:', int(self.ytr), 'ztr:', self.ztr, 'xtl:', int(self.xtl), 'ytl:', int(self.ytl), 'ztl:', self.ztl )
