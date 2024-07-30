@@ -910,7 +910,7 @@ class Player():
                     #aruco_cy = cy.value
                     #u, v = self.glob.vision.undistort_points(aruco_cx, aruco_cy)
                     #aruco_angle_horizontal = math.atan((self.glob.vision.undistort_cx -u)/ self.glob.vision.focal_length_horizontal)
-                    rotationFromHead = aruco_angle_horizontal.value
+                    rotationFromHead = aruco_angle_horizontal.value * 10
                     print('rotationFromHead: ', rotationFromHead)
                     intercom.memFSet(var.rotationFromHead, rotationFromHead)
                     if aruco_size > 90:

@@ -19,7 +19,7 @@ def detect_aruco_markers(frame, led):
     #print(ids)
     if ids is not None:
         # границы обнаруженных маркеров
-        #frame = cv2.aruco.drawDetectedMarkers(frame, corners, ids)
+        frame = cv2.aruco.drawDetectedMarkers(frame, corners, ids)
         # перебор всех обнаруженных маркеры
         for i in range(len(ids)):
             #  координаты углов маркера
