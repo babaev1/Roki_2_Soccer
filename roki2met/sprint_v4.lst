@@ -1386,7 +1386,7 @@ function declare void setup(
   ( <int 4:orderFromHead> ) = (0) 
   ( <float 5:rotationFromHead> ) = (0) 
   ( <int 71:flag_event> ) = (0) 
-  ( <int 8:cycle_number> ) = (30) 
+  ( <int 8:cycle_number> ) = (1000) 
   ( <float 36:rotationYieldRight> ) = (0.23) 
   ( <float 37:rotationYieldLeft> ) = (0.23) 
   ( <float 1215:svIkA5> ) = (40.2) 

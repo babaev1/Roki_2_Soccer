@@ -884,7 +884,7 @@ class Player():
             
                 # write motion parameters to zubr-controller motion
                 intercom.memISet(var.orderFromHead, 0)              #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
-                intercom.memISet(var.cycle_number, 33)
+                intercom.memISet(var.cycle_number, 100)
                 intercom.memISet(var.hipTilt, self.motion.params['SPRINT_HIP_TILT'])
                 intercom.memISet(var.fps, self.motion.params['SPRINT_FPS'])
                 intercom.memISet(var.stepLengthOrder, self.motion.params['SPRINT_STEP_LENGTH'])

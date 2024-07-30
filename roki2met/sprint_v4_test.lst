@@ -1383,7 +1383,7 @@ function declare void setup(
  {
   ( <int 4:orderFromHead> ) = (0) 
   ( <int 69:flag_event> ) = (0) 
-  ( <int 7:cycle_number> ) = (30) 
+  ( <int 7:cycle_number> ) = (1000) 
   ( <float 35:rotationYieldRight> ) = (0.23) 
   ( <float 36:rotationYieldLeft> ) = (0.23) 
   ( <float 1215:svIkA5> ) = (40.2) 

@@ -109,7 +109,7 @@ void setup() {
   orderFromHead = 0;
   rotationFromHead = 0;
   flag_event = 0;
-  cycle_number = 30;
+  cycle_number = 1000;
   rotationYieldRight = 0.23;
   rotationYieldLeft = 0.23;
   //Установка параметров модели для инверсной кинематики
@@ -790,7 +790,7 @@ void runTest() {
   stepLength = stepLengthOrder * 2.0 / 3.0;
   walkCycle(0);
   stepLength = stepLengthOrder * 1.0;
-  for( i = 0; i < cycle_number; i++ ){
+  for( i = 0; i < 10; i++ ){
     stabilizeRotationByIMU();
     walkCycle(0);
     }
