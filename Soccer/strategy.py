@@ -855,11 +855,12 @@ class Player():
             size = Value('i', 0)       # horizontal size of ARUCO code on picture
             side_shift = Value('i', 0) # horizontal shift of ARUCO code from center of picture 
             stopFlag = Value(c_bool, False)
-            cx = Value('i', 0)
-            cy = Value('i', 0)
+            #cx = Value('i', 0)
+            #cy = Value('i', 0)
+            aruco_angle_horizontal = Value('d', 0)
 
             # Process for Vision Pipeline
-            cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift,cx, cy, stopFlag), daemon = True)
+            cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift,aruco_angle_horizontal, stopFlag), daemon = True)
             # start Process of Vision Pipeline
             cam_proc.start()
             #cam_proc.join()
@@ -905,27 +906,29 @@ class Player():
                     if restart_flag == 0: break
                     aruco_size = size.value
                     aruco_shift = side_shift.value
-                    aruco_cx = cx.value
-                    aruco_cy = cy.value
-                    u, v = self.glob.vision.undistort_points(aruco_cx, aruco_cy)
-                    aruco_angle_horizontal = math.atan((self.glob.vision.undistort_cx -u)/ self.glob.vision.focal_length_horizontal)
-                    print('aruco_angle_horizontal: ', aruco_angle_horizontal)
-                    # if aruco_size > 90:
-                    #     print('Reverse')
-                    #     intercom.memISet(var.orderFromHead, 4)   
-                    # elif aruco_size == 0:
-                    #     intercom.memISet(var.orderFromHead, 0) 
-                    #     print('No marker')
-                    # else:
-                    #     if aruco_shift > 0:
-                    #         print('Go Left')
-                    #         intercom.memISet(var.orderFromHead, 2)
-                    #     elif aruco_shift < 0:
-                    #         print('Go Right')
-                    #         intercom.memISet(var.orderFromHead, 3)
-                    #     else:
-                    #         print('Go Straight')
-                    #         intercom.memISet(var.orderFromHead, 1)
+                    #aruco_cx = cx.value
+                    #aruco_cy = cy.value
+                    #u, v = self.glob.vision.undistort_points(aruco_cx, aruco_cy)
+                    #aruco_angle_horizontal = math.atan((self.glob.vision.undistort_cx -u)/ self.glob.vision.focal_length_horizontal)
+                    rotationFromHead = aruco_angle_horizontal.value
+                    print('rotationFromHead: ', rotationFromHead)
+                    intercom.memFSet(var.rotationFromHead, rotationFromHead)
+                    if aruco_size > 90:
+                        print('Reverse')
+                        intercom.memISet(var.orderFromHead, 4)   
+                    elif aruco_size == 0:
+                        intercom.memISet(var.orderFromHead, 0) 
+                        print('No marker')
+                    else:
+                        if aruco_shift > 0:
+                            print('Go Left')
+                            intercom.memISet(var.orderFromHead, 2)
+                        elif aruco_shift < 0:
+                            print('Go Right')
+                            intercom.memISet(var.orderFromHead, 3)
+                        else:
+                            print('Go Straight')
+                            intercom.memISet(var.orderFromHead, 1)
                     time.sleep(0.05)
 
             return

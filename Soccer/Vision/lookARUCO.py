@@ -17,7 +17,6 @@ def detect_aruco_markers(frame, led):
     corners, ids, rejected_img_points = cv2.aruco.detectMarkers(frame, aruco_dict, parameters=parameters)   # Обнаружение маркеров
     
     #print(ids)
-    aruco_angle_horizontal = 0
     if ids is not None:
         # границы обнаруженных маркеров
         #frame = cv2.aruco.drawDetectedMarkers(frame, corners, ids)
@@ -38,7 +37,7 @@ def detect_aruco_markers(frame, led):
                 aruco_angle_horizontal = math.atan((undistort_cx -u)/ focal_length_horizontal)
                 #print('size = ', size, 'side_shift = ', side_shift )
     else:
-        size = side_shift = 0
+        size = side_shift = aruco_angle_horizontal = 0
     return frame , size, side_shift, aruco_angle_horizontal
 
 def camera_process(size, side_shift, aruco_angle_horizontal, stopFlag):

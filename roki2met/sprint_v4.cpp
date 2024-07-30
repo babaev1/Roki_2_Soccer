@@ -10,6 +10,7 @@
 int restart_flag;
 int timeStep;
 int orderFromHead; // 0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back.
+float rotationFromHead;
 int pitStop;
 int startStop;
 int cycle_number;
@@ -106,6 +107,7 @@ float reducer;
 
 void setup() {
   orderFromHead = 0;
+  rotationFromHead = 0;
   flag_event = 0;
   cycle_number = 30;
   rotationYieldRight = 0.23;
@@ -267,13 +269,11 @@ void stabilizeRotationByIMU(){
   rotation = (forwardDirection - svEulerYaw) * 1.1;
   if( rotation > MATH_PI ) rotation -= 2 * MATH_PI;
   if( rotation < -MATH_PI ) rotation += 2 * MATH_PI;
-  if( rotation > 0.3 ) rotation = 0.3;
-  if( rotation < -0.3 ) rotation = -0.3;
   //correctedRotation = rotation * 0.25 * 0.23 / (rotation <= 0 ? rotationYieldRight : rotationYieldLeft);
-  if (orderFromHead == 1)correctedRotation = 0;
-  else if (orderFromHead == 2) correctedRotation = 0.3;
-  else if (orderFromHead == 3) correctedRotation = -0.3;
-  else correctedRotation = -rotation;
+  if (orderFromHead != 0) correctedRotation = rotationFromHead;
+  else correctedRotation = - rotation;
+  if (correctedRotation > 0.5) correctedRotation = 0.5;
+  if (correctedRotation < -0.5) correctedRotation = -0.5;
   
   //rotation = 0;
 }
@@ -772,7 +772,7 @@ void runTest() {
     stabilizeRotationByIMU();
     walkCycle(0);
     if(orderFromHead == 4) break;
-    orderFromHead = 0;
+    //orderFromHead = 0;
     }
   //Финальный шаг
   stepType = STEP_LAST;
