@@ -910,22 +910,22 @@ class Player():
                     u, v = self.glob.vision.undistort_points(aruco_cx, aruco_cy)
                     aruco_angle_horizontal = math.atan((self.glob.vision.undistort_cx -u)/ self.glob.vision.focal_length_horizontal)
                     print('aruco_angle_horizontal: ', aruco_angle_horizontal)
-                    if aruco_size > 90:
-                        print('Reverse')
-                        intercom.memISet(var.orderFromHead, 4)   
-                    elif aruco_size == 0:
-                        intercom.memISet(var.orderFromHead, 0) 
-                        print('No marker')
-                    else:
-                        if aruco_shift > 0:
-                            print('Go Left')
-                            intercom.memISet(var.orderFromHead, 2)
-                        elif aruco_shift < 0:
-                            print('Go Right')
-                            intercom.memISet(var.orderFromHead, 3)
-                        else:
-                            print('Go Straight')
-                            intercom.memISet(var.orderFromHead, 1)
+                    # if aruco_size > 90:
+                    #     print('Reverse')
+                    #     intercom.memISet(var.orderFromHead, 4)   
+                    # elif aruco_size == 0:
+                    #     intercom.memISet(var.orderFromHead, 0) 
+                    #     print('No marker')
+                    # else:
+                    #     if aruco_shift > 0:
+                    #         print('Go Left')
+                    #         intercom.memISet(var.orderFromHead, 2)
+                    #     elif aruco_shift < 0:
+                    #         print('Go Right')
+                    #         intercom.memISet(var.orderFromHead, 3)
+                    #     else:
+                    #         print('Go Straight')
+                    #         intercom.memISet(var.orderFromHead, 1)
                     time.sleep(0.05)
 
             return

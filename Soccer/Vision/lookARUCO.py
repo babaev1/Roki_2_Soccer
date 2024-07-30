@@ -17,7 +17,7 @@ def detect_aruco_markers(frame, led):
     corners, ids, rejected_img_points = cv2.aruco.detectMarkers(frame, aruco_dict, parameters=parameters)   # Обнаружение маркеров
     
     #print(ids)
-    
+    aruco_angle_horizontal = 0
     if ids is not None:
         # границы обнаруженных маркеров
         #frame = cv2.aruco.drawDetectedMarkers(frame, corners, ids)
