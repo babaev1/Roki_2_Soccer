@@ -205,7 +205,7 @@ void setup() {
   //фреймов, заданных данной переменной
   //Фактическая длительность шага составляет fps - 1, т.е. она короче на один фрейм
 
-  timeStep = 1;
+  timeStep = 2;
   
   reducer = 0.5;
   
@@ -278,8 +278,8 @@ void stabilizeRotationByIMU(){
   //correctedRotation = rotation * 0.25 * 0.23 / (rotation <= 0 ? rotationYieldRight : rotationYieldLeft);
   if (orderFromHead != 0) correctedRotation = vision_factor * rotationFromHead;
   else correctedRotation = imu_factor * rotation;
-  if (correctedRotation > 0.5) correctedRotation = 0.5;
-  if (correctedRotation < -0.5) correctedRotation = -0.5;
+  if (correctedRotation > 0.3) correctedRotation = 0.3;
+  if (correctedRotation < -0.3) correctedRotation = -0.3;
   
   //rotation = 0;
 }
@@ -750,9 +750,10 @@ void walkPhasa2() {
         dx = (xtr_plan - xtr) / (fr2 - j);
       xtr += dx;
       ytr  = s - 64 + dy0Typical - dy * fr2 / (fr2 - 2) * (j / 2);// - (1 - sfMathCos(tors_angle)) * svIkA5;
-      // wr = correctedRotation - j * stepRotation;
-      // wl = wr;
+      wr = correctedRotation - j * stepRotation;
+      wl = wr;
       }
+    /*
     if (correctedRotation < 0){
       wl = j * correctedRotation / (fr2 - 1);
       wr = wr0 - (correctedRotation - wr0) * j / fr2;
@@ -761,6 +762,7 @@ void walkPhasa2() {
       wr = wr0 - wr0 * j / fr2;
       wl = wl0 - wl0 * j / fr2;
       }
+      */
     xtl += dx2;
     ytl += dy0Typical;
 
@@ -812,9 +814,10 @@ void walkPhasa4() {
       dx = (xtl_plan - xtl) / (fr2 - j);
       xtl += dx;
       ytl  = s + 64 + dy0Typical - dy * j / 2;// + (1 - sfMathCos(tors_angle)) * svIkA5;
-      // wr = j * stepRotation - correctedRotation;
-      // wl = wr;
+      wr = j * stepRotation - correctedRotation;
+      wl = wr;
       }
+    /*
     if (correctedRotation > 0){
       wr = -j * correctedRotation / (fr2 - 1);
       wl = wr;
@@ -823,6 +826,7 @@ void walkPhasa4() {
       wr = wr0 - wr0 * j / fr2;
       wl = wl0 - wl0 * j / fr2;
       }
+      */
     xtr += dx4;
     ytr += dy0Typical;
     
