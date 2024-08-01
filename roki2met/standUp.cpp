@@ -50,7 +50,7 @@ void standUp() {
         sfPoseGroup(MASK_ALL, 0, frameCount);
         sfPoseGroup(MASK_RIGHT_ELBOW | MASK_LEFT_ELBOW, 5145, frameCount);
         sfPoseGroup(MASK_RIGHT_CLAVICLE | MASK_LEFT_CLAVICLE, 384, frameCount);
-        sfWaitFrame(frameCount)
+        sfWaitFrame(frameCount);
     }
     if (fallingFlag == -1) {  // face up
         // page 0
@@ -212,7 +212,7 @@ void main() {
   //Запускаем миксинг
   sfCreateTask( mixing, 20 );
 
-  sitToStart()
+  sitToStart();
 
   svButtonRight = SV_SLOT_INACTIVE;
   svButtonLeft = SV_SLOT_INACTIVE;
