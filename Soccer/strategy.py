@@ -850,6 +850,16 @@ class Player():
         self.motion.params['SPRINT_UGOL_TORSA'] = 0.1
         self.motion.params['SPRINT_IMU_FACTOR'] = -2
         self.motion.params['SPRINT_VISION_FACTOR'] = 1
+
+        self.motion.params['SPRINT_HIP_TILT'] = 0
+        self.motion.params['SPRINT_STEP_LENGTH'] = 60
+        self.motion.params['SPRINT_GAIT_HEIGHT'] = 180
+        self.motion.params['SPRINT_STEP_HEIGHT'] = 40
+        self.motion.params['SPRINT_FPS'] = 4
+        self.motion.params['SPRINT_UGOL_TORSA'] = 0.7
+        self.motion.params['SPRINT_IMU_FACTOR'] = -2
+        self.motion.params['SPRINT_VISION_FACTOR'] = 1
+
         if self.glob.SIMULATION == 5:
             from Soccer.Vision import lookARUCO
 

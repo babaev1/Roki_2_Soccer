@@ -98,8 +98,9 @@ float stepYtr;
 float stepYtl;
 
 #define STEP_FIRST 0
-#define STEP_LAST  1
-#define STEP_OTHER 2
+#define STEP_SECOND 1
+#define STEP_LAST  2
+#define STEP_OTHER 3
 int stepType;
 int flag;
 int flag_event;
@@ -204,7 +205,7 @@ void setup() {
   //фреймов, заданных данной переменной
   //Фактическая длительность шага составляет fps - 1, т.е. она короче на один фрейм
 
-  timeStep = 1;
+  timeStep = 2;
   
   reducer = 0.5;
   
@@ -248,7 +249,7 @@ void sitToStart(int frameCount){
   sfPoseGroup( MASK_HEAD_TILT, 700, frameCount );
   sfPoseGroup( MASK_RIGHT_CLAVICLE, 1370, frameCount );
   sfPoseGroup( MASK_LEFT_CLAVICLE, 1370, frameCount );
-  sfPoseGroup( MASK_RIGHT_ELBOW_SIDE, 700, frameCount );
+  sfPoseGroup( MASK_RIGHT_ELBOW_SIDE, 1000, frameCount );
   sfPoseGroup( MASK_LEFT_ELBOW_SIDE, 700, frameCount );
   sfPoseGroup( MASK_RIGHT_ELBOW, 4500, frameCount );
   sfPoseGroup( MASK_LEFT_ELBOW, 4500, frameCount );
@@ -436,7 +437,8 @@ void computeAlphaForWalkFine( int frameCount ) {
   //Ожидать когда движение завершится
   sfPoseGroupLin( MASK_RIGHT_ELBOW | MASK_LEFT_ELBOW, 4540, frameCount );
   sfPoseGroupLin( MASK_RIGHT_CLAVICLE | MASK_LEFT_CLAVICLE, 1400, frameCount );
-  sfPoseGroupLin( MASK_RIGHT_ELBOW_SIDE | MASK_LEFT_ELBOW_SIDE, 700, frameCount );
+  sfPoseGroupLin( MASK_RIGHT_ELBOW_SIDE | MASK_LEFT_ELBOW_SIDE, 1000, frameCount );
+  sfPoseGroupLin( MASK_RIGHT_SHOULDER | MASK_LEFT_SHOULDER, 1000, frameCount);
   sfWaitFrame( frameCount );
   }
 
@@ -890,12 +892,16 @@ void runTest() {
   //while (startStop == 0) sfWaitFrame(1);
   //Выполняем первый шаг
   stepType = STEP_FIRST;
-  stepLength = stepLengthOrder/ 3.0;
+  stepLength = stepLengthOrder/ 4.0;
+  walkCycle(0);
+  //Второй разгонный шаг
+  stepType = STEP_SECOND;
+  stepLength = stepLengthOrder / 2.0;
   walkCycle(0);
   
-  //Второй разгонный шаг
+  //Третий разгонный шаг
   stepType = STEP_OTHER;
-  stepLength = stepLengthOrder * 2.0 / 3.0;
+  stepLength = stepLengthOrder * 3.0 / 4.0;
   walkCycle(0);
   
   //Цикл одинаковых шагов
@@ -917,10 +923,13 @@ void runTest() {
   ugol_torsa *= -1;
   walkInitialPoseFine();
   stepType = STEP_FIRST;
-  stepLength = stepLengthOrder/ 3.0;
+  stepLength = stepLengthOrder/ 4.0;
+  walkCycle(0);
+  stepType = STEP_SECOND;
+  stepLength = stepLengthOrder / 2.0;
   walkCycle(0);
   stepType = STEP_OTHER;
-  stepLength = stepLengthOrder * 2.0 / 3.0;
+  stepLength = stepLengthOrder * 3.0 / 4.0;
   walkCycle(0);
   stepLength = stepLengthOrder * 1.0;
   for( i = 0; i < 10; i++ ){

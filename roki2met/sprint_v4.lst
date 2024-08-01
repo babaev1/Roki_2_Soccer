@@ -1444,7 +1444,7 @@ function declare void setup(
   ( <float 70:stepYtr> ) = ( ( ( <float 60:amplitude> ) / (2) ) / ( <int 34:selfInitPoses> ) ) 
   ( <float 71:stepYtl> ) = ( ( ( <float 60:amplitude> ) / (2) ) / ( <int 34:selfInitPoses> ) ) 
   ( <float 61:alpha01> ) = (3.14159) 
- if   ( <int 3:timeStep> ) = (1) 
+ if   ( <int 3:timeStep> ) = (2) 
   ( <float 77:reducer> ) = (0.5) 
   ( <int 10:stepLengthOrder> ) = (60) 
   ( <float 18:ugol_torsa> ) = (0.7) 
@@ -1672,6 +1672,12 @@ function declare void computeAlphaForWalkFine(
 ) end function declare
 > 
  if  call  <function declare void sfPoseGroupLin(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroupLin(
  int 4:unitMask
  int 3:angle
  int 2:frameCount
@@ -1917,13 +1923,19 @@ function declare void runTest(
 ) end function declare
 > 
   ( <int 72:stepType> ) = (0) 
-  ( <float 22:stepLength> ) = ( ( <int 10:stepLengthOrder> ) / (3) ) 
+  ( <float 22:stepLength> ) = ( ( <int 10:stepLengthOrder> ) / (4) ) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
 > 
-  ( <int 72:stepType> ) = (2) 
-  ( <float 22:stepLength> ) = ( ( ( <int 10:stepLengthOrder> ) * (2) ) / (3) ) 
+  ( <int 72:stepType> ) = (1) 
+  ( <float 22:stepLength> ) = ( ( <int 10:stepLengthOrder> ) / (2) ) 
+ call  <function declare void walkCycle(
+ int 2:half
+) end function declare
+> 
+  ( <int 72:stepType> ) = (3) 
+  ( <float 22:stepLength> ) = ( ( ( <int 10:stepLengthOrder> ) * (3) ) / (4) ) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
@@ -1931,7 +1943,7 @@ function declare void runTest(
   ( <float 22:stepLength> ) = ( ( <int 10:stepLengthOrder> ) * (1) ) 
   {
   }
- loop  ( <int 72:stepType> ) = (1) 
+ loop  ( <int 72:stepType> ) = (2) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
@@ -1945,13 +1957,19 @@ function declare void runTest(
 ) end function declare
 > 
   ( <int 72:stepType> ) = (0) 
-  ( <float 22:stepLength> ) = ( ( <int 10:stepLengthOrder> ) / (3) ) 
+  ( <float 22:stepLength> ) = ( ( <int 10:stepLengthOrder> ) / (4) ) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
 > 
-  ( <int 72:stepType> ) = (2) 
-  ( <float 22:stepLength> ) = ( ( ( <int 10:stepLengthOrder> ) * (2) ) / (3) ) 
+  ( <int 72:stepType> ) = (1) 
+  ( <float 22:stepLength> ) = ( ( <int 10:stepLengthOrder> ) / (2) ) 
+ call  <function declare void walkCycle(
+ int 2:half
+) end function declare
+> 
+  ( <int 72:stepType> ) = (3) 
+  ( <float 22:stepLength> ) = ( ( ( <int 10:stepLengthOrder> ) * (3) ) / (4) ) 
  call  <function declare void walkCycle(
  int 2:half
 ) end function declare
