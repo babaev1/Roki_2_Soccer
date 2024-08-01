@@ -864,6 +864,7 @@ class Player():
             process_file.close()
             labels = [[], [], [], ['start'], []]
             pressed_button = self.motion.push_Button(labels)
+            self.motion.with_Vision = False
             sideLength = 0
             stepLength = 64
             self.motion.gaitHeight = 180
@@ -876,7 +877,7 @@ class Player():
                     if cycle ==0 : stepLength1 = stepLength/3
                     if cycle ==1 : stepLength1 = stepLength/3 * 2
                     self.motion.refresh_Orientation()
-                    rotation = - self.motion.imu_body_yaw() * 1.1
+                    rotation =  -self.motion.imu_body_yaw() * 1.1
                     rotation = self.motion.normalize_rotation(rotation)
                     self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                     aruco_size = size.value
