@@ -673,24 +673,24 @@ VBC3_PUSH_GLOBAL 24 //rotation
 VBC1_MUL_FF
 VBC1_POP
 LAB1068: //if exit
-[1:281] ;if (correctedRotation > 0.3) correctedRotation = 0.3;
+[1:281] ;if (correctedRotation > 0.125) correctedRotation = 0.125;
 VBC3_PUSH_GLOBAL 80 //correctedRotation
-VBC5_PUSH_CONST 1050253722 
+VBC5_PUSH_CONST 1040187392 
 VBC1_GREAT_FF
 VBC4_FALSE_JUMP LAB1089 //if to false
-;if (correctedRotation > 0.3) correctedRotation = 0.3;
+;if (correctedRotation > 0.125) correctedRotation = 0.125;
 VBC2_PUSH_CONST 80 //correctedRotation
-VBC5_PUSH_CONST 1050253722 
+VBC5_PUSH_CONST 1040187392 
 VBC1_POP
 LAB1089: //if else
-[1:282] ;if (correctedRotation < -0.3) correctedRotation = -0.3;
+[1:282] ;if (correctedRotation < -0.125) correctedRotation = -0.125;
 VBC3_PUSH_GLOBAL 80 //correctedRotation
-VBC5_PUSH_CONST -1097229926 // -
+VBC5_PUSH_CONST -1107296256 // -
 VBC1_LESS_FF
 VBC4_FALSE_JUMP LAB1110 //if to false
-;if (correctedRotation < -0.3) correctedRotation = -0.3;
+;if (correctedRotation < -0.125) correctedRotation = -0.125;
 VBC2_PUSH_CONST 80 //correctedRotation
-VBC5_PUSH_CONST -1097229926 // -
+VBC5_PUSH_CONST -1107296256 // -
 VBC1_POP
 LAB1110: //if else
 [1:287] ;

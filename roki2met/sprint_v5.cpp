@@ -278,8 +278,8 @@ void stabilizeRotationByIMU(){
   //correctedRotation = rotation * 0.25 * 0.23 / (rotation <= 0 ? rotationYieldRight : rotationYieldLeft);
   if (orderFromHead != 0) correctedRotation = vision_factor * rotationFromHead;
   else correctedRotation = imu_factor * rotation;
-  if (correctedRotation > 0.3) correctedRotation = 0.3;
-  if (correctedRotation < -0.3) correctedRotation = -0.3;
+  if (correctedRotation > 0.125) correctedRotation = 0.125;
+  if (correctedRotation < -0.125) correctedRotation = -0.125;
   
   //rotation = 0;
 }
