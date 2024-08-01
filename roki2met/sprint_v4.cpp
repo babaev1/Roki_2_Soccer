@@ -56,6 +56,7 @@ float rotationYieldRight;
 float rotationYieldLeft;
 
 int   framestep;
+int frameCount;
 
 float xtr; // = 0
 float ytr; // = -self.d10   #-53.4
@@ -474,7 +475,7 @@ void standUp() {
         sfPoseGroup(MASK_ALL, 0, frameCount);
         sfPoseGroup(MASK_RIGHT_ELBOW | MASK_LEFT_ELBOW, 5145, frameCount);
         sfPoseGroup(MASK_RIGHT_CLAVICLE | MASK_LEFT_CLAVICLE, 384, frameCount);
-        sfWaitFrame(frameCount)
+        sfWaitFrame(frameCount);
     }
     if (fallingFlag == -1) {  // face up
         // page 0
