@@ -1,9 +1,14 @@
 import json, array, math
 
 class Glob:
-    def __init__(self, simulation, current_work_directory, particles_number = 1000):
-        self.COLUMNS = 18
-        self.ROWS = 13
+    def __init__(self, simulation, current_work_directory, particles_number = 1000, event_type = 'Robocup'):
+        self.event_type = event_type
+        if self.event_type == 'FIRA':
+            self.COLUMNS = 20
+            self.ROWS = 15
+        elif event_type == 'Robocup':
+            self.COLUMNS = 18
+            self.ROWS = 13
         self.current_work_directory = current_work_directory
         self.particles_number = particles_number
         self.pf_alloc1 = array.array('I',(0 for i in range(particles_number*4)))
@@ -61,13 +66,17 @@ class Glob:
         #print("self.side_step_right_yield", self.side_step_right_yield)
         #print(self.params)
         self.landmarks = landmarks
-        self.import_strategy_data(current_work_directory)
+        self.import_strategy_data()
         self.obstacleAvoidanceIsOn = False
         self.imu_drift_correction = 0
         self.imu_drift_last_correction_time = 0
 
-    def import_strategy_data(self, current_work_directory):
-        with open(current_work_directory + "Init_params/strategy_data.json", "r") as f:
+    def import_strategy_data(self):
+        if self.event_type == 'FIRA':
+            strategy_data_file = "Init_params/strategy_data_FIRA.json"
+        else:
+            strategy_data_file = "Init_params/strategy_data.json"
+        with open(self.current_work_directory + strategy_data_file, "r") as f:
             loaded_Dict = json.loads(f.read())
         if loaded_Dict.get('strategy_data') != None:
             strategy_data = loaded_Dict['strategy_data']

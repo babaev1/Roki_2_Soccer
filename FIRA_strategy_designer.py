@@ -295,7 +295,7 @@ class Strategy_Designer(wx.Frame):
         column_position = mouse_position[0] // cell #- 1
         raw_position = mouse_position[1] // cell #- 1
         legalPosition = False
-        if 0 <= column_position < 18  and 0 <= raw_position < 13 : legalPosition = True
+        if 0 <= column_position < COLUMNS and 0 <= raw_position < RAWS : legalPosition = True
         if legalPosition: 
             self.activeSector = [column_position, raw_position]
             print((column_position, raw_position))
