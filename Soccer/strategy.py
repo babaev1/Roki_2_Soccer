@@ -862,6 +862,8 @@ class Player():
             with open('/dev/shm/process.txt', 'w') as process_file:
                 print(str(pid), file= process_file)
             process_file.close()
+            labels = [[], [], [], ['start'], []]
+            pressed_button = self.motion.push_Button(labels)
             sideLength = 0
             stepLength = 64
             self.motion.gaitHeight = 180
