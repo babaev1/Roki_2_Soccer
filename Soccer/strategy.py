@@ -848,6 +848,8 @@ class Player():
         self.motion.params['SPRINT_STEP_HEIGHT'] = 30
         self.motion.params['SPRINT_FPS'] = 2
         self.motion.params['SPRINT_UGOL_TORSA'] = 0.1
+        self.motion.params['SPRINT_IMU_FACTOR'] = -1
+        self.motion.params['SPRINT_VISION_FACTOR'] = 1
         if self.glob.SIMULATION == 5:
             from Soccer.Vision import lookARUCO
 
@@ -890,7 +892,8 @@ class Player():
                 intercom.memISet(var.stepLengthOrder, self.motion.params['SPRINT_STEP_LENGTH'])
                 intercom.memISet(var.gaitHeight, self.motion.params['SPRINT_GAIT_HEIGHT'])
                 intercom.memISet(var.stepHeight, self.motion.params['SPRINT_STEP_HEIGHT'])
-                intercom.memFSet(var.ugol_torsa, self.motion.params['SPRINT_UGOL_TORSA'])
+                intercom.memFSet(var.imu_factor, self.motion.params['SPRINT_IMU_FACTOR'])
+                intercom.memFSet(var.vision_factor, self.motion.params['SPRINT_VISION_FACTOR'])
                 intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
                 #labels = [[], [], [], ['start'], []]
                 #pressed_button = self.motion.push_Button(labels)
@@ -934,7 +937,7 @@ class Player():
             return
         self.motion.first_Leg_Is_Right_Leg == True
         timeStep = 1
-        number_Of_Cycles = 40
+        number_Of_Cycles = 10
         if timeStep == 1:                   # 10ms
             stepLength = 30 #100
             self.motion.ugol_torsa = 0.3 #0.65
@@ -968,6 +971,7 @@ class Player():
             #rotation = self.motion.normalize_rotation(rotation)
             self.motion.walk_Cycle_With_Tors_v3(stepLength1,sideLength, 0 ,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
+        #self.motion.sim_Progress(10)
 
     def kick_test(self, second_pressed_button):
         if second_pressed_button == 'regular':
