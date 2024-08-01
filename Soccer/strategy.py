@@ -862,6 +862,8 @@ class Player():
             with open('/dev/shm/process.txt', 'w') as process_file:
                 print(str(pid), file= process_file)
             process_file.close()
+            self.motion.direction_To_Attack = 0
+            self.motion.activation()
             labels = [[], [], [], ['start'], []]
             pressed_button = self.motion.push_Button(labels)
             self.motion.with_Vision = False
