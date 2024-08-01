@@ -842,13 +842,13 @@ class Player():
             self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
 
     def sprint(self, second_pressed_button):
-        self.motion.params['SPRINT_HIP_TILT'] = 500
+        self.motion.params['SPRINT_HIP_TILT'] = 400
         self.motion.params['SPRINT_STEP_LENGTH'] = 40
         self.motion.params['SPRINT_GAIT_HEIGHT'] = 135
         self.motion.params['SPRINT_STEP_HEIGHT'] = 30
         self.motion.params['SPRINT_FPS'] = 2
         self.motion.params['SPRINT_UGOL_TORSA'] = 0.1
-        self.motion.params['SPRINT_IMU_FACTOR'] = -1
+        self.motion.params['SPRINT_IMU_FACTOR'] = -2
         self.motion.params['SPRINT_VISION_FACTOR'] = 1
         if self.glob.SIMULATION == 5:
             from Soccer.Vision import lookARUCO
