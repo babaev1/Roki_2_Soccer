@@ -849,12 +849,11 @@ class Player():
             size = Value('i', 0)       # horizontal size of ARUCO code on picture
             side_shift = Value('i', 0) # horizontal shift of ARUCO code from center of picture 
             stopFlag = Value(c_bool, False)
-            #cx = Value('i', 0)
-            #cy = Value('i', 0)
             aruco_angle_horizontal = Value('d', 0)
+            distance = Value('d', 0)
 
             # Process for Vision Pipeline
-            cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift,aruco_angle_horizontal, stopFlag), daemon = True)
+            cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift,aruco_angle_horizontal, distance, stopFlag), daemon = True)
             # start Process of Vision Pipeline
             cam_proc.start()
             #cam_proc.join()
@@ -883,8 +882,9 @@ class Player():
                     rotation =  -self.motion.imu_body_yaw() * 1.1
                     rotation = self.motion.normalize_rotation(rotation)
                     self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
-                    aruco_size = size.value
-                    if aruco_size > 90:
+                    #aruco_size = size.value
+                    aruco_dist = distance.value
+                    if 0 < aruco_dist < 90 :
                         print('Reverse')
                         #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 1)
                         #self.motion.walk_Final_Pose()
