@@ -600,7 +600,10 @@ class Motion(Robot, Motion_extention_1):
         dy0_typical = self.sideLength/(2*self.fr1+self.fr2+ 2 * framestep)*framestep        # CoM propulsion sideways per framestep
         xr_old, xl_old, yr_old, yl_old = self.xr, self.xl, self.yr, self.yl
         # correction of body tilt forward
-        self.xr, self.xl = self.params['BODY_TILT_AT_WALK'], self.params['BODY_TILT_AT_WALK']   #
+        if stepLength < 0:
+            self.xr, self.xl = self.params['BODY_TILT_AT_WALK_BACKWARDS'], self.params['BODY_TILT_AT_WALK_BACKWARDS']
+        else:
+            self.xr, self.xl = self.params['BODY_TILT_AT_WALK'], self.params['BODY_TILT_AT_WALK']   #
         # correction of sole skew depending on side angle of body when step pushes land
         self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
         if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)

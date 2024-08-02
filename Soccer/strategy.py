@@ -277,6 +277,7 @@ class Player():
             params['ROTATION_YIELD_RIGHT'] = round(rotation_yield_right, 3)
             params['ROTATION_YIELD_LEFT'] = round(rotation_yield_left, 3)
         jsonstring = '{\n"BODY_TILT_AT_WALK": ' + str(params["BODY_TILT_AT_WALK"]) \
+                    + ',\n"BODY_TILT_AT_WALK_BACKWARDS": ' + str(params["BODY_TILT_AT_WALK_BACKWARDS"]) \
                     + ',\n"SOLE_LANDING_SKEW": ' + str(params["SOLE_LANDING_SKEW"]) \
                     + ',\n"BODY_TILT_AT_KICK": ' + str(params["BODY_TILT_AT_KICK"]) \
                     + ',\n"ROTATION_YIELD_RIGHT": ' + str(params["ROTATION_YIELD_RIGHT"]) \
@@ -319,6 +320,7 @@ class Player():
         stepLength = 64
         self.motion.gaitHeight = 180
         if pressed_button == 'spot_run': stepLength = 0
+        if pressed_button == 'run_backwards': stepLength *= -1
         number_Of_Cycles = 20
         self.motion.amplitude = 32
         if pressed_button == 'short_run': number_Of_Cycles = 10
@@ -844,7 +846,6 @@ class Player():
     def sprint(self, second_pressed_button):
         if self.glob.SIMULATION == 5:
             from Soccer.Vision import lookARUCO
-
             # Pipeline variables
             size = Value('i', 0)       # horizontal size of ARUCO code on picture
             side_shift = Value('i', 0) # horizontal shift of ARUCO code from center of picture 
@@ -884,7 +885,7 @@ class Player():
                     self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                     #aruco_size = size.value
                     aruco_dist = distance.value
-                    if 0 < aruco_dist < 90 :
+                    if 0 < aruco_dist < self.glob.params['SPRINT_REVERSE_DISTANCE_CM'] * 2 :
                         print('Reverse')
                         #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 1)
                         #self.motion.walk_Final_Pose()
@@ -901,8 +902,8 @@ class Player():
                         break
                 if self.motion.falling_Flag != 0: continue
                 number_Of_Cycles = 10
-                stepLength = -50
-                self.glob.params['BODY_TILT_AT_WALK'] -= 0.01
+                stepLength = -64
+                #self.glob.params['BODY_TILT_AT_WALK'] -= 0.01
                 #self.motion.walk_Initial_Pose()
                 for cycle in range(number_Of_Cycles):
                     stepLength1 = stepLength

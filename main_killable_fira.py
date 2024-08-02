@@ -58,7 +58,7 @@ try:
         local = None
     
     if role == 'run_test':
-        labels = [[],['side_step_left', 'rotation_left'], [], ['short_run', 'long_run', 'spot_run', 'head_tilt_calibration'], ['side_step_right', 'rotation_right']]
+        labels = [[],['side_step_left', 'rotation_left'], [], ['short_run', 'long_run', 'spot_run', 'run_backwards'], ['side_step_right', 'rotation_right']]
     elif role == 'kick_test':
         labels = [[],[],[],['regular', 'new_kick'], []]
     elif role == 'basketball':
