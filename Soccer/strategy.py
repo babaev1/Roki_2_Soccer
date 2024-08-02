@@ -868,13 +868,13 @@ class Player():
             pressed_button = self.motion.push_Button(labels)
             self.motion.with_Vision = False
             sideLength = 0
-            stepLength = 64
-            self.motion.gaitHeight = 180
-            number_Of_Cycles = 200
             while True:
+                if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
+                stepLength = 64
                 number_Of_Cycles = 200
                 self.motion.walk_Initial_Pose()
                 for cycle in range(number_Of_Cycles):
+                    if self.motion.falling_Flag != 0: break
                     stepLength1 = stepLength
                     if cycle ==0 : stepLength1 = stepLength/3
                     if cycle ==1 : stepLength1 = stepLength/3 * 2
@@ -888,8 +888,10 @@ class Player():
                         self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 1)
                         self.motion.walk_Final_Pose()
                         break
+                if self.motion.falling_Flag != 0: continue
                 number_Of_Cycles = 10
                 stepLength = -50
+                self.glob.params['BODY_TILT_AT_WALK'] *= -1
                 for cycle in range(number_Of_Cycles):
                     stepLength1 = stepLength
                     if cycle ==0 : stepLength1 = stepLength/3
@@ -897,7 +899,7 @@ class Player():
                     self.motion.refresh_Orientation()
                     rotation = - self.motion.imu_body_yaw() * 1.1
                     rotation = self.motion.normalize_rotation(rotation)
-                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                    self.motion.walk_Cycle(stepLength1,sideLength, -rotation,cycle, number_Of_Cycles)
                 self.motion.walk_Final_Pose()
 
 
