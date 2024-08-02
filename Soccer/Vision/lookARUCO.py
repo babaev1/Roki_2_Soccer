@@ -51,7 +51,7 @@ def detect_aruco_markers(frame, led):
         size = side_shift = aruco_angle_horizontal = 0
     return frame , size, side_shift, aruco_angle_horizontal, distance
 
-def camera_process(size, side_shift, aruco_angle_horizontal, stopFlag):
+def camera_process(size, side_shift, aruco_angle_horizontal, distance, stopFlag):
     picam2 = Picamera2(camera_num=0)
     led = Led()
     picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)})) 
@@ -93,7 +93,7 @@ if __name__== "__main__":
     distance = Value('d', 0)
     stopFlag = Value(c_bool, False)
     # Process for Vision Pipeline
-    cam_proc = Process(target= camera_process, args=(size, side_shift, aruco_angle_horizontal, stopFlag), daemon = True)
+    cam_proc = Process(target= camera_process, args=(size, side_shift, aruco_angle_horizontal, distance, stopFlag), daemon = True)
     # start Process of Vision Pipeline
     cam_proc.start()
     while not stopFlag.value:
