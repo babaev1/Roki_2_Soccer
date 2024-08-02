@@ -571,7 +571,7 @@ class Motion(Robot, Motion_extention_1):
     def walk_Cycle(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
-            self.local.quality =0
+            #self.local.quality =0
             if self.falling_Flag == 3: uprint('STOP!')
             else: uprint('FALLING!!!', self.falling_Flag)
             return[]
@@ -1216,7 +1216,7 @@ class Motion(Robot, Motion_extention_1):
     def walk_Final_Pose(self, respect_body_tilt = False):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
-            self.local.quality =0
+            #self.local.quality =0
             if self.falling_Flag == 3: uprint('STOP!')
             else: uprint('FALLING!!!', self.falling_Flag)
             return[]

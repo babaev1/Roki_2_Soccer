@@ -864,6 +864,7 @@ class Player():
             process_file.close()
             self.motion.direction_To_Attack = 0
             self.motion.activation()
+            self.motion.head_Return(0, -1000)
             labels = [[], [], [], ['start'], []]
             pressed_button = self.motion.push_Button(labels)
             self.motion.with_Vision = False
@@ -885,13 +886,24 @@ class Player():
                     aruco_size = size.value
                     if aruco_size > 90:
                         print('Reverse')
-                        self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 1)
-                        self.motion.walk_Final_Pose()
+                        #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 1)
+                        #self.motion.walk_Final_Pose()
+                        stepLength1 = stepLength/3 * 2
+                        self.motion.refresh_Orientation()
+                        rotation =  -self.motion.imu_body_yaw() * 1.1
+                        rotation = self.motion.normalize_rotation(rotation)
+                        self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                        stepLength1 = stepLength/3
+                        self.motion.refresh_Orientation()
+                        rotation =  -self.motion.imu_body_yaw() * 1.1
+                        rotation = self.motion.normalize_rotation(rotation)
+                        self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                         break
                 if self.motion.falling_Flag != 0: continue
                 number_Of_Cycles = 10
                 stepLength = -50
-                self.glob.params['BODY_TILT_AT_WALK'] *= -1
+                self.glob.params['BODY_TILT_AT_WALK'] -= 0.01
+                #self.motion.walk_Initial_Pose()
                 for cycle in range(number_Of_Cycles):
                     stepLength1 = stepLength
                     if cycle ==0 : stepLength1 = stepLength/3
@@ -899,7 +911,7 @@ class Player():
                     self.motion.refresh_Orientation()
                     rotation = - self.motion.imu_body_yaw() * 1.1
                     rotation = self.motion.normalize_rotation(rotation)
-                    self.motion.walk_Cycle(stepLength1,sideLength, -rotation,cycle, number_Of_Cycles)
+                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                 self.motion.walk_Final_Pose()
 
 
