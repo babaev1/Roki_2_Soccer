@@ -320,7 +320,9 @@ class Player():
         stepLength = 64
         self.motion.gaitHeight = 180
         if pressed_button == 'spot_run': stepLength = 0
-        if pressed_button == 'run_backwards': stepLength *= -1
+        if pressed_button == 'run_backwards': 
+            stepLength = -50
+            self.motion.stepHeight = 40
         number_Of_Cycles = 20
         self.motion.amplitude = 32
         if pressed_button == 'short_run': number_Of_Cycles = 10
@@ -902,7 +904,8 @@ class Player():
                         break
                 if self.motion.falling_Flag != 0: continue
                 number_Of_Cycles = 10
-                stepLength = -64
+                stepLength = -50
+                self.motion.stepHeight = 40
                 #self.glob.params['BODY_TILT_AT_WALK'] -= 0.01
                 #self.motion.walk_Initial_Pose()
                 for cycle in range(number_Of_Cycles):
@@ -912,7 +915,7 @@ class Player():
                     self.motion.refresh_Orientation()
                     rotation = - self.motion.imu_body_yaw() * 1.1
                     rotation = self.motion.normalize_rotation(rotation)
-                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle +1, number_Of_Cycles +1) 
                 self.motion.walk_Final_Pose()
 
         else:
