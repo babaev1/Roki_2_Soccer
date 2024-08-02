@@ -219,6 +219,7 @@ class Player():
         if self.role == 'forward_v2': self.forward_v2_main_cycle()
         if self.role == 'marathon':  self.marathon_main_cycle()
         if self.role == 'penalty_Shooter': self.penalty_Shooter_main_cycle()
+        if self.role == 'FIRA_penalty_Shooter': self.FIRA_penalty_Shooter_main_cycle()
         if self.role == 'run_test': self.run_test_main_cycle(self.second_pressed_button)
         if self.role == 'rotation_test': self.rotation_test_main_cycle()
         if self.role == 'sidestep_test': self.sidestep_test_main_cycle()
@@ -553,6 +554,48 @@ class Player():
                     self.motion.far_distance_straight_approach([duty_x_position , duty_y_position], direction_To_Duty, gap = 0, stop_Over = False)
                     self.motion.turn_To_Course(0)
 
+
+    def FIRA_penalty_Shooter_main_cycle(self):
+        self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
+        first_shoot = True
+        first_look_point = [0.9, 0]
+        #self.glob.vision.camera_thread.start()
+        #self.motion.control_Head_motion_thread.start()
+        #self.motion.kick_off_ride()
+        self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
+        while (True):
+            if self.motion.falling_Flag != 0:
+                if self.motion.falling_Flag == 3: break
+                self.motion.falling_Flag = 0
+                self.local.coordinate_fall_reset()
+            #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+            #                                                                  very_Fast = False, first_look_point=first_look_point )
+            if self.glob.robot_see_ball > 0: self.local.ball_position_calculation()
+            first_look_point = self.local.ball_odometry
+            self.f.dir_To_Guest()
+            print('ball_coord = ', self.local.ball_odometry)
+            print('direction_To_Guest = ', math.degrees(self.f.direction_To_Guest), 'degrees')
+            if self.glob.robot_see_ball <= 0:
+                self.motion.turn_To_Course(self.local.coord_odometry[2]+ 2 * math.pi / 3)
+                continue
+            player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0],
+                                                          self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
+            player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
+            player_in_front_of_ball = -math.pi/2 < player_from_ball_yaw < math.pi/2
+            player_in_fast_kick_position = (player_from_ball_yaw > 2.5 or player_from_ball_yaw < -2.5) and self.glob.ball_distance < 0.6
+            if self.glob.ball_distance > 0.35  and not player_in_fast_kick_position:
+                if self.glob.ball_distance> 3: stop_Over = True
+                else: stop_Over = False
+                direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
+                self.motion.far_distance_straight_approach(self.local.ball_odometry, direction_To_Ball, stop_Over = stop_Over)
+                continue
+            if player_in_front_of_ball or not player_in_fast_kick_position:
+                self.go_Around_Ball(self.glob.ball_distance, self.glob.ball_course)
+                continue
+            self.motion.turn_To_Course(self.f.direction_To_Guest)
+            #if first_shoot:
+            success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
+            first_shoot = False
 
     def penalty_Shooter_main_cycle(self):
         self.f = Forward(self.motion, self.local, self.glob)

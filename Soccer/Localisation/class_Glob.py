@@ -44,7 +44,8 @@ class Glob:
             self.camera = Camera()
             self.STM_channel_class = STM_channel
             #import usocket, network
-            landmarks_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_landmarks.json"
+            if self.event_type == 'FIRA': landmarks_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_landmarks_FIRA.json"
+            else: landmarks_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_landmarks.json"
             params_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_params.json"
             params_2_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_params_2.json"
             self.Roki = None
