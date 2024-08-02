@@ -12,7 +12,7 @@ undistortPointMap = np.load("Soccer/Vision/undistortPointMap_x_y.npy")
 P_matrix = np.load("Soccer/Vision/Camera_calibration_P.npy")
 undistort_cx, undistort_cy = P_matrix[0,2], P_matrix[1,2]
 focal_length_horizontal = P_matrix[0,0]
-with open("calibration_matrix.yaml", "r")as f:
+with open("Soccer/Vision/calibration_matrix.yaml", "r")as f:
     data = yaml.load(f, Loader=SafeLoader)
 mtx = np.asarray(data['camera_matrix'])
 dist = np.asarray(data['dist_coeff'])
@@ -24,7 +24,9 @@ def detect_aruco_markers(frame, led):
 
     corners, ids, rejected_img_points = cv2.aruco.detectMarkers(frame, aruco_dict, parameters=parameters)   # Обнаружение маркеров
     rvec , tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners, markerSizeInCM, mtx, dist)
-    distance = tvec[2]
+    try:
+        distance = tvec[0][0][2]
+    except Exception: distance = 0
     #print(ids)
     if ids is not None:
         # границы обнаруженных маркеров
