@@ -40,7 +40,8 @@ from openvino.preprocess import ColorFormat
 from openvino.runtime import Layout, Type
 
 from copy import copy
-
+from multiprocessing import Process, Value
+from multiprocessing.shared_memory import ShareableList
 import sys
 sys.path.append("/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision")
 
@@ -245,5 +246,29 @@ def main():
             break
     cv2.destroyAllWindows()
 
+def example(fr):
+    while True:
+        cv2.imshow("Output", fr.value)
+        key = cv2.waitKey(1)
+        if key == ord('q'):
+            break
+
 if __name__ == '__main__':
-    sys.exit(main() or 0)
+    #sys.exit(main() or 0)
+    picam2 = Picamera2(camera_num=0)
+    picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)})) 
+    picam2.start()
+    request = picam2.capture_request()
+    frame = request.make_array("lores")  
+    request.release()
+    frame = cv2.cvtColor(frame, cv2.COLOR_YUV420p2RGB)
+    frame = frame[0:650,0:800,0:3]
+    fr = ShareableList(frame)
+    p1 = Process(target=example, args=(fr), daemon = True)
+    p1.start()
+    while True:
+        request = picam2.capture_request()
+        frame = request.make_array("lores")  
+        request.release()
+        fr.value = frame
+    
