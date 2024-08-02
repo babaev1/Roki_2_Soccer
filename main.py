@@ -65,7 +65,10 @@ try:
                     if os.path.isfile('/dev/shm/process.txt'):
                         with open('/dev/shm/process.txt', 'r') as process_file:
                             pid = int(process_file.read())
-                            os.kill(pid, signal.SIGTERM)
+                            try:
+                                os.kill(pid, signal.SIGTERM)
+                            except Exception:
+                                pass
                         os.remove('/dev/shm/process.txt')
                     p01.poll()
                     print('returncode =', p01.returncode)
