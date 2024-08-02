@@ -5,17 +5,26 @@ import time
 import numpy as np
 from Soccer.Vision.led_blink import Led
 import math
+import yaml
+from yaml.loader import SafeLoader
 
 undistortPointMap = np.load("Soccer/Vision/undistortPointMap_x_y.npy")
 P_matrix = np.load("Soccer/Vision/Camera_calibration_P.npy")
 undistort_cx, undistort_cy = P_matrix[0,2], P_matrix[1,2]
 focal_length_horizontal = P_matrix[0,0]
+with open("calibration_matrix.yaml", "r")as f:
+    data = yaml.load(f, Loader=SafeLoader)
+mtx = np.asarray(data['camera_matrix'])
+dist = np.asarray(data['dist_coeff'])
+markerSizeInCM = 16
+
 def detect_aruco_markers(frame, led):
     aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_100)    #  словарь аруко маркеров
     parameters = cv2.aruco.DetectorParameters_create()    # Параметры детектора
 
     corners, ids, rejected_img_points = cv2.aruco.detectMarkers(frame, aruco_dict, parameters=parameters)   # Обнаружение маркеров
-    
+    rvec , tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners, markerSizeInCM, mtx, dist)
+    distance = tvec[2]
     #print(ids)
     if ids is not None:
         # границы обнаруженных маркеров
@@ -38,7 +47,7 @@ def detect_aruco_markers(frame, led):
                 #print('size = ', size, 'side_shift = ', side_shift )
     else:
         size = side_shift = aruco_angle_horizontal = 0
-    return frame , size, side_shift, aruco_angle_horizontal
+    return frame , size, side_shift, aruco_angle_horizontal, distance
 
 def camera_process(size, side_shift, aruco_angle_horizontal, stopFlag):
     picam2 = Picamera2(camera_num=0)
@@ -53,7 +62,7 @@ def camera_process(size, side_shift, aruco_angle_horizontal, stopFlag):
         im = request.make_array("lores")  
         request.release()
         im = cv2.cvtColor(im, cv2.COLOR_YUV420p2GRAY)
-        im, size.value, side_shift.value, aruco_angle_horizontal.value = detect_aruco_markers(im, led)     # Обнаружение аруко маркеров
+        im, size.value, side_shift.value, aruco_angle_horizontal.value, distance.value = detect_aruco_markers(im, led)     # Обнаружение аруко маркеров
         cv2.imshow("Camera", im)
         cv2.waitKey(10)
         count += 1
@@ -67,6 +76,11 @@ def camera_process(size, side_shift, aruco_angle_horizontal, stopFlag):
             break
     cv2.destroyAllWindows()
 
+def evaluate_distance(corners):
+    markerSizeInCM = 16
+    rvec , tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corners, markerSizeInCM, mtx, dist)
+    return tvec[2]
+
 if __name__== "__main__":
     from multiprocessing import Value, Process
     from led_blink import Led
@@ -74,6 +88,7 @@ if __name__== "__main__":
     size = Value('i', 0)
     side_shift = Value('i', 0)
     aruco_angle_horizontal = Value('d', 0)
+    distance = Value('d', 0)
     stopFlag = Value(c_bool, False)
     # Process for Vision Pipeline
     cam_proc = Process(target= camera_process, args=(size, side_shift, aruco_angle_horizontal, stopFlag), daemon = True)
@@ -83,6 +98,7 @@ if __name__== "__main__":
         aruco_size = size.value
         aruco_shift = side_shift.value
         print("aruco_angle_horizontal: ", aruco_angle_horizontal.value)
+        print('distance :', distance.value)
         if aruco_size > 90:
             print('Reverse')
             stopFlag.value = True

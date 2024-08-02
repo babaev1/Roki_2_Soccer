@@ -914,68 +914,53 @@ class Player():
                     self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                 self.motion.walk_Final_Pose()
 
-
+        else:
+            self.motion.direction_To_Attack = 0
+            self.motion.activation()
+            self.motion.head_Return(0, -1000)
+            sideLength = 0
             while True:
-                # wait until motion paramenetrs initiated 
-                while True:
-                    ok, restart_flag = intercom.memIGet(var.restart_flag)
-                    if ok: print('restart_flag :', restart_flag)
-                    else: print(intercom.GetError())
-                    if restart_flag == 0: break
-                    time.sleep(0.25)
-            
-                # write motion parameters to zubr-controller motion
-                intercom.memISet(var.orderFromHead, 0)              #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
-                intercom.memISet(var.cycle_number, 100)
-                intercom.memISet(var.hipTilt, self.motion.params['SPRINT_HIP_TILT'])
-                intercom.memISet(var.fps, self.motion.params['SPRINT_FPS'])
-                intercom.memISet(var.stepLengthOrder, self.motion.params['SPRINT_STEP_LENGTH'])
-                intercom.memISet(var.gaitHeight, self.motion.params['SPRINT_GAIT_HEIGHT'])
-                intercom.memISet(var.stepHeight, self.motion.params['SPRINT_STEP_HEIGHT'])
-                intercom.memFSet(var.imu_factor, self.motion.params['SPRINT_IMU_FACTOR'])
-                intercom.memFSet(var.vision_factor, self.motion.params['SPRINT_VISION_FACTOR'])
-                intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
-                #labels = [[], [], [], ['start'], []]
-                #pressed_button = self.motion.push_Button(labels)
-                #intercom.memISet(var.startStop, 1)
-                while True:
-                    ok, restart_flag = intercom.memIGet(var.restart_flag)
-                    if ok: print('restart_flag :', restart_flag)
-                    else: print(intercom.GetError())
-                    if restart_flag == 1: break
-                    time.sleep(0.25)
-                while not stopFlag.value :
-                    ok, restart_flag = intercom.memIGet(var.restart_flag)
-                    if restart_flag == 0: break
-                    aruco_size = size.value
-                    aruco_shift = side_shift.value
-                    #aruco_cx = cx.value
-                    #aruco_cy = cy.value
-                    #u, v = self.glob.vision.undistort_points(aruco_cx, aruco_cy)
-                    #aruco_angle_horizontal = math.atan((self.glob.vision.undistort_cx -u)/ self.glob.vision.focal_length_horizontal)
-                    rotationFromHead = aruco_angle_horizontal.value * 10
-                    print('rotationFromHead: ', rotationFromHead)
-                    intercom.memFSet(var.rotationFromHead, rotationFromHead)
-                    if aruco_size > 90:
+                if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
+                stepLength = 64
+                number_Of_Cycles = 10
+                self.motion.walk_Initial_Pose()
+                for cycle in range(number_Of_Cycles):
+                    if self.motion.falling_Flag != 0: break
+                    stepLength1 = stepLength
+                    if cycle ==0 : stepLength1 = stepLength/3
+                    if cycle ==1 : stepLength1 = stepLength/3 * 2
+                    self.motion.refresh_Orientation()
+                    rotation =  -self.motion.imu_body_yaw() * 1.1
+                    rotation = self.motion.normalize_rotation(rotation)
+                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                    if cycle == 6:
                         print('Reverse')
-                        intercom.memISet(var.orderFromHead, 4)   
-                    elif aruco_size == 0:
-                        intercom.memISet(var.orderFromHead, 0) 
-                        print('No marker')
-                    else:
-                        if aruco_shift > 0:
-                            print('Go Left')
-                            intercom.memISet(var.orderFromHead, 2)
-                        elif aruco_shift < 0:
-                            print('Go Right')
-                            intercom.memISet(var.orderFromHead, 3)
-                        else:
-                            print('Go Straight')
-                            intercom.memISet(var.orderFromHead, 1)
-                    time.sleep(0.05)
+                        stepLength1 = stepLength/3 * 2
+                        self.motion.refresh_Orientation()
+                        rotation =  -self.motion.imu_body_yaw() * 1.1
+                        rotation = self.motion.normalize_rotation(rotation)
+                        self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                        stepLength1 = stepLength/3
+                        self.motion.refresh_Orientation()
+                        rotation =  -self.motion.imu_body_yaw() * 1.1
+                        rotation = self.motion.normalize_rotation(rotation)
+                        self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                        break
+                if self.motion.falling_Flag != 0: continue
+                number_Of_Cycles = 6
+                stepLength = -50
+                self.glob.params['BODY_TILT_AT_WALK'] -= 0.01
+                for cycle in range(number_Of_Cycles):
+                    stepLength1 = stepLength
+                    if cycle ==0 : stepLength1 = stepLength/3
+                    if cycle ==1 : stepLength1 = stepLength/3 * 2
+                    self.motion.refresh_Orientation()
+                    rotation = - self.motion.imu_body_yaw() * 1.1
+                    rotation = self.motion.normalize_rotation(rotation)
+                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle +1, number_Of_Cycles + 1)
+                self.motion.walk_Final_Pose()
 
-            return
-
+            
     def sprint_fast(self, second_pressed_button):
         self.motion.params['SPRINT_HIP_TILT'] = 400
         self.motion.params['SPRINT_STEP_LENGTH'] = 40
