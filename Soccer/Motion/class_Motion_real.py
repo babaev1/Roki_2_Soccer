@@ -456,7 +456,7 @@ class Motion_real(Motion):
                                    first_look_point = self.glob.ball_coord, with_Localization = False)
         dist_mm = dist *1000
         if (a==False and dist == 0) or self.falling_Flag != 0: return False
-        if dist > 0.9 or a == False: return False
+        if dist > 1.5 : return False
         if  0.02 < abs(dist * math.cos(napravl)) < 0.06 and dist * math.sin(napravl) < 0.03:
             #old_neck_pan, old_neck_tilt = self.head_Up()
             if napravl > 0: self.kick(first_Leg_Is_Right_Leg=False)
@@ -1082,7 +1082,7 @@ class Motion_real(Motion):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
             self.ytr = -self.d10 - j*self.amplitude/2 /initPoses
             self.ytl =  self.d10 - j*self.amplitude/2 /initPoses
-            angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA )
+            angles = self.computeAlphaForWalk()
             if len(angles)==0:
                 self.exitFlag = self.exitFlag +1
             else:

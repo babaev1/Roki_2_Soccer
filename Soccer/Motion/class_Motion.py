@@ -1302,7 +1302,7 @@ class Motion(Robot, Motion_extention_1):
                     time1 = time.perf_counter() -start1
                     #time2 = self.pyb.elapsed_millis(start2)
                     #time.sleep(self.frame_delay/1000 - time1)
-        self.robot_In_0_Pose = True
+        #self.robot_In_0_Pose = True
         if respect_body_tilt: 
             self.xr, self.xl = xr, xl
 
@@ -1383,7 +1383,7 @@ class Motion(Robot, Motion_extention_1):
                     #time.sleep(self.frame_delay/1000 - time1)
         # returning xr, xl, yr, yl to initial value
         self.xr, self.xl, self.yr, self.yl = xr_old, xl_old, yr_old, yl_old
-        self.robot_In_0_Pose = True
+        #self.robot_In_0_Pose = True
 
     def kick(self, first_Leg_Is_Right_Leg, small = False):
         self.robot_In_0_Pose = False
@@ -1634,7 +1634,7 @@ class Motion(Robot, Motion_extention_1):
                             servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
                     a=self.rcb.setServoPosAsync(servoDatas, self.frames_per_cycle, 0)
                     time1 = time.perf_counter() - start1
-        self.robot_In_0_Pose = True
+        #self.robot_In_0_Pose = True
 
 if __name__=="__main__":
     print('This is not main module!')
