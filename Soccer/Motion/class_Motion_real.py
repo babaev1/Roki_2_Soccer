@@ -103,12 +103,12 @@ class Motion_real(Motion):
 
     def seek_Ball_In_Pose(self, fast_Reaction_On, penalty_Goalkeeper = False, with_Localization = True, very_Fast = False, first_look_point= None):
         self.local.correct_yaw_in_pf()
-        #if self.robot_In_0_Pose == False:
-        #    if self.glob.SIMULATION == 5:
-        #        self.play_Soft_Motion_Slot(name = 'Initial_Pose')
-        #    else:
-        #        self.simulateMotion(name = 'Initial_Pose')
-        #    self.robot_In_0_Pose = True
+        if self.robot_In_0_Pose == False:
+            if self.glob.SIMULATION == 5:
+                self.play_Soft_Motion_Slot(name = 'Initial_Pose')
+            else:
+                self.simulateMotion(name = 'Initial_Pose')
+            self.robot_In_0_Pose = True
         variants = []
         if first_look_point == None:
             course_to_ball = 0
@@ -455,7 +455,7 @@ class Motion_real(Motion):
         a, napravl, dist, speed = self.seek_Ball_In_Pose(fast_Reaction_On = True, very_Fast = very_Fast,
                                    first_look_point = self.glob.ball_coord, with_Localization = False)
         dist_mm = dist *1000
-        if a==False or self.falling_Flag != 0: return False
+        if (a==False and dist == 0) or self.falling_Flag != 0: return False
         if dist > 0.9 or a == False: return False
         if  0.02 < abs(dist * math.cos(napravl)) < 0.06 and dist * math.sin(napravl) < 0.03:
             #old_neck_pan, old_neck_tilt = self.head_Up()
