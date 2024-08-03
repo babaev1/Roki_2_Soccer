@@ -1171,7 +1171,7 @@ class Motion_real(Motion):
                     head_turn(0, self.neck_play_pose)
                     time.sleep(0.1)
 
-    def jump_turn(self, course, jumps_limit = 6):
+    def jump_turn(self, course, jumps_limit = 8):
         motion = [
             #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             #[ 2, -700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0 ],
