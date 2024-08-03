@@ -423,7 +423,7 @@ class Motion(Robot, Motion_extention_1):
     def walk_Initial_Pose(self):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
-            self.local.quality =0
+            #self.local.quality =0
             if self.falling_Flag == 3: uprint('STOP!')
             else: uprint('FALLING!!!', self.falling_Flag)
             return[]
@@ -763,7 +763,7 @@ class Motion(Robot, Motion_extention_1):
                 #self.refresh_Orientation()
         # returning xr, xl, yr, yl to initial value
         self.xr, self.xl, self.yr, self.yl = xr_old, xl_old, yr_old, yl_old
-        if self.with_Vision:
+        if self.glob.with_Local:
             self.local.coord_shift[0] = self.cycle_step_yield*stepLength/64/1000
             if self.first_Leg_Is_Right_Leg:
                 self.local.coord_shift[1] = -self.side_step_right_yield * sideLength/20/1000
@@ -1309,7 +1309,7 @@ class Motion(Robot, Motion_extention_1):
     def walk_Final_Pose_After_Kick(self):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
-            self.local.quality =0
+            #self.local.quality =0
             if self.falling_Flag == 3: uprint('STOP!')
             else: uprint('FALLING!!!', self.falling_Flag)
             return[]
@@ -1388,7 +1388,7 @@ class Motion(Robot, Motion_extention_1):
     def kick(self, first_Leg_Is_Right_Leg, small = False):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
-            self.local.quality =0
+            #self.local.quality =0
             if self.falling_Flag == 3: uprint('STOP!')
             else: uprint('FALLING!!!', self.falling_Flag)
             return[]
@@ -1575,7 +1575,7 @@ class Motion(Robot, Motion_extention_1):
     def turn(self):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
-            self.local.quality =0
+            #self.local.quality =0
             if self.falling_Flag == 3: uprint('STOP!')
             else: uprint('FALLING!!!', self.falling_Flag)
             return[]

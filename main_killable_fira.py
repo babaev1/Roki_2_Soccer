@@ -53,6 +53,7 @@ try:
         local.coordinate_record(odometry = True)
     else:
         glob = Glob(SIMULATION, current_work_directory, particles_number = 100)
+        glob.with_Local = False
         vision = None
         motion = Motion_real(glob, vision)
         local = None
