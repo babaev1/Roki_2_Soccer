@@ -244,6 +244,31 @@ class Player():
         #sys.exit(1)
 
     def rotation_test_main_cycle(self):
+        motion = [
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 2, -700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 700, 0, 0, 0, 0, 1000, 0, 0, 0, 0],
+            [ 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        self.motion.head_Return(0, self.motion.neck_play_pose)
+        time.sleep(1)
+        self.motion.refresh_Orientation()
+        initial_yaw = self.motion.body_euler_angle['yaw']
+        jump_value = 1000           # jumping to Clock-Wise
+        motion[1][6] = motion[1][17] = jump_value
+        for _ in range(3):
+            self.motion.play_Soft_Motion_Slot(  motion_list = motion)
+            time.sleep(1)
+        self.motion.refresh_Orientation()
+        self.motion.params['CALIBRATED_CW_YAW'] = (self.motion.body_euler_angle['yaw'] - initial_yaw) / 3
+        initial_yaw_ccw = self.motion.body_euler_angle['yaw']
+        jump_value = -1000          # jumping to CCW
+        motion[1][6] = motion[1][17] = jump_value
+        for _ in range(3):
+            self.motion.play_Soft_Motion_Slot(  motion_list = motion)
+            time.sleep(1)
+        self.motion.refresh_Orientation()
+        self.motion.params['CALIBRATED_CCW_YAW'] = (self.body_euler_angle['yaw'] - initial_yaw_ccw) / 3
         number_Of_Cycles = 10
         stepLength = 0
         sideLength = 0
@@ -283,6 +308,8 @@ class Player():
                     + ',\n"BODY_TILT_AT_KICK": ' + str(params["BODY_TILT_AT_KICK"]) \
                     + ',\n"ROTATION_YIELD_RIGHT": ' + str(params["ROTATION_YIELD_RIGHT"]) \
                     + ',\n"ROTATION_YIELD_LEFT": ' + str(params["ROTATION_YIELD_LEFT"]) \
+                    + ',\n"CALIBRATED_CW_YAW": ' + str(params["CALIBRATED_CW_YAW"]) \
+                    + ',\n"CALIBRATED_CCW_YAW": ' + str(params["CALIBRATED_CCW_YAW"]) \
                     + ',\n"MOTION_SHIFT_TEST_X": ' + str(params["MOTION_SHIFT_TEST_X"]) \
                     + ',\n"MOTION_SHIFT_TEST_Y": ' + str(params["MOTION_SHIFT_TEST_Y"]) \
                     + ',\n"SIDE_STEP_RIGHT_TEST_RESULT": ' + str(params["SIDE_STEP_RIGHT_TEST_RESULT"]) \
