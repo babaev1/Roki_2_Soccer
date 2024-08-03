@@ -514,7 +514,7 @@ class Local():
         #self.coord_odometry = self.coordinate.copy()
         self.correct_yaw_in_pf()
         self.glob.pf_coord = self.call_Par_Filter.return_coord()
-        print('self.glob.pf_coord : ', round(self.glob.pf_coord[0]), round(self.glob.pf_coord[1]), round(self.glob.pf_coord[2]))
+        print('self.glob.pf_coord : ', round(self.glob.pf_coord[0], 2), round(self.glob.pf_coord[1], 2), round(self.glob.pf_coord[2], 2))
         if self.glob.obstacleAvoidanceIsOn: self.group_obstacles()
         self.coordinate_record()
         self.post_data_in_pose_number = 0
