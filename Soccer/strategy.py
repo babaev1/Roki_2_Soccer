@@ -609,9 +609,9 @@ class Player():
         #    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
         #self.motion.walk_Final_Pose()
 
-        return
-        self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
-        return
+        #return
+        #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
+        #return
         while (True):
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break

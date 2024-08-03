@@ -103,12 +103,12 @@ class Motion_real(Motion):
 
     def seek_Ball_In_Pose(self, fast_Reaction_On, penalty_Goalkeeper = False, with_Localization = True, very_Fast = False, first_look_point= None):
         self.local.correct_yaw_in_pf()
-        if self.robot_In_0_Pose == False:
-            if self.glob.SIMULATION == 5:
-                self.play_Soft_Motion_Slot(name = 'Initial_Pose')
-            else:
-                self.simulateMotion(name = 'Initial_Pose')
-            self.robot_In_0_Pose = True
+        #if self.robot_In_0_Pose == False:
+        #    if self.glob.SIMULATION == 5:
+        #        self.play_Soft_Motion_Slot(name = 'Initial_Pose')
+        #    else:
+        #        self.simulateMotion(name = 'Initial_Pose')
+        #    self.robot_In_0_Pose = True
         variants = []
         if first_look_point == None:
             course_to_ball = 0
@@ -144,7 +144,7 @@ class Motion_real(Motion):
                 for j in range(20):
                     self.sim_simxSynchronousTrigger(self.clientID)
             #self.refresh_Orientation()
-            a, course, dist, blob = self.vision.seek_Ball_In_Frame(with_Localization)
+            a, course, dist, blob = self.vision.seek_Ball_In_Frame_N(with_Localization)
             if a == True: 
                 variants.append ((course, dist *1000))
             if fast_Reaction_On == True and a== True: break

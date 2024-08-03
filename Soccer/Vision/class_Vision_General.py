@@ -122,6 +122,29 @@ class Vision_General:
             if result: return True, course, distance, ball_blob
             else: return False, 0, 0, 0
 
+    def seek_Ball_In_Frame_N(self, with_Localization = True):
+        see_ball = 0
+        timer1 = time.perf_counter()
+        for number in range (2):
+            camera_result, img, pitch, roll, yaw, pan = self.snapshot()
+            if camera_result:
+                ball_column, ball_row = self.neural.ball_detect_single(img)
+                if ball_column or ball_row: 
+                    result, self.camera_elevation = self.glob.motion.camera_elevation()
+                    if result:
+                        self.visible_reaction_ball()
+                        cv2.circle(img, (ball_column, ball_row), 20, (0, 255, 0), 5)
+                        self.display_camera_image(img, window = 'Ball')
+                        see_ball += 1
+                        break
+        if with_Localization and number == 0 and camera_result: self.glob.local.read_Localization_marks(img)
+        #print('seek_Ball_In_Frame time:', time.perf_counter()-timer1)
+        if see_ball == 0: return False, 0, 0, 0
+        else:
+            result, course, distance = self.get_course_and_distance_to_ball(ball_column, ball_row)
+            if result: return True, course, distance
+            else: return False, 0, 0, 0
+
     def get_course_and_distance_to_ball(self, ball_column, ball_row):                       # returns relative course from body in radians and relative distance in meters
         result, relative_x_on_floor, relative_y_on_floor = self.image_point_to_relative_coord_on_floor(
                                                     ball_column, ball_row, for_ball = True
