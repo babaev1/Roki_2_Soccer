@@ -1020,7 +1020,7 @@ class Motion_real(Motion):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
             self.ytr = -self.d10 + (initPoses-(j+1))*self.amplitude/2 /initPoses
             self.ytl =  self.d10 + (initPoses-(j+1))*self.amplitude/2 /initPoses
-            angles = self.computeAlphaForWalk(self.SIZES, self.LIMALPHA )
+            angles = self.computeAlphaForWalk()
             #if not self.falling_Flag ==0: return
             if len(angles)==0:
                 self.exitFlag = self.exitFlag +1
