@@ -587,6 +587,7 @@ class Player():
 
 
     def FIRA_penalty_Shooter_main_cycle(self):
+        self.motion.with_Vision = False
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         first_shoot = True
         first_look_point = [2.0 , 0]
@@ -612,13 +613,14 @@ class Player():
         #return
         #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
         #return
+
         while (True):
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break
                 self.motion.falling_Flag = 0
                 self.local.coordinate_fall_reset()
-            #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
-            #                                                                  very_Fast = False, first_look_point=first_look_point )
+            success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+                                                                              very_Fast = False, first_look_point=first_look_point )
             if self.glob.robot_see_ball > 0: self.local.ball_position_calculation()
             first_look_point = self.local.ball_odometry
             self.f.dir_To_Guest()

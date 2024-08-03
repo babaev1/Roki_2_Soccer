@@ -139,11 +139,11 @@ class Vision_General:
                         break
         if with_Localization and number == 0 and camera_result: self.glob.local.read_Localization_marks(img)
         #print('seek_Ball_In_Frame time:', time.perf_counter()-timer1)
-        if see_ball == 0: return False, 0, 0, 0
+        if see_ball == 0: return False, 0, 0
         else:
             result, course, distance = self.get_course_and_distance_to_ball(ball_column, ball_row)
             if result: return True, course, distance
-            else: return False, 0, 0, 0
+            else: return False, 0, 0
 
     def get_course_and_distance_to_ball(self, ball_column, ball_row):                       # returns relative course from body in radians and relative distance in meters
         result, relative_x_on_floor, relative_y_on_floor = self.image_point_to_relative_coord_on_floor(

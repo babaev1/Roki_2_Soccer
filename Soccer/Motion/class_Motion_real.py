@@ -144,7 +144,7 @@ class Motion_real(Motion):
                 for j in range(20):
                     self.sim_simxSynchronousTrigger(self.clientID)
             #self.refresh_Orientation()
-            a, course, dist, blob = self.vision.seek_Ball_In_Frame_N(with_Localization)
+            a, course, dist = self.vision.seek_Ball_In_Frame_N(with_Localization)
             if a == True: 
                 variants.append ((course, dist *1000))
             if fast_Reaction_On == True and a== True: break

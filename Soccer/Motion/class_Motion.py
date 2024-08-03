@@ -130,7 +130,7 @@ class Motion(Robot, Motion_extention_1):
                 queue_length = self.stm_channel.mb.GetBodyQueueInfo()[1].Size
                 if queue_length > 1: queue_length -= 1
                 sleeping_time = queue_length * frame_time_s
-        print('wait_for_gueue_end. sleeping time: ', sleeping_time)
+        #print('wait_for_gueue_end. sleeping time: ', sleeping_time)
         time.sleep(sleeping_time )
         for counter in range(1000):
             if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 2: break
@@ -1555,7 +1555,7 @@ class Motion(Robot, Motion_extention_1):
                     self.euler_angle['yaw'] += self.imu_drift_speed * (time.perf_counter() - self.start_point_for_imu_drift)
                     break
                 time.sleep(0.002)
-            print('body pitch:', round(self.body_euler_angle['pitch'], 2), 'body yaw:', round(self.body_euler_angle['yaw'], 2) )
+            #print('body pitch:', round(self.body_euler_angle['pitch'], 2), 'body yaw:', round(self.body_euler_angle['yaw'], 2) )
         else:
             returnCode, Dummy_Hquaternion= self.sim.simxGetObjectQuaternion(self.clientID, self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
             Dummy_Hquaternion = self.from_vrep_quat_to_conventional_quat(Dummy_Hquaternion)
