@@ -259,6 +259,7 @@ class Player():
         for _ in range(3):
             self.motion.play_Soft_Motion_Slot(  motion_list = motion)
             time.sleep(1)
+        time.sleep(2)
         self.motion.refresh_Orientation()
         self.motion.params['CALIBRATED_CW_YAW'] = round((self.motion.body_euler_angle['yaw'] - initial_yaw) / 3, 3)
         initial_yaw_ccw = self.motion.body_euler_angle['yaw']
@@ -267,6 +268,7 @@ class Player():
         for _ in range(3):
             self.motion.play_Soft_Motion_Slot(  motion_list = motion)
             time.sleep(1)
+        time.sleep(2)
         self.motion.refresh_Orientation()
         self.motion.params['CALIBRATED_CCW_YAW'] = round((self.motion.body_euler_angle['yaw'] - initial_yaw_ccw) / 3, 3)
         number_Of_Cycles = 10
@@ -595,7 +597,7 @@ class Player():
         self.motion.head_Return(0, -1500)
         time.sleep(1)
         self.motion.jump_turn(0.5, jumps_limit = 2)
-        self.motion.kick_power = 100
+        self.motion.kick_power = 60
         self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
         #number_Of_Cycles = 5
