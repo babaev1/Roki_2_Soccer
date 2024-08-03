@@ -1186,6 +1186,7 @@ class Motion_real(Motion):
         for i in range(jumps_limit):
             correction_yaw = course - self.body_euler_angle['yaw']
             if abs(correction_yaw) <  0.09: return
+            if abs(correction_yaw) <  0.09: break
             if correction_yaw > 0:
                 solid_jumps = math.floor(abs(correction_yaw / self.params['CALIBRATED_CCW_YAW']))
                 partial_jump = abs(correction_yaw % self.params['CALIBRATED_CCW_YAW'])
@@ -1201,14 +1202,15 @@ class Motion_real(Motion):
                 else: 
                     jump_value = 1000 * partial_jump
             motion[1][6] = motion[1][17] = jump_value
-            #if solid_jumps > 0:
-            #    for _ in range(solid_jumps):
-            #        self.play_Soft_Motion_Slot(motion_list = motion)
-            #        time.sleep(0.5)
-            #else: 
             self.play_Soft_Motion_Slot(motion_list = motion)
             time.sleep(0.5)
             self.refresh_Orientation()
+        self.refresh_Orientation()
+        if self.glob.with_Local:
+            self.local.coord_odometry[2] = self.body_euler_angle['yaw']
+            self.local.coord_shift = [0,0,0]
+            self.local.coordinate_record(odometry = True, shift = True)
+            self.local.refresh_odometry()
 
 
 if __name__=="__main__":

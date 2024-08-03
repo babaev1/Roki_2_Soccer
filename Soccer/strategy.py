@@ -634,7 +634,7 @@ class Player():
             print('ball_coord = ', self.glob.ball_coord)
             print('direction_To_Guest = ', math.degrees(self.f.direction_To_Guest), 'degrees')
             if dist == 0 and success_Code == False:
-                self.motion.turn_To_Course(self.glob.pf_coord[2]+ 2 * math.pi / 3)
+                self.motion.jump_turn(self.glob.pf_coord[2]+ 2 * math.pi / 3)
                 continue
             player_from_ball_yaw = coord2yaw(self.glob.pf_coord[0] - self.glob.ball_coord[0],
                                                           self.glob.pf_coord[1] - self.glob.ball_coord[1]) - self.f.direction_To_Guest
@@ -649,7 +649,7 @@ class Player():
                 continue
             if player_in_front_of_ball or not player_in_fast_kick_position:
                 self.go_Around_Ball(dist, napravl)
-            self.motion.turn_To_Course(self.f.direction_To_Guest)
+            self.motion.jump_turn(self.f.direction_To_Guest)
             #if first_shoot:
             if self.f.kick_Power == 1: self.motion.kick_power = 100
             if self.f.kick_Power == 2: self.motion.kick_power = 60
