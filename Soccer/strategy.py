@@ -277,17 +277,21 @@ class Player():
         self.motion.refresh_Orientation()
         first_yaw_measurement = self.motion.imu_body_yaw()
         rotation = -0.23
+        self.motion.first_Leg_Is_Right_Leg = True
+        invert = 1
         self.motion.walk_Initial_Pose()
         for cycle in range(number_Of_Cycles):
-            self.motion.walk_Cycle(stepLength,sideLength, rotation, cycle, number_Of_Cycles)
+            self.motion.walk_Cycle(stepLength,sideLength, invert * rotation, cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
         self.motion.refresh_Orientation()
         second_yaw_measurement = self.motion.imu_body_yaw()
         time.sleep(2)
         rotation = 0.23
+        self.motion.first_Leg_Is_Right_Leg = False
+        invert = -1
         self.motion.walk_Initial_Pose()
         for cycle in range(number_Of_Cycles):
-            self.motion.walk_Cycle(stepLength,sideLength, rotation, cycle, number_Of_Cycles)
+            self.motion.walk_Cycle(stepLength,sideLength, invert * rotation, cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
         self.motion.refresh_Orientation()
         third_yaw_measurement = self.motion.imu_body_yaw()
