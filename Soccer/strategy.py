@@ -559,10 +559,11 @@ class Player():
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         first_shoot = True
         first_look_point = [2.0 , 0]
-        self.motion.jump_turn(math.pi/4)
-        self.motion.head_Return(0, self.motion.neck_play_pose)
-        number_Of_Cycles = 10
-        stepLength = 20
+        self.motion.head_Return(0, -1500)
+        time.sleep(1)
+        self.motion.jump_turn(0.7)
+        number_Of_Cycles = 5
+        stepLength = 64
         sideLength = 0
         self.motion.walk_Initial_Pose()
         for cycle in range(number_Of_Cycles):
