@@ -344,10 +344,11 @@ class Motion_real(Motion):
                 self.walk_Cycle(stepLength, sideLength,invert*rotation,cycle,cycleNumber + after_cycle)
             if one_Off_Motion: self.walk_Final_Pose()
         self.refresh_Orientation()
-        self.local.coord_odometry[2] = self.body_euler_angle['yaw']
-        self.local.coord_shift = [0,0,0]
-        self.local.coordinate_record(odometry = True, shift = True)
-        self.local.refresh_odometry()
+        if self.glob.with_Local:
+            self.local.coord_odometry[2] = self.body_euler_angle['yaw']
+            self.local.coord_shift = [0,0,0]
+            self.local.coordinate_record(odometry = True, shift = True)
+            self.local.refresh_odometry()
         #if one_Off_Motion: self.head_Return(old_neck_pan, old_neck_tilt)
         self.first_Leg_Is_Right_Leg = True
 
