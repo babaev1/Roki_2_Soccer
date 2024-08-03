@@ -1175,7 +1175,7 @@ class Motion_real(Motion):
                     head_turn(0, self.neck_play_pose)
                     time.sleep(0.1)
 
-    def jump_turn(self, course):
+    def jump_turn(self, course, jumps_limit = 6):
         motion = [
             #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             #[ 2, -700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0 ],
@@ -1187,7 +1187,7 @@ class Motion_real(Motion):
             [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
         self.refresh_Orientation()
-        for i in range(6):
+        for i in range(jumps_limit):
             correction_yaw = course - self.body_euler_angle['yaw']
             if abs(correction_yaw) <  0.09: return
             if correction_yaw > 0:
@@ -1205,13 +1205,13 @@ class Motion_real(Motion):
                 else: 
                     jump_value = 1000 * partial_jump
             motion[1][6] = motion[1][17] = jump_value
-            if solid_jumps > 0:
-                for _ in range(solid_jumps):
-                    self.play_Soft_Motion_Slot(motion_list = motion)
-                    time.sleep(0.5)
-            else: 
-                self.play_Soft_Motion_Slot(motion_list = motion)
-                time.sleep(0.5)
+            #if solid_jumps > 0:
+            #    for _ in range(solid_jumps):
+            #        self.play_Soft_Motion_Slot(motion_list = motion)
+            #        time.sleep(0.5)
+            #else: 
+            self.play_Soft_Motion_Slot(motion_list = motion)
+            time.sleep(0.5)
             self.refresh_Orientation()
 
 

@@ -592,7 +592,7 @@ class Player():
         first_look_point = [2.0 , 0]
         self.motion.head_Return(0, -1500)
         time.sleep(1)
-        self.motion.jump_turn(0.7)
+        self.motion.jump_turn(0.7, jumps_limit = 2)
         self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
         #number_Of_Cycles = 5
