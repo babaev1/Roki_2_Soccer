@@ -312,8 +312,8 @@ class Player():
                     + ',\n"BODY_TILT_AT_KICK": ' + str(params["BODY_TILT_AT_KICK"]) \
                     + ',\n"ROTATION_YIELD_RIGHT": ' + str(params["ROTATION_YIELD_RIGHT"]) \
                     + ',\n"ROTATION_YIELD_LEFT": ' + str(params["ROTATION_YIELD_LEFT"]) \
-                    + ',\n"CALIBRATED_CW_YAW": ' + str(params["CALIBRATED_CW_YAW"]) \
-                    + ',\n"CALIBRATED_CCW_YAW": ' + str(params["CALIBRATED_CCW_YAW"]) \
+                    + ',\n"CALIBRATED_CW_YAW": ' + str(self.motion.params['CALIBRATED_CW_YAW']) \
+                    + ',\n"CALIBRATED_CCW_YAW": ' + str(self.motion.params['CALIBRATED_CCW_YAW']) \
                     + ',\n"MOTION_SHIFT_TEST_X": ' + str(params["MOTION_SHIFT_TEST_X"]) \
                     + ',\n"MOTION_SHIFT_TEST_Y": ' + str(params["MOTION_SHIFT_TEST_Y"]) \
                     + ',\n"SIDE_STEP_RIGHT_TEST_RESULT": ' + str(params["SIDE_STEP_RIGHT_TEST_RESULT"]) \
