@@ -268,7 +268,7 @@ class Player():
             self.motion.play_Soft_Motion_Slot(  motion_list = motion)
             time.sleep(1)
         self.motion.refresh_Orientation()
-        self.motion.params['CALIBRATED_CCW_YAW'] = round((self.body_euler_angle['yaw'] - initial_yaw_ccw) / 3, 3)
+        self.motion.params['CALIBRATED_CCW_YAW'] = round((self.motion.body_euler_angle['yaw'] - initial_yaw_ccw) / 3, 3)
         number_Of_Cycles = 10
         stepLength = 0
         sideLength = 0
