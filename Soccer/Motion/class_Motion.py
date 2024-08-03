@@ -95,6 +95,7 @@ class Motion(Robot, Motion_extention_1):
         self.euler_angle = {}
         self.robot_In_0_Pose = True
         self.keep_hands_up = False
+        self.kick_power = 100       # from 0 to 100
         self.motion_slot_progress = False
         self.Vision_Sensor_Display_On = self.glob.params['Vision_Sensor_Display_On']
         #self.start_point_for_imu_drift = 0
@@ -1395,8 +1396,8 @@ class Motion(Robot, Motion_extention_1):
         gaitHeight = 210
         stepHeight = 55
         stepLength = 64
-        kick_size = 70
-        if small : kick_size = -10
+        kick_size = self.kick_power - 30
+        #if small : kick_size = -10
         tmp1 = self.first_Leg_Is_Right_Leg
         self.first_Leg_Is_Right_Leg = first_Leg_Is_Right_Leg
         tmp = self.gaitHeight

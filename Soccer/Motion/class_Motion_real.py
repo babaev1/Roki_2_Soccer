@@ -450,7 +450,7 @@ class Motion_real(Motion):
         #self.local.coordinate_record(odometry = True)
         #if one_Off_Motion: self.head_Return(old_neck_pan, old_neck_tilt)
 
-    def near_distance_ball_approach_and_kick(self, kick_direction, strong_kick = False, small_kick = False, very_Fast = False ):
+    def near_distance_ball_approach_and_kick(self, kick_direction, very_Fast = False ):
         offset_of_ball = self.params['KICK_OFFSET_OF_BALL']  # self.d10 # module of local robot Y coordinate of ball im mm before kick 
         a, napravl, dist, speed = self.seek_Ball_In_Pose(fast_Reaction_On = True, very_Fast = very_Fast,
                                    first_look_point = self.glob.ball_coord, with_Localization = False)
@@ -524,18 +524,12 @@ class Motion_real(Motion):
             #camera_thread = threading.Thread(target = self.glob.vision.detect_Ball_in_Stream, args=(stop_detecting_Ball,))
             #camera_thread.setDaemon(True)
             #camera_thread.start()
-            result, kick_by_Right = self.verify_ball_position(kick_by_Right, kick_direction)
+            #result, kick_by_Right = self.verify_ball_position(kick_by_Right, kick_direction)
             #stop_detecting_Ball.set()
             self.first_Leg_Is_Right_Leg = True
             #self.stepHeight = 32
             #self.head_Up()
-            if strong_kick == True:
-                if kick_by_Right == True:
-                    self.play_Motion_Slot(name = 'Soccer_Kick_Forward_Right_Leg')
-                else:
-                    self.play_Motion_Slot(name = 'Soccer_Kick_Forward_Left_Leg')
-            else:
-                self.kick( first_Leg_Is_Right_Leg=kick_by_Right, small = small_kick)
+            self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
             self.local.coord_odometry[0] += dist * math.cos(napravl)
             self.local.coord_odometry[1] += dist * math.sin(napravl)
             self.pause_in_ms(1000)
@@ -608,7 +602,7 @@ class Motion_real(Motion):
         self.walk_Final_Pose()
         return result, kick_by_Right
 
-    def near_distance_ball_approach_and_kick_streaming(self, kick_direction, small_kick = False):
+    def near_distance_ball_approach_and_kick_streaming(self, kick_direction):
         print('near_distance_ball_approach_and_kick_streaming')
         offset_of_ball = self.params['KICK_OFFSET_OF_BALL']  # self.d10 # module of local robot Y coordinate of ball im mm before kick 
         if self.glob.ball_distance > 0.9 or self.glob.robot_see_ball <= 0: return False
@@ -630,7 +624,7 @@ class Motion_real(Motion):
             result, kick_by_Right = self.verify_ball_position(kick_by_Right, kick_direction)
             self.first_Leg_Is_Right_Leg = True
             if self.glob.ball_distance < 0.2:
-                self.kick( first_Leg_Is_Right_Leg=kick_by_Right, small = small_kick)
+                self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
                 #if small_kick:
                 #    self.kick( first_Leg_Is_Right_Leg=kick_by_Right, small = small_kick)
                 #else:

@@ -488,9 +488,10 @@ class Player():
                 continue
             if player_in_fast_kick_position:
                 self.motion.turn_To_Course(self.f.direction_To_Guest)
-                small_kick = False
-                if self.f.kick_Power > 1: small_kick = True
-                success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest, small_kick = small_kick)
+                if self.f.kick_Power == 1: self.motion.kick_power = 100
+                if self.f.kick_Power == 2: self.motion.kick_power = 60
+                if self.f.kick_Power == 3: self.motion.kick_power = 20
+                success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
 
     def goalkeeper_main_cycle(self):
         def ball_position_is_dangerous(row, col):
@@ -560,10 +561,9 @@ class Player():
                     continue
                 print('goalkeeper turn_To_Course(direction_To_Guest)')
                 self.motion.turn_To_Course(self.f.direction_To_Guest)
-                small_kick = False
-                if self.f.kick_Power > 1: small_kick = True
                 print('goalkeeper near_distance_ball_approach_and_kick')
-                success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest, strong_kick = False, small_kick = small_kick)
+                self.motion.kick_power = 100
+                success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest)
 
             else:
                 fast_Reaction_On = False
@@ -595,6 +595,7 @@ class Player():
         self.motion.head_Return(0, -1500)
         time.sleep(1)
         self.motion.jump_turn(0.5, jumps_limit = 2)
+        self.motion.kick_power = 100
         self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
         #number_Of_Cycles = 5
@@ -644,7 +645,10 @@ class Player():
                 self.go_Around_Ball(dist, napravl)
             self.motion.turn_To_Course(self.f.direction_To_Guest)
             #if first_shoot:
-            success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest, strong_kick = False)
+            if self.f.kick_Power == 1: self.motion.kick_power = 100
+            if self.f.kick_Power == 2: self.motion.kick_power = 60
+            if self.f.kick_Power == 3: self.motion.kick_power = 20
+            success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest)
             first_shoot = False
 
     def penalty_Shooter_main_cycle(self):
