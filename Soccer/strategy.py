@@ -592,8 +592,8 @@ class Player():
         first_look_point = [2.0 , 0]
         self.motion.head_Return(0, -1500)
         time.sleep(1)
-        self.motion.jump_turn(0.5)
-        self.motion.kick(True, small = False)
+        self.motion.jump_turn(0.7, jumps_limit = 2)
+        self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
         #number_Of_Cycles = 5
         #stepLength = 64
@@ -609,9 +609,9 @@ class Player():
         #    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
         #self.motion.walk_Final_Pose()
 
-        return
-        self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
-        return
+        #return
+        #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
+        #return
         while (True):
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break
