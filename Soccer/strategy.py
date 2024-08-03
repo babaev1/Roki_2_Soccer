@@ -261,7 +261,9 @@ class Player():
             time.sleep(1)
         time.sleep(2)
         self.motion.refresh_Orientation()
-        self.motion.params['CALIBRATED_CW_YAW'] = round((self.motion.body_euler_angle['yaw'] - initial_yaw) / 3, 3)
+        angle_cw = self.motion.body_euler_angle['yaw'] - initial_yaw
+        if angle_cw > 0 : angle_cw -= 2 * math.pi
+        self.motion.params['CALIBRATED_CW_YAW'] = round(angle_cw / 3, 3)
         initial_yaw_ccw = self.motion.body_euler_angle['yaw']
         jump_value = -1000          # jumping to CCW
         motion[1][6] = motion[1][17] = jump_value
@@ -270,7 +272,9 @@ class Player():
             time.sleep(1)
         time.sleep(2)
         self.motion.refresh_Orientation()
-        self.motion.params['CALIBRATED_CCW_YAW'] = round((self.motion.body_euler_angle['yaw'] - initial_yaw_ccw) / 3, 3)
+        angle_ccw = self.motion.body_euler_angle['yaw'] - initial_yaw_ccw
+        if angle_ccw < 0 : angle_cw += 2 * math.pi
+        self.motion.params['CALIBRATED_CCW_YAW'] = round(angle_ccw / 3, 3)
         number_Of_Cycles = 10
         stepLength = 0
         sideLength = 0
