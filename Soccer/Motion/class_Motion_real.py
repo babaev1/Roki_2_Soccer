@@ -182,7 +182,7 @@ class Motion_real(Motion):
                 for j in range(16):
                     self.sim_simxSynchronousTrigger(self.clientID)
             self.refresh_Orientation()
-            a, course, dist, speed = self.vision.detect_Ball_Speed()
+            a, course, dist, speed = self.vision.detect_Ball_Speed_N()
             #if with_Localization: self.local.localisation_Complete()
             self.local.localisation_Complete()
             if a == True:
