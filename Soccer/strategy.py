@@ -563,6 +563,7 @@ class Player():
         #self.motion.control_Head_motion_thread.start()
         #self.motion.kick_off_ride()
         self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
+        return
         while (True):
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break

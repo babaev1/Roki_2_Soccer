@@ -35,7 +35,7 @@ try:
     if first_pressed_button == 'forward_center':
         initial_coord = [-0.45, 0, 0]
     if first_pressed_button == 'FIRA_penalty_Shooter':
-         initial_coord = [0.2, 0, 0]
+         initial_coord = [0.8, 0, 0]
     if first_pressed_button == 'penalty_Goalkeeper':
         initial_coord = [-landmarks['FIELD_LENGTH'] / 2, 0, 0]
 
