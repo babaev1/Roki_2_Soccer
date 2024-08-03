@@ -558,10 +558,24 @@ class Player():
     def FIRA_penalty_Shooter_main_cycle(self):
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         first_shoot = True
-        first_look_point = [0.9, 0]
-        #self.glob.vision.camera_thread.start()
-        #self.motion.control_Head_motion_thread.start()
-        #self.motion.kick_off_ride()
+        first_look_point = [2.0 , 0]
+        self.motion.jump_turn(math.pi/4)
+        self.motion.head_Return(0, self.motion.neck_play_pose)
+        number_Of_Cycles = 10
+        stepLength = 20
+        sideLength = 0
+        self.motion.walk_Initial_Pose()
+        for cycle in range(number_Of_Cycles):
+            stepLength1 = stepLength
+            if cycle == 0 : stepLength1 = stepLength/3
+            if cycle == 1 : stepLength1 = stepLength/3 * 2
+            self.motion.refresh_Orientation()
+            rotation = math.pi/4 - self.motion.imu_body_yaw() * 1.1
+            rotation = self.motion.normalize_rotation(rotation)
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+        self.motion.walk_Final_Pose()
+
+        return
         self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
         while (True):
             if self.motion.falling_Flag != 0:
