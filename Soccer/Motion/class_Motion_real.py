@@ -1189,7 +1189,7 @@ class Motion_real(Motion):
         self.refresh_Orientation()
         for i in range(6):
             correction_yaw = course - self.body_euler_angle['yaw']
-            if abs(correction_yaw) <  0.035: return
+            if abs(correction_yaw) <  0.09: return
             if correction_yaw > 0:
                 solid_jumps = math.floor(abs(correction_yaw / self.params['CALIBRATED_CCW_YAW']))
                 partial_jump = abs(correction_yaw % self.params['CALIBRATED_CCW_YAW'])

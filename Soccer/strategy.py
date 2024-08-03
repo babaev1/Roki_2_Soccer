@@ -593,19 +593,21 @@ class Player():
         self.motion.head_Return(0, -1500)
         time.sleep(1)
         self.motion.jump_turn(0.7)
-        number_Of_Cycles = 5
-        stepLength = 64
-        sideLength = 0
-        self.motion.walk_Initial_Pose()
-        for cycle in range(number_Of_Cycles):
-            stepLength1 = stepLength
-            if cycle == 0 : stepLength1 = stepLength/3
-            if cycle == 1 : stepLength1 = stepLength/3 * 2
-            self.motion.refresh_Orientation()
-            rotation = math.pi/4 - self.motion.imu_body_yaw() * 1.1
-            rotation = self.motion.normalize_rotation(rotation)
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
-        self.motion.walk_Final_Pose()
+        self.motion.kick(True, small = True)
+        self.motion.walk_Final_Pose_After_Kick()
+        #number_Of_Cycles = 5
+        #stepLength = 64
+        #sideLength = 0
+        #self.motion.walk_Initial_Pose()
+        #for cycle in range(number_Of_Cycles):
+        #    stepLength1 = stepLength
+        #    if cycle == 0 : stepLength1 = stepLength/3
+        #    if cycle == 1 : stepLength1 = stepLength/3 * 2
+        #    self.motion.refresh_Orientation()
+        #    rotation = math.pi/4 - self.motion.imu_body_yaw() * 1.1
+        #    rotation = self.motion.normalize_rotation(rotation)
+        #    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+        #self.motion.walk_Final_Pose()
 
         return
         self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
