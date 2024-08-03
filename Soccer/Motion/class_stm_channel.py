@@ -21,7 +21,7 @@ class STM_channel():
         self.zubr = Roki.Zubr(self.mb)
 
     def read_quaternion_from_imu_in_head(self, frame_number = None):
-        if frame_number != None:
+        if frame_number != None and self.glob.camera_streaming :
             ok, fr = self.mb.GetIMUFrame(frame_number)
         else:
             ok, fr = self.mb.GetIMULatest()

@@ -588,6 +588,7 @@ class Player():
 
     def FIRA_penalty_Shooter_main_cycle(self):
         self.motion.with_Vision = False
+        self.glob.camera_streaming = False
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         first_shoot = True
         first_look_point = [2.0 , 0]
