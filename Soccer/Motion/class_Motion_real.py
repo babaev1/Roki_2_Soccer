@@ -173,7 +173,7 @@ class Motion_real(Motion):
             self.neck_tilt = int((-alpha_d)/self.TIK2RAD + self.neck_calibr)
             #uprint('self.neck_pan =', self.neck_pan, 'self.neck_tilt =', self.neck_tilt)
             if self.glob.SIMULATION == 5:
-                self.head_Return(self.neck_pan, self.neck_tilt)
+                self.head_Return(self.neck_pan, c)
             else:
                 returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                              self.jointHandle[21] , self.neck_pan * self.TIK2RAD * self.ACTIVESERVOS[21][3], self.sim.simx_opmode_oneshot)   # Шея поворот
