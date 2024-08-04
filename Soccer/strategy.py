@@ -213,7 +213,7 @@ class Player():
 
     def play_game(self):
         if self.role == 'goalkeeper': self.goalkeeper_main_cycle()
-        if self.role == 'penalty_Goalkeeper': self.penalty_Goalkeeper_main_cycle()
+        if self.role == 'penalty_Goalkeeper': self.FIRA_penalty_Goalkeeper_main_cycle()
         if self.role == 'side_to_side': self.side_to_side_main_cycle()
         if self.role == 'forward': self.forward_main_cycle(self.second_pressed_button)
         if self.role == 'forward_v2': self.forward_v2_main_cycle()
@@ -641,7 +641,7 @@ class Player():
             player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
             player_in_front_of_ball = -math.pi/2 < player_from_ball_yaw < math.pi/2
             player_in_fast_kick_position = (player_from_ball_yaw > 2.5 or player_from_ball_yaw < -2.5) and dist < 0.6
-            if (dist == 0 or dist > 4)  and not player_in_fast_kick_position:
+            if (dist == 0 or dist > 0.5)  and not player_in_fast_kick_position:
                 if dist > 1: stop_Over = True
                 else: stop_Over = False
                 direction_To_Ball = math.atan2((self.glob.ball_coord[1] - self.glob.pf_coord[1]), (self.glob.ball_coord[0] - self.glob.pf_coord[0]))
@@ -697,6 +697,27 @@ class Player():
             #if first_shoot:
             success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
             first_shoot = False
+
+
+    def FIRA_penalty_Goalkeeper_main_cycle(self):
+        self.motion.with_Vision = False
+        self.glob.camera_streaming = False
+        self.motion.head_Return(0, -1500)
+        self.g = GoalKeeper(self.motion, self.local, self.glob)
+        self.glob.obstacleAvoidanceIsOn = False
+        first_Get_Up = True
+        while (True):
+            if self.motion.falling_Flag != 0:
+                if self.motion.falling_Flag == 3: break
+                self.motion.falling_Flag = 0
+                self.local.coordinate_fall_reset()
+            self.motion.jump_turn(0)
+            success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+                                                                              very_Fast = True )
+            if dist != 0:
+                displacement = self.glob.ball_coord[1] - self.glob.pf_coord[1]
+                if abs(displacement) > 0.2:
+                    self.motion.near_distance_omni_motion(abs(displacement) * 1000, math.copysign(math.pi/2, displacement))
 
 
     def penalty_Goalkeeper_main_cycle(self):
