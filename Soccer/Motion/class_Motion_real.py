@@ -171,7 +171,6 @@ class Motion_real(Motion):
             alpha = math.atan(E)
             alpha_d = math.pi/2 - alpha
             self.neck_tilt = int((-alpha_d)/self.TIK2RAD + self.neck_calibr)
-            #uprint('self.neck_pan =', self.neck_pan, 'self.neck_tilt =', self.neck_tilt)
             if self.glob.SIMULATION == 5:
                 self.head_Return(self.neck_pan, c)
             else:
