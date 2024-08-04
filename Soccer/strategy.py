@@ -601,7 +601,7 @@ class Player():
         self.motion.head_Return(0, -1500)
         time.sleep(1)
         self.motion.jump_turn(0.5, jumps_limit = 2)
-        self.motion.kick_power = 60
+        self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
         self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
         #number_Of_Cycles = 5
