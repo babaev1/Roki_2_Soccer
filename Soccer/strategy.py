@@ -605,7 +605,7 @@ class Player():
         self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
         self.motion.jump_turn(0)
-        self.motion.near_distance_omni_motion(200, math.pi/2)
+        self.motion.near_distance_omni_motion(300, math.pi/2)
         #number_Of_Cycles = 5
         #stepLength = 64
         #sideLength = 0
