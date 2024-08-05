@@ -8,7 +8,7 @@ class roki2met :
     mixingRoki2metSlot = 3
     standUpSlot = 8
     Basketball_ThrowSlot = 9
-    Basketball_PickUp_v2Slot = 10
+    Basketball_PickUp_v2_R2Slot = 10
     TripleJumpForFIRA2023Slot = 11
     TripleJumpForFIRA2024Slot = 12
     sprint_start_poseSlot = 19
@@ -242,8 +242,8 @@ class roki2met :
         frameCount = 6
 
 
-    class Basketball_PickUp_v2 :
-        #Перечень переменных слота Basketball_PickUp_v2
+    class Basketball_PickUp_v2_R2 :
+        #Перечень переменных слота Basketball_PickUp_v2_R2
         pitStop = 2
         clamping = 3
         steps = 4

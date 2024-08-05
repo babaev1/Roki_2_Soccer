@@ -615,7 +615,7 @@ class Motion(Robot, Motion_extention_1):
             #         break
             #     time.sleep(0.02)
             #     counter += 1
-        fase_offset = 0.7
+        fase_offset = 0 #0.7
         for iii in range(0,frameNumberPerCycle,framestep):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
             if 0<= iii <self.fr1 :                                              # FASA 1
