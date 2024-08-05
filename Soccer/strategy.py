@@ -867,7 +867,7 @@ class Player():
         #    throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
         if pressed_button == 'start' or pressed_button == 'pick_up_test' :
             #self.motion.play_Soft_Motion_Slot( name = 'pickUp', motion_list = pickUp)
-            var = roki2met.roki2met.Basketball_PickUp_v2
+            var = roki2met.roki2met.Basketball_PickUp_v2_R2
             self.glob.rcb.motionPlay(10)                                # Basketball_PickUp
             while True:
                 ok, frameCount = intercom.memIGet(var.frameCount)

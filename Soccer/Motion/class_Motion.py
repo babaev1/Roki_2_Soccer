@@ -442,8 +442,8 @@ class Motion(Robot, Motion_extention_1):
             self.ztl = self.ztl0 - j*(self.ztl0+self.gaitHeight)/self.initPoses
             # self.ytr = -self.d10 - j*self.amplitude/2 /self.initPoses
             # self.ytl =  self.d10 - j*self.amplitude/2 /self.initPoses
-            self.ytr = -self.d10 - j* 32 /self.initPoses
-            self.ytl =  self.d10 - j* 32 /self.initPoses
+            self.ytr = -self.d10 - j* 16 /self.initPoses
+            self.ytl =  self.d10 - j* 16 /self.initPoses
             angles = self.computeAlphaForWalk()
             #if not self.falling_Flag ==0: return
             if len(angles)==0:
@@ -615,7 +615,7 @@ class Motion(Robot, Motion_extention_1):
             #         break
             #     time.sleep(0.02)
             #     counter += 1
-        fase_offset = 0 #0.7
+        fase_offset = 0.7 #1.57  #0.7
         for iii in range(0,frameNumberPerCycle,framestep):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
             if 0<= iii <self.fr1 :                                              # FASA 1
