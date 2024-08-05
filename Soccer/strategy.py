@@ -399,7 +399,7 @@ class Player():
             #if cycle ==0 : stepLength1 = stepLength/3
             #if cycle ==1 : stepLength1 = stepLength/3 * 2
             self.motion.refresh_Orientation()
-            rotation = 0 - invert * self.motion.imu_body_yaw() * 1.1
+            rotation = 0 + invert * self.motion.imu_body_yaw() * 1.1
             rotation = self.motion.normalize_rotation(rotation)
             #rotation = 0
             self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
