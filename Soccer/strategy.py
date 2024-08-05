@@ -604,6 +604,7 @@ class Player():
         self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
         self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
+        self.motion.near_distance_omni_motion(200, math.pi/2)
         #number_Of_Cycles = 5
         #stepLength = 64
         #sideLength = 0
