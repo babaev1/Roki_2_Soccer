@@ -442,8 +442,8 @@ class Motion(Robot, Motion_extention_1):
             self.ztl = self.ztl0 - j*(self.ztl0+self.gaitHeight)/self.initPoses
             # self.ytr = -self.d10 - j*self.amplitude/2 /self.initPoses
             # self.ytl =  self.d10 - j*self.amplitude/2 /self.initPoses
-            self.ytr = -self.d10 - j* 16 /self.initPoses
-            self.ytl =  self.d10 - j* 16 /self.initPoses
+            self.ytr = -self.d10 - j* 24 /self.initPoses
+            self.ytl =  self.d10 - j* 24 /self.initPoses
             angles = self.computeAlphaForWalk()
             #if not self.falling_Flag ==0: return
             if len(angles)==0:

@@ -1235,6 +1235,7 @@ class Player():
 
     def kick_test(self, second_pressed_button):
         if second_pressed_button == 'regular':
+            self.motion.kick_power = 100
             self.motion.kick(True)
         else:
             self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
