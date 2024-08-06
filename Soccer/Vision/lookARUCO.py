@@ -43,7 +43,7 @@ def detect_aruco_markers(frame, led):
                 
                 tr_x, tr_y = undistortPointMap[top_right[0] * 2, top_right[1] * 2]
                 tl_x, tl_y = undistortPointMap[top_left[0] * 2, top_left[1] * 2]
-                size = tr_x[0] - tL_x[0]
+                size = tr_x - tl_x
                 cx = int((top_right[0] + top_left[0])/2)
                 cy = int((top_left[1] + bottom_left[1])/2)
                 side_shift =  400 - int((top_right[0] + top_left[0])/2)
@@ -105,7 +105,7 @@ if __name__== "__main__":
         print("aruco_angle_horizontal: ", aruco_angle_horizontal.value)
         print('distance :', distance.value)
         print('size :', aruco_size)
-        if aruco_size > 90:
+        if aruco_size > 150:
             print('Reverse')
             stopFlag.value = True
         else:
