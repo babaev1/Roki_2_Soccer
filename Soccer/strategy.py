@@ -998,6 +998,7 @@ class Player():
             pressed_button = self.motion.push_Button(labels)
             self.motion.with_Vision = False
             sideLength = 0
+            direction = 0
             while True:
                 if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
                 stepLength = 64
@@ -1009,9 +1010,10 @@ class Player():
                     if cycle ==0 : stepLength1 = stepLength/3
                     if cycle ==1 : stepLength1 = stepLength/3 * 2
                     self.motion.refresh_Orientation()
-                    rotation =  -self.motion.imu_body_yaw() * 1.1
+                    rotation = direction -self.motion.imu_body_yaw() * 1.1
                     rotation = self.motion.normalize_rotation(rotation)
                     self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                    if cycle > 20:  direction +=  aruco_angle_horizontal.value
                     #aruco_size = size.value
                     aruco_dist = distance.value
                     if 0 < aruco_dist < self.glob.params['SPRINT_REVERSE_DISTANCE_CM'] * 2 :
