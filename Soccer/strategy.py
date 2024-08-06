@@ -1005,6 +1005,8 @@ class Player():
                 stepLength = 64
                 number_Of_Cycles = 200
                 self.motion.walk_Initial_Pose()
+                reverseFlag = False
+                countdown = 0
                 for cycle in range(number_Of_Cycles):
                     if self.motion.falling_Flag != 0: break
                     stepLength1 = stepLength
@@ -1024,7 +1026,9 @@ class Player():
                     
                     aruco_dist = distance.value
                     #if 0 < aruco_dist < self.glob.params['SPRINT_REVERSE_DISTANCE_CM'] * 2 :
-                    if aruco_size > self.glob.params['SPRINT_ARUCO_SIZE'] :
+                    if aruco_size > self.glob.params['SPRINT_ARUCO_SIZE'] : reverseFlag = True
+                    if reverseFlag: countdown += 1
+                    if countdown == 5:
                         print('Reverse')
                         #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 1)
                         #self.motion.walk_Final_Pose()
