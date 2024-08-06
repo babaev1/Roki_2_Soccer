@@ -604,7 +604,7 @@ class Player():
         self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
         self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
-        self.motion.jump_turn(0)
+        self.motion.jump_turn(self.f.direction_To_Guest)
         self.motion.near_distance_omni_motion(300, math.pi/2)
         #number_Of_Cycles = 5
         #stepLength = 64
@@ -653,9 +653,10 @@ class Player():
                 self.go_Around_Ball(dist, napravl)
             self.motion.jump_turn(self.f.direction_To_Guest)
             #if first_shoot:
-            if self.f.kick_Power == 1: self.motion.kick_power = 100
-            if self.f.kick_Power == 2: self.motion.kick_power = 60
-            if self.f.kick_Power == 3: self.motion.kick_power = 20
+            #if self.f.kick_Power == 1: self.motion.kick_power = 100
+            #if self.f.kick_Power == 2: self.motion.kick_power = 60
+            #if self.f.kick_Power == 3: self.motion.kick_power = 20
+            self.motion.kick_power = 100
             success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest)
             first_shoot = False
 
