@@ -1345,7 +1345,7 @@ class Player():
             if restart_flag == 0: break
             time.sleep(0.25)
         intercom.memISet(var.tuner, self.motion.params['TRIPLE_JUMP_TUNER'])
-        intercom.memISet(var.factor, self.motion.params['TRIPLE_JUMP_FACTOR'])
+        intercom.memFSet(var.factor, self.motion.params['TRIPLE_JUMP_FACTOR'])
         intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
 
 
