@@ -226,7 +226,7 @@ void main() {
 	//page_5();
 	//page_6();
   
-	//page_7();
+	page_7();
 	for( i = 0; i < 6 * factor; i++ ) page_8(i);
 	page_9();
   	page_9_1();

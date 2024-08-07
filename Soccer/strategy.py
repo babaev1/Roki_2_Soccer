@@ -1357,7 +1357,7 @@ class Player():
         self.motion.params['MARATHON_FPS'] = 4
         self.motion.params['MARATHON_UGOL_TORSA'] = 0
         self.motion.params['MARATHON_BODY_TILT_AT_WALK'] = 0.04
-        if self.glob.SIMULATION == 5:
+        if self.glob.SIMULATION == 6:
             from Soccer.Vision import lookAtLine
 
             # Pipeline variables
