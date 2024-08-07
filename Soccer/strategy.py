@@ -1332,8 +1332,8 @@ class Player():
     def triple_jump_main_cycle(self):
         var = roki2met.roki2met.TripleJumpForFIRA2023
         intercom = self.glob.stm_channel.zubr 
-        self.motion.params['TRIPLE_JUMP_TUNER'] = 0
-        self.motion.params['TRIPLE_JUMP_FACTOR'] = 0.9
+        #self.motion.params['TRIPLE_JUMP_TUNER'] = 0
+        #self.motion.params['TRIPLE_JUMP_FACTOR'] = 0.9
         #self.glob.stm_channel.mb.SetBodyQueuePeriod(15)
         time.sleep(5)
         #self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
