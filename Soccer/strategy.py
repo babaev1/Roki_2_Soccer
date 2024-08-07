@@ -1351,6 +1351,7 @@ class Player():
 
 
     def marathon_main_cycle(self):
+        self.motion.with_Vision = False
         self.motion.params['MARATHON_STEP_LENGTH'] = 0
         self.motion.params['MARATHON_GAIT_HEIGHT'] = 195
         self.motion.params['MARATHON_STEP_HEIGHT'] = 40
