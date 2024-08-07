@@ -1700,16 +1700,16 @@ function declare void runTest(
 ) end function declare
 > 
   ( <int 53:stepType> ) = (0) 
-  ( <float 4:stepLength> ) = ( (50) / (3) ) 
+  ( <float 4:stepLength> ) = ( (40) / (3) ) 
  call  <function declare void walkCycle(
 ) end function declare
 > 
   ( <int 53:stepType> ) = (2) 
-  ( <float 4:stepLength> ) = ( ( (50) * (2) ) / (3) ) 
+  ( <float 4:stepLength> ) = ( ( (40) * (2) ) / (3) ) 
  call  <function declare void walkCycle(
 ) end function declare
 > 
-  ( <float 4:stepLength> ) = (50) 
+  ( <float 4:stepLength> ) = (40) 
   {
   }
  loop  ( <int 53:stepType> ) = (1) 
@@ -1760,7 +1760,7 @@ function declare void main(
  int 2:stackSize
 ) end function declare
 > 
- loop  ( <int 1022:svButtonRight> ) = ( -(1) ) 
+  ( <int 1022:svButtonRight> ) = ( -(1) ) 
   ( <int 1021:svButtonLeft> ) = ( -(1) ) 
  call  <function declare void sfBip(
  int 3:bipCount

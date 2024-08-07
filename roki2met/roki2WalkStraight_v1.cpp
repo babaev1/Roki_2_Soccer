@@ -613,7 +613,7 @@ void mixing() {
   }
   
 #define CYCLE_COUNT 5 //Количество шагов. Общее количество шагов будет +3
-#define STEP_LENGHT 50
+#define STEP_LENGHT 40
 
 void setup_final(){
   fr1 = 20; //8;       
@@ -675,7 +675,7 @@ void main() {
   //Запускаем миксинг
   sfCreateTask( mixing, 20 );
 
-  while (pitStop == 0) sfWaitFrame(1); // waithing to change parameters
+  //while (pitStop == 0) sfWaitFrame(1); // waithing to change parameters
 
   svButtonRight = SV_SLOT_INACTIVE;
   svButtonLeft = SV_SLOT_INACTIVE;
