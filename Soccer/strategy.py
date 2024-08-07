@@ -1440,16 +1440,16 @@ class Player():
             print('order_from_Head: ', order_from_Head)
             shift = order_from_Head // 10
             turn = order_from_Head % 10
-            if shift == 2 : sideLength = -20
-            elif shift == 3 : sideLength = 20
+            if shift == 2 : sideLength = -10
+            elif shift == 3 : sideLength = 10
             else: sideLength = 0
             stepLength1 = stepLength
             if cycle ==0 : stepLength1 = stepLength/3
             if cycle ==1 : stepLength1 = stepLength/3 * 2
             self.motion.refresh_Orientation()
             
-            if turn == 2: direction += 0.2
-            elif turn == 3: direction -= 0.2
+            if turn == 2: direction += 0.1
+            elif turn == 3: direction -= 0.1
             #elif turn == 1: rotation = 0
             rotation = direction + invert * self.motion.imu_body_yaw() * 1.1
             #if rotation > 0: rotation *= 1.5
