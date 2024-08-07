@@ -1419,47 +1419,63 @@ class Player():
         # start Process of Vision Pipeline
         cam_proc.start()
         """
-        event = threading.Event()
-        camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift))
-        camera_thread.setDaemon(True)
-        camera_thread.start()
+        while True:
+            event = threading.Event()
+            camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift))
+            camera_thread.setDaemon(True)
+            camera_thread.start()
 
-        self.motion.head_Return(0, self.motion.neck_play_pose)
-        stepLength = 50
-        self.motion.gaitHeight = 190
-        number_Of_Cycles = 100
-        self.motion.amplitude = 32
-        sideLength = 0
-        #self.motion.first_Leg_Is_Right_Leg = False
-        if self.motion.first_Leg_Is_Right_Leg: invert = -1
-        else: invert = 1
-        self.motion.walk_Initial_Pose()
-        number_Of_Cycles += 1
-        direction = 0
-        for cycle in range(number_Of_Cycles):
-            order_from_Head = self.glob.vision.turn_shift
-            print('order_from_Head: ', order_from_Head)
-            shift = order_from_Head // 10
-            turn = order_from_Head % 10
-            if shift == 2 : sideLength = -10
-            elif shift == 3 : sideLength = 10
-            else: sideLength = 0
-            stepLength1 = stepLength
-            if cycle ==0 : stepLength1 = stepLength/3
-            if cycle ==1 : stepLength1 = stepLength/3 * 2
-            self.motion.refresh_Orientation()
-            
-            if turn == 2: direction += 0.1
-            elif turn == 3: direction -= 0.1
-            #elif turn == 1: rotation = 0
-            rotation = direction + invert * self.motion.imu_body_yaw() * 1.1
-            #if rotation > 0: rotation *= 1.5
-            rotation = self.motion.normalize_rotation(rotation)
+            self.motion.head_Return(0, self.motion.neck_play_pose)
+            stepLength = 50
+            self.motion.gaitHeight = 190
+            number_Of_Cycles = 100
+            self.motion.amplitude = 32
+            sideLength = 0
+            self.motion.walk_Initial_Pose()
+            direction = 0
+            for cycle in range(number_Of_Cycles):
+                order_from_Head = self.glob.vision.turn_shift
+                print('order_from_Head: ', order_from_Head)
+                shift = order_from_Head // 10
+                turn = order_from_Head % 10
+                if shift == 2 : sideLength = -20
+                elif shift == 3 : sideLength = 20
+                else: sideLength = 0
+                stepLength1 = stepLength
+                if cycle ==0 : stepLength1 = stepLength/3
+                if cycle ==1 : stepLength1 = stepLength/3 * 2
+                self.motion.refresh_Orientation()
+                if turn == 2: direction += 0.2
+                elif turn == 3: direction -= 0.2
+                #elif turn == 1: rotation = 0
+                rotation = direction - self.motion.imu_body_yaw() * 1.1
+                #if rotation > 0: rotation *= 1.5
+                rotation = self.motion.normalize_rotation(rotation)
+                self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                if self.glob.camera_down_Flag == True:
+                    stepLength1 = stepLength/3 * 2
+                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 2)
+                    stepLength1 = stepLength/3
+                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle+1)
+                    break
+            self.motion.walk_Final_Pose()
+            event.set()
+            time.sleep(2)
 
-            #rotation = 0
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
-        self.motion.walk_Final_Pose()
-        event.set()
+            if self.glob.SIMULATION == 5:
+                if self.glob.camera_down_Flag == True:
+                    print('Camera resetting')
+                    self.glob.camera_down_Flag = False
+                    self.glob.vision.camera.picam2.close()
+                    #self.glob.vision.event.set()
+                    new_stm_channel  = self.STM_channel(self.glob)
+                    self.glob.stm_channel = new_stm_channel
+                    self.glob.rcb = self.glob.stm_channel.rcb
+                    new_vision = self.Vision_RPI(self.glob)
+                    self.glob.vision = new_vision
+                    self.motion.vision = self.glob.vision
+                    self.local.vision = self.glob.vision
+                    #self.glob.vision.camera_thread.start()
 
     def test_walk_main_cycle(self):
         self.motion.fr1 = 40 #40 #50

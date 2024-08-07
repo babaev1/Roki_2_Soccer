@@ -463,6 +463,9 @@ class Vision_General:
                 else: turn = 0
                 self.turn_shift = turn + shift
                 #print('number of detected points: ', np.sum(mask/255))
+            else: 
+                self.turn_shift = 0
+                self.glob.camera_down_Flag = True
             time.sleep(0.5)
 
 
