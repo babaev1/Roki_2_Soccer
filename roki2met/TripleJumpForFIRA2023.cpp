@@ -177,6 +177,7 @@ void page_10(){
 
 void main() {
   int i;
+  int jump;
   /*
     restart_flag = 0;
     restart_flag = 1;
@@ -188,6 +189,7 @@ void main() {
     svButtonLeft = SV_SLOT_RELAX;
     restart_flag = 0;
 */
+  for( jump = 0; jump < 3; i++ ){
   	factor = 0.9; //0.9
 	page_1();
 	page_2();
@@ -210,4 +212,6 @@ void main() {
   	page_9_1();
   	page_0();
 	//page_10();
+    	sfWaitFrame( 1500 );
+    }
 }

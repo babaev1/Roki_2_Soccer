@@ -1847,28 +1847,12 @@ function declare void main(
 {
  {
  int -1:i
+ int -2:jump
   {
   }
-  ( <float 4:factor> ) = (0.9) 
- call  <function declare void page_1(
-) end function declare
-> 
- call  <function declare void page_2(
-) end function declare
-> 
- loop loop loop loop call  <function declare void page_7(
-) end function declare
-> 
- loop call  <function declare void page_9(
-) end function declare
-> 
- call  <function declare void page_9_1(
-) end function declare
-> 
- call  <function declare void page_0(
-) end function declare
-> 
- return
+  {
+  }
+ loop return
  }
 }
 
