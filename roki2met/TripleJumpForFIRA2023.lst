@@ -250,6 +250,8 @@ int 1149:leftClawAddonMix
 int 2:restart_flag
 int 3:frameCount
 float 4:factor
+int 5:tuner
+int 6:pitStop
 
 //==================
 //  functions
@@ -1382,18 +1384,6 @@ function declare void page_2(
  int 2:frameCount
 ) end function declare
 > 
- call  <function declare void sfPoseGroup(
- int 4:unitMask
- int 3:angle
- int 2:frameCount
-) end function declare
-> 
- call  <function declare void sfPoseGroup(
- int 4:unitMask
- int 3:angle
- int 2:frameCount
-) end function declare
-> 
  call  <function declare void sfWaitFrame(
  int 2:frame
 ) end function declare
@@ -1852,7 +1842,9 @@ function declare void main(
   }
   {
   }
- loop return
+  ( <int 5:tuner> ) = (0) 
+  ( <float 4:factor> ) = (0.9) 
+ loop loop return
  }
 }
 

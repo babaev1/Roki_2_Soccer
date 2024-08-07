@@ -14,6 +14,8 @@
 int restart_flag;
 int frameCount;
 float factor;
+int tuner;
+int pitStop;
 
 void page_0() {
 	frameCount = 250;
@@ -41,9 +43,9 @@ void page_1() {
 void page_2() {
 	frameCount = 30; //12;
   	frameCount *= factor;
-	sfPoseGroup(MASK_FOOT_FRONT, 3394, frameCount);
-  	sfPoseGroup(MASK_FOOT_FRONT, 2680, frameCount);
-	sfPoseGroup(MASK_HIP, 3900, frameCount);
+	//sfPoseGroup(MASK_FOOT_FRONT, 3394, frameCount);
+  	sfPoseGroup(MASK_FOOT_FRONT, 2680 + tuner, frameCount);
+	//sfPoseGroup(MASK_HIP, 3900, frameCount);
   	sfPoseGroup(MASK_HIP, 4100, frameCount);
   	//sfPoseGroup(MASK_KNEE, 3400, frameCount);
 	sfWaitFrame(frameCount);
@@ -178,6 +180,8 @@ void page_10(){
 void main() {
   int i;
   int jump;
+  tuner = 0;
+  factor = 0.9; //0.9
   /*
     restart_flag = 0;
     restart_flag = 1;
@@ -189,8 +193,8 @@ void main() {
     svButtonLeft = SV_SLOT_RELAX;
     restart_flag = 0;
 */
+  while (pitStop == 0) sfWaitFrame(1); // waithing to change parameters
   for( jump = 0; jump < 3; i++ ){
-  	factor = 0.9; //0.9
 	page_1();
 	page_2();
 

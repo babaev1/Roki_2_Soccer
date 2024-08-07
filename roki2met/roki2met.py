@@ -257,6 +257,8 @@ class roki2met :
         restart_flag = 2
         frameCount = 3
         factor = 4
+        tuner = 5
+        pitStop = 6
 
 
     class TripleJumpForFIRA2024 :
