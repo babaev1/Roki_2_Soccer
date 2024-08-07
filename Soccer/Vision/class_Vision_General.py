@@ -418,6 +418,7 @@ class Vision_General:
                 high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
                 if self.glob.SIMULATION == 5:
                     img1 = cv2.resize(img1, (200,160))
+                    img1 = cv2.resize(img1, (160,200))
                 image = cv2.resize(img1[79:][:][:],(x_size, y_size))
                 labimg = cv2.cvtColor (image, cv2.COLOR_BGR2LAB)
                 mask = cv2.inRange (labimg, low_th, high_th)
@@ -430,6 +431,7 @@ class Vision_General:
                             x_list.append(x)
                             y_list.append(y_size - y)
                 if len(x_list) == 0: continue
+                self.visible_reaction_ball()
                 try:
                     coeff = self.quadratic_ransac_curve_fit(np.array(x_list), np.array(y_list))
                 except Exception: continue
