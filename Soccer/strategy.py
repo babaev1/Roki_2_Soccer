@@ -1028,7 +1028,7 @@ class Player():
                     #if 0 < aruco_dist < self.glob.params['SPRINT_REVERSE_DISTANCE_CM'] * 2 :
                     if aruco_size > self.glob.params['SPRINT_ARUCO_SIZE'] : reverseFlag = True
                     if reverseFlag: countdown += 1
-                    if countdown == 5:
+                    if countdown == 3:
                         print('Reverse')
                         #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 1)
                         #self.motion.walk_Final_Pose()
