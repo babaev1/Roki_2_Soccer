@@ -416,6 +416,8 @@ class Vision_General:
                 th = self.TH['orange ball']['th']
                 low_th = (int(th[0] * 2.55), th[2] + 128, th[4] + 128)
                 high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
+                if self.glob.SIMULATION == 5:
+                    img1 = cv2.resize(img1, (160,200))
                 image = cv2.resize(img1[79:][:][:],(x_size, y_size))
                 labimg = cv2.cvtColor (image, cv2.COLOR_BGR2LAB)
                 mask = cv2.inRange (labimg, low_th, high_th)
