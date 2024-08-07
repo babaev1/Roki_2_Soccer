@@ -1331,7 +1331,7 @@ class Player():
     
     def triple_jump_main_cycle(self):
         self.glob.stm_channel.mb.SetBodyQueuePeriod(15)
-        time.sleep(10)
+        time.sleep(5)
         self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
 
     def marathon_main_cycle(self):
