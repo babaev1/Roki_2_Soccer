@@ -93,119 +93,119 @@ VBC1_STACK_UP2//remove result, call address and params
 [2:10] ;
 VBC1_RETURN
 ;page_0 <void()>
-[1:21] ;frameCount = 250;
+[1:22] ;frameCount = 250;
 VBC2_PUSH_CONST 3 //frameCount
 VBC3_PUSH_CONST 250 
 VBC1_POP
-[1:22] ;frameCount *= factor;
+[1:23] ;frameCount *= factor;
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_POP_CI
-[1:23] ;sfPoseGroup(1056964607 , 0, frameCount);
+[1:24] ;sfPoseGroup(1056964607 , 0, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 1056964607 
 VBC1_PUSH_0 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:24] ;sfWaitFrame(frameCount);
+[1:25] ;sfWaitFrame(frameCount);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:27] ;
+[1:28] ;
 VBC1_RETURN
 ;page_1 <void()>
-[1:28] ;frameCount = 30;
+[1:29] ;frameCount = 30;
 VBC2_PUSH_CONST 3 //frameCount
 VBC2_PUSH_CONST 30 
 VBC1_POP
-[1:29] ;frameCount *= factor;
+[1:30] ;frameCount *= factor;
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_POP_CI
-[1:30] ;sfPoseGroup((524288  | 262144 ), 3072, frameCount);
+[1:31] ;sfPoseGroup((524288  | 262144 ), 3072, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST 3072 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:31] ;sfPoseGroup((131072  | 65536  | 134217728  | 67108864  ), 3072, frameCount);
+[1:32] ;sfPoseGroup((131072  | 65536  | 134217728  | 67108864  ), 3072, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 201523200 
 VBC3_PUSH_CONST 3072 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:34] ;sfPoseGroup((32768  | 16384 ), 3456, frameCount);
+[1:35] ;sfPoseGroup((32768  | 16384 ), 3456, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST 3456 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:35] ;sfPoseGroup((32  | 16 ), 460, frameCount);
+[1:36] ;sfPoseGroup((32  | 16 ), 460, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC2_PUSH_CONST 48 
 VBC3_PUSH_CONST 460 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:36] ;sfPoseGroup((8  | 4 ), -1022, frameCount);
+[1:37] ;sfPoseGroup((8  | 4 ), -1022, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC2_PUSH_CONST 12 
 VBC3_PUSH_CONST -1022 // -
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:37] ;sfPoseGroup((8  | 4 ), -3000, frameCount);
+[1:38] ;sfPoseGroup((8  | 4 ), -3000, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC2_PUSH_CONST 12 
 VBC3_PUSH_CONST -3000 // -
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:38] ;sfPoseGroup(33554432 , -921, frameCount);
+[1:39] ;sfPoseGroup(33554432 , -921, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 33554432 
 VBC3_PUSH_CONST -921 // -
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:39] ;sfPoseGroup(33554432 , 4000, frameCount);
+[1:40] ;sfPoseGroup(33554432 , 4000, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 33554432 
 VBC3_PUSH_CONST 4000 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:40] ;sfWaitFrame(frameCount);
+[1:41] ;sfWaitFrame(frameCount);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:43] ;
+[1:44] ;
 VBC1_RETURN
 ;page_2 <void()>
-[1:44] ;frameCount = 30; 
+[1:45] ;frameCount = 30; 
 VBC2_PUSH_CONST 3 //frameCount
 VBC2_PUSH_CONST 30 
 VBC1_POP
-[1:45] ;frameCount *= factor;
+[1:46] ;frameCount *= factor;
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_POP_CI
-[1:47] ;sfPoseGroup((524288  | 262144 ), 2680 + tuner, frameCount);
+[1:48] ;sfPoseGroup((524288  | 262144 ), 2680 + tuner, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST 2680 
@@ -214,26 +214,26 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:49] ;sfPoseGroup((32768  | 16384 ), 4100, frameCount);
+[1:50] ;sfPoseGroup((32768  | 16384 ), 4100, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST 4100 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:51] ;sfWaitFrame(frameCount);
+[1:52] ;sfWaitFrame(frameCount);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:54] ;
+[1:55] ;
 VBC1_RETURN
 ;page_3 <void(,int)>
-[1:55] ;frameCount = 1;  		
+[1:56] ;frameCount = 1;  		
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_1 
 VBC1_POP
-[1:57] ;sfPoseGroupLin((524288  | 262144 ), 3072 + i, frameCount);
+[1:58] ;sfPoseGroupLin((524288  | 262144 ), 3072 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST 3072 
@@ -242,7 +242,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:58] ;sfPoseGroupLin((131072  | 65536  | 134217728  | 67108864  ), 1920 + i, frameCount);
+[1:59] ;sfPoseGroupLin((131072  | 65536  | 134217728  | 67108864  ), 1920 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC5_PUSH_CONST 201523200 
 VBC3_PUSH_CONST 1920 
@@ -251,7 +251,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:60] ;sfPoseGroupLin((32768  | 16384 ), 1536 + i, frameCount);
+[1:61] ;sfPoseGroupLin((32768  | 16384 ), 1536 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST 1536 
@@ -260,7 +260,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:61] ;sfPoseGroupLin((8  | 4 ), 2304 + i, frameCount);
+[1:62] ;sfPoseGroupLin((8  | 4 ), 2304 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC2_PUSH_CONST 12 
 VBC3_PUSH_CONST 2304 
@@ -269,7 +269,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:62] ;sfPoseGroup(33554432 , -921 + i, frameCount);
+[1:63] ;sfPoseGroup(33554432 , -921 + i, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 33554432 
 VBC3_PUSH_CONST -921 // -
@@ -278,19 +278,19 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:63] ;sfWaitFrame(frameCount);
+[1:64] ;sfWaitFrame(frameCount);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:66] ;
+[1:67] ;
 VBC1_RETURN
 ;page_4 <void(,int)>
-[1:67] ;frameCount = 1; 
+[1:68] ;frameCount = 1; 
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_1 
 VBC1_POP
-[1:69] ;sfPoseGroupLin((2097152  | 1048576 ), 921 + i, frameCount);
+[1:70] ;sfPoseGroupLin((2097152  | 1048576 ), 921 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 3145728 
 VBC3_PUSH_CONST 921 
@@ -299,7 +299,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:70] ;sfPoseGroupLin((524288  | 262144 ), -307 + i, frameCount);
+[1:71] ;sfPoseGroupLin((524288  | 262144 ), -307 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST -307 // -
@@ -308,7 +308,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:71] ;sfPoseGroupLin((524288  | 262144 ), -907 + i, frameCount);
+[1:72] ;sfPoseGroupLin((524288  | 262144 ), -907 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST -907 // -
@@ -317,7 +317,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:72] ;sfPoseGroupLin((131072  | 65536  | 134217728  | 67108864  ), 153 + i, frameCount);
+[1:73] ;sfPoseGroupLin((131072  | 65536  | 134217728  | 67108864  ), 153 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC5_PUSH_CONST 201523200 
 VBC3_PUSH_CONST 153 
@@ -326,7 +326,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:75] ;sfPoseGroupLin((32768  | 16384 ), -1996 + i, frameCount);
+[1:76] ;sfPoseGroupLin((32768  | 16384 ), -1996 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST -1996 // -
@@ -335,7 +335,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:77] ;sfPoseGroupLin((8  | 4 ), 3840 + i, frameCount);
+[1:78] ;sfPoseGroupLin((8  | 4 ), 3840 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC2_PUSH_CONST 12 
 VBC3_PUSH_CONST 3840 
@@ -344,7 +344,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:78] ;sfPoseGroup(33554432 , -921 + i, frameCount);
+[1:79] ;sfPoseGroup(33554432 , -921 + i, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 33554432 
 VBC3_PUSH_CONST -921 // -
@@ -353,26 +353,26 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:79] ;sfWaitFrame(frameCount);
+[1:80] ;sfWaitFrame(frameCount);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:81] ;
+[1:82] ;
 VBC1_RETURN
 ;page_5 <void(,int)>
-[1:82] ;frameCount = 1;		
+[1:83] ;frameCount = 1;		
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_1 
 VBC1_POP
-[1:83] ;frameCount *= factor;
+[1:84] ;frameCount *= factor;
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_POP_CI
-[1:84] ;sfPoseGroupLin((2097152  | 1048576 ), 1536 + i, frameCount);
+[1:85] ;sfPoseGroupLin((2097152  | 1048576 ), 1536 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 3145728 
 VBC3_PUSH_CONST 1536 
@@ -381,7 +381,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:85] ;sfPoseGroupLin((524288  | 262144 ), -1474 + i, frameCount);
+[1:86] ;sfPoseGroupLin((524288  | 262144 ), -1474 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST -1474 // -
@@ -390,7 +390,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:87] ;sfPoseGroupLin((131072  | 65536  | 134217728  | 67108864  ), 0 + i, frameCount);
+[1:88] ;sfPoseGroupLin((131072  | 65536  | 134217728  | 67108864  ), 0 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC5_PUSH_CONST 201523200 
 VBC1_PUSH_0 
@@ -399,7 +399,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:89] ;sfPoseGroupLin((32768  | 16384 ), -2304 + i, frameCount);
+[1:90] ;sfPoseGroupLin((32768  | 16384 ), -2304 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST -2304 // -
@@ -408,7 +408,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:91] ;sfPoseGroupLin((512  | 256 ), 622 + i, frameCount);
+[1:92] ;sfPoseGroupLin((512  | 256 ), 622 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC3_PUSH_CONST 768 
 VBC3_PUSH_CONST 622 
@@ -417,7 +417,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:93] ;sfPoseGroupLin((8  | 4 ), 3840 + i, frameCount);
+[1:94] ;sfPoseGroupLin((8  | 4 ), 3840 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC2_PUSH_CONST 12 
 VBC3_PUSH_CONST 3840 
@@ -426,7 +426,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:94] ;sfPoseGroup(33554432 , -921 + i, frameCount);
+[1:95] ;sfPoseGroup(33554432 , -921 + i, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 33554432 
 VBC3_PUSH_CONST -921 // -
@@ -435,19 +435,19 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:95] ;sfWaitFrame(frameCount);
+[1:96] ;sfWaitFrame(frameCount);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:98] ;
+[1:99] ;
 VBC1_RETURN
 ;page_6 <void(,int)>
-[1:99] ;frameCount = 1;		
+[1:100] ;frameCount = 1;		
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_1 
 VBC1_POP
-[1:101] ;sfPoseGroupLin((2097152  | 1048576 ), 0 + i, frameCount);
+[1:102] ;sfPoseGroupLin((2097152  | 1048576 ), 0 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 3145728 
 VBC1_PUSH_0 
@@ -456,7 +456,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:102] ;sfPoseGroupLin((524288  | 262144 ), 3429 + i, frameCount);
+[1:103] ;sfPoseGroupLin((524288  | 262144 ), 3429 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST 3429 
@@ -465,7 +465,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:104] ;sfPoseGroupLin((131072  | 65536  | 134217728  | 67108864  ), 3500 + i, frameCount);
+[1:105] ;sfPoseGroupLin((131072  | 65536  | 134217728  | 67108864  ), 3500 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC5_PUSH_CONST 201523200 
 VBC3_PUSH_CONST 3500 
@@ -474,7 +474,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:108] ;sfPoseGroupLin((32768  | 16384 ), 5600 + i, frameCount);
+[1:109] ;sfPoseGroupLin((32768  | 16384 ), 5600 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST 5600 
@@ -483,7 +483,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:110] ;sfPoseGroupLin((512  | 256 ), -921 + i, frameCount);
+[1:111] ;sfPoseGroupLin((512  | 256 ), -921 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC3_PUSH_CONST 768 
 VBC3_PUSH_CONST -921 // -
@@ -492,7 +492,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:111] ;sfPoseGroupLin((8  | 4 ), -4094 + i, frameCount);
+[1:112] ;sfPoseGroupLin((8  | 4 ), -4094 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC2_PUSH_CONST 12 
 VBC3_PUSH_CONST -4094 // -
@@ -501,7 +501,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:112] ;sfPoseGroup(33554432 , 4000+ i, frameCount);
+[1:113] ;sfPoseGroup(33554432 , 4000+ i, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 33554432 
 VBC3_PUSH_CONST 4000 
@@ -510,106 +510,106 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:113] ;sfWaitFrame(frameCount);
+[1:114] ;sfWaitFrame(frameCount);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:116] ;
+[1:117] ;
 VBC1_RETURN
 ;page_6_1 <void(,int)>
-[1:117] ;frameCount = 1;
+[1:118] ;frameCount = 1;
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_1 
 VBC1_POP
-[1:118] ;frameCount *= factor;
+[1:119] ;frameCount *= factor;
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_POP_CI
-[1:119] ;sfPoseGroupLin((2097152  | 1048576 ), 0, frameCount);
+[1:120] ;sfPoseGroupLin((2097152  | 1048576 ), 0, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 3145728 
 VBC1_PUSH_0 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:120] ;sfPoseGroupLin((524288  | 262144 ), 3429, frameCount);
+[1:121] ;sfPoseGroupLin((524288  | 262144 ), 3429, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST 3429 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:122] ;sfPoseGroupLin((131072  | 65536  | 134217728  | 67108864  ), 3500, frameCount);
+[1:123] ;sfPoseGroupLin((131072  | 65536  | 134217728  | 67108864  ), 3500, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC5_PUSH_CONST 201523200 
 VBC3_PUSH_CONST 3500 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:126] ;sfPoseGroupLin((32768  | 16384 ), 5191, frameCount);
+[1:127] ;sfPoseGroupLin((32768  | 16384 ), 5191, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST 5191 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:127] ;sfPoseGroupLin((32768  | 16384 ), 3500, frameCount);
+[1:128] ;sfPoseGroupLin((32768  | 16384 ), 3500, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST 3500 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:128] ;sfPoseGroupLin((512  | 256 ), -921, frameCount);
+[1:129] ;sfPoseGroupLin((512  | 256 ), -921, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC3_PUSH_CONST 768 
 VBC3_PUSH_CONST -921 // -
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:129] ;sfPoseGroupLin((8  | 4 ), -3583, frameCount);
+[1:130] ;sfPoseGroupLin((8  | 4 ), -3583, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC2_PUSH_CONST 12 
 VBC3_PUSH_CONST -3583 // -
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:130] ;sfWaitFrame(frameCount);
+[1:131] ;sfWaitFrame(frameCount);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:133] ;
+[1:134] ;
 VBC1_RETURN
 ;page_7 <void()>
-[1:134] ;frameCount = 2;
+[1:135] ;frameCount = 2;
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_2 
 VBC1_POP
-[1:136] ;sfWaitFrame(frameCount);
+[1:137] ;sfWaitFrame(frameCount);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:139] ;
+[1:140] ;
 VBC1_RETURN
-;page_8 <void(,int)>
-[1:140] ;frameCount = 1;		
+;page_8_ <void(,int)>
+[1:141] ;frameCount = 1;		
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_1 
 VBC1_POP
-[1:141] ;frameCount *= factor;
+[1:142] ;frameCount *= factor;
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_POP_CI
-[1:142] ;sfPoseGroupLin((524288  | 262144 ), 3993 + i, frameCount);
+[1:143] ;sfPoseGroupLin((524288  | 262144 ), 3993 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST 3993 
@@ -618,7 +618,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:143] ;sfPoseGroupLin((524288  | 262144 ), 3000 + i, frameCount);
+[1:144] ;sfPoseGroupLin((524288  | 262144 ), 3000 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST 3000 
@@ -627,7 +627,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:145] ;sfPoseGroupLin((32768  | 16384 ), 5600 + i, frameCount);
+[1:146] ;sfPoseGroupLin((32768  | 16384 ), 5600 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST 5600 
@@ -636,7 +636,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:146] ;sfPoseGroupLin((32768  | 16384 ), 5000 + i, frameCount);
+[1:147] ;sfPoseGroupLin((32768  | 16384 ), 5000 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST 5000 
@@ -645,7 +645,16 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:147] ;sfPoseGroupLin((512  | 256 ), -921 + i, frameCount);
+[1:148] ;sfPoseGroupLin((32768  | 16384 ), 4800 + i, frameCount);
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 49152 
+VBC3_PUSH_CONST 4800 
+VBC2_PUSH_LOCAL 2 //i
+VBC1_ADD
+VBC3_PUSH_GLOBAL 3 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:149] ;sfPoseGroupLin((512  | 256 ), -921 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC3_PUSH_CONST 768 
 VBC3_PUSH_CONST -921 // -
@@ -654,7 +663,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:148] ;sfPoseGroupLin((8  | 4 ), -4094 + i, frameCount);
+[1:150] ;sfPoseGroupLin((8  | 4 ), -4094 + i, frameCount);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC2_PUSH_CONST 12 
 VBC3_PUSH_CONST -4094 // -
@@ -663,7 +672,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:149] ;sfPoseGroup(33554432 , 4000+ i, frameCount);
+[1:151] ;sfPoseGroup(33554432 , 4000+ i, frameCount);
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 33554432 
 VBC3_PUSH_CONST 4000 
@@ -672,48 +681,66 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:150] ;sfWaitFrame(frameCount);
+[1:152] ;sfWaitFrame(frameCount);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:153] ;
+[1:154] ;
 VBC1_RETURN
-;page_9 <void()>
-[1:154] ;frameCount = 175;
+;page_8 <void(,int)>
+[1:155] ;frameCount = 1;		
 VBC2_PUSH_CONST 3 //frameCount
-VBC3_PUSH_CONST 175 
+VBC1_PUSH_1 
 VBC1_POP
-[1:155] ;frameCount *= factor;
+[1:156] ;frameCount *= factor;
 VBC2_PUSH_CONST 3 //frameCount
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_POP_CI
-[1:156] ;sfWaitFrame(frameCount);
-VBC2_PUSH_CONST 56  //func address sfWaitFrame
+[1:157] ;sfPoseGroupLin((524288  | 262144 ), 3993 , frameCount);
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 786432 
+VBC3_PUSH_CONST 3993 
 VBC3_PUSH_GLOBAL 3 //frameCount
-VBC1_CALL1
-VBC1_STACK_UP2//remove result, call address and params
-[1:160] ;
-VBC1_RETURN
-;page_9_1 <void()>
-[1:161] ;frameCount = 175;
-VBC2_PUSH_CONST 3 //frameCount
-VBC3_PUSH_CONST 175 
-VBC1_POP
-[1:162] ;frameCount *= factor;
-VBC2_PUSH_CONST 3 //frameCount
-VBC1_PUSH_TOS
-VBC1_LOAD
-VBC3_PUSH_GLOBAL 4 //factor
-VBC1_MUL_IF
-VBC1_POP_CI
-[1:163] ;sfPoseGroup((32768  | 16384 ), 5072, frameCount);
-VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:158] ;sfPoseGroupLin((524288  | 262144 ), 3000, frameCount);
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC4_PUSH_CONST 786432 
+VBC3_PUSH_CONST 3000 
+VBC3_PUSH_GLOBAL 3 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:160] ;sfPoseGroupLin((32768  | 16384 ), 4800 + hip_at_landing , frameCount);
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
 VBC4_PUSH_CONST 49152 
-VBC3_PUSH_CONST 5072 
+VBC3_PUSH_CONST 4800 
+VBC3_PUSH_GLOBAL 7 //hip_at_landing
+VBC1_ADD
+VBC3_PUSH_GLOBAL 3 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:161] ;sfPoseGroupLin((512  | 256 ), -921 , frameCount);
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC3_PUSH_CONST 768 
+VBC3_PUSH_CONST -921 // -
+VBC3_PUSH_GLOBAL 3 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:162] ;sfPoseGroupLin((8  | 4 ), -4094 , frameCount);
+VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
+VBC2_PUSH_CONST 12 
+VBC3_PUSH_CONST -4094 // -
+VBC3_PUSH_GLOBAL 3 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:163] ;sfPoseGroup(33554432 , 4000, frameCount);
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC5_PUSH_CONST 33554432 
+VBC3_PUSH_CONST 4000 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
@@ -724,10 +751,10 @@ VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:168] ;
 VBC1_RETURN
-;page_10 <void()>
-[1:169] ;frameCount = 75;
+;page_9 <void()>
+[1:169] ;frameCount = 175;
 VBC2_PUSH_CONST 3 //frameCount
-VBC2_PUSH_CONST 75 
+VBC3_PUSH_CONST 175 
 VBC1_POP
 [1:170] ;frameCount *= factor;
 VBC2_PUSH_CONST 3 //frameCount
@@ -736,223 +763,268 @@ VBC1_LOAD
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_POP_CI
-[1:171] ;sfPoseGroup( (524288  | 262144 ), 3072, frameCount );
+[1:171] ;sfWaitFrame(frameCount);
+VBC2_PUSH_CONST 56  //func address sfWaitFrame
+VBC3_PUSH_GLOBAL 3 //frameCount
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:175] ;
+VBC1_RETURN
+;page_9_1 <void()>
+[1:176] ;frameCount = 175;
+VBC2_PUSH_CONST 3 //frameCount
+VBC3_PUSH_CONST 175 
+VBC1_POP
+[1:177] ;frameCount *= factor;
+VBC2_PUSH_CONST 3 //frameCount
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 4 //factor
+VBC1_MUL_IF
+VBC1_POP_CI
+[1:178] ;sfPoseGroup((32768  | 16384 ), 5072, frameCount);
+VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
+VBC4_PUSH_CONST 49152 
+VBC3_PUSH_CONST 5072 
+VBC3_PUSH_GLOBAL 3 //frameCount
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:179] ;sfWaitFrame(frameCount);
+VBC2_PUSH_CONST 56  //func address sfWaitFrame
+VBC3_PUSH_GLOBAL 3 //frameCount
+VBC1_CALL1
+VBC1_STACK_UP2//remove result, call address and params
+[1:183] ;
+VBC1_RETURN
+;page_10 <void()>
+[1:184] ;frameCount = 75;
+VBC2_PUSH_CONST 3 //frameCount
+VBC2_PUSH_CONST 75 
+VBC1_POP
+[1:185] ;frameCount *= factor;
+VBC2_PUSH_CONST 3 //frameCount
+VBC1_PUSH_TOS
+VBC1_LOAD
+VBC3_PUSH_GLOBAL 4 //factor
+VBC1_MUL_IF
+VBC1_POP_CI
+[1:186] ;sfPoseGroup( (524288  | 262144 ), 3072, frameCount );
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC4_PUSH_CONST 786432 
 VBC3_PUSH_CONST 3072 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:172] ;sfPoseGroup( (131072  | 65536  | 134217728  | 67108864  ), 3072, frameCount );
+[1:187] ;sfPoseGroup( (131072  | 65536  | 134217728  | 67108864  ), 3072, frameCount );
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 201523200 
 VBC3_PUSH_CONST 3072 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:173] ;sfPoseGroup( (32768  | 16384 ), 3456, frameCount );
+[1:188] ;sfPoseGroup( (32768  | 16384 ), 3456, frameCount );
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC4_PUSH_CONST 49152 
 VBC3_PUSH_CONST 3456 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:174] ;sfPoseGroup( (512  | 256 ), 0, frameCount );
+[1:189] ;sfPoseGroup( (512  | 256 ), 0, frameCount );
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC3_PUSH_CONST 768 
 VBC1_PUSH_0 
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:175] ;sfPoseGroup( (8  | 4 ), -1022, frameCount );
+[1:190] ;sfPoseGroup( (8  | 4 ), -1022, frameCount );
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC2_PUSH_CONST 12 
 VBC3_PUSH_CONST -1022 // -
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:177] ;sfWaitFrame( frameCount );
+[1:192] ;sfWaitFrame( frameCount );
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 3 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:180] ;
+[1:195] ;
 VBC1_RETURN
 ;main <void()>
 VBC1_STACK_DN2//local vars 2
-[1:181] ;
-[1:182] ;
-[1:183] ;tuner = 0;
+[1:196] ;
+[1:197] ;
+[1:198] ;tuner = 0;
 VBC2_PUSH_CONST 5 //tuner
 VBC1_PUSH_0 
 VBC1_POP
-[1:184] ;factor = 0.9; 
+[1:199] ;factor = 0.9; 
 VBC2_PUSH_CONST 4 //factor
 VBC5_PUSH_CONST 1063675494 
 VBC1_POP
-[1:196] ;while (pitStop == 0) sfWaitFrame(1); 
-LAB1381: //while condition
+[1:200] ;hip_at_landing = 0;
+VBC2_PUSH_CONST 7 //hip_at_landing
+VBC1_PUSH_0 
+VBC1_POP
+[1:212] ;while (pitStop == 0) sfWaitFrame(1); 
+LAB1530: //while condition
 VBC3_PUSH_GLOBAL 6 //pitStop
 VBC1_PUSH_0 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1399 //while to exit
+VBC4_FALSE_JUMP LAB1548 //while to exit
 ;while (pitStop == 0) sfWaitFrame(1); 
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC1_PUSH_1 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-VBC4_JUMP LAB1381 //while forever loop
-LAB1399: //while exit
-[1:197] ;for( jump = 0; jump < 3; i++ ){
+VBC4_JUMP LAB1530 //while forever loop
+LAB1548: //while exit
+[1:213] ;for( jump = 0; jump < 3; i++ ){
 VBC2_PUSH_B_OFFSET -2 //jump
 VBC1_PUSH_0 
 VBC1_POP
-LAB1403: //for condition
+LAB1552: //for condition
 VBC2_PUSH_LOCAL -2 //jump
 VBC2_PUSH_CONST 3 
 VBC1_LESS
-VBC4_FALSE_JUMP LAB1608 //to for exit
+VBC4_FALSE_JUMP LAB1752 //to for exit
 ;
-[1:198] ;page_1();
+[1:214] ;page_1();
 VBC2_PUSH_CONST 109  //func address page_1
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-[1:199] ;page_2();
+[1:215] ;page_2();
 VBC3_PUSH_CONST 264  //func address page_2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-[1:201] ;for( i = 0; i < 15 * factor; i++ ) page_3(i);
+[1:217] ;for( i = 0; i < 15 * factor; i++ ) page_3(i);
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB1425: //for condition
+LAB1574: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC2_PUSH_CONST 15 
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_LESS_IF
-VBC4_FALSE_JUMP LAB1452 //to for exit
+VBC4_FALSE_JUMP LAB1601 //to for exit
 ;for( i = 0; i < 15 * factor; i++ ) page_3(i);
 VBC3_PUSH_CONST 324  //func address page_3
 VBC2_PUSH_LOCAL -1 //i
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1445: //for step
+LAB1594: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1425 //to condition
-LAB1452: //for exit
-[1:202] ;for( i = 0; i < 8 * factor; i++ ) page_4(i);
+VBC4_JUMP LAB1574 //to condition
+LAB1601: //for exit
+[1:218] ;for( i = 0; i < 8 * factor; i++ ) page_4(i);
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB1456: //for condition
+LAB1605: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC2_PUSH_CONST 8 
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_LESS_IF
-VBC4_FALSE_JUMP LAB1483 //to for exit
+VBC4_FALSE_JUMP LAB1632 //to for exit
 ;for( i = 0; i < 8 * factor; i++ ) page_4(i);
 VBC3_PUSH_CONST 436  //func address page_4
 VBC2_PUSH_LOCAL -1 //i
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1476: //for step
+LAB1625: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1456 //to condition
-LAB1483: //for exit
-[1:203] ;for( i = 0; i < 3 * factor; i++ ) page_5(i);
+VBC4_JUMP LAB1605 //to condition
+LAB1632: //for exit
+[1:219] ;for( i = 0; i < 3 * factor; i++ ) page_5(i);
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB1487: //for condition
+LAB1636: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC2_PUSH_CONST 3 
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_LESS_IF
-VBC4_FALSE_JUMP LAB1514 //to for exit
+VBC4_FALSE_JUMP LAB1663 //to for exit
 ;for( i = 0; i < 3 * factor; i++ ) page_5(i);
 VBC3_PUSH_CONST 588  //func address page_5
 VBC2_PUSH_LOCAL -1 //i
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1507: //for step
+LAB1656: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1487 //to condition
-LAB1514: //for exit
-[1:204] ;for( i = 0; i < 2 * factor; i++ ) page_6(i);
+VBC4_JUMP LAB1636 //to condition
+LAB1663: //for exit
+[1:220] ;for( i = 0; i < 2 * factor; i++ ) page_6(i);
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB1518: //for condition
+LAB1667: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC1_PUSH_2 
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_LESS_IF
-VBC4_FALSE_JUMP LAB1544 //to for exit
+VBC4_FALSE_JUMP LAB1693 //to for exit
 ;for( i = 0; i < 2 * factor; i++ ) page_6(i);
 VBC3_PUSH_CONST 746  //func address page_6
 VBC2_PUSH_LOCAL -1 //i
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1537: //for step
+LAB1686: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1518 //to condition
-LAB1544: //for exit
-[1:206] ;page_7();
-VBC3_PUSH_CONST 1031  //func address page_7
-VBC1_CALL0
-VBC1_STACK_UP1//remove result, call address and params
-[1:214] ;for( i = 0; i < 6 * factor; i++ ) page_8(i);
+VBC4_JUMP LAB1667 //to condition
+LAB1693: //for exit
+[1:230] ;for( i = 0; i < 6 * factor; i++ ) page_8(i);
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB1553: //for condition
+LAB1697: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC2_PUSH_CONST 6 
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_LESS_IF
-VBC4_FALSE_JUMP LAB1580 //to for exit
+VBC4_FALSE_JUMP LAB1724 //to for exit
 ;for( i = 0; i < 6 * factor; i++ ) page_8(i);
-VBC3_PUSH_CONST 1043  //func address page_8
+VBC3_PUSH_CONST 1222  //func address page_8
 VBC2_PUSH_LOCAL -1 //i
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1573: //for step
+LAB1717: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1553 //to condition
-LAB1580: //for exit
-[1:215] ;page_9();
-VBC3_PUSH_CONST 1202  //func address page_9
+VBC4_JUMP LAB1697 //to condition
+LAB1724: //for exit
+[1:231] ;page_9();
+VBC3_PUSH_CONST 1347  //func address page_9
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-[1:216] ;page_9_1();
-VBC3_PUSH_CONST 1225  //func address page_9_1
+[1:232] ;page_9_1();
+VBC3_PUSH_CONST 1370  //func address page_9_1
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-[1:217] ;page_0();
+[1:233] ;page_0();
 VBC2_PUSH_CONST 70  //func address page_0
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-[1:219] ;sfWaitFrame( 1500 );
+[1:235] ;sfWaitFrame( 1500 );
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_CONST 1500 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1601: //for step
+LAB1745: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1403 //to condition
-LAB1608: //for exit
-[1:221] ;
+VBC4_JUMP LAB1552 //to condition
+LAB1752: //for exit
+[1:237] ;
 VBC1_RETURN
 //Init table
 //Variables
@@ -1160,3 +1232,4 @@ frameCount : 3
 factor F: 4
 tuner : 5
 pitStop : 6
+hip_at_landing : 7

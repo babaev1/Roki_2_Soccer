@@ -259,6 +259,7 @@ class roki2met :
         factor = 4
         tuner = 5
         pitStop = 6
+        hip_at_landing = 7
 
 
     class TripleJumpForFIRA2024 :

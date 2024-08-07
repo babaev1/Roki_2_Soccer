@@ -16,6 +16,7 @@ int frameCount;
 float factor;
 int tuner;
 int pitStop;
+int hip_at_landing;
 
 void page_0() {
 	frameCount = 250;
@@ -136,7 +137,7 @@ void page_7() {
   	sfWaitFrame(frameCount);
 }
 
-void page_8(int i) {
+void page_8_(int i) {
 	frameCount = 1;		// 6
   	frameCount *= factor;
 	sfPoseGroupLin(MASK_FOOT_FRONT, 3993 + i, frameCount);
@@ -144,10 +145,24 @@ void page_8(int i) {
 	//sfPoseGroup(MASK_HIP, 3072, frameCount);
   	sfPoseGroupLin(MASK_HIP, 5600 + i, frameCount);
   	sfPoseGroupLin(MASK_HIP, 5000 + i, frameCount);
+  	sfPoseGroupLin(MASK_HIP, 4800 + i, frameCount);
 	sfPoseGroupLin(MASK_ELBOW, -921 + i, frameCount);
 	sfPoseGroupLin(MASK_CLAVICLE, -4094 + i, frameCount);
   	sfPoseGroup(MASK_HEAD_TILT, 4000+ i, frameCount);
 	sfWaitFrame(frameCount);
+}
+void page_8(int i) {
+	frameCount = 1;		// 6
+  	frameCount *= factor;
+	sfPoseGroupLin(MASK_FOOT_FRONT, 3993 , frameCount);
+  	sfPoseGroupLin(MASK_FOOT_FRONT, 3000, frameCount);
+	//sfPoseGroup(MASK_HIP, 3072, frameCount);
+  	sfPoseGroupLin(MASK_HIP, 4800 + hip_at_landing , frameCount);
+	sfPoseGroupLin(MASK_ELBOW, -921 , frameCount);
+	sfPoseGroupLin(MASK_CLAVICLE, -4094 , frameCount);
+  	sfPoseGroup(MASK_HEAD_TILT, 4000, frameCount);
+	sfWaitFrame(frameCount);
+
 }
 
 void page_9() {
@@ -182,6 +197,7 @@ void main() {
   int jump;
   tuner = 0;
   factor = 0.9; //0.9
+  hip_at_landing = 0;
   /*
     restart_flag = 0;
     restart_flag = 1;
@@ -203,7 +219,7 @@ void main() {
 	for( i = 0; i < 3 * factor; i++ ) page_5(i);
 	for( i = 0; i < 2 * factor; i++ ) page_6(i);
   	//page_6_1();
-  	page_7();
+  	//page_7();
   
   	//page_3();
 	//page_4();

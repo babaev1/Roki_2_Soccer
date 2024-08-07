@@ -252,6 +252,7 @@ int 3:frameCount
 float 4:factor
 int 5:tuner
 int 6:pitStop
+int 7:hip_at_landing
 
 //==================
 //  functions
@@ -570,6 +571,9 @@ function declare void page_6_1(
  int 2:i
 ) end function declare
 function declare void page_7(
+) end function declare
+function declare void page_8_(
+ int 2:i
 ) end function declare
 function declare void page_8(
  int 2:i
@@ -1689,7 +1693,7 @@ function declare void page_7(
 
 
 
-function declare void page_8(
+function declare void page_8_(
  int 2:i
 ) end function declare
 {
@@ -1702,6 +1706,65 @@ function declare void page_8(
  int 2:frameCount
 ) end function declare
 > 
+ call  <function declare void sfPoseGroupLin(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroupLin(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroupLin(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroupLin(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroupLin(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroupLin(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+ return
+ }
+}
+
+
+
+function declare void page_8(
+ int 2:i
+) end function declare
+{
+ {
+  ( <int 3:frameCount> ) = (1) 
+  ( <int 3:frameCount> ) *= ( <float 4:factor> ) 
  call  <function declare void sfPoseGroupLin(
  int 4:unitMask
  int 3:angle
@@ -1844,6 +1907,7 @@ function declare void main(
   }
   ( <int 5:tuner> ) = (0) 
   ( <float 4:factor> ) = (0.9) 
+  ( <int 7:hip_at_landing> ) = (0) 
  loop loop return
  }
 }
