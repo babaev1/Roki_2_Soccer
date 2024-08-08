@@ -402,7 +402,7 @@ class Vision_General:
         else: result = False
         return result, displacement
 
-    def detect_Line_Follow_Stream(self, event, turn_shift, direction_from_vision):
+    def detect_Line_Follow_Stream_(self, event, turn_shift, direction_from_vision):
         x_size = 200
         y_size = 80
         turn_shift.value = 0
@@ -480,45 +480,65 @@ class Vision_General:
                 self.glob.camera_down_Flag = True
             time.sleep(0.5)
 
-
-                #img = Image(img1)
-                ##self.display_camera_image(self.image, window = 'Original')
-                #blobs = img.find_blobs([self.TH['orange ball']['th']],
-                #                    pixels_threshold=self.TH['orange ball']['pixel'],
-                #                    area_threshold=self.TH['orange ball']['area'],
-                #                    merge=True)
-                #len_blobs = len(blobs)
-                #height = self.glob.params["CAMERA_VERTICAL_RESOLUTION"]
-                #order = []
-                #for i in range(len_blobs):
-                #    order.append([height - blobs[i].cy(), i,0,0])
-                #sorted_order = sorted(order)
-                #new_order_len = min(10, len_blobs)
-                #new_order = sorted_order[:new_order_len]
-                #for i in range(new_order_len):
-                #    ball_column = blobs[new_order[i][1]].cx()
-                #    ball_row = blobs[new_order[i][1]].cy()
-                #    result, relative_x_on_floor, relative_y_on_floor = self.image_point_to_relative_coord_on_floor(ball_column, ball_row,
-                #                                                for_ball = True)
-                #    new_order[i][0] = int(math.sqrt(relative_x_on_floor *relative_x_on_floor + relative_y_on_floor * relative_y_on_floor))
-                #    new_order[i][2] = int(relative_x_on_floor)
-                #    new_order[i][3] = int(relative_y_on_floor)
-                #sorted_new_order = sorted(new_order)
-                #if new_order_len != 0:
-                #    for i in range(new_order_len):
-                #        if sorted_new_order[i][0] == 0 : continue
-                #        if sorted_new_order[i][0] > 5000 : break            # getting off if distances more than 5m.
-                #        ball_blob = blobs[sorted_new_order[i][1]]
-                #        if self.orange_ball_is_on_green_field(ball_blob, img, distance_mm = sorted_new_order[i][0]): 
-                #            self.visible_reaction_ball()
-                #            print('relative coord of ball on floor (x,y)= ', sorted_new_order[i][2], sorted_new_order[i][3])
-                #            img.draw_rectangle(ball_blob.rect())
-                #            self.display_camera_image(img.img, 'Ball')
-                #            distance = sorted_new_order[i][0] / 1000
-                #            course = math.atan2(sorted_new_order[i][3], sorted_new_order[i][2])
-                #            position.append([course, distance])
-                #            see_ball += 1
-                #            break
+    def detect_Line_Follow_Stream(self, event, turn_shift, direction_from_vision):
+        x_size = 200
+        y_size = 80
+        turn_shift.value = 0
+        while True:
+            bottom_root = 100
+            top_root = 100
+            turn = 0
+            shift = 0
+            if event.is_set(): break
+            result, self.camera_elevation = self.glob.motion.camera_elevation()
+            camera_result, img1, self.pitch, self.roll, yaw, pan = self.snapshot()
+            if camera_result:
+                th = self.TH['orange ball']['th']
+                low_th = (int(th[0] * 2.55), th[2] + 128, th[4] + 128)
+                high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
+                if self.glob.SIMULATION == 5:
+                    img1 = cv2.resize(img1, (200,160))
+                image = cv2.resize(img1[79:][:][:],(x_size, y_size))
+                labimg = cv2.cvtColor (image, cv2.COLOR_BGR2LAB)
+                mask = cv2.inRange (labimg, low_th, high_th)
+                cv2.imshow('Track', image)
+                cv2.waitKey(10)
+                self.display_camera_image(mask, 'Line')
+                x_list = []
+                y_list = []
+                for x in range(x_size):
+                    for y in range(y_size):
+                        if mask[y][x] : 
+                            x_list.append(x)
+                            y_list.append(y_size - y)
+                if len(x_list) == 0: continue
+                self.visible_reaction_ball()
+                try:
+                    coeff = self.linear_ransac_curve_fit(np.array(x_list), np.array(y_list))
+                except Exception: continue
+                bottom_x = (80 - coeff[0]) / coeff[1]
+                top_x = - coeff[0] / coeff[1]
+                result, relative_x0_on_floor, relative_y0_on_floor = self.image_point_to_relative_coord_on_floor(int(bottom_x) * 4, 640,
+                                                                for_ball = False)
+                print('relative_y0_on_floor :', relative_y0_on_floor)
+                if relative_y0_on_floor > 100: shift = 20
+                elif relative_y0_on_floor < -100: shift = 30
+                else: shift = 10
+                result, relative_x1_on_floor, relative_y1_on_floor = self.image_point_to_relative_coord_on_floor(int(top_x) * 4 , 320,
+                                                                for_ball = False)
+                print('relative_y1_on_floor :', relative_y1_on_floor)
+                if relative_y1_on_floor == 0: direction_from_vision.value = 0
+                else:  direction_from_vision.value = math.atan2(relative_x1_on_floor, relative_y1_on_floor)
+                #direction_from_vision.value = math.atan2((bottom_root - top_root) , y_size)  #+ yaw
+                if relative_y1_on_floor > 100: turn = 2
+                elif relative_y1_on_floor < -100: turn = 3
+                else: turn = 1
+                turn_shift.value = turn + shift
+                #print('number of detected points: ', np.sum(mask/255))
+            else: 
+                turn_shift.value = 0
+                self.glob.camera_down_Flag = True
+            time.sleep(0.5)
 
     def quadratic_ransac_curve_fit(self, x, y):
 
@@ -566,20 +586,21 @@ class Vision_General:
         intercept = reg.estimator_.intercept_[0]
         coeff = np.array([intercept, coeff[0, 0]])
 
-        inliers = reg.inlier_mask_
-        outliers = np.logical_not(inliers)
+        #inliers = reg.inlier_mask_
+        #outliers = np.logical_not(inliers)
 
-        plt.plot(x[inliers], y[inliers], 'k.', label='inliers')
-        plt.plot(x[outliers], y[outliers], 'r.', label='outliers')
-        plt.plot(xi, yi, label='Linear Regression')
+        #plt.plot(x[inliers], y[inliers], 'k.', label='inliers')
+        #plt.plot(x[outliers], y[outliers], 'r.', label='outliers')
+        #plt.plot(xi, yi, label='Linear Regression')
     
-        plt.xlabel('x')
-        plt.ylabel('y')
-        plt.title('Linear')
-        print('Equation: {0:.5f} + {1:.5f}x'.format(coeff[0], coeff[1]))
-        print('Y-intercept: {}'.format(coeff[0]))
-        plt.legend()
-        plt.show()
+        #plt.xlabel('x')
+        #plt.ylabel('y')
+        #plt.title('Linear')
+        #print('Equation: {0:.5f} + {1:.5f}x'.format(coeff[0], coeff[1]))
+        #print('Y-intercept: {}'.format(coeff[0]))
+        #plt.legend()
+        #plt.show()
+        return coeff
 
 if __name__=="__main__":
     pass
