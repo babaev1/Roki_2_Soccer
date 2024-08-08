@@ -3,6 +3,7 @@ import json, array, math
 class Glob:
     def __init__(self, simulation, current_work_directory, particles_number = 1000, event_type = 'Robocup'):
         self.event_type = event_type
+        self.neural_vision = True
         self.camera_streaming = True        # supply IMU data for camera as stream or as one-off
         self.with_Local = True
         if self.event_type == 'FIRA':
