@@ -1448,6 +1448,7 @@ class Player():
                 if cycle ==0 : stepLength1 = stepLength/3
                 if cycle ==1 : stepLength1 = stepLength/3 * 2
                 self.motion.refresh_Orientation()
+                rotation = 0
                 if turn == 2: direction = 0.1
                 elif turn == 3: direction = -0.1
                 elif turn == 1: rotation = 0
