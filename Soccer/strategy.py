@@ -1450,10 +1450,11 @@ class Player():
                 if turn == 2: direction = 0.1
                 elif turn == 3: direction = -0.1
                 elif turn == 1: rotation = 0
-                rotation = direction #- self.motion.imu_body_yaw() * 1.1
+                #rotation = direction #- self.motion.imu_body_yaw() * 1.1
                 #if rotation > 0: rotation *= 1.5
                 #rotation = -0.3
-                direction = direction_from_vision.value
+                direction = direction * 0.8 + direction_from_vision.value * 0.2
+                rotation = direction - self.motion.imu_body_yaw() * 1.1
                 print("direction: ", direction)
                 rotation = self.motion.normalize_rotation(rotation)
                 #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
