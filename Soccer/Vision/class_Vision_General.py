@@ -402,10 +402,10 @@ class Vision_General:
         else: result = False
         return result, displacement
 
-    def detect_Line_Follow_Stream(self, event, turn_shift):
+    def detect_Line_Follow_Stream(self, event, turn_shift, direction_from_vision):
         x_size = 200
         y_size = 80
-        self.turn_shift = 0
+        turn_shift.value = 0
         while True:
             turn = 0
             shift = 0
@@ -460,14 +460,16 @@ class Vision_General:
                     result, relative_x_on_floor, relative_y1_on_floor = self.image_point_to_relative_coord_on_floor(int(top_root) * 4 , 320,
                                                                 for_ball = False)
                     print('relative_y1_on_floor :', relative_y1_on_floor)
+                    if relative_y1_on_floor == 0: direction_from_vision.value = 0
+                    else:  direction_from_vision.value = math.atan2(relative_x_on_floor, relative_y1_on_floor)
                     if relative_y1_on_floor > 100: turn = 2
                     elif relative_y1_on_floor < -100: turn = 3
                     else: turn = 1
                 else: turn = 0
-                self.turn_shift = turn + shift
+                turn_shift.value = turn + shift
                 #print('number of detected points: ', np.sum(mask/255))
             else: 
-                self.turn_shift = 0
+                turn_shift.value = 0
                 self.glob.camera_down_Flag = True
             time.sleep(0.5)
 

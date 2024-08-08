@@ -1412,6 +1412,8 @@ class Player():
         # Pipeline variables
         turn_shift = Value('i', 0)       #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
                                             #  0X - no shift, 2X - shift to left, 3X - shift to right
+        direction_from_vision = Value('d', 0)
+
         """
         stop_flag = Value('i', 0)
         # Process for Vision Pipeline
@@ -1421,7 +1423,7 @@ class Player():
         """
         while True:
             event = threading.Event()
-            camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift))
+            camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift, direction_from_vision))
             camera_thread.setDaemon(True)
             camera_thread.start()
 
@@ -1431,10 +1433,10 @@ class Player():
             number_Of_Cycles = 100
             self.motion.amplitude = 32
             sideLength = 0
-            #self.motion.walk_Initial_Pose()
+            self.motion.walk_Initial_Pose()
             direction = 0
             for cycle in range(number_Of_Cycles):
-                order_from_Head = self.glob.vision.turn_shift
+                order_from_Head = turn_shift.value
                 print('order_from_Head: ', order_from_Head)
                 shift = order_from_Head // 10
                 turn = order_from_Head % 10
@@ -1447,20 +1449,20 @@ class Player():
                 self.motion.refresh_Orientation()
                 if turn == 2: direction = 0.1
                 elif turn == 3: direction = -0.1
-                #elif turn == 1: rotation = 0
+                elif turn == 1: rotation = 0
                 rotation = direction #- self.motion.imu_body_yaw() * 1.1
                 #if rotation > 0: rotation *= 1.5
                 #rotation = -0.3
                 print("direction: ", direction)
                 rotation = self.motion.normalize_rotation(rotation)
-                #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                 if self.glob.camera_down_Flag == True:
                     stepLength1 = stepLength/3 * 2
-                    #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 2)
+                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 2)
                     stepLength1 = stepLength/3
-                    #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle+1)
+                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle+1)
                     break
-            #self.motion.walk_Final_Pose()
+            self.motion.walk_Final_Pose()
             event.set()
             time.sleep(2)
 
