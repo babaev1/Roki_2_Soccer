@@ -1436,6 +1436,7 @@ class Player():
             self.motion.walk_Initial_Pose()
             direction = 0
             for cycle in range(number_Of_Cycles):
+                if self.motion.falling_Flag != 0: break
                 order_from_Head = turn_shift.value
                 print('order_from_Head: ', order_from_Head)
                 shift = order_from_Head // 10
@@ -1471,6 +1472,7 @@ class Player():
                     self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle+1)
                     break
             self.motion.walk_Final_Pose()
+            if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
             event.set()
             time.sleep(2)
 
