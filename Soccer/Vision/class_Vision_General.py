@@ -518,6 +518,13 @@ class Vision_General:
                 except Exception: continue
                 bottom_x = (80 - coeff[0]) / coeff[1]
                 top_x = - coeff[0] / coeff[1]
+                #bottom_y = 640
+                #if bottom_x > 200: 
+                #    bottom_x = 200
+                #    bottom_y = int(coeff[0] + coeff[1] * 200)
+                #if bottom_x < 0:
+                #    bottom_x = 0
+                    bottom_y = int(coeff[0])
                 #result, relative_x0_on_floor, relative_y0_on_floor = self.image_point_to_relative_coord_on_floor(int(bottom_x) * 4, 640,
                                                                 #for_ball = False)
                 #print('relative_y0_on_floor :', relative_y0_on_floor)
@@ -525,7 +532,7 @@ class Vision_General:
                 #elif relative_y0_on_floor < -100: shift = 30
                 #else: shift = 10
                 if bottom_x < 90 : shift = 20
-                elif bottom_x > 110: shift = -20
+                elif bottom_x > 110: shift = 30
                 else: shift = 10
                 #result, relative_x1_on_floor, relative_y1_on_floor = self.image_point_to_relative_coord_on_floor(int(top_x) * 4 , 320,
                 #                                                for_ball = False)
