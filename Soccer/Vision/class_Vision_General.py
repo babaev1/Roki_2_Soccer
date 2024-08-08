@@ -527,12 +527,12 @@ class Vision_General:
                 if bottom_x < 90 : shift = 20
                 elif bottom_x > 110: shift = -20
                 else: shift = 10
-                result, relative_x1_on_floor, relative_y1_on_floor = self.image_point_to_relative_coord_on_floor(int(top_x) * 4 , 320,
-                                                                for_ball = False)
-                print('relative_y1_on_floor :', relative_y1_on_floor)
-                if relative_y1_on_floor == 0: direction_from_vision.value = 0
-                else:  direction_from_vision.value = math.atan2(relative_x1_on_floor, relative_y1_on_floor)
-                direction_from_vision.value = math.atan2((bottom_x - top_x) , y_size)  #+ yaw
+                #result, relative_x1_on_floor, relative_y1_on_floor = self.image_point_to_relative_coord_on_floor(int(top_x) * 4 , 320,
+                #                                                for_ball = False)
+                #print('relative_y1_on_floor :', relative_y1_on_floor)
+                #if relative_y1_on_floor == 0: direction_from_vision.value = 0
+                #else:  direction_from_vision.value = math.atan2(relative_x1_on_floor, relative_y1_on_floor)
+                #direction_from_vision.value = math.atan2((bottom_x - top_x) , y_size)  #+ yaw
                 #if relative_y1_on_floor > 100: turn = 2
                 #elif relative_y1_on_floor < -100: turn = 3
                 #else: turn = 1
