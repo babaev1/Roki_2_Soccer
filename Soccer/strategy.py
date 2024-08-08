@@ -1457,6 +1457,8 @@ class Player():
                 #rotation = direction - self.motion.imu_body_yaw() * 1.1
                 direction = direction_from_vision.value 
                 rotation = direction_from_vision.value
+                if rotation > 0.1: rotation = 0.1
+                if rotation < -0.1: rotation = -0.1
                 print("direction: ", direction)
                 rotation = self.motion.normalize_rotation(rotation)
                 print("rotatition: ", rotation)
