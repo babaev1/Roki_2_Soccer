@@ -460,8 +460,9 @@ class Vision_General:
                     result, relative_x_on_floor, relative_y1_on_floor = self.image_point_to_relative_coord_on_floor(int(top_root) * 4 , 320,
                                                                 for_ball = False)
                     print('relative_y1_on_floor :', relative_y1_on_floor)
-                    if relative_y1_on_floor == 0: direction_from_vision.value = 0
-                    else:  direction_from_vision.value = math.atan2(relative_x_on_floor, relative_y1_on_floor)
+                    #if relative_y1_on_floor == 0: direction_from_vision.value = yaw
+                    #else:  direction_from_vision.value = math.atan2(relative_x_on_floor, relative_y1_on_floor) + yaw
+                    direction_from_vision.value = math.atan2((bottom_root - top_root) / y_size) + yaw
                     if relative_y1_on_floor > 100: turn = 2
                     elif relative_y1_on_floor < -100: turn = 3
                     else: turn = 1
