@@ -1431,7 +1431,7 @@ class Player():
             number_Of_Cycles = 100
             self.motion.amplitude = 32
             sideLength = 0
-            self.motion.walk_Initial_Pose()
+            #self.motion.walk_Initial_Pose()
             direction = 0
             for cycle in range(number_Of_Cycles):
                 order_from_Head = self.glob.vision.turn_shift
@@ -1445,21 +1445,22 @@ class Player():
                 if cycle ==0 : stepLength1 = stepLength/3
                 if cycle ==1 : stepLength1 = stepLength/3 * 2
                 self.motion.refresh_Orientation()
-                if turn == 2: direction += 0.2
-                elif turn == 3: direction -= 0.2
+                if turn == 2: direction = 0.1
+                elif turn == 3: direction = -0.1
                 #elif turn == 1: rotation = 0
-                rotation = direction - self.motion.imu_body_yaw() * 1.1
+                rotation = direction #- self.motion.imu_body_yaw() * 1.1
                 #if rotation > 0: rotation *= 1.5
-                rotation = -0.3
+                #rotation = -0.3
+                print("direction: ", direction)
                 rotation = self.motion.normalize_rotation(rotation)
-                self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                 if self.glob.camera_down_Flag == True:
                     stepLength1 = stepLength/3 * 2
-                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 2)
+                    #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 2)
                     stepLength1 = stepLength/3
-                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle+1)
+                    #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle+1)
                     break
-            self.motion.walk_Final_Pose()
+            #self.motion.walk_Final_Pose()
             event.set()
             time.sleep(2)
 
