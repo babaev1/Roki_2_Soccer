@@ -407,6 +407,8 @@ class Vision_General:
         y_size = 80
         turn_shift.value = 0
         while True:
+            bottom_root = 100
+            top_root = 100
             turn = 0
             shift = 0
             if event.is_set(): break
@@ -440,8 +442,10 @@ class Vision_General:
                     bottom_root1 = (- coeff[1] + math.sqrt(coeff[1]**2 - 4 * coeff[0] * coeff[2]))/(2 * coeff[2])
                     bottom_root2 = (- coeff[1] - math.sqrt(coeff[1]**2 - 4 * coeff[0] * coeff[2]))/(2 * coeff[2])
                     #print('bottom_root1 :', bottom_root1, 'bottom_root2 :', bottom_root2)
-                    if 0 <= bottom_root1 <= x_size: bottom_root = bottom_root1
-                    if 0 <= bottom_root2 <= x_size: bottom_root = bottom_root2
+                    #if 0 <= bottom_root1 <= x_size: bottom_root = bottom_root1
+                    #if 0 <= bottom_root2 <= x_size: bottom_root = bottom_root2
+                    if abs(bottom_root1 - x_size /2) < abs(bottom_root2 - x_size /2): bottom_root = bottom_root1
+                    else: bottom_root = bottom_root2
                     print('bottom_root :', bottom_root)
                     result, relative_x_on_floor, relative_y0_on_floor = self.image_point_to_relative_coord_on_floor(int(bottom_root) * 4, 640,
                                                                 for_ball = False)
@@ -454,15 +458,17 @@ class Vision_General:
                     top_root1 = (- coeff[1] + math.sqrt(coeff[1]**2 - 4 * (coeff[0] - y_size) * coeff[2]))/(2 * coeff[2])
                     top_root2 = (- coeff[1] - math.sqrt(coeff[1]**2 - 4 * (coeff[0] - y_size) * coeff[2]))/(2 * coeff[2])
                     #print('bottom_root1 :', bottom_root1, 'bottom_root2 :', bottom_root2)
-                    if 0 <= top_root1 <= x_size: top_root = top_root1
-                    if 0 <= top_root2 <= x_size: top_root = top_root2
+                    #if 0 <= top_root1 <= x_size: top_root = top_root1
+                    #if 0 <= top_root2 <= x_size: top_root = top_root2
+                    if abs(top_root1 - x_size /2) < abs(top_root2 - x_size /2): top_root = top_root1
+                    else: top_root = top_root2
                     print('top_root :', top_root)
                     result, relative_x_on_floor, relative_y1_on_floor = self.image_point_to_relative_coord_on_floor(int(top_root) * 4 , 320,
                                                                 for_ball = False)
                     print('relative_y1_on_floor :', relative_y1_on_floor)
                     #if relative_y1_on_floor == 0: direction_from_vision.value = yaw
                     #else:  direction_from_vision.value = math.atan2(relative_x_on_floor, relative_y1_on_floor) + yaw
-                    direction_from_vision.value = math.atan2((bottom_root - top_root) / y_size) + yaw
+                    direction_from_vision.value = math.atan2((bottom_root - top_root) , y_size)  #+ yaw
                     if relative_y1_on_floor > 100: turn = 2
                     elif relative_y1_on_floor < -100: turn = 3
                     else: turn = 1
