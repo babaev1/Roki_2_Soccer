@@ -1450,6 +1450,7 @@ class Player():
                 #elif turn == 1: rotation = 0
                 rotation = direction - self.motion.imu_body_yaw() * 1.1
                 #if rotation > 0: rotation *= 1.5
+                rotation = -0.3
                 rotation = self.motion.normalize_rotation(rotation)
                 self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                 if self.glob.camera_down_Flag == True:

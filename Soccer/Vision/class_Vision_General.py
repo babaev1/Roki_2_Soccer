@@ -421,7 +421,9 @@ class Vision_General:
                 image = cv2.resize(img1[79:][:][:],(x_size, y_size))
                 labimg = cv2.cvtColor (image, cv2.COLOR_BGR2LAB)
                 mask = cv2.inRange (labimg, low_th, high_th)
-                #self.display_camera_image(mask, 'Line')
+                cv2.imshow('Track', image)
+                cv2.waitKey(10)
+                self.display_camera_image(mask, 'Line')
                 x_list = []
                 y_list = []
                 for x in range(x_size):
@@ -440,8 +442,8 @@ class Vision_General:
                     #print('bottom_root1 :', bottom_root1, 'bottom_root2 :', bottom_root2)
                     if 0 <= bottom_root1 <= x_size: bottom_root = bottom_root1
                     if 0 <= bottom_root2 <= x_size: bottom_root = bottom_root2
-                    #print('bottom_root :', bottom_root)
-                    result, relative_x_on_floor, relative_y0_on_floor = self.image_point_to_relative_coord_on_floor(int(bottom_root), 160,
+                    print('bottom_root :', bottom_root)
+                    result, relative_x_on_floor, relative_y0_on_floor = self.image_point_to_relative_coord_on_floor(int(bottom_root) * 4, 640,
                                                                 for_ball = False)
                     print('relative_y0_on_floor :', relative_y0_on_floor)
                     if relative_y0_on_floor > 100: shift = 20
@@ -449,13 +451,13 @@ class Vision_General:
                     else: shift = 10
                 else: shift = 0
                 if (coeff[1]**2 - 4 * (coeff[0] - y_size) * coeff[2]) >= 0:
-                    bottom_root1 = (- coeff[1] + math.sqrt(coeff[1]**2 - 4 * (coeff[0] - y_size) * coeff[2]))/(2 * coeff[2])
-                    bottom_root2 = (- coeff[1] - math.sqrt(coeff[1]**2 - 4 * (coeff[0] - y_size) * coeff[2]))/(2 * coeff[2])
+                    top_root1 = (- coeff[1] + math.sqrt(coeff[1]**2 - 4 * (coeff[0] - y_size) * coeff[2]))/(2 * coeff[2])
+                    top_root2 = (- coeff[1] - math.sqrt(coeff[1]**2 - 4 * (coeff[0] - y_size) * coeff[2]))/(2 * coeff[2])
                     #print('bottom_root1 :', bottom_root1, 'bottom_root2 :', bottom_root2)
-                    if 0 <= bottom_root1 <= x_size: bottom_root = bottom_root1
-                    if 0 <= bottom_root2 <= x_size: bottom_root = bottom_root2
-                    #print('bottom_root :', bottom_root)
-                    result, relative_x_on_floor, relative_y1_on_floor = self.image_point_to_relative_coord_on_floor(int(bottom_root), y_size,
+                    if 0 <= top_root1 <= x_size: top_root = top_root1
+                    if 0 <= top_root2 <= x_size: top_root = top_root2
+                    print('top_root :', top_root)
+                    result, relative_x_on_floor, relative_y1_on_floor = self.image_point_to_relative_coord_on_floor(int(top_root) * 4 , 320,
                                                                 for_ball = False)
                     print('relative_y1_on_floor :', relative_y1_on_floor)
                     if relative_y1_on_floor > 100: turn = 2
