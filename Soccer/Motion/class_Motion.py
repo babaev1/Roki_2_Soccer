@@ -125,7 +125,7 @@ class Motion(Robot, Motion_extention_1):
         queue_length = self.stm_channel.mb.GetBodyQueueInfo()[1].Size
         if queue_length > 1: queue_length -= 1
         sleeping_time = queue_length * frame_time_s
-        print('wait_for_gueue_end. sleeping time: ', sleeping_time)
+        #print('wait_for_gueue_end. sleeping time: ', sleeping_time)
         if with_Vision:
             if sleeping_time > 0.1 :
                 if self.glob.role == 'marathon':

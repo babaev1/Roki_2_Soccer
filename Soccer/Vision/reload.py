@@ -4,11 +4,12 @@ import time
 import numpy as np
 
 class Blob:
-    def __init__ (self, x_, y_, w_, h_):
+    def __init__ (self, x_, y_, w_, h_, a_ = 0):
         self.x_ = x_
         self.y_ = y_
         self.w_ = w_
         self.h_ = h_
+        self.a = a_
 
     def x (self):
         return self.x_
@@ -30,6 +31,9 @@ class Blob:
 
     def rect (self):
         return (self.x_, self.y_, self.w_, self.h_)
+
+    def pixels(self):
+        return self.a
 
 class Line:
     def __init__ (self, x1_, y1_, x2_, y2_, theta_):
@@ -105,7 +109,8 @@ class Image:
                     new_blob = Blob (stats [label_num, cv2.CC_STAT_LEFT],
                                      stats [label_num, cv2.CC_STAT_TOP],
                                      stats [label_num, cv2.CC_STAT_WIDTH],
-                                     stats [label_num, cv2.CC_STAT_HEIGHT])
+                                     stats [label_num, cv2.CC_STAT_HEIGHT],
+                                     area)
 
                     #print ("append", area)
                     blobs.append (new_blob)
