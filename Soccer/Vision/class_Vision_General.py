@@ -480,7 +480,7 @@ class Vision_General:
                 self.glob.camera_down_Flag = True
             time.sleep(0.5)
 
-    def detect_Line_Follow_Stream(self, event, turn_shift, direction_from_vision):
+    def detect_Line_Follow_Stream__(self, event, turn_shift, direction_from_vision):
         x_size = 200
         y_size = 80
         turn_shift.value = 0
@@ -548,6 +548,72 @@ class Vision_General:
                 else: turn = 1
                 turn_shift.value = turn + shift
                 #print('number of detected points: ', np.sum(mask/255))
+            else: 
+                turn_shift.value = 0
+                self.glob.camera_down_Flag = True
+            time.sleep(0.5)
+
+    def detect_Line_Follow_Stream(self, event, turn_shift, direction_from_vision):
+        x_size = 200
+        y_size = 160
+        turn_shift.value = 0
+        while True:
+            bottom_root = 100
+            top_root = 100
+            turn = 0
+            shift = 0
+            if event.is_set(): break
+            result, self.camera_elevation = self.glob.motion.camera_elevation()
+            camera_result, img1, self.pitch, self.roll, yaw, pan = self.snapshot()
+            if camera_result:
+                th = self.TH['orange ball']['th']
+                low_th = (int(th[0] * 2.55), th[2] + 128, th[4] + 128)
+                high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
+                if self.glob.SIMULATION == 5:
+                    img1 = cv2.resize(img1, (200,160))
+
+                img = Image(img1)
+                ROIS = [ # [ROI, weight]
+                       (0, 140, 200, 20, 0.3), # You'll need to tweak the weights for your app
+                       (0,  70, 200, 20, 0.4), # depending on how your robot is setup.
+                       (0,   0, 200, 20, 0.3)
+                      ]
+                weight_sum = 0
+                for r in ROIS: weight_sum += r[4]
+
+                image = cv2.resize(img1,(x_size, y_size))
+                img = Image(image)
+                centroid_sum = 0
+                blob_found = False
+                for r in ROIS:
+                    blobs  = img.find_blobs([self.TH['orange ball']['th']],  pixels_threshold=self.TH['orange ball']['pixel'],
+                                           area_threshold=self.TH['orange ball']['area'], merge=True, margin=10, roi=r[0:4])
+
+                    if (len (blobs) != 0):
+                        blob_found = True
+
+                    if blobs:
+                        # Find the blob with the most pixels.
+                        largest_blob = max(blobs, key=lambda b: b.pixels())
+
+                        # Draw a rect around the blob.
+                        img.draw_rectangle(largest_blob.rect())
+
+                        centroid_sum += largest_blob.cx() * r[4] # r[4] is the roi weight.
+                if (blob_found == False):
+                    self.glob.data_quality_is_good = False
+                    deflection_angle = 0
+                    return 0
+                else:
+                    center_pos = (centroid_sum / weight_sum) # Determine center of line.
+
+                    deflection_angle = -math.atan((center_pos-80)/60)
+                    # Convert angle in radians to degrees.
+                    deflection_angle = math.degrees(deflection_angle)
+                self.glob.deflection.append(deflection_angle)
+                if len(self.glob.deflection) > 60:
+                    self.glob.deflection.pop(0)
+                self.glob.data_quality_is_good = True
             else: 
                 turn_shift.value = 0
                 self.glob.camera_down_Flag = True

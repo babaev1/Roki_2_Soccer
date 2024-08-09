@@ -6,6 +6,8 @@ class Glob:
         self.neural_vision = True
         self.camera_streaming = True        # supply IMU data for camera as stream or as one-off
         self.with_Local = True
+        self.glob.data_quality_is_good = False
+        self.glob.deflection = []
         if self.event_type == 'FIRA':
             self.COLUMNS = 20
             self.ROWS = 15

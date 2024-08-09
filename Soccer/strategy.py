@@ -1350,7 +1350,7 @@ class Player():
         intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
 
 
-    def marathon_main_cycle(self):
+    def marathon_main_cycle_(self):
         self.motion.with_Vision = False
         self.motion.params['MARATHON_STEP_LENGTH'] = 0
         self.motion.params['MARATHON_GAIT_HEIGHT'] = 195
@@ -1491,6 +1491,84 @@ class Player():
                     self.motion.vision = self.glob.vision
                     self.local.vision = self.glob.vision
                     #self.glob.vision.camera_thread.start()
+
+    def marathon_main_cycle(self):
+        self.motion.with_Vision = False
+        self.motion.params['MARATHON_STEP_LENGTH'] = 0
+        self.motion.params['MARATHON_GAIT_HEIGHT'] = 195
+        self.motion.params['MARATHON_STEP_HEIGHT'] = 40
+        self.motion.params['MARATHON_FPS'] = 4
+        self.motion.params['MARATHON_UGOL_TORSA'] = 0
+        self.motion.params['MARATHON_BODY_TILT_AT_WALK'] = 0.04
+
+        # Pipeline variables
+        turn_shift = Value('i', 0)       #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
+                                            #  0X - no shift, 2X - shift to left, 3X - shift to right
+        direction_from_vision = Value('d', 0)
+
+        while True:
+            event = threading.Event()
+            camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift, direction_from_vision))
+            camera_thread.setDaemon(True)
+            camera_thread.start()
+
+            self.motion.head_Return(0, self.motion.neck_play_pose)
+            stepLength = 50
+            self.motion.gaitHeight = 190
+            number_Of_Cycles = 100
+            self.motion.amplitude = 32
+            sideLength = 0
+            self.motion.walk_Initial_Pose()
+            direction = 0
+            for cycle in range(number_Of_Cycles):
+                if self.motion.falling_Flag != 0: break
+                deflection = sum(self.glob.deflection[-8:]) / 8
+                if self.glob.data_quality_is_good :
+                    rotation = math.radians(deflection)
+                    limit = 0.1
+                else:
+                    rotation = 0.5
+                    limit = 0.5
+                self.motion.refresh_Orientation()
+                rotation_imu = - self.motion.body_euler_angle['yaw'] * 1.1
+                rotation = rotation * 0.3 + rotation_imu * 0.7
+                rotation = self.normalize_rotation(rotation, limit= limit)
+                print("rotatition: ", rotation)
+                self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                #time.sleep(3)
+                if self.glob.camera_down_Flag == True:
+                    stepLength1 = stepLength/3 * 2
+                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 2)
+                    stepLength1 = stepLength/3
+                    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle+1)
+                    break
+            self.motion.walk_Final_Pose()
+            if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
+            event.set()
+            time.sleep(2)
+
+            if self.glob.SIMULATION == 5:
+                if self.glob.camera_down_Flag == True:
+                    print('Camera resetting')
+                    self.glob.camera_down_Flag = False
+                    self.glob.vision.camera.picam2.close()
+                    #self.glob.vision.event.set()
+                    new_stm_channel  = self.STM_channel(self.glob)
+                    self.glob.stm_channel = new_stm_channel
+                    self.glob.rcb = self.glob.stm_channel.rcb
+                    new_vision = self.Vision_RPI(self.glob)
+                    self.glob.vision = new_vision
+                    self.motion.vision = self.glob.vision
+                    self.local.vision = self.glob.vision
+                    #self.glob.vision.camera_thread.start()
+
+    def normalize_rotation(self, yaw, limit= 0.3):
+        if abs(yaw) > 2 * math.pi: yaw %= (2 * math.pi)
+        if yaw > math.pi : yaw -= (2 * math.pi)
+        if yaw < -math.pi : yaw += (2 * math.pi)
+        if yaw > limit : yaw = limit
+        if yaw < -limit : yaw = -limit
+        return yaw
 
     def test_walk_main_cycle(self):
         self.motion.fr1 = 40 #40 #50
