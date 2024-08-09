@@ -506,7 +506,7 @@ class Vision_General:
                 self.display_camera_image(mask, 'Line')
                 x_list = []
                 y_list = []
-                
+
                 for x in range(x_size):
                     for y in range(y_size):
                         if mask[y][x] : 
@@ -525,7 +525,7 @@ class Vision_General:
                 #    bottom_y = int(coeff[0] + coeff[1] * 200)
                 #if bottom_x < 0:
                 #    bottom_x = 0
-                    bottom_y = int(coeff[0])
+                    #bottom_y = int(coeff[0])
                 #result, relative_x0_on_floor, relative_y0_on_floor = self.image_point_to_relative_coord_on_floor(int(bottom_x) * 4, 640,
                                                                 #for_ball = False)
                 #print('relative_y0_on_floor :', relative_y0_on_floor)
@@ -564,63 +564,62 @@ class Vision_General:
             turn = 0
             shift = 0
             if event.is_set(): break
-            result, self.camera_elevation = self.glob.motion.camera_elevation()
-            camera_result, img1, self.pitch, self.roll, yaw, pan = self.snapshot()
-            if camera_result:
-                th = self.TH['orange ball']['th']
-                low_th = (int(th[0] * 2.55), th[2] + 128, th[4] + 128)
-                high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
-                if self.glob.SIMULATION == 5:
-                    img1 = cv2.resize(img1, (200,160))
+            #result, self.camera_elevation = self.glob.motion.camera_elevation()
+            #camera_result, img1, self.pitch, self.roll, yaw, pan = self.snapshot()
+            img1, frame_number = self.camera.snapshot()
+            th = self.TH['orange ball']['th']
+            low_th = (int(th[0] * 2.55), th[2] + 128, th[4] + 128)
+            high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
+            if self.glob.SIMULATION == 5:
+                img1 = cv2.resize(img1, (200,160))
+            cv2.imshow('Track',img1)
+            cv2.waitKey(10)
+            img = Image(img1)
+            ROIS = [ # [ROI, weight]
+                    (0, 140, 200, 20, 0.3), # You'll need to tweak the weights for your app
+                    (0,  70, 200, 20, 0.4), # depending on how your robot is setup.
+                    (0,   0, 200, 20, 0.3)
+                    ]
+            weight_sum = 0
+            for r in ROIS: weight_sum += r[4]
 
-                img = Image(img1)
-                ROIS = [ # [ROI, weight]
-                       (0, 140, 200, 20, 0.3), # You'll need to tweak the weights for your app
-                       (0,  70, 200, 20, 0.4), # depending on how your robot is setup.
-                       (0,   0, 200, 20, 0.3)
-                      ]
-                weight_sum = 0
-                for r in ROIS: weight_sum += r[4]
+            #image = cv2.resize(img1,(x_size, y_size))
+            img = Image(img1)
+            centroid_sum = 0
+            blob_found = False
+            for r in ROIS:
+                blobs  = img.find_blobs([self.TH['orange ball']['th']],  pixels_threshold=self.TH['orange ball']['pixel'],
+                                        area_threshold=self.TH['orange ball']['area'], merge=True, margin=10, roi=r[0:4])
 
-                image = cv2.resize(img1,(x_size, y_size))
-                img = Image(image)
-                centroid_sum = 0
-                blob_found = False
-                for r in ROIS:
-                    blobs  = img.find_blobs([self.TH['orange ball']['th']],  pixels_threshold=self.TH['orange ball']['pixel'],
-                                           area_threshold=self.TH['orange ball']['area'], merge=True, margin=10, roi=r[0:4])
+                if (len (blobs) != 0):
+                    blob_found = True
 
-                    if (len (blobs) != 0):
-                        blob_found = True
+                if blobs:
+                    # Find the blob with the most pixels.
+                    largest_blob = max(blobs, key=lambda b: b.pixels())
 
-                    if blobs:
-                        # Find the blob with the most pixels.
-                        largest_blob = max(blobs, key=lambda b: b.pixels())
+                    # Draw a rect around the blob.
+                    img.draw_rectangle(largest_blob.rect())
 
-                        # Draw a rect around the blob.
-                        img.draw_rectangle(largest_blob.rect())
+                    centroid_sum += largest_blob.cx() * r[4] # r[4] is the roi weight.
+            # cv2.imshow('Track',img1)
+            # cv2.waitKey(10)
+            if (blob_found == False):
+                self.glob.data_quality_is_good = False
+                deflection_angle = 0
+                return 0
+            else:
+                center_pos = (centroid_sum / weight_sum) # Determine center of line.
 
-                        centroid_sum += largest_blob.cx() * r[4] # r[4] is the roi weight.
-                cv2.imshow(img.img)
-                cv2.waitKey(10)
-                if (blob_found == False):
-                    self.glob.data_quality_is_good = False
-                    deflection_angle = 0
-                    return 0
-                else:
-                    center_pos = (centroid_sum / weight_sum) # Determine center of line.
+                deflection_angle = -math.atan((center_pos-80)/60)
+                # Convert angle in radians to degrees.
+                deflection_angle = math.degrees(deflection_angle)
+            self.glob.deflection.append(deflection_angle)
+            if len(self.glob.deflection) > 60:
+                self.glob.deflection.pop(0)
+            self.glob.data_quality_is_good = True
 
-                    deflection_angle = -math.atan((center_pos-80)/60)
-                    # Convert angle in radians to degrees.
-                    deflection_angle = math.degrees(deflection_angle)
-                self.glob.deflection.append(deflection_angle)
-                if len(self.glob.deflection) > 60:
-                    self.glob.deflection.pop(0)
-                self.glob.data_quality_is_good = True
-            else: 
-                turn_shift.value = 0
-                self.glob.camera_down_Flag = True
-            time.sleep(0.5)
+            time.sleep(0.1)
 
     def quadratic_ransac_curve_fit(self, x, y):
 

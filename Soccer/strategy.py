@@ -1511,7 +1511,7 @@ class Player():
             camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift, direction_from_vision))
             camera_thread.setDaemon(True)
             camera_thread.start()
-            
+
 
             self.motion.head_Return(0, self.motion.neck_play_pose)
             stepLength = 50
@@ -1519,7 +1519,7 @@ class Player():
             number_Of_Cycles = 100
             self.motion.amplitude = 32
             sideLength = 0
-            self.motion.walk_Initial_Pose()
+            #self.motion.walk_Initial_Pose()
             direction = 0
             for cycle in range(number_Of_Cycles):
                 if self.motion.falling_Flag != 0: break
@@ -1535,8 +1535,8 @@ class Player():
                 rotation = rotation * 0.3 + rotation_imu * 0.7
                 rotation = self.normalize_rotation(rotation, limit= limit)
                 print("rotatition: ", rotation)
-                self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
-                #time.sleep(3)
+                #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                time.sleep(3)
                 if self.glob.camera_down_Flag == True:
                     stepLength1 = stepLength/3 * 2
                     self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 2)
