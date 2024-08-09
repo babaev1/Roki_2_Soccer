@@ -625,17 +625,17 @@ class Vision_General:
         turn = 0
         shift = 0
         img1, frame_number = self.camera.snapshot()
-        th = self.TH['orange ball']['th']
-        low_th = (int(th[0] * 2.55), th[2] + 128, th[4] + 128)
-        high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
+        #th = self.TH['orange ball']['th']
+        #low_th = (int(th[0] * 2.55), th[2] + 128, th[4] + 128)
+        #high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
         if self.glob.SIMULATION == 5:
-            img1 = cv2.resize(img1, (200,160))
+            img1 = cv2.resize(img1, (400,320))
         
         img = Image(img1)
         ROIS = [ # [ROI, weight]
-                (0, 140, 200, 20, 0.7), # You'll need to tweak the weights for your app
-                (0,  70, 200, 20, 0.4), # depending on how your robot is setup.
-                (0,   0, 200, 20, 0.3)
+                (0, 2*140, 2*200, 2*20, 0.7), # You'll need to tweak the weights for your app
+                (0,  2*70, 2*200, 2*20, 0.4), # depending on how your robot is setup.
+                (0,   0, 2*200, 2*20, 0.3)
                 ]
         weight_sum = 0
         for r in ROIS: weight_sum += r[4]
@@ -645,8 +645,10 @@ class Vision_General:
         centroid_sum = 0
         blob_found = False
         for r in ROIS:
-            blobs  = img.find_blobs([self.TH['orange ball']['th']],  pixels_threshold=self.TH['orange ball']['pixel'],
-                                    area_threshold=self.TH['orange ball']['area'], merge=True, margin=10, roi=r[0:4])
+            blobs  = img.find_blobs([self.TH['orange ball']['th']], 
+                                    pixels_threshold=20, #self.TH['orange ball']['pixel'],
+                                    area_threshold=20, #self.TH['orange ball']['area'],
+                                    merge=True, margin=10, roi=r[0:4])
 
             if (len (blobs) != 0):
                 blob_found = True
@@ -654,6 +656,8 @@ class Vision_General:
             if blobs:
                 # Find the blob with the most pixels.
                 largest_blob = max(blobs, key=lambda b: b.pixels())
+
+                print("largest blob found")
 
                 # Draw a rect around the blob.
                 img.draw_rectangle(largest_blob.rect())

@@ -66,6 +66,8 @@ class Image:
         self.img = img_.copy ()
 
     def find_blobs (self, ths, roi = None, pixels_threshold = 100, area_threshold = 100, merge=False, margin=0, invert = False):
+        #print("find blobs")
+        
         blobs = []
         if roi == None:
             image_roi = self.img
@@ -82,6 +84,8 @@ class Image:
                 labimg = cv2.cvtColor (image_roi, cv2.COLOR_BGR2LAB)
 
                 mask = cv2.inRange (labimg, low_th, high_th)
+
+                cv2.imshow("mask for debug", mask)
 
                 if (invert == True):
                     mask = cv2.bitwise_not (mask)

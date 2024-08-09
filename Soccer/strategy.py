@@ -1508,7 +1508,7 @@ class Player():
             #camera_thread.start()
 
             self.motion.with_Vision = True
-            self.motion.head_Return(0, self.motion.neck_play_pose)
+            self.motion.head_Return(0, -2000)
             stepLength = 50
             self.motion.gaitHeight = 180
             number_Of_Cycles = 100
@@ -1530,7 +1530,7 @@ class Player():
                     limit = 0.5
                 self.motion.refresh_Orientation()
                 rotation_imu = - self.motion.body_euler_angle['yaw'] * 1.1
-                rotation = rotation * 0.3 + rotation_imu * 0.7
+                rotation = rotation * 0.83 + rotation_imu * 0.17
                 rotation = self.normalize_rotation(rotation, limit= limit)
                 print("rotatition: ", rotation)
                 if self.glob.shift > 10 : sideLength = 20
