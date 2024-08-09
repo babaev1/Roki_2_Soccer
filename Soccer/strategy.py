@@ -1511,6 +1511,7 @@ class Player():
             camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift, direction_from_vision))
             camera_thread.setDaemon(True)
             camera_thread.start()
+            
 
             self.motion.head_Return(0, self.motion.neck_play_pose)
             stepLength = 50

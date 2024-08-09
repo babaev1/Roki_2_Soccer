@@ -506,6 +506,7 @@ class Vision_General:
                 self.display_camera_image(mask, 'Line')
                 x_list = []
                 y_list = []
+                
                 for x in range(x_size):
                     for y in range(y_size):
                         if mask[y][x] : 
