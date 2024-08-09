@@ -127,7 +127,9 @@ class Motion(Robot, Motion_extention_1):
         sleeping_time = queue_length * frame_time_s
         if with_Vision:
             if sleeping_time > 0.1 :
-                self.glob.vision.detect_Ball_in_One_Shot()
+                if self.glob.role == 'marathon':
+                    self.golb.vision.detect_Line_Follow_One_Shot()
+                else:  self.glob.vision.detect_Ball_in_One_Shot()
                 queue_length = self.stm_channel.mb.GetBodyQueueInfo()[1].Size
                 if queue_length > 1: queue_length -= 1
                 sleeping_time = queue_length * frame_time_s

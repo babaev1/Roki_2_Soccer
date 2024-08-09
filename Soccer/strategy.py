@@ -1501,16 +1501,11 @@ class Player():
         self.motion.params['MARATHON_UGOL_TORSA'] = 0
         self.motion.params['MARATHON_BODY_TILT_AT_WALK'] = 0.04
 
-        # Pipeline variables
-        turn_shift = Value('i', 0)       #  0 - no order, 1 - straight forward, 2 - to left, 3- to right, 4 - reverse back
-                                            #  0X - no shift, 2X - shift to left, 3X - shift to right
-        direction_from_vision = Value('d', 0)
-
         while True:
-            event = threading.Event()
-            camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift, direction_from_vision))
-            camera_thread.setDaemon(True)
-            camera_thread.start()
+            #event = threading.Event()
+            #camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift, direction_from_vision))
+            #camera_thread.setDaemon(True)
+            #camera_thread.start()
 
 
             self.motion.head_Return(0, self.motion.neck_play_pose)
@@ -1545,23 +1540,23 @@ class Player():
                     break
             self.motion.walk_Final_Pose()
             if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
-            event.set()
+            #event.set()
             time.sleep(2)
 
-            if self.glob.SIMULATION == 5:
-                if self.glob.camera_down_Flag == True:
-                    print('Camera resetting')
-                    self.glob.camera_down_Flag = False
-                    self.glob.vision.camera.picam2.close()
-                    #self.glob.vision.event.set()
-                    new_stm_channel  = self.STM_channel(self.glob)
-                    self.glob.stm_channel = new_stm_channel
-                    self.glob.rcb = self.glob.stm_channel.rcb
-                    new_vision = self.Vision_RPI(self.glob)
-                    self.glob.vision = new_vision
-                    self.motion.vision = self.glob.vision
-                    self.local.vision = self.glob.vision
-                    #self.glob.vision.camera_thread.start()
+            #if self.glob.SIMULATION == 5:
+            #    if self.glob.camera_down_Flag == True:
+            #        print('Camera resetting')
+            #        self.glob.camera_down_Flag = False
+            #        self.glob.vision.camera.picam2.close()
+            #        #self.glob.vision.event.set()
+            #        new_stm_channel  = self.STM_channel(self.glob)
+            #        self.glob.stm_channel = new_stm_channel
+            #        self.glob.rcb = self.glob.stm_channel.rcb
+            #        new_vision = self.Vision_RPI(self.glob)
+            #        self.glob.vision = new_vision
+            #        self.motion.vision = self.glob.vision
+            #        self.local.vision = self.glob.vision
+            #        #self.glob.vision.camera_thread.start()
 
     def normalize_rotation(self, yaw, limit= 0.3):
         if abs(yaw) > 2 * math.pi: yaw %= (2 * math.pi)

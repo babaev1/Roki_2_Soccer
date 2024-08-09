@@ -44,6 +44,7 @@ try:
         glob = Glob(SIMULATION, current_work_directory, particles_number = 100, event_type = 'FIRA')
         glob.pf_coord = initial_coord
         glob.neural_vision = (role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper')
+        glob.role = role
         vision = Vision_RPI(glob)
         motion = Motion_real(glob, vision)
         motion.falling_Flag = 0
