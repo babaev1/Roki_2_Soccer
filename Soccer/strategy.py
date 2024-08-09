@@ -1507,7 +1507,7 @@ class Player():
             self.motion.head_Return(0, -2000)
             stepLength = 50
             self.motion.gaitHeight = 180
-            number_Of_Cycles = 10
+            number_Of_Cycles = 600
             self.motion.amplitude = 32
             sideLength = 0
             self.motion.walk_Initial_Pose()
@@ -1542,9 +1542,11 @@ class Player():
                     self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle+1)
                     break
             self.motion.walk_Final_Pose()
-            if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
+            
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
-            time.sleep(2)
+            if self.motion.falling_Flag != 0: 
+                self.motion.falling_Flag = 0
+            else:   time.sleep(90)
 
 
     def normalize_rotation(self, yaw, limit= 0.3):
