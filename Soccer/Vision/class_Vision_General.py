@@ -574,50 +574,50 @@ class Vision_General:
                 img1 = cv2.resize(img1, (200,160))
             cv2.imshow('Track',img1)
             cv2.waitKey(10)
-            img = Image(img1)
-            ROIS = [ # [ROI, weight]
-                    (0, 140, 200, 20, 0.3), # You'll need to tweak the weights for your app
-                    (0,  70, 200, 20, 0.4), # depending on how your robot is setup.
-                    (0,   0, 200, 20, 0.3)
-                    ]
-            weight_sum = 0
-            for r in ROIS: weight_sum += r[4]
+            #img = Image(img1)
+            #ROIS = [ # [ROI, weight]
+            #        (0, 140, 200, 20, 0.3), # You'll need to tweak the weights for your app
+            #        (0,  70, 200, 20, 0.4), # depending on how your robot is setup.
+            #        (0,   0, 200, 20, 0.3)
+            #        ]
+            #weight_sum = 0
+            #for r in ROIS: weight_sum += r[4]
 
-            #image = cv2.resize(img1,(x_size, y_size))
-            img = Image(img1)
-            centroid_sum = 0
-            blob_found = False
-            for r in ROIS:
-                blobs  = img.find_blobs([self.TH['orange ball']['th']],  pixels_threshold=self.TH['orange ball']['pixel'],
-                                        area_threshold=self.TH['orange ball']['area'], merge=True, margin=10, roi=r[0:4])
+            ##image = cv2.resize(img1,(x_size, y_size))
+            #img = Image(img1)
+            #centroid_sum = 0
+            #blob_found = False
+            #for r in ROIS:
+            #    blobs  = img.find_blobs([self.TH['orange ball']['th']],  pixels_threshold=self.TH['orange ball']['pixel'],
+            #                            area_threshold=self.TH['orange ball']['area'], merge=True, margin=10, roi=r[0:4])
 
-                if (len (blobs) != 0):
-                    blob_found = True
+            #    if (len (blobs) != 0):
+            #        blob_found = True
 
-                if blobs:
-                    # Find the blob with the most pixels.
-                    largest_blob = max(blobs, key=lambda b: b.pixels())
+            #    if blobs:
+            #        # Find the blob with the most pixels.
+            #        largest_blob = max(blobs, key=lambda b: b.pixels())
 
-                    # Draw a rect around the blob.
-                    img.draw_rectangle(largest_blob.rect())
+            #        # Draw a rect around the blob.
+            #        img.draw_rectangle(largest_blob.rect())
 
-                    centroid_sum += largest_blob.cx() * r[4] # r[4] is the roi weight.
-            # cv2.imshow('Track',img1)
-            # cv2.waitKey(10)
-            if (blob_found == False):
-                self.glob.data_quality_is_good = False
-                deflection_angle = 0
-                return 0
-            else:
-                center_pos = (centroid_sum / weight_sum) # Determine center of line.
+            #        centroid_sum += largest_blob.cx() * r[4] # r[4] is the roi weight.
+            ## cv2.imshow('Track',img1)
+            ## cv2.waitKey(10)
+            #if (blob_found == False):
+            #    self.glob.data_quality_is_good = False
+            #    deflection_angle = 0
+            #    return 0
+            #else:
+            #    center_pos = (centroid_sum / weight_sum) # Determine center of line.
 
-                deflection_angle = -math.atan((center_pos-80)/60)
-                # Convert angle in radians to degrees.
-                deflection_angle = math.degrees(deflection_angle)
-            self.glob.deflection.append(deflection_angle)
-            if len(self.glob.deflection) > 60:
-                self.glob.deflection.pop(0)
-            self.glob.data_quality_is_good = True
+            #    deflection_angle = -math.atan((center_pos-80)/60)
+            #    # Convert angle in radians to degrees.
+            #    deflection_angle = math.degrees(deflection_angle)
+            #self.glob.deflection.append(deflection_angle)
+            #if len(self.glob.deflection) > 60:
+            #    self.glob.deflection.pop(0)
+            #self.glob.data_quality_is_good = True
 
             time.sleep(0.1)
 
