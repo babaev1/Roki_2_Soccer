@@ -628,15 +628,26 @@ class Vision_General:
         #th = self.TH['orange ball']['th']
         #low_th = (int(th[0] * 2.55), th[2] + 128, th[4] + 128)
         #high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
+
+        FRAME_X, FRAME_Y = 400, 320
+
         if self.glob.SIMULATION == 5:
-            img1 = cv2.resize(img1, (400,320))
+            img1 = cv2.resize(img1, (FRAME_X, FRAME_Y))
         
         img = Image(img1)
+
+        #ROIS = [ # [ROI, weight]
+        #        (0, 2*140, 2*200, 2*20, 0.7), # You'll need to tweak the weights for your app
+        #        (0,  2*70, 2*200, 2*20, 0.4), # depending on how your robot is setup.
+        #        (0,   0, 2*200, 2*20, 0.3)
+        #        ]
+
         ROIS = [ # [ROI, weight]
-                (0, 2*140, 2*200, 2*20, 0.7), # You'll need to tweak the weights for your app
-                (0,  2*70, 2*200, 2*20, 0.4), # depending on how your robot is setup.
-                (0,   0, 2*200, 2*20, 0.3)
+                (140, 140, 120, 20, 0.7), # You'll need to tweak the weights for your app
+                (130, 110, 140, 20, 0.4), # depending on how your robot is setup.
+                (120,  65, 160, 20, 0.3)
                 ]
+
         weight_sum = 0
         for r in ROIS: weight_sum += r[4]
 
@@ -663,7 +674,8 @@ class Vision_General:
                 img.draw_rectangle(largest_blob.rect())
 
                 centroid_sum += largest_blob.cx() * r[4] # r[4] is the roi weight.
-                if r ==0: self.glob.shift = 100 - largest_blob.cx()
+                if r ==0: self.glob.shift = FRAME_X / 2 - largest_blob.cx()
+        
         img1 = cv2.resize(img1, (800, 650))
         cv2.imshow('Track',img1)
         cv2.waitKey(10)
@@ -674,9 +686,10 @@ class Vision_General:
         else:
             center_pos = (centroid_sum / weight_sum) # Determine center of line.
 
-            deflection_angle = -math.atan((center_pos-80)/60)
+            deflection_angle = -math.atan((center_pos-FRAME_X / 2) / FRAME_Y / 2)
             # Convert angle in radians to degrees.
             deflection_angle = math.degrees(deflection_angle)
+        
         self.glob.deflection.append(deflection_angle)
         if len(self.glob.deflection) > 60:
             self.glob.deflection.pop(0)

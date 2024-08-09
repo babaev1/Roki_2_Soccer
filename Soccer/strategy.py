@@ -1524,10 +1524,10 @@ class Player():
                 deflection = sum(self.glob.deflection[-8:]) / 8
                 if self.glob.data_quality_is_good :
                     rotation = math.radians(deflection)
-                    limit = 0.2
+                    limit = 0.1
                 else:
                     rotation = 0.5
-                    limit = 0.5
+                    limit = 0.1
                 self.motion.refresh_Orientation()
                 rotation_imu = - self.motion.body_euler_angle['yaw'] * 1.1
                 rotation = rotation * 0.83 + rotation_imu * 0.17

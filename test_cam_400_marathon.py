@@ -62,13 +62,15 @@ frame_duration_us = 16700
 # camera.picam2.set_controls({"AnalogueGain": threshold_Dict['gain']})
 
 glob = Glob(5, '/home/pi/Desktop/Roki_2_Soccer/')
-glob.camera.camera_lores = (400, 325)
+glob.camera.camera_lores = (1600, 1300)
 vision = Vision(glob)
 motion = Motion_real(glob, vision)
 
 a = 0
 start_time = time.perf_counter()
 cycles = 1000
+map1 = np.load('Soccer/Vision/Camera_calibration_map1.npy')
+map2 = np.load('Soccer/Vision/Camera_calibration_map2.npy')
 while a < cycles:
 #     # get image and its number
 #     im, frame_number, total_number_of_frames, frame_timestamp, frame_duration= camera.snapshot()
@@ -81,7 +83,13 @@ while a < cycles:
 #     camera_roll = - imu_roll
     
     camera_result, cv2_image, pitch, roll, yaw, pan = vision.snapshot()
-    
+
+    print(cv2_image.shape)
+
+    undistorted_img = cv2.remap(cv2_image, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+    undistorted_img3 = undistorted_img[325:975, 400:1200]
+
+    cv2_image = cv2.resize(undistorted_img3, (800,650))
     color_image = reload.Image(cv2_image)
     ball_column, ball_row = 0, 0
     blobs = color_image.find_blobs([threshold_Dict['white marking']['th']],# 20, 20):
@@ -95,23 +103,23 @@ while a < cycles:
     sorted_order = sorted(order)
     new_order_len = min(10, len_blobs)
     new_order = sorted_order[:new_order_len]
-    for i in range(new_order_len):
-        ball_column = blobs[new_order[i][1]].cx()
-        ball_row = blobs[new_order[i][1]].cy()
-        relative_x_on_floor, relative_y_on_floor, v = image_point_to_relative_coord_on_floor(ball_column, ball_row,
-                                                    pitch, roll, camera_elevation, for_ball = True)
-        new_order[i][0] = int(math.sqrt(relative_x_on_floor *relative_x_on_floor + relative_y_on_floor * relative_y_on_floor))
-        new_order[i][2] = int(relative_x_on_floor)
-        new_order[i][3] = int(relative_y_on_floor)
-    sorted_new_order = sorted(new_order)
-    if len_blobs != 0:
-        blob = blobs[sorted_new_order[0][1]]
-        color_image.draw_rectangle(blob.rect())
+    # for i in range(new_order_len):
+    #     ball_column = blobs[new_order[i][1]].cx()
+    #     ball_row = blobs[new_order[i][1]].cy()
+    #     relative_x_on_floor, relative_y_on_floor, v = image_point_to_relative_coord_on_floor(ball_column, ball_row,
+    #                                                 pitch, roll, camera_elevation, for_ball = True)
+    #     new_order[i][0] = int(math.sqrt(relative_x_on_floor *relative_x_on_floor + relative_y_on_floor * relative_y_on_floor))
+    #     new_order[i][2] = int(relative_x_on_floor)
+    #     new_order[i][3] = int(relative_y_on_floor)
+    # sorted_new_order = sorted(new_order)
+    # if len_blobs != 0:
+    #     blob = blobs[sorted_new_order[0][1]]
+    #     color_image.draw_rectangle(blob.rect())
 
-        print('a:', a, 'blobs: ', len_blobs, 'relative_x_on_floor = ', sorted_new_order[0][2], 'relative_y_on_floor = ', sorted_new_order[0][3],
-               'imu_pitch = ', round(pitch, 2), 'imu_roll =', round(roll, 2))
-            #print('time_calac = ', time.perf_counter() - start0)
-    a += 1
+    #     print('a:', a, 'blobs: ', len_blobs, 'relative_x_on_floor = ', sorted_new_order[0][2], 'relative_y_on_floor = ', sorted_new_order[0][3],
+    #            'imu_pitch = ', round(pitch, 2), 'imu_roll =', round(roll, 2))
+    #         #print('time_calac = ', time.perf_counter() - start0)
+    # a += 1
     im = cv2.resize(color_image.img, [800, 650])
     cv2.imshow("Camera", im)
     cv2.waitKey(10)
