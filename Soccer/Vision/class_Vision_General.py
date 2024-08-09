@@ -601,6 +601,8 @@ class Vision_General:
                         img.draw_rectangle(largest_blob.rect())
 
                         centroid_sum += largest_blob.cx() * r[4] # r[4] is the roi weight.
+                cv2.imshow(img.img)
+                cv2.waitKey(10)
                 if (blob_found == False):
                     self.glob.data_quality_is_good = False
                     deflection_angle = 0
