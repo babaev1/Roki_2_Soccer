@@ -643,19 +643,23 @@ class Vision_General:
         #        ]
 
         ROIS = [ # [ROI, weight]
-                (140, 140, 120, 20, 0.7), # You'll need to tweak the weights for your app
-                (130, 110, 140, 20, 0.4), # depending on how your robot is setup.
-                (120,  65, 160, 20, 0.3)
+                (140, 140, 120, 20, 0.2), # You'll need to tweak the weights for your app
+                (130, 110, 140, 20, 0.5), # depending on how your robot is setup.
+                (120,  65, 160, 20, 0.8)
                 ]
 
         weight_sum = 0
-        for r in ROIS: weight_sum += r[4]
+        weighted_y = 0
+
+        for r in ROIS:
+            weight_sum += r[4]
+            weighted_y += (FRAME_Y - r[1]) * r[4]
 
         #image = cv2.resize(img1,(x_size, y_size))
         img = Image(img1)
         centroid_sum = 0
         blob_found = False
-        for r in ROIS:
+        for i, r in enumerate(ROIS):
             blobs  = img.find_blobs([self.TH['orange ball']['th']], 
                                     pixels_threshold=20, #self.TH['orange ball']['pixel'],
                                     area_threshold=20, #self.TH['orange ball']['area'],
@@ -673,8 +677,8 @@ class Vision_General:
                 # Draw a rect around the blob.
                 img.draw_rectangle(largest_blob.rect())
 
-                centroid_sum += largest_blob.cx() * r[4] # r[4] is the roi weight.
-                if r ==0: self.glob.shift = FRAME_X / 2 - largest_blob.cx()
+                centroid_sum += (largest_blob.cx() + r[0] - r[2] / 2) * r[4] # r[4] is the roi weight.
+                if i == 0: self.glob.shift = r[2] / 2 - largest_blob.cx()
         
         img1 = cv2.resize(img1, (800, 650))
         cv2.imshow('Track',img1)
@@ -683,12 +687,17 @@ class Vision_General:
             self.glob.data_quality_is_good = False
             deflection_angle = 0
             return 0
+        
         else:
             center_pos = (centroid_sum / weight_sum) # Determine center of line.
 
-            deflection_angle = -math.atan((center_pos-FRAME_X / 2) / FRAME_Y / 2)
+            weighted_y /= weight_sum
+
+            deflection_angle = math.atan((center_pos - (FRAME_X / 2 + 30)) / weighted_y)#FRAME_Y * 2)
             # Convert angle in radians to degrees.
             deflection_angle = math.degrees(deflection_angle)
+
+            print("center_pos, deflection, weighy", center_pos, deflection_angle, weighted_y)
         
         self.glob.deflection.append(deflection_angle)
         if len(self.glob.deflection) > 60:

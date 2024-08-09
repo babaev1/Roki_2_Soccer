@@ -1530,12 +1530,13 @@ class Player():
                     limit = 0.1
                 self.motion.refresh_Orientation()
                 rotation_imu = - self.motion.body_euler_angle['yaw'] * 1.1
-                rotation = rotation * 0.83 + rotation_imu * 0.17
+                #rotation = rotation * 0.83 + rotation_imu * 0.17
                 rotation = self.normalize_rotation(rotation, limit= limit)
                 print("rotatition: ", rotation)
-                if self.glob.shift > 10 : sideLength = 20
-                elif self.glob.shift < -10 : sideLength = -20
+                if self.glob.shift > 10 : sideLength = -min(self.glob.shift / 3, 20)
+                elif self.glob.shift < -10 : sideLength = -max(self.glob.shift / 3, -20)
                 else: sideLength = 0
+                print('self.glob.shift', self.glob.shift)
                 self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                 #time.sleep(3)
                 if self.glob.camera_down_Flag == True:
