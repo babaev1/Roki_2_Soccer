@@ -10,6 +10,7 @@ class Glob:
         self.with_Local = True
         self.data_quality_is_good = False
         self.deflection = []
+        self.shift = 0
         if self.event_type == 'FIRA':
             self.COLUMNS = 20
             self.ROWS = 15

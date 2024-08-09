@@ -630,11 +630,10 @@ class Vision_General:
         high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
         if self.glob.SIMULATION == 5:
             img1 = cv2.resize(img1, (200,160))
-        cv2.imshow('Track',img1)
-        cv2.waitKey(10)
+        
         img = Image(img1)
         ROIS = [ # [ROI, weight]
-                (0, 140, 200, 20, 0.3), # You'll need to tweak the weights for your app
+                (0, 140, 200, 20, 0.7), # You'll need to tweak the weights for your app
                 (0,  70, 200, 20, 0.4), # depending on how your robot is setup.
                 (0,   0, 200, 20, 0.3)
                 ]
@@ -660,8 +659,10 @@ class Vision_General:
                 img.draw_rectangle(largest_blob.rect())
 
                 centroid_sum += largest_blob.cx() * r[4] # r[4] is the roi weight.
-        # cv2.imshow('Track',img1)
-        # cv2.waitKey(10)
+                if r ==0: self.glob.shift = 100 - largest_blob.cx()
+        img1 = cv2.resize(img1, (800, 650))
+        cv2.imshow('Track',img1)
+        cv2.waitKey(10)
         if (blob_found == False):
             self.glob.data_quality_is_good = False
             deflection_angle = 0

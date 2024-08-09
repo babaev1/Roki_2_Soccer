@@ -1507,21 +1507,24 @@ class Player():
             #camera_thread.setDaemon(True)
             #camera_thread.start()
 
-
+            self.motion.with_Vision = True
             self.motion.head_Return(0, self.motion.neck_play_pose)
             stepLength = 50
-            self.motion.gaitHeight = 190
+            self.motion.gaitHeight = 180
             number_Of_Cycles = 100
             self.motion.amplitude = 32
             sideLength = 0
-            #self.motion.walk_Initial_Pose()
+            self.motion.walk_Initial_Pose()
             direction = 0
             for cycle in range(number_Of_Cycles):
                 if self.motion.falling_Flag != 0: break
+                stepLength1 = stepLength
+                if cycle ==0 : stepLength1 = stepLength/3
+                if cycle ==1 : stepLength1 = stepLength/3 * 2
                 deflection = sum(self.glob.deflection[-8:]) / 8
                 if self.glob.data_quality_is_good :
                     rotation = math.radians(deflection)
-                    limit = 0.1
+                    limit = 0.2
                 else:
                     rotation = 0.5
                     limit = 0.5
@@ -1530,8 +1533,11 @@ class Player():
                 rotation = rotation * 0.3 + rotation_imu * 0.7
                 rotation = self.normalize_rotation(rotation, limit= limit)
                 print("rotatition: ", rotation)
-                #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
-                time.sleep(3)
+                if self.glob.shift > 10 : sideLength = 20
+                elif self.glob.shift < -10 : sideLength = -20
+                else: sideLength = 0
+                self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+                #time.sleep(3)
                 if self.glob.camera_down_Flag == True:
                     stepLength1 = stepLength/3 * 2
                     self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 2)
