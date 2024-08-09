@@ -1502,16 +1502,12 @@ class Player():
         self.motion.params['MARATHON_BODY_TILT_AT_WALK'] = 0.04
 
         while True:
-            #event = threading.Event()
-            #camera_thread = threading.Thread(target = self.glob.vision.detect_Line_Follow_Stream, args=(event, turn_shift, direction_from_vision))
-            #camera_thread.setDaemon(True)
-            #camera_thread.start()
 
             self.motion.with_Vision = True
             self.motion.head_Return(0, -2000)
             stepLength = 50
             self.motion.gaitHeight = 180
-            number_Of_Cycles = 100
+            number_Of_Cycles = 10
             self.motion.amplitude = 32
             sideLength = 0
             self.motion.walk_Initial_Pose()
@@ -1547,23 +1543,9 @@ class Player():
                     break
             self.motion.walk_Final_Pose()
             if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
-            #event.set()
+            self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
             time.sleep(2)
 
-            #if self.glob.SIMULATION == 5:
-            #    if self.glob.camera_down_Flag == True:
-            #        print('Camera resetting')
-            #        self.glob.camera_down_Flag = False
-            #        self.glob.vision.camera.picam2.close()
-            #        #self.glob.vision.event.set()
-            #        new_stm_channel  = self.STM_channel(self.glob)
-            #        self.glob.stm_channel = new_stm_channel
-            #        self.glob.rcb = self.glob.stm_channel.rcb
-            #        new_vision = self.Vision_RPI(self.glob)
-            #        self.glob.vision = new_vision
-            #        self.motion.vision = self.glob.vision
-            #        self.local.vision = self.glob.vision
-            #        #self.glob.vision.camera_thread.start()
 
     def normalize_rotation(self, yaw, limit= 0.3):
         if abs(yaw) > 2 * math.pi: yaw %= (2 * math.pi)
