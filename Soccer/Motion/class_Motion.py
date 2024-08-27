@@ -825,7 +825,7 @@ class Motion(Robot, Motion_extention_1):
             #     counter += 1
         fase_offset = 0.7 #1.57  #0.7
         order = [10.7, 0, -10.5, -16, -10.7, 0, 10.5, 16]
-        #order = [8, 0, -8, -16, -8, 0, 8, 16]
+        order = [8, 0, -8, -16, -8, 0, 8, 16]
         for iii in range(0,frameNumberPerCycle,framestep):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
             if 0<= iii <self.fr1 :                                              # FASA 1
