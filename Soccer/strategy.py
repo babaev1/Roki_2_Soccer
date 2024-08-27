@@ -379,7 +379,7 @@ class Player():
             #if rotation > 0: rotation *= 1.5
             rotation = self.motion.normalize_rotation(rotation)
             #rotation = 0
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+            self.motion.walk_Cycle_v1(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
 
     def sidestep_test_main_cycle(self, pressed_button):
@@ -402,7 +402,7 @@ class Player():
             rotation = 0 + invert * self.motion.imu_body_yaw() * 1.1
             rotation = self.motion.normalize_rotation(rotation)
             #rotation = 0
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+            self.motion.walk_Cycle_v1(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
 
     def norm_yaw(self, yaw):
