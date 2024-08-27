@@ -1578,8 +1578,8 @@ class Player():
             [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
         for _ in range(20):
-            #self.motion.play_Soft_Motion_Slot(motion_list = motion_forward)
-            self.motion.play_Soft_Motion_Slot(name = "Small_Jump")
+            self.motion.play_Soft_Motion_Slot(motion_list = motion_forward)
+            #self.motion.play_Soft_Motion_Slot(name = "Small_Jump")
             time.sleep(0.25)
 
         return
