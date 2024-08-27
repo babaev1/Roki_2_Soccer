@@ -824,15 +824,20 @@ class Motion(Robot, Motion_extention_1):
             #     time.sleep(0.02)
             #     counter += 1
         fase_offset = 0.7 #1.57  #0.7
-        order = [10.7, 0, -10.5, -16, -10.7, 0, 10.5, 16]
-        order = [8, 0, -8, -16, -8, 0, 8, 16]
+        #order = [10.7, 0, -10.5, -16, -10.7, 0, 10.5, 16]
+        order = []
+        pos = int(self.amplitude/2)
+        for _ in range(self.fr1):
+            pos -= int(self.amplitude/self.fr1)
+            order.append(pos)
+        #order = [8, 0, -8, -16, -8, 0, 8, 16]
         for iii in range(0,frameNumberPerCycle,framestep):
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
             if 0<= iii <self.fr1 :                                              # FASA 1
-                alpha = alpha01 * (iii/2+ fase_offset*framestep)
+                #alpha = alpha01 * (iii/2+ fase_offset*framestep)
                 #alpha = alpha01 * iii/2
-                S = (self.amplitude/2 + self.sideLength/2 )*math.cos(alpha)
-                S = order[int(iii/2)] * (self.amplitude + self.sideLength ) / self.amplitude
+                #S = (self.amplitude/2 + self.sideLength/2 )*math.cos(alpha)
+                S = order[iii + framestep - 1] * (self.amplitude + self.sideLength ) / self.amplitude
                 self.ytr = S - self.d10 + self.sideLength/2
                 self.ytl = S + self.d10 + self.sideLength/2
                 self.ztl = -self.gaitHeight
@@ -843,10 +848,10 @@ class Motion(Robot, Motion_extention_1):
                 self.xtr = xtr0 - dx0 - dx0 * iii/framestep
 
             if self.fr1+self.fr2<=iii<2*self.fr1+self.fr2 :                     # FASA 3
-                alpha = alpha01 * ((iii-self.fr2)/2+ fase_offset*framestep)
+                #alpha = alpha01 * ((iii-self.fr2)/2+ fase_offset*framestep)
                 #alpha = alpha01 * (iii-self.fr2)/2
-                S = (self.amplitude/2 + self.sideLength/2)*math.cos(alpha)
-                S = order[int((iii-self.fr2)/2)] * (self.amplitude + self.sideLength ) / self.amplitude
+                #S = (self.amplitude/2 + self.sideLength/2)*math.cos(alpha)
+                S = - order[iii - self.fr1 - self.fr2 + framestep - 1] * (self.amplitude + self.sideLength ) / self.amplitude
                 self.ytr = S - self.d10 - self.sideLength/2
                 self.ytl = S + self.d10 + self.sideLength/2
                 self.ztl = -self.gaitHeight

@@ -265,13 +265,14 @@ class Motion_sim(Motion_real):
             activePoseOld = []
             for ind in range(len(self.activePose)): activePoseOld.append(self.activePose[ind])
             self.activePose =[]
-            for j in range(len(self.ACTIVEJOINTS) - 4):
+            #for j in range(len(self.ACTIVEJOINTS) - 4):
+            for j in range(len(motion_list[i]) - 1):
                     self.activePose.append(0.017*motion_list[i][j+1]*0.03375)
             pulseNum = int(motion_list[i][0]*self.FRAMELENGTH * 1000 / self.simThreadCycleInMs)
             for k in range (pulseNum):
                 if self.glob.SIMULATION == 3: self.wait_sim_step()
                 #self.sim.simxPauseCommunication(self.clientID, True)
-                for j in range(len(self.ACTIVEJOINTS) - 4):
+                for j in range(len(motion_list[i - 1]) - 1):
                     tempActivePose = activePoseOld[j]+(self.activePose[j]-activePoseOld[j])*k/pulseNum
                     returnCode = self.sim.simxSetJointTargetPosition(self.clientID, self.jointHandle[j] ,
                                  tempActivePose*self.ACTIVESERVOS[j][3] +self.trims[j], self.sim.simx_opmode_streaming)

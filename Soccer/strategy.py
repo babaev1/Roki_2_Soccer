@@ -1253,7 +1253,8 @@ class Player():
             self.motion.kick_power = 100
             self.motion.kick(True)
         else:
-            self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
+            self.test_walk_main_cycle()
+            #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
         if self.glob.SIMULATION == 1:
             self.motion.sim_Progress(10)
         
@@ -1558,6 +1559,31 @@ class Player():
         return yaw
 
     def test_walk_main_cycle(self):
+        motion_turn = [
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 2, -700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 700, 0, 0, 0, 0, 1000, 0, 0, 0, 0],
+            [ 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        motion_right = [
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, -711, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -650, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        motion_forward = [
+            [ 10, 0, 200, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -200, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, 0, -1500, 0, 0, 0, 0, 0, 0, 0, 0, 1000, 0, 1500, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        for _ in range(20):
+            #self.motion.play_Soft_Motion_Slot(motion_list = motion_forward)
+            self.motion.play_Soft_Motion_Slot(name = "Small_Jump")
+            time.sleep(0.25)
+
+        return
+        self.motion.jump_turn(1)
         self.motion.fr1 = 40 #40 #50
         self.motion.fr2 = 20 #12 #20
         self.motion.amplitude = 110 #110
