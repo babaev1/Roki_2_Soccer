@@ -424,7 +424,7 @@ class Motion(Robot, Motion_extention_1):
         self.direction_To_Attack = self.norm_yaw(self.direction_To_Attack)
         self.glob.imu_drift_last_correction_time = time.perf_counter()
 
-    def walk_Initial_Pose(self):
+    def walk_Initial_Pose(self, amplitude = 24):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
             #self.local.quality =0
@@ -445,8 +445,8 @@ class Motion(Robot, Motion_extention_1):
             self.ztl = self.ztl0 - j*(self.ztl0+self.gaitHeight)/self.initPoses
             # self.ytr = -self.d10 - j*self.amplitude/2 /self.initPoses
             # self.ytl =  self.d10 - j*self.amplitude/2 /self.initPoses
-            self.ytr = -self.d10 - j* 24 /self.initPoses
-            self.ytl =  self.d10 - j* 24 /self.initPoses
+            self.ytr = -self.d10 - j* amplitude /self.initPoses
+            self.ytl =  self.d10 - j* amplitude /self.initPoses
             angles = self.computeAlphaForWalk()
             #if not self.falling_Flag ==0: return
             if len(angles)==0:
@@ -1619,7 +1619,7 @@ class Motion(Robot, Motion_extention_1):
         self.first_Leg_Is_Right_Leg = first_Leg_Is_Right_Leg
         tmp = self.gaitHeight
         self.gaitHeight = gaitHeight
-        self.walk_Initial_Pose()
+        self.walk_Initial_Pose(amplitude = 46)
         alpha = 0
         alpha01 = math.pi/self.fr1*2
         frameNumberPerCycle = 2*self.fr1+2*self.fr2
