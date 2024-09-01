@@ -572,7 +572,7 @@ class Motion(Robot, Motion_extention_1):
         #                    servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
         #            a=self.rcb.setServoPosAsync(servoDatas, self.frames_per_cycle, 0)
 
-    def walk_Cycle(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
+    def walk_Cycle_v0(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
             #self.local.quality =0
@@ -777,7 +777,7 @@ class Motion(Robot, Motion_extention_1):
         #self.first_Leg_Is_Right_Leg = tmp1
         if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
 
-    def walk_Cycle_v1(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
+    def walk_Cycle(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
             #self.local.quality =0
@@ -1602,165 +1602,6 @@ class Motion(Robot, Motion_extention_1):
         # returning xr, xl, yr, yl to initial value
         self.xr, self.xl, self.yr, self.yl = xr_old, xl_old, yr_old, yl_old
         #self.robot_In_0_Pose = True
-
-    def kick_v1(self, first_Leg_Is_Right_Leg, small = False):
-        self.robot_In_0_Pose = False
-        if not self.falling_Test() == 0:
-            #self.local.quality =0
-            if self.falling_Flag == 3: uprint('STOP!')
-            else: uprint('FALLING!!!', self.falling_Flag)
-            return[]
-        gaitHeight = 210
-        stepHeight = 55
-        stepLength = 64
-        kick_size = self.kick_power - 30
-        #if small : kick_size = -10
-        tmp1 = self.first_Leg_Is_Right_Leg
-        self.first_Leg_Is_Right_Leg = first_Leg_Is_Right_Leg
-        tmp = self.gaitHeight
-        self.gaitHeight = gaitHeight
-        self.walk_Initial_Pose()
-        alpha = 0
-        alpha01 = math.pi/self.fr1*2
-        frameNumberPerCycle = 2*self.fr1+2*self.fr2
-        framestep = self.simThreadCycleInMs//10
-        dx0_typical = self.stepLength/(2*self.fr1+self.fr2+ 2 * framestep)*framestep
-        xr_old, xl_old, yr_old, yl_old = self.xr, self.xl, self.yr, self.yl
-        # correction of body tilt forward
-        self.xr, self.xl = self.params['BODY_TILT_AT_KICK'], self.params['BODY_TILT_AT_KICK']   #
-        # correction of sole skew depending on side angle of body when step pushes land
-        self.yr, self.yl = - self.params['SOLE_LANDING_SKEW'], self.params['SOLE_LANDING_SKEW']
-        fase_offset = 0.7
-        order = []
-        pos = int(self.amplitude/2)
-        for _ in range(self.fr1):
-            pos -= int(self.amplitude/self.fr1)
-            order.append(pos)
-        if self.glob.SIMULATION == 5:
-            self.wait_for_gueue_end(self.with_Vision)
-            # while True:
-            #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 3: break
-            #     time.sleep(0.02)
-        for iii in range(0,frameNumberPerCycle,framestep):
-            if self.glob.SIMULATION == 2: start1 = self.pyb.millis()
-            if 0<= iii <self.fr1 :
-                #alpha = alpha01 * (iii/2+fase_offset*framestep)
-                #S = (self.amplitude/2 )*math.cos(alpha)
-                S = order[iii + framestep - 1]
-                self.ytr = S - self.d10
-                self.ytl = S + self.d10
-                self.ztl = -gaitHeight
-                self.ztr = -gaitHeight
-                continue
-            if self.fr1+self.fr2<=iii<2*self.fr1+self.fr2 :
-                #alpha = alpha01 * ((iii-self.fr2)/2+fase_offset*framestep)
-                #S = (self.amplitude/2)*math.cos(alpha)
-                S = - order[iii - self.fr1 - self.fr2 + framestep - 1]
-                self.ytr = S - self.d10
-                self.ytl = S + self.d10
-                self.ztl = -gaitHeight
-                self.ztr = -gaitHeight
-                dx0 = dx0_typical
-                self.xtl -= dx0
-                self.xtr -= dx0
-            if self.fr1<= iii <self.fr1+self.fr2:
-                self.ztr = -gaitHeight + stepHeight
-                dx = stepLength/2/self.fr2*2
-                dx0 = stepLength/(2*self.fr1+self.fr2+4)*framestep
-                if iii==self.fr1:
-                    self.xtr -= dx0
-                    self.ytr = S - 64
-                elif iii == (self.fr1 +self.fr2 - 2):
-                    self.xtr -= dx0
-                    self.ytr = S - 64
-                else:
-                    self.xtr += dx*self.fr2/(self.fr2-2 * framestep)
-                    self.ytr = S - 64
-                if iii == self.fr1 +self.fr2 - 10: self.xtr += kick_size
-                if iii == self.fr1 +self.fr2 - 4: self.xtr -= kick_size
-                self.xtl -= dx0
-            if 2*self.fr1+self.fr2<= iii :
-                self.ztl = -gaitHeight + stepHeight
-                dx0 = dx0_typical * 4 / self.fr2           # 8.75/6
-                dx = (stepLength*(self.fr1+self.fr2)/(4*self.fr1)+2*dx0)/(self.fr2 - 2 * framestep) * framestep
-                if iii== (2*self.fr1 + 2*self.fr2 - framestep):
-                    self.ztl = -gaitHeight
-                    self.ytl = S + self.d10
-
-                if iii== (2*self.fr1 + self.fr2 ):
-                    self.xtl -= dx0
-                    self.ytl = S + 64
-                elif iii== (2*self.fr1 + 2*self.fr2 - framestep):
-                    self.xtl -= dx0
-                    self.ytl = S + 64
-                else:
-                    self.xtl += dx
-                    self.ytl = S + 64
-                self.xtr -= dx0
-            angles = self.computeAlphaForWalk()
-            if not self.falling_Flag ==0: return
-            if len(angles)==0:
-                self.exitFlag = self.exitFlag +1
-            else:
-                if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0 or self.glob.SIMULATION == 3:
-                    if self.glob.SIMULATION == 3: self.wait_sim_step()
-                    #self.sim.simxPauseCommunication(self.clientID, True)
-                    for i in range(len(angles)):
-                        if self.glob.SIMULATION == 1 or self.glob.SIMULATION == 3:
-                           returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
-                                        self.jointHandle[i] , angles[i]*self.ACTIVESERVOS[i][3]+self.trims[i],
-                                        self.sim.simx_opmode_oneshot)
-                        elif self.glob.SIMULATION == 0:
-                           returnCode = self.sim.simxSetJointPosition(self.clientID,
-                                        self.jointHandle[i] , angles[i]*self.ACTIVESERVOS[i][3]+self.trims[i],
-                                        self.sim.simx_opmode_oneshot)
-                    #self.sim.simxPauseCommunication(self.clientID, False)
-                    if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0 or self.glob.SIMULATION == 3:
-                        time.sleep(self.slowTime)
-                        returnCode, Dummy_Hposition= self.sim.simxGetObjectPosition(self.clientID, self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
-                        #uprint(self.euler_angle)
-                        self.Dummy_HData.append(Dummy_Hposition)
-                        returnCode, self.Ballposition= self.sim.simxGetObjectPosition(self.clientID, self.BallHandle , -1, self.sim.simx_opmode_buffer)
-                        self.BallData.append(self.Ballposition)
-                        self.timeElapsed = self.timeElapsed +1
-                        #uprint(Dummy_Hposition)
-                        #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
-                        #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
-                        if self.glob.SIMULATION == 1:
-                            self.sim_simxSynchronousTrigger(self.clientID)
-                elif self.glob.SIMULATION == 5:
-                    joint_number = len(angles)
-                    if self.model == 'Roki_2':
-                        servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number + 2)]
-                        for i in range(joint_number):
-                            if self.ACTIVESERVOS[i][0] == 8:
-                                n = joint_number- 1 + self.ACTIVESERVOS[i][1]
-                                pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2]/2 + 7500)
-                                servoDatas[n].Id, servoDatas[n].Sio, servoDatas[n].Data = 13, self.ACTIVESERVOS[i][1], pos
-                            else: pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
-                            servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
-                    else:
-                        servoDatas = [self.Roki.Rcb4.ServoData() for _ in range(joint_number)]
-                        for i in range(joint_number):
-                            pos = int(angles[i]*1698 * self.ACTIVESERVOS[i][2] + 7500)
-                            servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
-                    #start2 = self.pyb.millis()
-                    a=self.rcb.setServoPosAsync(servoDatas,self.frames_per_cycle, 0)
-                    #uprint(disp)
-                    #time2 = self.pyb.elapsed_millis(start2)
-                    # time1 = self.pyb.elapsed_millis(start1)
-                    # self.pyb.delay(self.frame_delay - time1)
-                #self.refresh_Orientation()
-        # returning xr, xl, yr, yl to initial value
-        self.xr, self.xl, self.yr, self.yl = xr_old, xl_old, yr_old, yl_old
-        self.walk_Final_Pose_After_Kick()
-        self.pause_in_ms(100)
-        self.local.coord_shift[0] = self.first_step_yield/2000
-        self.local.coord_shift[1] = 0
-        self.local.coordinate_record(odometry = True, shift = True)
-        self.local.refresh_odometry()
-        self.gaitHeight = tmp
-        self.first_Leg_Is_Right_Leg = tmp1
 
     def kick(self, first_Leg_Is_Right_Leg, small = False):
         self.robot_In_0_Pose = False
