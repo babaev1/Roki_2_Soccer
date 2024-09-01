@@ -1253,7 +1253,9 @@ class Player():
             self.motion.kick_power = 100
             self.motion.kick(True)
         else:
-            self.test_walk_main_cycle()
+            self.motion.kick_power = 100
+            self.motion.kick_v1(True)
+            #self.test_walk_main_cycle()
             #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
         if self.glob.SIMULATION == 1:
             self.motion.sim_Progress(10)
