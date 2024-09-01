@@ -57,7 +57,8 @@ def build_argparser():
                       #required=False, default="/home/pi/yolo_roma/s640_30_epochs.xml", type=str)
                       #required=False, default="/home/pi/yolo_roma/yolov5_a_fp32.xml", type=str)
                         #required=False, default="/home/pi/yolo_roma/yolov5_a.xml", type=str)
-                        required=False, default="/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/yolov5_b.xml", type=str)
+                        #required=False, default="/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/yolov5_b.xml", type=str)
+                        required=False, default="/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/orange_ball_on_green_only.xml", type=str)
     args.add_argument("-d", "--device",
                       help="Optional. Specify the target device to infer on; CPU, GPU, FPGA, HDDL or MYRIAD is"
                            " acceptable. The sample will look for a suitable plugin for device specified. "

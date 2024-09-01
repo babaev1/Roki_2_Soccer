@@ -9,7 +9,7 @@ picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888', "
 picam2.start()
 
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-out = cv2.VideoWriter('/home/pi/Desktop/output.avi', fourcc, 20.0, (640,  640))
+out = cv2.VideoWriter('/home/pi/Desktop/output2.avi', fourcc, 20.0, (640,  640))
 
 
 mb = Roki.Motherboard()
@@ -42,7 +42,7 @@ sd5.Sio = 2
 sd5.Data = -250 + 7500
 
 
-rcb.setServoPosAsync([sd1, sd2, sd3, sd4, sd5], 80, 79)
+#rcb.setServoPosAsync([sd1, sd2, sd3, sd4, sd5], 80, 79)
 
 def letterbox(img, size=(640, 640), color=(114, 114, 114), auto=True, scaleFill=False, scaleup=True):
     # Resize image to a 32-pixel-multiple rectangle https://github.com/ultralytics/yolov3/issues/232
