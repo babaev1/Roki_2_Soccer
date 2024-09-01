@@ -523,7 +523,7 @@ class Motion_real(Motion):
                 #sideLengthResidue_accumulated += sideLengthResidue
                 cycle += 1
             self.walk_Final_Pose()
-            print('stepLengthResidue_accumulated =', stepLengthResidue_accumulated)
+            #print('stepLengthResidue_accumulated =', stepLengthResidue_accumulated)
             self.first_Leg_Is_Right_Leg = True
             #self.stepHeight = 20
             #stop_detecting_Ball = threading.Event()
@@ -535,6 +535,7 @@ class Motion_real(Motion):
             self.first_Leg_Is_Right_Leg = True
             #self.stepHeight = 32
             #self.head_Up()
+            print('Kick_by_Right = ', kick_by_Right)
             self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
             self.local.coord_odometry[0] += dist * math.cos(napravl)
             self.local.coord_odometry[1] += dist * math.sin(napravl)

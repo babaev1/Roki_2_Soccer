@@ -177,12 +177,12 @@ class Forward_Vector_Matrix:
         self.kick_Power = 1
 
     def dir_To_Guest(self):
-        if abs(self.local.ball_odometry[0])  >  self.glob.landmarks["FIELD_LENGTH"] / 2:
-            ball_x = math.copysign(self.glob.landmarks["FIELD_LENGTH"] / 2, self.local.ball_odometry[0])
-        else: ball_x = self.local.ball_odometry[0]
-        if abs(self.local.ball_odometry[1])  >  self.glob.landmarks["FIELD_WIDTH"] / 2:
-            ball_y = math.copysign(self.glob.landmarks["FIELD_WIDTH"] / 2, self.local.ball_odometry[1])
-        else: ball_y = self.local.ball_odometry[1]
+        if abs(self.glob.ball_coord[0])  >  self.glob.landmarks["FIELD_LENGTH"] / 2:
+            ball_x = math.copysign(self.glob.landmarks["FIELD_LENGTH"] / 2, self.glob.ball_coord[0])
+        else: ball_x = self.glob.ball_coord[0]
+        if abs(self.glob.ball_coord[1])  >  self.glob.landmarks["FIELD_WIDTH"] / 2:
+            ball_y = math.copysign(self.glob.landmarks["FIELD_WIDTH"] / 2, self.glob.ball_coord[1])
+        else: ball_y = self.glob.ball_coord[1]
         col = math.floor((ball_x + self.glob.landmarks["FIELD_LENGTH"] / 2) / (self.glob.landmarks["FIELD_LENGTH"] / self.glob.COLUMNS))
         row = math.floor((- ball_y + self.glob.landmarks["FIELD_WIDTH"] / 2) / (self.glob.landmarks["FIELD_WIDTH"] / self.glob.ROWS))
         if col >= self.glob.COLUMNS : col = self.glob.COLUMNS - 1
@@ -425,7 +425,7 @@ class Player():
             self.motion.kick_off_ride()
             first_look_point = None
         else:
-            first_look_point= self.local.ball_odometry
+            first_look_point= self.glob.ball_coord
         while (True):
             if (time.perf_counter() - self.motion.start_point_for_imu_drift) > 360:
                 self.motion.turn_To_Course(0)
