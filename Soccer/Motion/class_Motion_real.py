@@ -482,6 +482,7 @@ class Motion_real(Motion):
                 side_step_yield = self.side_step_left_yield
             else:
                 invert = 1
+                self.first_Leg_Is_Right_Leg = True
                 side_step_yield = self.side_step_right_yield
             m = int(math.ceil(abs(displacement)/side_step_yield))       # potential side steps number
             if n < m : n = m
