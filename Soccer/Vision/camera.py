@@ -93,39 +93,62 @@ class Camera:
         self.picam2.stop()
 
 if __name__ == '__main__':
-    from class_stm_channel import STM_channel
-    stm_channel = STM_channel()
-    stm_channel.mb.ResetIMUCounter()
+    from multiprocessing import Array, Process, Value
+    import numpy as np
+    frame = Array('B', 1560000)
+    trigger = Value('i', 0)
+    def display(frame, trigger):
+        while True:
+            if trigger.value:
+                image = np.frombuffer(frame.get_obj(), dtype=np.uint8)
+                image = image.reshape(650,800,3)
+                cv2.imshow("Camera2", image)
+                cv2.waitKey(10)
+            time.sleep(0.01)
+    
+    
+    process = Process(target=display, args=(frame, trigger,))
+    process.start()
+    #process.join()
+    #from class_stm_channel import STM_channel
+    #stm_channel = STM_channel()
+    #stm_channel.mb.ResetIMUCounter()
     camera_frame_timestamps = []    
     single_quat_timestamps =[]
     camera = Camera()
-    quat = stm_channel.read_quaternion_from_imu_in_head(frame_number = None)
-    single_quat_timestamps.append(quat[4] + round(quat[5]/1000000000, 3))
+    #quat = stm_channel.read_quaternion_from_imu_in_head(frame_number = None)
+    #single_quat_timestamps.append(quat[4] + round(quat[5]/1000000000, 3))
     camera.start() #(exposure = 100000)         # exposure limits: 11 ~ 199953
     start_time = time.perf_counter()
     
-    cycles = 10
+    cycles = 150
     for _ in range(cycles):
 #         quat = stm_channel.read_quaternion_from_imu_in_head(frame_number = None)
 #         single_quat_timestamps.append(quat[4] + round(quat[5]/1000000000, 3))
-        image, frame_number, total_number_of_frames, frame_timestamp, frame_duration = camera.snapshot()
+        image, frame_number = camera.snapshot()
+        # im = np.frombuffer(frame.get_obj(), dtype=np.uint8)
+        # im = im.reshape(650,800,3)
+        # im = image
+        frame.value = np.ndarray.tobytes(image)
+        trigger.value = 1
+        print(len(image), image.shape, image.dtype)
         #quat = stm_channel.read_quaternion_from_imu_in_head(frame_number = frame_number)
-        camera_frame_timestamps.append(round(frame_timestamp/1000000000, 3))
+        #camera_frame_timestamps.append(round(frame_timestamp/1000000000, 3))
         #print('frame_number: ', frame_number )
-#         cv2.imshow("Camera", image)
-#         cv2.waitKey(10)
+        cv2.imshow("Camera", image)
+        cv2.waitKey(10)
 
-    FRAME_RATE = 3
-    FRAME_RATE = int(1000000 // FRAME_RATE)
-    camera.picam2.set_controls({"FrameDurationLimits":(FRAME_RATE,FRAME_RATE)})
-    time.sleep(2)
+    #FRAME_RATE = 3
+    #FRAME_RATE = int(1000000 // FRAME_RATE)
+    #camera.picam2.set_controls({"FrameDurationLimits":(FRAME_RATE,FRAME_RATE)})
+    #time.sleep(2)
     
-    for _ in range(cycles):
+    #for _ in range(cycles):
 #         quat = stm_channel.read_quaternion_from_imu_in_head(frame_number = None)
 #         single_quat_timestamps.append(quat[4] + round(quat[5]/1000000000, 3))
-        image, frame_number, total_number_of_frames, frame_timestamp, frame_duration = camera.snapshot()
+        #image, frame_number = camera.snapshot()
         #quat = stm_channel.read_quaternion_from_imu_in_head(frame_number = frame_number)
-        camera_frame_timestamps.append(round(frame_timestamp/1000000000, 3))
+        #camera_frame_timestamps.append(round(frame_timestamp/1000000000, 3))
         #print('frame_number: ', frame_number )
 #         cv2.imshow("Camera", image)
 #         cv2.waitKey(10)
@@ -134,14 +157,14 @@ if __name__ == '__main__':
     #print('frame_number: ', frame_number, 'total_number_of_frames: ', total_number_of_frames, 'frame_timestamp: ', frame_timestamp)
     print('Rate : ', int(cycles/ time_elapsed), ' FPS')
     #cv2.destroyAllWindows()
-    print('total number of frames: ', len(camera.frame_number_counter.list_of_Timestamps) + camera.frame_number_counter.head_of_Timestamps)
+    #print('total number of frames: ', len(camera.frame_number_counter.list_of_Timestamps) + camera.frame_number_counter.head_of_Timestamps)
     #print(camera.frame_number_counter.list_of_Timestamps)
-    for i in range(300):
-        try:
-            #print(i)
-            quat = stm_channel.read_quaternion_from_imu_in_head(frame_number = i)
-        except Exception: break
-    print('IMU records in stm: ', i)
+    # for i in range(300):
+    #     try:
+    #         #print(i)
+    #         quat = stm_channel.read_quaternion_from_imu_in_head(frame_number = i)
+    #     except Exception: break
+    # print('IMU records in stm: ', i)
 #         timestamp = quat[4] + round(quat[5]/1000000000, 3)
 #         print(timestamp, i)
         #time.sleep(1)
