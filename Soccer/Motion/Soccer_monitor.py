@@ -5,6 +5,7 @@ import math
 import array
 import json
 from multiprocessing import Process, Array
+import wx
 
    
 try:

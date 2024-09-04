@@ -13,7 +13,7 @@ from roki2met import roki2met
 import datetime
 import numpy as np
 from ctypes import c_bool
-from Soccer_monitor import launcher
+from Soccer.Motion.Soccer_monitor import launcher
 
 
 def coord2yaw(x, y):
@@ -415,7 +415,7 @@ class Player():
     def forward_main_cycle(self, pressed_button):
         monitor = Process(target=launcher, args=(self.glob.pf_coord, self.glob.ball_coord))
         monitor.start()
-        monitor.join()
+        #monitor.join()
         #self.glob.with_pf = False
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         if self.glob.SIMULATION == 5:
