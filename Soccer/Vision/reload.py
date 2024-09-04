@@ -85,7 +85,7 @@ class Image:
 
                 mask = cv2.inRange (labimg, low_th, high_th)
 
-                cv2.imshow("mask for debug", mask)
+                #cv2.imshow("mask for debug", mask)
 
                 if (invert == True):
                     mask = cv2.bitwise_not (mask)

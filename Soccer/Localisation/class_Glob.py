@@ -1,4 +1,5 @@
 import json, array, math
+from multiprocessing import Array
 
 class Glob:
     def __init__(self, simulation, current_work_directory, particles_number = 1000, event_type = 'Robocup'):
@@ -25,12 +26,14 @@ class Glob:
         self.new_p = array.array('I',(0 for i in range(particles_number)))
         self.strategy_data = array.array('b',(0 for i in range(self.COLUMNS * self.ROWS * 2)))
         self.SIMULATION = simulation             # 0 - Simulation without physics, 1 - Simulation with physics, 2 - live on openMV
-        self.ball_coord =[0.0, 0.0]                # global coordinate
+        self.ball_coord = Array('f', 2)
+        self.ball_coord[:] =[0.0, 0.0]                # global coordinate
         self.ball_course = 0                       # local course from robot body
         self.ball_distance = 0                     # local distance from robot body
         self.ball_speed = [0.0, 0.0]      # [tangential_speed, front_speed ]
         self.robot_see_ball = 0
-        self.pf_coord = [0.0,0.0,0.0]
+        self.pf_coord = Array('f', 3)
+        self.pf_coord[:] = [0.0,0.0,0.0]
         self.obstacles = []
         self.motion = None
         self.local = None
