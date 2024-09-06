@@ -482,8 +482,10 @@ class Player():
             if self.glob.robot_see_ball <= 0:
                 print('Seek ball')
                 self.motion.head_Return(-2667, self.motion.neck_play_pose)
+                time.sleep(1)
                 self.glob.vision.detect_Ball_in_One_Shot()
                 self.motion.head_Return(2667, self.motion.neck_play_pose)
+                time.sleep(1)
                 self.glob.vision.detect_Ball_in_One_Shot()
                 if self.glob.robot_see_ball > 0: 
                     self.glob.ball_coord = self.local.ball_odometry
@@ -493,7 +495,7 @@ class Player():
                                                           self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
             player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
             player_in_front_of_ball = -math.pi/2 < player_from_ball_yaw < math.pi/2
-            player_in_fast_kick_position = (player_from_ball_yaw > 2.5 or player_from_ball_yaw < -2.5) and self.glob.ball_distance < 0.6
+            player_in_fast_kick_position = (player_from_ball_yaw > 2.0 or player_from_ball_yaw < -2.0) and self.glob.ball_distance < 0.6
             if self.glob.ball_distance > 0.35  and not player_in_fast_kick_position:
                 #if self.glob.ball_distance > 3: stop_Over = True
                 #else: stop_Over = False

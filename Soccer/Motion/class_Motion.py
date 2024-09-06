@@ -778,7 +778,7 @@ class Motion(Robot, Motion_extention_1):
         if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
         else: self.glob.vision.detect_Ball_in_One_Shot()
 
-    def walk_Cycle(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
+    def walk_Cycle(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles, half = False):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
             #self.local.quality =0
@@ -833,6 +833,7 @@ class Motion(Robot, Motion_extention_1):
             order.append(pos)
         #order = [8, 0, -8, -16, -8, 0, 8, 16]
         for iii in range(0,frameNumberPerCycle,framestep):
+            if half and iii == (frameNumberPerCycle/2 - framestep): break 
             if self.glob.SIMULATION == 5: start1 = time.perf_counter()
             if 0<= iii <self.fr1 :                                              # FASA 1
                 #alpha = alpha01 * (iii/2+ fase_offset*framestep)
@@ -987,12 +988,15 @@ class Motion(Robot, Motion_extention_1):
             if self.first_Leg_Is_Right_Leg:
                 self.local.coord_shift[1] = -self.side_step_right_yield * sideLength/20/1000
             else: self.local.coord_shift[1] = self.side_step_left_yield * sideLength/20/1000
+            if half: 
+                self.local.coord_shift[0] *= 0.5
+                self.local.coord_shift[1] *= 0.5
             self.local.coordinate_record(odometry = True, shift = True)
             self.local.refresh_odometry()
         #self.first_Leg_Is_Right_Leg = tmp1
         if self.glob.monitor_is_on: self.glob.monitor()
         if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
-        else: self.glob.vision.detect_Ball_in_One_Shot()
+        #else: self.glob.vision.detect_Ball_in_One_Shot()
 
     def walk_Cycle_With_Tors_v2(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
         self.walk_Cycle_With_Tors_v2_init(stepLength,sideLength, rotation)

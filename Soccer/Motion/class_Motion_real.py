@@ -545,6 +545,7 @@ class Motion_real(Motion):
         return True
 
     def verify_ball_position(self, kick_by_Right, kick_direction):
+        print("verify_ball_position")
         def moving_direction(kick_by_Right):
             if self.glob.ball_distance <= 0: return False , 0, 0, kick_by_Right
             #ball_x = self.glob.ball_distance * math.cos(self.glob.ball_course) * 1000
@@ -577,37 +578,57 @@ class Motion_real(Motion):
             #self.glob.camera_ON = False
             return result, kick_by_Right
         self.first_Leg_Is_Right_Leg = True
+        invert = 1
         motion_to_right = (side_motion < 0)
-        #if side_motion <= 0:
-        #    self.first_Leg_Is_Right_Leg = True
-        #    invert = 1
-        #else:
-        #    self.first_Leg_Is_Right_Leg = False
-        #    invert = -1
+        if side_motion <= 0:
+            self.first_Leg_Is_Right_Leg = True
+            invert = 1
+        else:
+            self.first_Leg_Is_Right_Leg = False
+            invert = -1
         self.gaitHeight= 180
         self.walk_Initial_Pose()
         number_Of_Cycles = 50
         for cycle in range(number_Of_Cycles):
-            if (motion_to_right and (side_motion >= 0)) or ((not motion_to_right) and (side_motion < 0)) : self.walk_Restart()
+            #if (motion_to_right and (side_motion >= 0)) or ((not motion_to_right) and (side_motion < 0)) : self.walk_Restart()
+            if ((motion_to_right and (side_motion >= 0)) or ((not motion_to_right) and (side_motion < 0))) and cycle != 0 :
+                self.walk_Cycle_slow(0, 0, invert * rotation, 1, 3, half = True)
+            motion_to_right = (side_motion < 0)
+            if side_motion <= 0:
+                self.first_Leg_Is_Right_Leg = True
+                invert = 1
+            else:
+                self.first_Leg_Is_Right_Leg = False
+                invert = -1
             self.refresh_Orientation()
             rotation = kick_direction - self.body_euler_angle['yaw'] * 1.1
             rotation = self.normalize_rotation(rotation)
-            if front_motion > front_motion_tolerance: stepLength = 30
-            elif front_motion < -front_motion_tolerance: stepLength = -30
-            else: stepLength = front_motion * 64 / self.cycle_step_yield
+            front_motion_order = front_motion * 64 / self.cycle_step_yield
+            if front_motion_order > front_motion_tolerance: stepLength = front_motion_tolerance
+            elif front_motion_order < -front_motion_tolerance: stepLength = -front_motion_tolerance
+            else: stepLength = front_motion_order
+            #if front_motion > front_motion_tolerance: stepLength = 30
+            #elif front_motion < -front_motion_tolerance: stepLength = -30
+            #else: stepLength = front_motion * 64 / self.cycle_step_yield
             #print('side_motion =', side_motion)
-            if side_motion  < -side_motion_tolerance : sideLength = 20 
-            elif side_motion > side_motion_tolerance : sideLength = -20
-            elif side_motion > 0: sideLength = -side_motion * 20 / self.glob.side_step_left_yield
-            else: sideLength = -side_motion * 20 / self.side_step_right_yield 
+            #if side_motion  < -side_motion_tolerance : sideLength = 20 
+            #elif side_motion > side_motion_tolerance : sideLength = -20
+            #elif side_motion > 0: sideLength = -side_motion * 20 / self.glob.side_step_left_yield
+            #else: sideLength = -side_motion * 20 / self.side_step_right_yield 
+            if side_motion >= 0 : side_motion_order = side_motion * 20/self.glob.side_step_left_yield 
+            else: side_motion_order = side_motion * 20/self.glob.side_step_right_yield
+            if side_motion_order < -side_motion_tolerance or side_motion_order > side_motion_tolerance: sideLength = side_motion_tolerance
+            else: sideLength = abs(side_motion_order)
             #self.walk_Cycle(stepLength, sideLength,  rotation, cycle, number_Of_Cycles)
-            if self.glob.ball_distance > 0.7 or (result and front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance) or not result:
-                self.walk_Cycle(stepLength, sideLength,  rotation, cycle, cycle + 1)
+            #if self.glob.ball_distance > 0.7 or (result and front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance) or not result:
+            if (result and front_motion_order <= front_motion_tolerance and abs(side_motion_order) < side_motion_tolerance) or not result:
+                self.walk_Cycle(stepLength, sideLength,  invert * rotation, cycle, cycle + 1)
                 break
             else:
-                self.walk_Cycle(stepLength, sideLength, rotation, cycle, number_Of_Cycles)
+                self.walk_Cycle(stepLength, sideLength, invert * rotation, cycle, number_Of_Cycles)
             result, front_motion, side_motion, kick_by_Right =  moving_direction(kick_by_Right)
         self.walk_Final_Pose()
+        print("verify_ball_position complete")
         return result, kick_by_Right
 
     def near_distance_ball_approach_and_kick_streaming(self, kick_direction):
@@ -632,6 +653,7 @@ class Motion_real(Motion):
             result, kick_by_Right = self.verify_ball_position(kick_by_Right, kick_direction)
             self.first_Leg_Is_Right_Leg = True
             if self.glob.ball_distance < 0.2:
+                self.jump_turn(kick_direction)
                 self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
                 #if small_kick:
                 #    self.kick( first_Leg_Is_Right_Leg=kick_by_Right, small = small_kick)
