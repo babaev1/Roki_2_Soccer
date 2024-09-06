@@ -592,7 +592,7 @@ class Motion_real(Motion):
         for cycle in range(number_Of_Cycles):
             #if (motion_to_right and (side_motion >= 0)) or ((not motion_to_right) and (side_motion < 0)) : self.walk_Restart()
             if ((motion_to_right and (side_motion >= 0)) or ((not motion_to_right) and (side_motion < 0))) and cycle != 0 :
-                self.walk_Cycle_slow(0, 0, invert * rotation, 1, 3, half = True)
+                self.walk_Cycle(0, 0, invert * rotation, 1, 3, half = True)
             motion_to_right = (side_motion < 0)
             if side_motion <= 0:
                 self.first_Leg_Is_Right_Leg = True
