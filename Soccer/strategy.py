@@ -462,12 +462,13 @@ class Player():
             #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
             #                                                                  very_Fast = True, first_look_point=first_look_point)
             #time.sleep(1) # this is to look around for ball 
+            self.motion.head_Return(0, self.motion.neck_play_pose)
             self.glob.vision.detect_Ball_in_One_Shot()
             if self.glob.robot_see_ball > 0: 
                 self.glob.ball_coord = self.local.ball_odometry
             self.glob.pf_coord = self.local.coord_odometry
             time_elapsed = time.time() - second_player_timer
-            if self.glob.SIMULATION == 5: frozen_time = 10
+            if self.glob.SIMULATION == 5: frozen_time = 10 
             else: frozen_time = 10
             if pressed_button == 'start_later' and time_elapsed < frozen_time : 
                 #if self.glob.SIMULATION == 1: self.motion.sim_simxSynchronousTrigger(self.motion.clientID)
