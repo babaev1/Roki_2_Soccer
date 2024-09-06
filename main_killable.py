@@ -62,9 +62,10 @@ try:
     if first_pressed_button == 'kick_test':
         role = 'kick_test'
         initial_coord = [0.0, 0.0, 0]
-    glob = Glob(SIMULATION, current_work_directory, particles_number = 100)
+    glob = Glob(SIMULATION, current_work_directory, particles_number = 100, event_type = 'Robocup')
     glob.pf_coord = initial_coord
-        
+    glob.neural_vision = (role == 'forward' or role == 'penalty_Shooter' or role == 'penalty_Goalkeeper' or role == 'goalkeeper')
+    glob.role = role
     vision = Vision_RPI(glob)
     motion = Motion_real(glob, vision)
     motion.falling_Flag = 0

@@ -1,12 +1,11 @@
-import json, array, math
-from multiprocessing import Array
+import json, array, math, time
 
 class Glob:
     def __init__(self, simulation, current_work_directory, particles_number = 1000, event_type = 'Robocup'):
         self.event_type = event_type
         self.neural_vision = True
         self.role = None
-
+        self.monitor_is_on = False
         self.camera_streaming = True        # supply IMU data for camera as stream or as one-off
         self.with_Local = True
         self.data_quality_is_good = False
@@ -26,14 +25,12 @@ class Glob:
         self.new_p = array.array('I',(0 for i in range(particles_number)))
         self.strategy_data = array.array('b',(0 for i in range(self.COLUMNS * self.ROWS * 2)))
         self.SIMULATION = simulation             # 0 - Simulation without physics, 1 - Simulation with physics, 2 - live on openMV
-        self.ball_coord = Array('f', 2)
-        self.ball_coord[:] =[0.0, 0.0]                # global coordinate
+        self.ball_coord =[0.0, 0.0]                # global coordinate
         self.ball_course = 0                       # local course from robot body
         self.ball_distance = 0                     # local distance from robot body
         self.ball_speed = [0.0, 0.0]      # [tangential_speed, front_speed ]
         self.robot_see_ball = 0
-        self.pf_coord = Array('f', 3)
-        self.pf_coord[:] = [0.0,0.0,0.0]
+        self.pf_coord = [0.0,0.0,0.0]
         self.obstacles = []
         self.motion = None
         self.local = None
@@ -82,6 +79,10 @@ class Glob:
         self.obstacleAvoidanceIsOn = False
         self.imu_drift_correction = 0
         self.imu_drift_last_correction_time = 0
+        if self.SIMULATION == 5:
+            self.monitor_filename = '/dev/shm/monitor.json'
+        else:
+            self.monitor_filename = self.current_work_directory + "Soccer/log/monitor.json"
 
     def import_strategy_data(self):
         if self.event_type == 'FIRA':
@@ -100,5 +101,9 @@ class Glob:
                 self.strategy_data[index1*2] = power
                 self.strategy_data[index1*2+1] = yaw
 
+    def monitor(self):
+        report = {'ball': self.ball_coord, 'pf_coord': self.pf_coord , 'coord_odometry': self.local.coord_odometry}
+        with open(self.monitor_filename, "w") as f:
+            json.dump(report, f)
 
 

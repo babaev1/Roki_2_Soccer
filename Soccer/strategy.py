@@ -13,7 +13,8 @@ from roki2met import roki2met
 import datetime
 import numpy as np
 from ctypes import c_bool
-from Soccer.Motion.Soccer_monitor import launcher
+#from Soccer.Motion.Soccer_monitor import launcher
+#from Soccer.Localisation.class_Glob import monitor
 
 
 def coord2yaw(x, y):
@@ -413,9 +414,7 @@ class Player():
         return yaw
 
     def forward_main_cycle(self, pressed_button):
-        monitor = Process(target=launcher, args=(self.glob.pf_coord, self.glob.ball_coord))
-        monitor.start()
-        #monitor.join()
+        self.glob.monitor_is_on = True
         #self.glob.with_pf = False
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         if self.glob.SIMULATION == 5:
@@ -431,14 +430,17 @@ class Player():
         else:
             first_look_point= self.glob.ball_coord
         while (True):
-            if (time.perf_counter() - self.motion.start_point_for_imu_drift) > 360:
-                self.motion.turn_To_Course(0)
-                self.motion.turn_To_Course(0, accurate = True)
-                if self.glob.SIMULATION == 5:
+            if self.glob.SIMULATION == 5:
+                if (time.perf_counter() - self.motion.start_point_for_imu_drift) > 360:
+                    self.motion.turn_To_Course(0)
+                    self.motion.turn_To_Course(0, accurate = True)
                     for i in range(5):
                         self.motion.rcb.motionPlay(25)
                         self.motion.pause_in_ms(400)
-                break
+                    break
+            else:
+                if self.motion.trigger_counter > 18000:
+                    break
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break
                 self.motion.falling_Flag = 0
@@ -476,7 +478,7 @@ class Player():
             print('coord =', round(self.local.coord_odometry[0],2), round(self.local.coord_odometry[1],2), 'ball =', round(self.local.ball_odometry[0],2), round(self.local.ball_odometry[1],2))
             if self.glob.robot_see_ball <= 0:
                 print('Seek ball')
-                self.motion.turn_To_Course(self.local.coord_odometry[2]+ 2 * math.pi / 3)
+                self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
                 continue
             player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0],
                                                           self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
@@ -484,20 +486,20 @@ class Player():
             player_in_front_of_ball = -math.pi/2 < player_from_ball_yaw < math.pi/2
             player_in_fast_kick_position = (player_from_ball_yaw > 2.5 or player_from_ball_yaw < -2.5) and self.glob.ball_distance < 0.6
             if self.glob.ball_distance > 0.35  and not player_in_fast_kick_position:
-                if self.glob.ball_distance > 3: stop_Over = True
-                else: stop_Over = False
+                #if self.glob.ball_distance > 3: stop_Over = True
+                #else: stop_Over = False
                 direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
                 print('napravl :', self.glob.ball_course)
                 print('direction_To_Ball', direction_To_Ball)
                 #self.motion.far_distance_plan_approach(self.local.ball_odometry, self.f.direction_To_Guest, stop_Over = stop_Over)
-                self.motion.far_distance_straight_approach(self.local.ball_odometry, direction_To_Ball, stop_Over = stop_Over)
+                self.motion.far_distance_straight_approach(self.local.ball_odometry, direction_To_Ball, stop_Over = False)
                 #self.go_Around_Ball(dist, napravl)
                 continue
             if player_in_front_of_ball or not player_in_fast_kick_position:
                 self.go_Around_Ball(self.glob.ball_distance, self.glob.ball_course)
                 continue
             if player_in_fast_kick_position:
-                self.motion.turn_To_Course(self.f.direction_To_Guest)
+                self.motion.jump_turn(self.f.direction_To_Guest)
                 if self.f.kick_Power == 1: self.motion.kick_power = 100
                 if self.f.kick_Power == 2: self.motion.kick_power = 60
                 if self.f.kick_Power == 3: self.motion.kick_power = 20

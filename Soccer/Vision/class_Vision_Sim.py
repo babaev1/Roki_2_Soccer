@@ -22,7 +22,7 @@ class Vision_Sim(Vision_General):
             self.image = self.glob.motion.vision_Sensor_Get_Image()
             self.glob.motion.refresh_Orientation()
             #print("snapshot: self.glob.motion.euler_angle['pitch'] :", self.glob.motion.euler_angle['pitch'], ' head_tilt: ', self.glob.motion.neck_tilt * self.glob.motion.TIK2RAD)
-            print("snapshot: self.glob.motion.euler_angle['roll'] :", self.glob.motion.euler_angle['roll'])
+            #print("snapshot: self.glob.motion.euler_angle['roll'] :", self.glob.motion.euler_angle['roll'])
             self.pan = - self.glob.motion.neck_pan * self.glob.motion.TIK2RAD
             self.pitch, self.roll, self.yaw = self.glob.motion.euler_angle['pitch'], self.glob.motion.euler_angle['roll'], self.glob.motion.euler_angle['yaw']
             return True, self.image, self.pitch, self.roll, self.yaw, self.pan

@@ -12,26 +12,30 @@ try:
     with open('/sys/firmware/devicetree/base/model') as model:     
         RPi_model = model.read()
     if RPi_model[:12]== "Raspberry Pi":
+        SIMULATION = 5
         pass                         # will be running on Raspberry Pi
     else:
         # will be running on desktop computer
         import wx
         import random
+        SIMULATION = 1
 except Exception:
     # will be running on desktop computer
     import wx
     import random                # 0 - Simulation without physics, 
-                                        # 1 - Simulation synchronous with physics, 
+    SIMULATION = 1               # 1 - Simulation synchronous with physics, 
                                         # 3 - Simulation streaming with physics
 
+cwd = os.getcwd()
 
 class Soccer_monitor(wx.Frame):
 
-    def __init__(self, pf_coord, ball_coord):
+    def __init__(self, *args, **kw):
         #super().__init__(*args, **kw)
         super(Soccer_monitor, self).__init__(None)
-        self.pf_coord = pf_coord
-        self.ball_coord = ball_coord
+        self.pf_coord = [0,0,0]
+        self.coord_odometry = [0,0,0]
+        self.ball_coord = [0,0]
         self.isLeftDown = False
         self.timer = wx.Timer(self)
         self.InitUI()
@@ -48,6 +52,16 @@ class Soccer_monitor(wx.Frame):
         self.Centre()
 
     def OnTimer(self, event):
+        if SIMULATION == 5:
+            filename = '/dev/shm/monitor.json'
+        else: 
+            filename = cwd + "/Soccer/log/monitor.json"
+        if os.path.isfile(filename):
+            with open(filename, 'r') as f:
+                data = json.loads(f.read())
+                self.pf_coord = data['pf_coord']
+                self.ball_coord = data['ball']
+                self.coord_odometry = data['coord_odometry']
         self.Refresh()
 
     def OnPaint(self, e):
@@ -86,10 +100,12 @@ class Soccer_monitor(wx.Frame):
         self.dc.SetBrush(wx.Brush('#ff0000'))
         self.dc.DrawCircle(int(self.ball_coord[0] *200), int(self.ball_coord[1] *200), int(0.04 *200))   # ball
 
-        self.draw_player(self.pf_coord[0], self.pf_coord[1], self.pf_coord[2])
+        self.draw_player(self.pf_coord)
+        self.draw_player(self.coord_odometry)
         #dc.Bind()
 
-    def draw_player(self, x, y, yaw):
+    def draw_player(self, coord):
+        x, y, yaw = coord
         self.dc.SetBrush(wx.Brush('#000000'))
         width = height = 40
         start = math.degrees(yaw) + 45
@@ -142,9 +158,9 @@ class Soccer_monitor(wx.Frame):
             #    self.obstacles[self.moving_object] = [(pos[0] + self.dx)/200, (pos[1] + self.dy)/200, self.obstacles[self.moving_object][2]]
             #    self.Refresh()
 
-def launcher(pf_coord, ball_coord):
+def launcher():
     app = wx.App()
-    ex = Soccer_monitor(pf_coord, ball_coord)
+    ex = Soccer_monitor(None)
     ex.Show()
     app.MainLoop()
 
@@ -152,17 +168,4 @@ def launcher(pf_coord, ball_coord):
 
 
 if __name__ == '__main__':
-    pf_coord = Array('f', 3)
-    ball_coord = Array('f', 2)
-    pf_coord[:] =  [0.276, 0.749, -0.5]
-    ball_coord[:] = [-0.132, 0.957]
-    p1 = Process(target=launcher, args=(pf_coord, ball_coord))
-    p1.start()
-    #launcher(pf_coord, ball_coord)
-    for i in range(50):
-        x = 2 * math.sin(i/10)
-        y = 2 * math.cos(i/10)
-        pf_coord[0] = x
-        pf_coord[1] = y
-        time.sleep(1)
-    time.sleep(10)
+    launcher()

@@ -19,7 +19,6 @@ try:
     from button_test import Button_Test
     labels = [[],
               ['basketball', 'triple_jump', 'weight_lifting',  'kick_test'],
-              #['basketball', 'kick_test'],
               [],
               ['sprint', 'marathon', 'forward'],
               ['FIRA_penalty_Shooter', 'penalty_Goalkeeper', 'run_test']]

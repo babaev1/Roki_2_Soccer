@@ -355,8 +355,8 @@ class Vision_General:
             course_global_rad = course + yaw
             proforma_ball_coord = [distance * math.cos(course_global_rad) + self.glob.local.coord_odometry[0],
                                     distance * math.sin(course_global_rad) + self.glob.local.coord_odometry[1]]
-            self.glob.local.ball_odometry = [self.glob.local.ball_odometry[0] * 0.5 + proforma_ball_coord[0] * 0.5,
-                                                self.glob.local.ball_odometry[1] * 0.5 + proforma_ball_coord[1] * 0.5]
+            self.glob.local.ball_odometry = [self.glob.local.ball_odometry[0] * 0.2 + proforma_ball_coord[0] * 0.8,
+                                                self.glob.local.ball_odometry[1] * 0.2 + proforma_ball_coord[1] * 0.8]
             self.glob.ball_course = course
             self.glob.ball_distance = distance
             self.glob.ball_speed = speed

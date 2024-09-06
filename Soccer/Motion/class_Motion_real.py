@@ -758,6 +758,9 @@ class Motion_real(Motion):
                 deceleration = True
                 number_Of_Cycles += 1
             for cycle in range(number_Of_Cycles):
+                shift = -self.glob.ball_distance * math.tan(self.glob.ball_course)
+                if  abs(shift) > 0.025: sideLength = math.copysign(20, shift)
+                else: sideLength = shift * 1000
                 stepLength1 = stepLength
                 if acceleration:
                     if cycle == 0: stepLength1 = stepLength / 3
@@ -781,6 +784,9 @@ class Motion_real(Motion):
                     number_Of_Cycles += 1
             else: deceleration = False
             for cycle in range(1, number_Of_Cycles + 1, 1):
+                shift = -self.glob.ball_distance * math.tan(self.glob.ball_course)
+                if  abs(shift) > 0.025: sideLength = math.copysign(20, shift)
+                else: sideLength = shift * 1000
                 stepLength1 = stepLength
                 if acceleration:
                     if cycle == 0: stepLength1 = stepLength / 3

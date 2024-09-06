@@ -776,6 +776,7 @@ class Motion(Robot, Motion_extention_1):
             self.local.refresh_odometry()
         #self.first_Leg_Is_Right_Leg = tmp1
         if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
+        else: self.glob.vision.detect_Ball_in_One_Shot()
 
     def walk_Cycle(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
         self.robot_In_0_Pose = False
@@ -989,9 +990,9 @@ class Motion(Robot, Motion_extention_1):
             self.local.coordinate_record(odometry = True, shift = True)
             self.local.refresh_odometry()
         #self.first_Leg_Is_Right_Leg = tmp1
+        if self.glob.monitor_is_on: self.glob.monitor()
         if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
-
-    
+        else: self.glob.vision.detect_Ball_in_One_Shot()
 
     def walk_Cycle_With_Tors_v2(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
         self.walk_Cycle_With_Tors_v2_init(stepLength,sideLength, rotation)

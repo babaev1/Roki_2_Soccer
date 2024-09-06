@@ -5,6 +5,7 @@ import math, time, json, array
 from Soccer.Localisation.PF.call_par_filter import Call_Par_Filter
 from Soccer.Localisation.PF.ParticleFilter import random
 import threading
+from multiprocessing import Array
 
 LOCALISATION_VISUALISATION_IS_ON = False
 OBSTACLE_VISUALISATION_IS_ON = False
@@ -63,6 +64,7 @@ class Local():
         #self.post_data_in_pose = []
         self.coordinate = [0.0,0.0,0.0]
         self.coord_visible = [0.0,0.0,0.0]
+        #self.coord_odometry = Array('f', 3)
         self.coord_odometry = coord_odometry
         self.coord_odometry_old = coord_odometry
         self.ball_odometry = [0, 0]

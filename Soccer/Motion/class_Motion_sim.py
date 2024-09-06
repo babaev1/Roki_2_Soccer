@@ -130,6 +130,7 @@ class Motion_sim(Motion_real):
         self.neck_play_pose = data1['neck_play_pose']
         self.head_pitch_with_horizontal_camera = data1['head_pitch_with_horizontal_camera']
         self.neck_tilt = self.neck_calibr
+        self.trigger_counter = 0
         
 
     def wait_sim_step(self):
@@ -164,6 +165,7 @@ class Motion_sim(Motion_real):
         return retFloats[0]
 
     def sim_simxSynchronousTrigger(self, clientID):
+        self.trigger_counter += 1
         if  self.glob.SIMULATION == 1 :
             if self.transfer_Data.stop > 0:
                     self.transfer_Data.stop += 1
