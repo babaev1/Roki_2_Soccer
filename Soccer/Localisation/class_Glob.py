@@ -3,7 +3,8 @@ import json, array, math, time
 class Glob:
     def __init__(self, simulation, current_work_directory, particles_number = 1000, event_type = 'Robocup'):
         self.event_type = event_type
-        self.neural_vision = True
+        self.neural_vision = False
+        self.neural = None
         self.role = None
         self.monitor_is_on = False
         self.camera_streaming = True        # supply IMU data for camera as stream or as one-off
@@ -105,5 +106,9 @@ class Glob:
         report = {'ball': self.ball_coord, 'pf_coord': self.pf_coord , 'coord_odometry': self.local.coord_odometry}
         with open(self.monitor_filename, "w") as f:
             json.dump(report, f)
+
+    def neural_vision_enable(self):
+        from Soccer.Vision.yolov5_tools import Neural
+        self.neural = Neural()
 
 

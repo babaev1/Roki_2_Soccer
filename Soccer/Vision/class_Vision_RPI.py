@@ -15,9 +15,6 @@ CAMERA_FRAME_DURATION_US = 16700
 class Vision_RPI(Vision_General):
     def __init__(self, glob):
         super().__init__(glob)
-        if self.glob.neural_vision :
-            from Soccer.Vision.yolov5_tools import Neural
-            self.neural = Neural()
         with open("/home/pi/Desktop/" + "Init_params/Real/Real_Thresholds.json", "r") as f:
             self.TH = json.loads(f.read())
         self.undistortPointMap = np.load(self.glob.current_work_directory + "Soccer/Vision/undistortPointMap_x_y.npy")

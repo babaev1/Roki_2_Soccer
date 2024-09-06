@@ -64,7 +64,9 @@ try:
         initial_coord = [0.0, 0.0, 0]
     glob = Glob(SIMULATION, current_work_directory, particles_number = 100, event_type = 'Robocup')
     glob.pf_coord = initial_coord
-    glob.neural_vision = (role == 'forward' or role == 'penalty_Shooter' or role == 'penalty_Goalkeeper' or role == 'goalkeeper')
+    if (role == 'forward' or role == 'penalty_Shooter' or role == 'penalty_Goalkeeper' or role == 'goalkeeper'):
+        glob.neural_vision_enable()
+        glob.neural_vision = True
     glob.role = role
     vision = Vision_RPI(glob)
     motion = Motion_real(glob, vision)

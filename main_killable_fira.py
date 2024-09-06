@@ -42,7 +42,9 @@ try:
                     role == 'basketball' or role == 'marathon' :   #or role == 'run_test' or role == 'weight_lifting':
         glob = Glob(SIMULATION, current_work_directory, particles_number = 100, event_type = 'FIRA')
         glob.pf_coord = initial_coord
-        glob.neural_vision = (role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper')
+        if (role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper'):
+            glob.neural_vision_enable()
+            glob.neural_vision = True
         glob.role = role
         vision = Vision_RPI(glob)
         motion = Motion_real(glob, vision)

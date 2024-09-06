@@ -128,7 +128,7 @@ class Vision_General:
         for number in range (2):
             camera_result, img, pitch, roll, yaw, pan = self.snapshot()
             if camera_result:
-                ball_column, ball_row = self.neural.ball_detect_single(img)
+                ball_column, ball_row = self.glob.neural.ball_detect_single(img)
                 if ball_column or ball_row: 
                     if self.glob.event_type == "FIRA":
                         self.camera_elevation = 410
@@ -162,7 +162,7 @@ class Vision_General:
             for number in range (2):
                 camera_result, img, pitch, roll, yaw, pan = self.snapshot()
                 if camera_result:
-                    ball_column, ball_row = self.neural.ball_detect_single(img)
+                    ball_column, ball_row = self.glob.neural.ball_detect_single(img)
                     if ball_column or ball_row: 
                         result, course, distance = self.get_course_and_distance_to_ball(ball_column, ball_row)
                         if result:

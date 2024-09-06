@@ -458,7 +458,7 @@ class Player():
                     self.glob.vision = new_vision
                     self.motion.vision = self.glob.vision
                     self.local.vision = self.glob.vision
-                    self.glob.vision.camera_thread.start()
+                    #self.glob.vision.camera_thread.start()
             #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
             #                                                                  very_Fast = True, first_look_point=first_look_point)
             #time.sleep(1) # this is to look around for ball 
