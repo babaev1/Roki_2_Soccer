@@ -477,9 +477,17 @@ class Player():
             self.f.dir_To_Guest()
             print('direction_To_Guest = ', round(math.degrees(self.f.direction_To_Guest)), 'degrees')
             print('coord =', round(self.local.coord_odometry[0],2), round(self.local.coord_odometry[1],2), 'ball =', round(self.local.ball_odometry[0],2), round(self.local.ball_odometry[1],2))
+            if self.glob.robot_see_ball < -6:
+                self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
             if self.glob.robot_see_ball <= 0:
                 print('Seek ball')
-                self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
+                self.motion.head_Return(-2667, self.motion.neck_play_pose)
+                self.glob.vision.detect_Ball_in_One_Shot()
+                self.motion.head_Return(2667, self.motion.neck_play_pose)
+                self.glob.vision.detect_Ball_in_One_Shot()
+                if self.glob.robot_see_ball > 0: 
+                    self.glob.ball_coord = self.local.ball_odometry
+                #self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
                 continue
             player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0],
                                                           self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest

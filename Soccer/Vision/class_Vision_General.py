@@ -272,7 +272,7 @@ class Vision_General:
                 camera_result, img1, self.pitch, self.roll, yaw, pan = self.snapshot()
                 if camera_result:
                     img = Image(img1)
-                    self.display_camera_image(self.image, window = 'Original')
+                    #self.display_camera_image(self.image, window = 'Original')
                     blobs = img.find_blobs([self.TH['orange ball']['th']],
                                         pixels_threshold=self.TH['orange ball']['pixel'],
                                         area_threshold=self.TH['orange ball']['area'],
@@ -303,12 +303,13 @@ class Vision_General:
                                 self.visible_reaction_ball()
                                 print('relative coord of ball on floor (x,y)= ', sorted_new_order[i][2], sorted_new_order[i][3])
                                 img.draw_rectangle(ball_blob.rect())
-                                self.display_camera_image(img.img, 'Ball')
+                                #self.display_camera_image(img.img, 'Ball')
                                 distance = sorted_new_order[i][0] / 1000
                                 course = math.atan2(sorted_new_order[i][3], sorted_new_order[i][2])
                                 position.append([course, distance])
                                 see_ball += 1
                                 break
+                    self.display_camera_image(self.image, window = 'Original')
         n = len(position)
         if n > 1:
             if distance == 0 : speed = [0,0]

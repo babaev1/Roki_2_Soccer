@@ -122,6 +122,9 @@ class Local():
 
 
     def coordinate_fall_reset(self):
+        self.motion.refresh_Orientation()
+        #self.refresh_odometry()
+        self.correct_yaw_in_pf()
         self.call_Par_Filter.pf.fall_reset()
 
     def coordinate_trust_estimation(self):
