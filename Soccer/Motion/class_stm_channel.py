@@ -31,7 +31,7 @@ class STM_channel():
             ok, info = self.mb.GetIMUContainerInfo()
             print("Imu info: " + "  First: " + str(info.First), "  NumAv: " + str(info.NumAv), "  MaxFr: " + str(info.MaxFrames))
             print('error : ', 'frame_number = ', frame_number)
-            if frame_number < info.First or frame_number > info.First + info.NumAv: self.glob.camera_down_Flag = True
+            if frame_number < info.First or frame_number >= info.First + info.NumAv: self.glob.camera_down_Flag = True
             return (0,0,0,0,0,0)
         # try:
         #     if frame_number != None:
