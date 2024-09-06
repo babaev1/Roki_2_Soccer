@@ -58,7 +58,7 @@ def build_argparser():
                       #required=False, default="/home/pi/yolo_roma/yolov5_a_fp32.xml", type=str)
                         #required=False, default="/home/pi/yolo_roma/yolov5_a.xml", type=str)
                         #required=False, default="/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/yolov5_b.xml", type=str)
-                        required=False, default="/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/orange_ball_on_green_only.xml", type=str)
+                        required=False, default="/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/orange_ball_basket.xml", type=str)
     args.add_argument("-d", "--device",
                       help="Optional. Specify the target device to infer on; CPU, GPU, FPGA, HDDL or MYRIAD is"
                            " acceptable. The sample will look for a suitable plugin for device specified. "
@@ -299,7 +299,7 @@ class Neural:
         cx, cy = 0, 0
         for result in detections:
             class_label = result["class_index"]
-            if class_label == 0:
+            if class_label == 0 or class_label == 1 :
                 box = result["box"]
                 box = np.clip(box, 0, 640)
                 x_min = int(box[0].item())
@@ -310,7 +310,7 @@ class Neural:
                 cy = int(((y_max + y_min)/2 - 60) / 640 *800 )
             
             # Draw bounding box on the image
-            cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
+                cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
         # Display the image with bounding boxes
         # cv2.imshow("Output", frame)
         # key = cv2.waitKey(10)
