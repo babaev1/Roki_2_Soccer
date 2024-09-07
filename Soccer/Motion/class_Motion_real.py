@@ -198,6 +198,7 @@ class Motion_real(Motion):
                 self.glob.ball_course = course
                 self.glob.ball_distance = dist
                 self.glob.ball_speed = speed
+                self.glob.robot_see_ball = 5
                 return(a, course, dist, speed)
             else:
                 if distance1 !=0:
@@ -208,9 +209,11 @@ class Motion_real(Motion):
                                             dist * math.sin(course_global_rad) + self.glob.pf_coord[1]]
                     self.glob.ball_course = course1
                     self.glob.ball_distance = dist
+                    self.glob.robot_see_ball = 5
                     return(a, course1, dist, [0, 0])
         #if with_Localization: self.local.localisation_Complete()
         self.local.localisation_Complete()
+        self.glob.robot_see_ball -= 1
         return False, 0, 0, [0, 0]
 
     def watch_Ball_In_Pose(self, penalty_Goalkeeper = False):
