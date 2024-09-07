@@ -119,7 +119,7 @@ class Motion_real(Motion):
         head_pose = [(-2667,c), (-1333, c) , ( 0, c) , (1333, c) , (2667,c),
                      (-2667, c-700),(-1333, c-700), (0, c-700), (1333,c-700),(2667, c-700),
                     (-2667, c-1400), (-1333, c-1400), ( 0, c-1400), (1333, c-1400), (2667, c-1400)]
-        head_pose_seq = [2,3,1]
+        head_pose_seq = [2,4,0]
         for i in range(len(head_pose_seq)+1):
             if  i == 0:
                 self.neck_pan = -int(course_to_ball/self.TIK2RAD)
@@ -195,6 +195,9 @@ class Motion_real(Motion):
                 course_global_rad = course + self.glob.pf_coord[2]
                 self.glob.ball_coord = [dist*math.cos(course_global_rad)+ self.glob.pf_coord[0],
                                          dist*math.sin(course_global_rad)+ self.glob.pf_coord[1]]
+                self.glob.ball_course = course
+                self.glob.ball_distance = dist
+                self.glob.ball_speed = speed
                 return(a, course, dist, speed)
             else:
                 if distance1 !=0:
@@ -203,6 +206,8 @@ class Motion_real(Motion):
                     course_global_rad = course1 + self.glob.pf_coord[2]
                     self.glob.ball_coord = [dist * math.cos(course_global_rad) + self.glob.pf_coord[0],
                                             dist * math.sin(course_global_rad) + self.glob.pf_coord[1]]
+                    self.glob.ball_course = course1
+                    self.glob.ball_distance = dist
                     return(a, course1, dist, [0, 0])
         #if with_Localization: self.local.localisation_Complete()
         self.local.localisation_Complete()
@@ -589,10 +594,11 @@ class Motion_real(Motion):
         self.gaitHeight= 180
         self.walk_Initial_Pose()
         number_Of_Cycles = 50
+        stepLength = sideLength = 0
         for cycle in range(number_Of_Cycles):
             #if (motion_to_right and (side_motion >= 0)) or ((not motion_to_right) and (side_motion < 0)) : self.walk_Restart()
             if ((motion_to_right and (side_motion >= 0)) or ((not motion_to_right) and (side_motion < 0))) and cycle != 0 :
-                self.walk_Cycle(0, 0, invert * rotation, 1, 3, half = True)
+                self.walk_Cycle(stepLength, 0, invert * rotation, 1, 3, half = True)
             motion_to_right = (side_motion < 0)
             if side_motion <= 0:
                 self.first_Leg_Is_Right_Leg = True

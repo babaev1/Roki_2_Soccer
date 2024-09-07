@@ -463,7 +463,11 @@ class Player():
             #                                                                  very_Fast = True, first_look_point=first_look_point)
             #time.sleep(1) # this is to look around for ball 
             self.motion.head_Return(0, self.motion.neck_play_pose)
-            self.glob.vision.detect_Ball_in_One_Shot()
+            success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+                                                                              very_Fast = False, first_look_point=first_look_point )
+            first_look_point = self.glob.ball_coord
+            self.motion.head_Return(0, self.motion.neck_play_pose)
+            #self.glob.vision.detect_Ball_in_One_Shot()
             if self.glob.robot_see_ball > 0: 
                 self.glob.ball_coord = self.local.ball_odometry
             self.glob.pf_coord = self.local.coord_odometry
@@ -478,19 +482,20 @@ class Player():
             print('direction_To_Guest = ', round(math.degrees(self.f.direction_To_Guest)), 'degrees')
             print('coord =', round(self.local.coord_odometry[0],2), round(self.local.coord_odometry[1],2), 'ball =', round(self.local.ball_odometry[0],2), round(self.local.ball_odometry[1],2))
             if self.glob.robot_see_ball < -6:
-                self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
-            if self.glob.robot_see_ball <= 0:
                 print('Seek ball')
-                self.motion.head_Return(-2667, self.motion.neck_play_pose)
-                time.sleep(1)
-                self.glob.vision.detect_Ball_in_One_Shot()
-                self.motion.head_Return(2667, self.motion.neck_play_pose)
-                time.sleep(1)
-                self.glob.vision.detect_Ball_in_One_Shot()
-                if self.glob.robot_see_ball > 0: 
-                    self.glob.ball_coord = self.local.ball_odometry
+                self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
+            #if self.glob.robot_see_ball <= 0:
+            #    print('Seek ball')
+            #    self.motion.head_Return(-2667, self.motion.neck_play_pose)
+            #    time.sleep(1)
+            #    self.glob.vision.detect_Ball_in_One_Shot()
+            #    self.motion.head_Return(2667, self.motion.neck_play_pose)
+            #    time.sleep(1)
+            #    self.glob.vision.detect_Ball_in_One_Shot()
+            #    if self.glob.robot_see_ball > 0: 
+            #        self.glob.ball_coord = self.local.ball_odometry
                 #self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
-                continue
+                #continue
             player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0],
                                                           self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
             player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
@@ -785,69 +790,129 @@ class Player():
                 if ((0.7 < dist < self.glob.landmarks['FIELD_LENGTH']/2) and (-math.pi/4 > napravl >= -math.pi/2)): self.g.scenario_B4()
                 self.motion.head_Return(old_neck_pan, old_neck_tilt)
 
+    #def go_Around_Ball(self, dist, napravl):
+    #    print('go_Around_Ball')
+    #    turning_radius = 0.20 # meters
+    #    #first_look_point= self.local.ball_odometry
+    #    #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+    #    #                                                                  very_Fast = True, first_look_point=first_look_point)
+    #    #if success_Code != True: return
+    #    if dist > 0.5: return
+    #    correction_x = dist * math.cos(napravl)
+    #    correction_y = dist * math.sin(napravl)
+    #    alpha = self.f.direction_To_Guest - self.local.coord_odometry[2]
+    #    alpha = self.motion.norm_yaw(alpha)
+    #    initial_body_yaw = self.local.coord_odometry[2]
+    #    correction_napravl = math.atan2(correction_y, (correction_x - turning_radius))
+    #    correction_dist = math.sqrt(correction_y**2 + (correction_x - turning_radius)**2)
+    #    old_neck_pan, old_neck_tilt = self.motion.head_Up()
+    #    if napravl * alpha > 0:
+    #        if napravl > 0: self.motion.first_Leg_Is_Right_Leg = False
+    #        self.motion.walk_Initial_Pose()
+    #        if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+    #        self.motion.turn_To_Course(self.local.coord_odometry[2] + napravl, one_Off_Motion = False)
+    #        if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+    #        self.motion.walk_Restart()
+    #        if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+    #        self.motion.near_distance_omni_motion((dist - turning_radius) * 1000 , 0, one_Off_Motion = False)
+    #        alpha = self.motion.norm_yaw(alpha - napravl)
+    #        initial_body_yaw += napravl
+    #    else:
+    #        if correction_napravl > 0: self.motion.first_Leg_Is_Right_Leg = False
+    #        self.motion.walk_Initial_Pose()
+    #        if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+    #        self.motion.near_distance_omni_motion(correction_dist*1000, correction_napravl, one_Off_Motion = False)
+    #    if alpha >= 0:
+    #        if self.motion.first_Leg_Is_Right_Leg == False:
+    #            change_legs = True
+    #        else:
+    #            change_legs = False
+    #            self.motion.walk_Restart()
+    #        self.motion.first_Leg_Is_Right_Leg = True
+    #        side_step_yield = self.motion.side_step_right_yield
+    #        invert = 1
+    #    else:
+    #        if self.motion.first_Leg_Is_Right_Leg == True:
+    #            change_legs = True
+    #        else:
+    #            change_legs = False
+    #            self.motion.walk_Restart()
+    #        self.motion.first_Leg_Is_Right_Leg = False
+    #        side_step_yield = self.motion.side_step_left_yield
+    #        invert = -1
+    #    #print('6self.motion.first_Leg_Is_Right_Leg:', self.motion.first_Leg_Is_Right_Leg)
+    #    yaw_increment_at_side_step =  math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
+    #    number_Of_Cycles = int(round(abs(alpha / yaw_increment_at_side_step)))+1
+    #    stepLength = 0
+    #    sideLength = 20
+    #    for cycle in range(number_Of_Cycles):
+    #        self.motion.refresh_Orientation()
+    #        rotation = initial_body_yaw + cycle * yaw_increment_at_side_step - self.motion.imu_body_yaw() * 1.1
+    #        rotation = self.motion.normalize_rotation(rotation)
+    #        #rotation = 0
+    #        if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+    #        self.motion.walk_Cycle(stepLength, sideLength, invert*rotation, cycle, number_Of_Cycles)
+    #    if self.motion.falling_Flag == 3 : self.motion.falling_Flag = 0 
+    #    self.motion.walk_Final_Pose()
+    #    self.motion.first_Leg_Is_Right_Leg = True
+
     def go_Around_Ball(self, dist, napravl):
-        print('go_Around_Ball')
-        turning_radius = 0.20 # meters
-        #first_look_point= self.local.ball_odometry
+        turning_radius = 0.18 # meters
+        #first_look_point= self.glob.ball_coord
         #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
         #                                                                  very_Fast = True, first_look_point=first_look_point)
         #if success_Code != True: return
         if dist > 0.5: return
         correction_x = dist * math.cos(napravl)
         correction_y = dist * math.sin(napravl)
-        alpha = self.f.direction_To_Guest - self.local.coord_odometry[2]
+        alpha = self.f.direction_To_Guest - self.glob.pf_coord[2]
         alpha = self.motion.norm_yaw(alpha)
-        initial_body_yaw = self.local.coord_odometry[2]
+        initial_body_yaw = self.glob.pf_coord[2]
         correction_napravl = math.atan2(correction_y, (correction_x - turning_radius))
         correction_dist = math.sqrt(correction_y**2 + (correction_x - turning_radius)**2)
         old_neck_pan, old_neck_tilt = self.motion.head_Up()
+        self.motion.first_Leg_Is_Right_Leg = True
+
+        self.motion.walk_Initial_Pose()
         if napravl * alpha > 0:
-            if napravl > 0: self.motion.first_Leg_Is_Right_Leg = False
-            self.motion.walk_Initial_Pose()
-            if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
-            self.motion.turn_To_Course(self.local.coord_odometry[2] + napravl, one_Off_Motion = False)
-            if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
-            self.motion.walk_Restart()
-            if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
+            self.motion.turn_To_Course(self.glob.pf_coord[2] + napravl, one_Off_Motion = False)
+            #self.motion.walk_Restart()
             self.motion.near_distance_omni_motion((dist - turning_radius) * 1000 , 0, one_Off_Motion = False)
             alpha = self.motion.norm_yaw(alpha - napravl)
             initial_body_yaw += napravl
         else:
-            if correction_napravl > 0: self.motion.first_Leg_Is_Right_Leg = False
-            self.motion.walk_Initial_Pose()
-            if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
             self.motion.near_distance_omni_motion(correction_dist*1000, correction_napravl, one_Off_Motion = False)
         if alpha >= 0:
             if self.motion.first_Leg_Is_Right_Leg == False:
                 change_legs = True
+                self.motion.walk_Cycle(0, 0, 0, 1, 3, half = True)
             else:
                 change_legs = False
-                self.motion.walk_Restart()
+                #self.motion.walk_Restart()
             self.motion.first_Leg_Is_Right_Leg = True
             side_step_yield = self.motion.side_step_right_yield
             invert = 1
         else:
             if self.motion.first_Leg_Is_Right_Leg == True:
                 change_legs = True
+                self.motion.walk_Cycle(0, 0, 0, 1, 3, half = True)
             else:
                 change_legs = False
-                self.motion.walk_Restart()
+                #self.motion.walk_Restart()
             self.motion.first_Leg_Is_Right_Leg = False
             side_step_yield = self.motion.side_step_left_yield
             invert = -1
         #print('6self.motion.first_Leg_Is_Right_Leg:', self.motion.first_Leg_Is_Right_Leg)
-        yaw_increment_at_side_step =  math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
+        yaw_increment_at_side_step = 2 * math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
         number_Of_Cycles = int(round(abs(alpha / yaw_increment_at_side_step)))+1
         stepLength = 0
-        sideLength = 20
-        for cycle in range(number_Of_Cycles):
+        sideLength = 40
+        for cycle in range(1, number_Of_Cycles):
             self.motion.refresh_Orientation()
-            rotation = initial_body_yaw + cycle * yaw_increment_at_side_step - self.motion.imu_body_yaw() * 1.1
+            rotation = initial_body_yaw + cycle * yaw_increment_at_side_step - self.motion.imu_body_yaw() * 1
             rotation = self.motion.normalize_rotation(rotation)
             #rotation = 0
-            if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
             self.motion.walk_Cycle(stepLength, sideLength, invert*rotation, cycle, number_Of_Cycles)
-        if self.motion.falling_Flag == 3 : self.motion.falling_Flag = 0 
         self.motion.walk_Final_Pose()
         self.motion.first_Leg_Is_Right_Leg = True
 
