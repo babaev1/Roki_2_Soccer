@@ -1652,9 +1652,9 @@ class Player():
             ]
         motion_right = [
             [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 1, -711, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -650, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            [ 1, -911, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -650, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
         motion_left = [
             [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -1675,7 +1675,7 @@ class Player():
             #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
         for _ in range(20):
-            self.motion.play_Soft_Motion_Slot(motion_list = motion_forward)
+            self.motion.play_Soft_Motion_Slot(motion_list = motion_right)
             #self.motion.play_Soft_Motion_Slot(motion_list = motion_left)
             #self.motion.play_Soft_Motion_Slot(name = "Small_Jump")
             time.sleep(0.25)
