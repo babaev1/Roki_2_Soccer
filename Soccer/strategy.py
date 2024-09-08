@@ -226,7 +226,7 @@ class Player():
         if self.role == 'rotation_test': self.rotation_test_main_cycle()
         if self.role == 'sidestep_test': self.sidestep_test_main_cycle()
         if self.role == 'obstacle_runner': self.obstacle_runner_main_cycle()
-        if self.role == 'test_walk': self.test_walk_main_cycle()
+        if self.role == 'kick_test': self.test_walk_main_cycle()
         if self.role == 'ball_moving': self.ball_moving_main_cycle()
         if self.role == 'dance': self.dance_main_cycle()
         if self.role == 'basketball': self.basketball_main_cycle(self.second_pressed_button)
@@ -1653,19 +1653,37 @@ class Player():
         motion_right = [
             [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [ 1, -711, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -650, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        motion_left = [
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, 650, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 711, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
         motion_forward = [
-            [ 10, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 2, 0, -1500, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 1500, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            [ 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, -100, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, -700, -300, 0, 0, 0, 0, 0, 0, 0, 0, 00, 700, 300, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        motion_backward = [
+            [ 10, 0, -100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 100, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, -700, 300, 0, 0, 0, 0, 0, 0, 0, 0, 00, 700, -300, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
         for _ in range(20):
-            self.motion.play_Soft_Motion_Slot(motion_list = motion_right)
+            self.motion.play_Soft_Motion_Slot(motion_list = motion_forward)
+            #self.motion.play_Soft_Motion_Slot(motion_list = motion_left)
             #self.motion.play_Soft_Motion_Slot(name = "Small_Jump")
             time.sleep(0.25)
+        #for _ in range(20):
+        #    #self.motion.play_Soft_Motion_Slot(motion_list = motion_right)
+        #    self.motion.play_Soft_Motion_Slot(motion_list = motion_left)
+        #    #self.motion.play_Soft_Motion_Slot(name = "Small_Jump")
+        #    time.sleep(0.25)
 
         return
         self.motion.jump_turn(1)
