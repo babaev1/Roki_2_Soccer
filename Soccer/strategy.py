@@ -1660,11 +1660,10 @@ class Player():
             [ 10,-200, 0, 0, 0, -200, 0, 0, 0, 0, 0, 0, -200, 0, 0, 0, -200, 0, 0, 0, 0, 0],
             [ 3, 650, 0, 0, 0, -200, 0, 0, 0, 0, 0, 0, 711, 0, 0, 0, -200, 0, 0, 0, 0, 0],
             [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            #[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
         motion_forward = [
             [ 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, -100, 0, 0, 0, 0, 0, 0, 0],
-            #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 0, 0, 0, 0, 0, 0, 0, 0],
             [ 3, -700, -300, 0, 0, 0, 0, 0, 0, 0, 0, 00, 700, 300, 0, 0, 0, 0, 0, 0, 0, 0],
             [ 3, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -100, 0, 0, 0, 0, 0, 0, 0, 0],
             [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -1675,11 +1674,32 @@ class Player():
             [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
-        for _ in range(20):
-            self.motion.play_Soft_Motion_Slot(motion_list = motion_right)
-            #self.motion.play_Soft_Motion_Slot(motion_list = motion_left)
-            #self.motion.play_Soft_Motion_Slot(name = "Small_Jump")
+
+        front_motion_tolerance = 30
+        side_motion_tolerance = 20
+        self.motion.head_Return(0, self.motion.neck_play_pose)
+        time.sleep(2)
+        self.motion.detect_Ball_in_One_Shot()
+        ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course)
+        kick_by_Right = (ball_y < 0)
+        for _ in range(50):
+            self.motion.detect_Ball_in_One_Shot()
+            ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course)
+            ball_x = self.glob.ball_distance * math.cos(self.glob.ball_course)
+            kick_by_Right = (ball_y < 0)
+            if kick_by_Right: side_motion = ball_y + self.params["KICK_OFFSET_OF_BALL"]
+            else: side_motion = ball_y - self.params["KICK_OFFSET_OF_BALL"]
+            front_motion = ball_x - self.params["KICK_ADJUSTMENT_DISTANCE_2"]
+            if front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance:
+                break
+            if front_motion > front_motion_tolerance: self.motion.play_Soft_Motion_Slot(motion_list = motion_forward)
+            if front_motion < -front_motion_tolerance: self.motion.play_Soft_Motion_Slot(motion_list = motion_backward)
+            if side_motion > side_motion_tolerance: self.motion.play_Soft_Motion_Slot(motion_list = motion_left)
+            if side_motion < -side_motion_tolerance: self.motion.play_Soft_Motion_Slot(motion_list = motion_right)
+            self.motion.jump_turn(0)
             time.sleep(0.25)
+        self.motion.kick(kick_by_Right)
+        self.motion.walk_Final_Pose_After_Kick()
         #for _ in range(20):
         #    #self.motion.play_Soft_Motion_Slot(motion_list = motion_right)
         #    self.motion.play_Soft_Motion_Slot(motion_list = motion_left)
