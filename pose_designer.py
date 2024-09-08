@@ -198,7 +198,6 @@ class Pose_Designer(wx.Frame, Robot):
                                   #style=wx.SP_WRAP, min=self.jointLimits[jointNumber][0], max=self.jointLimits[jointNumber][1], initial=0)
                                   style=wx.SP_ARROW_KEYS|wx.ALIGN_LEFT, min=self.ACTIVESERVOS[jointNumber][4], max=self.ACTIVESERVOS[jointNumber][5], initial=0)
                                   #style=wx.ALIGN_LEFT, min=self.ACTIVESERVOS[jointNumber][4], max=self.ACTIVESERVOS[jointNumber][5], initial=0)
-        controlvalue.SetIncrement(10)
         controlslider.Bind(wx.EVT_SLIDER, self.On_Slider_move)
         controlvalue.Bind(wx.EVT_SPINCTRL, self.On_SPINCTRL_change)
         controlvalue.Bind(wx.EVT_TEXT, self.On_SPINCTRL_change)

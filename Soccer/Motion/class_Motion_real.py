@@ -110,6 +110,7 @@ class Motion_real(Motion):
                 self.simulateMotion(name = 'Initial_Pose')
             self.robot_In_0_Pose = True
         variants = []
+        first_look_point = None
         if first_look_point == None:
             course_to_ball = 0
             tilt_to_ball = (-self.neck_play_pose - self.neck_calibr) * self.TIK2RAD 
@@ -167,22 +168,27 @@ class Motion_real(Motion):
                     course_global_rad = course1 + self.glob.pf_coord[2]
                     self.glob.ball_coord = [dist * math.cos(course_global_rad) + self.glob.pf_coord[0],
                                             dist * math.sin(course_global_rad) + self.glob.pf_coord[1]]
+                    self.local.ball_odometry = self.glob.ball_coord
                     return(a, course1, dist, [0, 0])
-            self.neck_pan =int( - course1/ self.TIK2RAD)
-            D = self.params['HEIGHT_OF_CAMERA'] - self.params['HEIGHT_OF_NECK']- self.params['DIAMETER_OF_BALL']/2
-            E = (2*distance1*D - math.sqrt(4*distance1**2*D**2 - 4*(distance1**2-self.params['HEIGHT_OF_NECK']**2)*(D**2 -self.params['HEIGHT_OF_NECK']**2)))/(2*(D**2-self.params['HEIGHT_OF_NECK']**2))
-            alpha = math.atan(E)
-            alpha_d = math.pi/2 - alpha
-            self.neck_tilt = int((-alpha_d)/self.TIK2RAD + self.neck_calibr)
-            if self.glob.SIMULATION == 5:
-                self.head_Return(self.neck_pan, c)
-            else:
-                returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
-                             self.jointHandle[21] , self.neck_pan * self.TIK2RAD * self.ACTIVESERVOS[21][3], self.sim.simx_opmode_oneshot)   # Шея поворот
-                returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
-                             self.jointHandle[22] , self.neck_tilt * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
-                for j in range(16):
-                    self.sim_simxSynchronousTrigger(self.clientID)
+            #self.neck_pan =int( - course1/ self.TIK2RAD)
+            pos_list = [abs(course1), abs(-math.pi/2 - course1), abs(math.pi/2 - course1)]
+            pos = pos_list.index(min(pos_list))
+            self.neck_pan = head_pose[head_pose_seq[pos]][0]
+            #D = self.params['HEIGHT_OF_CAMERA'] - self.params['HEIGHT_OF_NECK']- self.params['DIAMETER_OF_BALL']/2
+            #E = (2*distance1*D - math.sqrt(4*distance1**2*D**2 - 4*(distance1**2-self.params['HEIGHT_OF_NECK']**2)*(D**2 -self.params['HEIGHT_OF_NECK']**2)))/(2*(D**2-self.params['HEIGHT_OF_NECK']**2))
+            #alpha = math.atan(E)
+            #alpha_d = math.pi/2 - alpha
+            #self.neck_tilt = int((-alpha_d)/self.TIK2RAD + self.neck_calibr)
+            self.head_Return(self.neck_pan, c)
+            #if self.glob.SIMULATION == 5:
+            #    self.head_Return(self.neck_pan, c)
+            #else:
+            #    returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
+            #                 self.jointHandle[21] , self.neck_pan * self.TIK2RAD * self.ACTIVESERVOS[21][3], self.sim.simx_opmode_oneshot)   # Шея поворот
+            #    returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
+            #                 self.jointHandle[22] , self.neck_tilt * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
+            #    for j in range(16):
+            #        self.sim_simxSynchronousTrigger(self.clientID)
             self.refresh_Orientation()
             if self.glob.SIMULATION == 5:
                 a, course, dist, speed = self.vision.detect_Ball_Speed_N()
@@ -195,6 +201,7 @@ class Motion_real(Motion):
                 course_global_rad = course + self.glob.pf_coord[2]
                 self.glob.ball_coord = [dist*math.cos(course_global_rad)+ self.glob.pf_coord[0],
                                          dist*math.sin(course_global_rad)+ self.glob.pf_coord[1]]
+                self.local.ball_odometry = self.glob.ball_coord
                 self.glob.ball_course = course
                 self.glob.ball_distance = dist
                 self.glob.ball_speed = speed
@@ -207,6 +214,7 @@ class Motion_real(Motion):
                     course_global_rad = course1 + self.glob.pf_coord[2]
                     self.glob.ball_coord = [dist * math.cos(course_global_rad) + self.glob.pf_coord[0],
                                             dist * math.sin(course_global_rad) + self.glob.pf_coord[1]]
+                    self.local.ball_odometry = self.glob.ball_coord
                     self.glob.ball_course = course1
                     self.glob.ball_distance = dist
                     self.glob.robot_see_ball = 5
@@ -406,6 +414,8 @@ class Motion_real(Motion):
             for i in range(16):
                 if self.glob.SIMULATION != 0:
                     self.sim_simxSynchronousTrigger(self.clientID)
+        self.neck_pan = old_neck_pan
+        self.neck_tilt = old_neck_tilt
         self.refresh_Orientation()
 
     def normalize_rotation(self, yaw):
@@ -832,6 +842,63 @@ class Motion_real(Motion):
         self.walk_Final_Pose()
         #self.head_Return(old_neck_pan, old_neck_tilt)
         return True
+
+    def far_distance_straight_approach_streaming(self):
+        print("far_distance_straight_approach_streaming")
+        proximity = 0.2
+        direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
+        self.jump_turn(direction_To_Ball)
+        stepLength = 64
+        sideLength = 0
+        last_step_factor = 1
+        discontinue = False
+        if self.glob.robot_see_ball < 0: return
+        side_motion = self.glob.ball_distance * math.tan(self.glob.ball_course)
+        sideLength = abs(side_motion) * 1000
+        if sideLength > 20: sideLength = 20
+        motion_to_right = (side_motion < 0)
+        if motion_to_right:
+            self.first_Leg_Is_Right_Leg = True
+            invert = 1
+        else:
+            self.first_Leg_Is_Right_Leg = False
+            invert = -1
+        self.walk_Initial_Pose()
+        cycle = 0
+        while True:
+            discontinue = (self.glob.ball_distance - proximity) < 0.1 * (6 - self.glob.robot_see_ball)
+            if discontinue: last_step_factor  *= 0.6
+            else: 
+                last_step_factor  /= 0.6
+                if last_step_factor > 1: last_step_factor = 1
+            if cycle == 0: initial_step_factor = 0.33
+            elif cycle == 1: initial_step_factor = 0.66
+            else: initial_step_factor = 1 
+            stepLength1 = stepLength * last_step_factor * initial_step_factor
+            self.refresh_Orientation()
+            rotation = direction_To_Ball - self.body_euler_angle['yaw'] * 1.1
+            rotation = self.normalize_rotation(rotation)
+            #side_motion = self.glob.ball_distance * math.tan(self.glob.ball_course - self.local.coord_odometry[2])
+            side_motion = self.glob.ball_distance * math.tan(self.glob.ball_course)
+            if ((motion_to_right and (side_motion >= 0)) or ((not motion_to_right) and (side_motion < 0))) and cycle != 0 :
+                self.walk_Cycle(stepLength, 0, invert * rotation, 1, 3, half = True)
+            motion_to_right = (side_motion < 0)
+            sideLength = abs(side_motion) * 1000
+            if sideLength > 20: sideLength = 20
+            if side_motion <= 0:
+                self.first_Leg_Is_Right_Leg = True
+                invert = 1
+            else:
+                self.first_Leg_Is_Right_Leg = False
+                invert = -1
+            if last_step_factor < 0.6:
+                self.walk_Cycle(stepLength1, sideLength, invert * rotation, cycle, cycle + 1)
+                break
+            else:
+                self.walk_Cycle(stepLength1, sideLength, invert * rotation, cycle, cycle + 2)
+            cycle += 1
+        self.walk_Final_Pose()
+        return
 
     def far_distance_plan_approach(self, ball_coord, target_yaw, stop_Over = False):
         dest = []

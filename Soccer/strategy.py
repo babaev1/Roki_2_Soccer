@@ -426,9 +426,9 @@ class Player():
         #self.motion.control_Head_motion_thread.start()
         if pressed_button == 'start':
             self.motion.kick_off_ride()
-            first_look_point = None
-        else:
-            first_look_point= self.glob.ball_coord
+        #    first_look_point = None
+        #else:
+        #    first_look_point= self.glob.ball_coord
         while (True):
             if self.glob.SIMULATION == 5:
                 if (time.perf_counter() - self.motion.start_point_for_imu_drift) > 360:
@@ -465,12 +465,12 @@ class Player():
             if self.glob.robot_see_ball <= 0:
                 self.motion.head_Return(0, self.motion.neck_play_pose)
                 success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
-                                                                                  very_Fast = False, first_look_point=first_look_point )
+                                                                                  very_Fast = False)
                 self.motion.head_Return(0, self.motion.neck_play_pose)
-            first_look_point = self.glob.ball_coord
+            #first_look_point = self.glob.ball_coord
             #self.glob.vision.detect_Ball_in_One_Shot()
-            if self.glob.robot_see_ball > 0: 
-                self.glob.ball_coord = self.local.ball_odometry
+            #if self.glob.robot_see_ball > 0: 
+            #    self.glob.ball_coord = self.local.ball_odometry
             self.glob.pf_coord = self.local.coord_odometry
             time_elapsed = time.time() - second_player_timer
             if self.glob.SIMULATION == 5: frozen_time = 10 
@@ -509,7 +509,8 @@ class Player():
                 print('napravl :', self.glob.ball_course)
                 print('direction_To_Ball', direction_To_Ball)
                 #self.motion.far_distance_plan_approach(self.local.ball_odometry, self.f.direction_To_Guest, stop_Over = stop_Over)
-                self.motion.far_distance_straight_approach(self.local.ball_odometry, direction_To_Ball, stop_Over = False)
+                #self.motion.far_distance_straight_approach(self.local.ball_odometry, direction_To_Ball, stop_Over = False)
+                self.motion.far_distance_straight_approach_streaming()
                 #self.go_Around_Ball(dist, napravl)
                 continue
             if player_in_front_of_ball or not player_in_fast_kick_position:
@@ -858,6 +859,7 @@ class Player():
     #    self.motion.first_Leg_Is_Right_Leg = True
 
     def go_Around_Ball(self, dist, napravl):
+        print('go_Around_Ball')
         turning_radius = 0.18 # meters
         #first_look_point= self.glob.ball_coord
         #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
