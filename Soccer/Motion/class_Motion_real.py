@@ -137,7 +137,7 @@ class Motion_real(Motion):
                 return False, 0, 0, [0, 0]
             if self.glob.SIMULATION == 5:
                 self.head_Return(self.neck_pan, self.neck_tilt)
-                time.sleep(1)
+                time.sleep(2)
             else:
                 returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                          self.jointHandle[21] , self.neck_pan * self.TIK2RAD * self.ACTIVESERVOS[21][3], self.sim.simx_opmode_oneshot)   # Шея поворот
@@ -866,7 +866,7 @@ class Motion_real(Motion):
         self.walk_Initial_Pose()
         cycle = 0
         while True:
-            discontinue = (self.glob.ball_distance - proximity) < 0.1 * (6 - self.glob.robot_see_ball)
+            discontinue = (self.glob.ball_distance - proximity - 0.1) < 0.1 * (6 - self.glob.robot_see_ball)
             if discontinue: last_step_factor  *= 0.6
             else: 
                 last_step_factor  /= 0.6

@@ -873,7 +873,7 @@ class Player():
         initial_body_yaw = self.glob.pf_coord[2]
         correction_napravl = math.atan2(correction_y, (correction_x - turning_radius))
         correction_dist = math.sqrt(correction_y**2 + (correction_x - turning_radius)**2)
-        old_neck_pan, old_neck_tilt = self.motion.head_Up()
+        #old_neck_pan, old_neck_tilt = self.motion.head_Up()
         self.motion.first_Leg_Is_Right_Leg = True
 
         self.motion.walk_Initial_Pose()
