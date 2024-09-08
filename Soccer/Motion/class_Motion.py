@@ -1698,6 +1698,7 @@ class Motion(Robot, Motion_extention_1):
             angles = self.computeAlphaForWalk()
             if not self.falling_Flag ==0: return
             if len(angles)==0:
+                print("unresolved IK at kick")
                 self.exitFlag = self.exitFlag +1
             else:
                 if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0 or self.glob.SIMULATION == 3:

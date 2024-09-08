@@ -650,6 +650,63 @@ class Motion_real(Motion):
         print("verify_ball_position complete")
         return result, kick_by_Right
 
+    def fine_adjustment_before_kick(self, kick_direction):
+        motion_turn = [
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 3, -700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 700, 0, 0, 0, 0, 1000, 0, 0, 0, 0],
+            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            #[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        motion_right = [
+            [ 10, 200, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0, 0, 0],
+            [ 3, -711, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, -650, 0, 0, 0, 200, 0, 0, 0, 0, 0],
+            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            #[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        motion_left = [
+            [ 10,-200, 0, 0, 0, -200, 0, 0, 0, 0, 0, 0, -200, 0, 0, 0, -200, 0, 0, 0, 0, 0],
+            [ 3, 650, 0, 0, 0, -200, 0, 0, 0, 0, 0, 0, 711, 0, 0, 0, -200, 0, 0, 0, 0, 0],
+            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            #[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        motion_forward = [
+            [ 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, -100, 0, 0, 0, 0, 0, 0, 0],
+            [ 3, -700, -300, 0, 0, 0, 0, 0, 0, 0, 0, 00, 700, 300, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 3, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -100, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+        motion_backward = [
+            [ 10, 0, -100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 100, 0, 0, 0, 0, 0, 0, 0],
+            [ 3, -700, 300, 0, 0, 0, 0, 0, 0, 0, 0, 00, 700, -300, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
+
+        front_motion_tolerance = 10
+        side_motion_tolerance = 10
+        self.head_Return(0, self.neck_play_pose)
+        time.sleep(2)
+        self.glob.vision.detect_Ball_in_One_Shot()
+        ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course)
+        kick_by_Right = (ball_y < 0)
+        for _ in range(50):
+            self.glob.vision.detect_Ball_in_One_Shot()
+            ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course) * 1000
+            ball_x = self.glob.ball_distance * math.cos(self.glob.ball_course) * 1000
+            kick_by_Right = (ball_y < 0)
+            if kick_by_Right: side_motion = ball_y + self.glob.params["KICK_OFFSET_OF_BALL"]
+            else: side_motion = ball_y - self.glob.params["KICK_OFFSET_OF_BALL"]
+            front_motion = ball_x - self.glob.params["KICK_ADJUSTMENT_DISTANCE_2"]
+            if front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance:
+                break
+            if front_motion > front_motion_tolerance: self.play_Soft_Motion_Slot(motion_list = motion_forward)
+            if front_motion < -front_motion_tolerance: self.play_Soft_Motion_Slot(motion_list = motion_backward)
+            if side_motion > side_motion_tolerance: self.play_Soft_Motion_Slot(motion_list = motion_left)
+            if side_motion < -side_motion_tolerance: self.play_Soft_Motion_Slot(motion_list = motion_right)
+            self.jump_turn(kick_direction)
+            time.sleep(0.25)
+        return kick_by_Right
+
     def near_distance_ball_approach_and_kick_streaming(self, kick_direction):
         print('near_distance_ball_approach_and_kick_streaming')
         offset_of_ball = self.params['KICK_OFFSET_OF_BALL']  # self.d10 # module of local robot Y coordinate of ball im mm before kick 
@@ -671,17 +728,9 @@ class Motion_real(Motion):
             self.first_Leg_Is_Right_Leg = True
             result, kick_by_Right = self.verify_ball_position(kick_by_Right, kick_direction)
             self.first_Leg_Is_Right_Leg = True
-            if self.glob.ball_distance < 0.2:
-                self.jump_turn(kick_direction)
-                self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
-                #if small_kick:
-                #    self.kick( first_Leg_Is_Right_Leg=kick_by_Right, small = small_kick)
-                #else:
-                #    if kick_by_Right:
-                #        self.play_Soft_Motion_Slot(name ='Kick_Right_v2')
-                #    else:
-                #        self.play_Soft_Motion_Slot(name ='Kick_Left_v2')
-                self.pause_in_ms(1000)
+            kick_by_Right = self.fine_adjustment_before_kick( kick_direction)
+            self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
+            self.pause_in_ms(1000)
         return True
 
     def kick_off_ride(self):
