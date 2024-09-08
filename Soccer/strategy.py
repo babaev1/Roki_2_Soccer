@@ -1675,21 +1675,21 @@ class Player():
             [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
 
-        front_motion_tolerance = 30
-        side_motion_tolerance = 20
+        front_motion_tolerance = 10
+        side_motion_tolerance = 10
         self.motion.head_Return(0, self.motion.neck_play_pose)
         time.sleep(2)
-        self.motion.detect_Ball_in_One_Shot()
+        self.glob.vision.detect_Ball_in_One_Shot()
         ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course)
         kick_by_Right = (ball_y < 0)
         for _ in range(50):
-            self.motion.detect_Ball_in_One_Shot()
-            ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course)
-            ball_x = self.glob.ball_distance * math.cos(self.glob.ball_course)
+            self.glob.vision.detect_Ball_in_One_Shot()
+            ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course) * 1000
+            ball_x = self.glob.ball_distance * math.cos(self.glob.ball_course) * 1000
             kick_by_Right = (ball_y < 0)
-            if kick_by_Right: side_motion = ball_y + self.params["KICK_OFFSET_OF_BALL"]
-            else: side_motion = ball_y - self.params["KICK_OFFSET_OF_BALL"]
-            front_motion = ball_x - self.params["KICK_ADJUSTMENT_DISTANCE_2"]
+            if kick_by_Right: side_motion = ball_y + self.glob.params["KICK_OFFSET_OF_BALL"]
+            else: side_motion = ball_y - self.glob.params["KICK_OFFSET_OF_BALL"]
+            front_motion = ball_x - self.glob.params["KICK_ADJUSTMENT_DISTANCE_2"]
             if front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance:
                 break
             if front_motion > front_motion_tolerance: self.motion.play_Soft_Motion_Slot(motion_list = motion_forward)

@@ -64,7 +64,7 @@ try:
         initial_coord = [0.0, 0.0, 0]
     glob = Glob(SIMULATION, current_work_directory, particles_number = 100, event_type = 'Robocup')
     glob.pf_coord = initial_coord
-    if (role == 'forward' or role == 'penalty_Shooter' or role == 'penalty_Goalkeeper' or role == 'goalkeeper'):
+    if (role == 'forward' or role == 'penalty_Shooter' or role == 'penalty_Goalkeeper' or role == 'goalkeeper' or role == 'kick_test'):
         glob.neural_vision_enable()
         glob.neural_vision = True
     glob.role = role
@@ -81,7 +81,7 @@ try:
         second_pressed_button = 'start'
     else:
         second_pressed_button = motion.push_Button(labels)
-    if role == 'dance' or role == 'kick_test':
+    if role == 'dance':
         local = None
     else:
         motion.direction_To_Attack = -initial_coord[2]
