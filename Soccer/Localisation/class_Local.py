@@ -108,9 +108,9 @@ class Local():
         self.last_y = self.glob.params['CAMERA_VERTICAL_RESOLUTION'] - 1
         self.last_x = self.glob.params['CAMERA_HORIZONTAL_RESOLUTION'] - 1
         self.width_of_goals = self.glob.landmarks['post2'][0][1] - self.glob.landmarks['post1'][0][1]
-        t1 = threading.Thread(target = self.particle_filter_update_in_thread)
-        t1.setDaemon(True)
-        t1.start()
+        #t1 = threading.Thread(target = self.particle_filter_update_in_thread)
+        #t1.setDaemon(True)
+        #t1.start()
 
     def refresh_odometry(self):
         self.coord_odometry[2] = self.motion.imu_body_yaw()
@@ -361,6 +361,16 @@ class Local():
         #self.call_Par_Filter.update(self.landmarks_for_PF, self.coord_for_PF)
         #self.coord_for_PF =[]
         #self.landmarks_for_PF={}
+
+    def particle_filter_update(self):
+        landmarks = self.copy.deepcopy(self.landmarks_for_PF)
+        self.landmarks_for_PF={'unsorted_posts':[],'post1':[], 'post2':[], 'post3':[], 'post4':[], 'lines':[], 'Line_crosses':[], 'penalty':[]}
+        coord = self.coord_for_PF.copy()
+        self.coord_for_PF =[]
+        #timer1 = time.perf_counter()
+        self.call_Par_Filter.update(landmarks, coord)
+        #print('resampling time =', time.perf_counter() - timer1)
+
 
     def particle_filter_update_in_thread(self):
         while True:

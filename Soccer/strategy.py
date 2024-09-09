@@ -1647,6 +1647,17 @@ class Player():
             [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
+        self.glob.vision.detect_Ball_in_One_Shot()
+        start = time.perf_counter()
+        self.glob.camera_reset()
+        self.glob.vision.detect_Ball_in_One_Shot()
+        time_elapsed = time.perf_counter() - start
+        print("camera reset time_elapsed : ", time_elapsed)
+
+        start = time.perf_counter()
+        self.glob.local.particle_filter_update()
+        time_elapsed = time.perf_counter() - start
+        print("pf time_elapsed : ", time_elapsed)
 
         front_motion_tolerance = 10
         side_motion_tolerance = 10
