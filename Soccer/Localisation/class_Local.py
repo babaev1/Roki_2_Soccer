@@ -108,9 +108,9 @@ class Local():
         self.last_y = self.glob.params['CAMERA_VERTICAL_RESOLUTION'] - 1
         self.last_x = self.glob.params['CAMERA_HORIZONTAL_RESOLUTION'] - 1
         self.width_of_goals = self.glob.landmarks['post2'][0][1] - self.glob.landmarks['post1'][0][1]
-        #t1 = threading.Thread(target = self.particle_filter_update_in_thread)
-        #t1.setDaemon(True)
-        #t1.start()
+        t1 = threading.Thread(target = self.particle_filter_update_in_thread)
+        t1.setDaemon(True)
+        t1.start()
 
     def refresh_odometry(self):
         self.coord_odometry[2] = self.motion.imu_body_yaw()

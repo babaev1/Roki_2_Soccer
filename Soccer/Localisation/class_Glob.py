@@ -50,6 +50,8 @@ class Glob:
         elif self.SIMULATION == 5 :
             from Soccer.Vision.camera import Camera
             from Soccer.Motion.class_stm_channel import STM_channel
+            from Soccer.Vision.class_Vision_RPI import Vision_RPI
+            self.Vision_RPI = Vision_RPI
             self.camera = Camera()
             self.STM_channel_class = STM_channel
             #import usocket, network
@@ -110,5 +112,18 @@ class Glob:
     def neural_vision_enable(self):
         from Soccer.Vision.yolov5_tools import Neural
         self.neural = Neural()
+
+    def camera_reset(self):
+        print('Camera resetting')
+        self.camera_down_Flag = False
+        self.vision.camera.picam2.close()
+        self.vision.event.set()
+        new_stm_channel  = self.STM_channel_class(self)
+        self.stm_channel = new_stm_channel
+        self.rcb = self.stm_channel.rcb
+        new_vision = self.Vision_RPI(self)
+        self.vision = new_vision
+        self.motion.vision = self.vision
+        self.local.vision = self.vision
 
 

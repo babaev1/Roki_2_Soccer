@@ -415,20 +415,14 @@ class Player():
 
     def forward_main_cycle(self, pressed_button):
         self.glob.monitor_is_on = True
-        #self.glob.with_pf = False
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         if self.glob.SIMULATION == 5:
             self.motion.rcb.motionPlay(25)          # zummer
             labels = [[], [], [], ['start', 'start_later'], []]
             pressed_button = self.motion.push_Button(labels)
         second_player_timer = time.time()
-        #self.glob.vision.camera_thread.start()
-        #self.motion.control_Head_motion_thread.start()
         if pressed_button == 'start':
             self.motion.kick_off_ride()
-        #    first_look_point = None
-        #else:
-        #    first_look_point= self.glob.ball_coord
         while (True):
             if self.glob.SIMULATION == 5:
                 if (time.perf_counter() - self.motion.start_point_for_imu_drift) > 360:
@@ -445,20 +439,19 @@ class Player():
                 if self.motion.falling_Flag == 3: break
                 self.motion.falling_Flag = 0
                 self.local.coordinate_fall_reset()
-            if self.glob.SIMULATION == 5:
-                if self.glob.camera_down_Flag == True:
-                    print('Camera resetting')
-                    self.glob.camera_down_Flag = False
-                    self.glob.vision.camera.picam2.close()
-                    self.glob.vision.event.set()
-                    new_stm_channel  = self.STM_channel(self.glob)
-                    self.glob.stm_channel = new_stm_channel
-                    self.glob.rcb = self.glob.stm_channel.rcb
-                    new_vision = self.Vision_RPI(self.glob)
-                    self.glob.vision = new_vision
-                    self.motion.vision = self.glob.vision
-                    self.local.vision = self.glob.vision
-                    #self.glob.vision.camera_thread.start()
+            if self.glob.camera_down_Flag == True: self.glob.camera_reset()
+                    #print('Camera resetting')
+                    #self.glob.camera_down_Flag = False
+                    #self.glob.vision.camera.picam2.close()
+                    #self.glob.vision.event.set()
+                    #new_stm_channel  = self.STM_channel(self.glob)
+                    #self.glob.stm_channel = new_stm_channel
+                    #self.glob.rcb = self.glob.stm_channel.rcb
+                    #new_vision = self.Vision_RPI(self.glob)
+                    #self.glob.vision = new_vision
+                    #self.motion.vision = self.glob.vision
+                    #self.local.vision = self.glob.vision
+                    ##self.glob.vision.camera_thread.start()
             #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
             #                                                                  very_Fast = True, first_look_point=first_look_point)
             #time.sleep(1) # this is to look around for ball 
@@ -467,16 +460,11 @@ class Player():
                 success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
                                                                                   very_Fast = False)
                 self.motion.head_Return(0, self.motion.neck_play_pose)
-            #first_look_point = self.glob.ball_coord
-            #self.glob.vision.detect_Ball_in_One_Shot()
-            #if self.glob.robot_see_ball > 0: 
-            #    self.glob.ball_coord = self.local.ball_odometry
             self.glob.pf_coord = self.local.coord_odometry
             time_elapsed = time.time() - second_player_timer
             if self.glob.SIMULATION == 5: frozen_time = 10 
             else: frozen_time = 10
             if pressed_button == 'start_later' and time_elapsed < frozen_time : 
-                #if self.glob.SIMULATION == 1: self.motion.sim_simxSynchronousTrigger(self.motion.clientID)
                 time.sleep(0.02)
                 continue
             self.f.dir_To_Guest()
@@ -485,33 +473,18 @@ class Player():
             if self.glob.robot_see_ball < -6:
                 print('Seek ball')
                 self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
-            #if self.glob.robot_see_ball <= 0:
-            #    print('Seek ball')
-            #    self.motion.head_Return(-2667, self.motion.neck_play_pose)
-            #    time.sleep(1)
-            #    self.glob.vision.detect_Ball_in_One_Shot()
-            #    self.motion.head_Return(2667, self.motion.neck_play_pose)
-            #    time.sleep(1)
-            #    self.glob.vision.detect_Ball_in_One_Shot()
-            #    if self.glob.robot_see_ball > 0: 
-            #        self.glob.ball_coord = self.local.ball_odometry
-                #self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
-                #continue
             player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0],
                                                           self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
             player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
             player_in_front_of_ball = -math.pi/2 < player_from_ball_yaw < math.pi/2
             player_in_fast_kick_position = (player_from_ball_yaw > 2.0 or player_from_ball_yaw < -2.0) and self.glob.ball_distance < 0.6
             if self.glob.ball_distance > 0.35  and not player_in_fast_kick_position:
-                #if self.glob.ball_distance > 3: stop_Over = True
-                #else: stop_Over = False
                 direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
                 print('napravl :', self.glob.ball_course)
                 print('direction_To_Ball', direction_To_Ball)
                 #self.motion.far_distance_plan_approach(self.local.ball_odometry, self.f.direction_To_Guest, stop_Over = stop_Over)
                 #self.motion.far_distance_straight_approach(self.local.ball_odometry, direction_To_Ball, stop_Over = False)
                 self.motion.far_distance_straight_approach_streaming()
-                #self.go_Around_Ball(dist, napravl)
                 continue
             if player_in_front_of_ball or not player_in_fast_kick_position:
                 self.go_Around_Ball(self.glob.ball_distance, self.glob.ball_course)

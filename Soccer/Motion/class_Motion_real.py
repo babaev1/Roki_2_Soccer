@@ -582,7 +582,7 @@ class Motion_real(Motion):
             if ball_y < -20: kick_by_Right = True
             if kick_by_Right: side_motion = ball_y + self.params["KICK_OFFSET_OF_BALL"]
             else: side_motion = ball_y - self.params["KICK_OFFSET_OF_BALL"]
-            front_motion = ball_x - self.params["KICK_ADJUSTMENT_DISTANCE_2"]
+            front_motion = ball_x - self.params["KICK_ADJUSTMENT_DISTANCE_1"]
             print('front_motion: ', round(front_motion), 'side_motion: ', round(side_motion))
             return True, front_motion, side_motion, kick_by_Right
 
@@ -651,6 +651,7 @@ class Motion_real(Motion):
         return result, kick_by_Right
 
     def fine_adjustment_before_kick(self, kick_direction):
+        print("fine_adjustment_before_kick")
         motion_turn = [
             [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [ 3, -700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 700, 0, 0, 0, 0, 1000, 0, 0, 0, 0],
@@ -691,6 +692,9 @@ class Motion_real(Motion):
         kick_by_Right = (ball_y < 0)
         for _ in range(50):
             self.glob.vision.detect_Ball_in_One_Shot()
+            if self.glob.camera_down_Flag == True: 
+                self.glob.camera_reset()
+                self.glob.vision.detect_Ball_in_One_Shot()
             ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course) * 1000
             ball_x = self.glob.ball_distance * math.cos(self.glob.ball_course) * 1000
             kick_by_Right = (ball_y < 0)
@@ -698,6 +702,10 @@ class Motion_real(Motion):
             else: side_motion = ball_y - self.glob.params["KICK_OFFSET_OF_BALL"]
             front_motion = ball_x - self.glob.params["KICK_ADJUSTMENT_DISTANCE_2"]
             if front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance:
+                break
+            if not self.falling_Test() == 0:
+                if self.falling_Flag == 3: uprint('STOP!')
+                else: uprint('FALLING!!!', self.falling_Flag)
                 break
             if front_motion > front_motion_tolerance: self.play_Soft_Motion_Slot(motion_list = motion_forward)
             if front_motion < -front_motion_tolerance: self.play_Soft_Motion_Slot(motion_list = motion_backward)
