@@ -909,6 +909,8 @@ class Motion_real(Motion):
         sideLength = 0
         last_step_factor = 1
         discontinue = False
+        L = math.sqrt((self.local.ball_odometry[1] - self.local.coord_odometry[1])**2 + (self.local.ball_odometry[0] - self.local.coord_odometry[0])**2)
+        number_Of_Cycles = math.ceil(abs(L * 1000 / self.cycle_step_yield)) + 8
         if self.glob.robot_see_ball < 0: return
         side_motion = self.glob.ball_distance * math.tan(self.glob.ball_course)
         sideLength = abs(side_motion) * 1000
@@ -921,8 +923,9 @@ class Motion_real(Motion):
             self.first_Leg_Is_Right_Leg = False
             invert = -1
         self.walk_Initial_Pose()
-        cycle = 0
-        while True:
+        #cycle = 0
+        for cycle in range(number_Of_Cycles):
+        #while True:
             discontinue = (self.glob.ball_distance - proximity - 0.1) < 0.1 * (6 - self.glob.robot_see_ball)
             if discontinue: last_step_factor  *= 0.6
             else: 
@@ -948,12 +951,12 @@ class Motion_real(Motion):
             else:
                 self.first_Leg_Is_Right_Leg = False
                 invert = -1
-            if last_step_factor < 0.6:
+            if last_step_factor < 0.6 :
                 self.walk_Cycle(stepLength1, sideLength, invert * rotation, cycle, cycle + 1)
                 break
             else:
-                self.walk_Cycle(stepLength1, sideLength, invert * rotation, cycle, cycle + 2)
-            cycle += 1
+                self.walk_Cycle(stepLength1, sideLength, invert * rotation, cycle, number_Of_Cycles)
+            #cycle += 1
         self.walk_Final_Pose()
         return
 
