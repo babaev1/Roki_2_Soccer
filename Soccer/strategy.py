@@ -438,7 +438,8 @@ class Player():
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break
                 self.motion.falling_Flag = 0
-                self.local.coordinate_fall_reset()
+                #self.local.coordinate_fall_reset()
+                self.motion.head_Return(0, self.motion.neck_play_pose)
             if self.glob.camera_down_Flag == True: self.glob.camera_reset()
                     #print('Camera resetting')
                     #self.glob.camera_down_Flag = False
