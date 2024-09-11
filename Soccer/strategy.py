@@ -461,7 +461,8 @@ class Player():
                 success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
                                                                                   very_Fast = False)
                 self.motion.head_Return(0, self.motion.neck_play_pose)
-            self.glob.pf_coord = self.local.coord_odometry
+            #self.glob.pf_coord = self.local.coord_odometry
+            self.glob.local.localisation_Complete()
             time_elapsed = time.time() - second_player_timer
             if self.glob.SIMULATION == 5: frozen_time = 10 
             else: frozen_time = 10
@@ -474,6 +475,7 @@ class Player():
             if self.glob.robot_see_ball < -6:
                 print('Seek ball')
                 self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
+                continue
             player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0],
                                                           self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
             player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
@@ -880,10 +882,10 @@ class Player():
             side_step_yield = self.motion.side_step_left_yield
             invert = -1
         #print('6self.motion.first_Leg_Is_Right_Leg:', self.motion.first_Leg_Is_Right_Leg)
-        yaw_increment_at_side_step = 2 * math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
+        yaw_increment_at_side_step =  math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
         number_Of_Cycles = int(round(abs(alpha / yaw_increment_at_side_step)))+1
         stepLength = 0
-        sideLength = 40
+        sideLength = 20
         for cycle in range(1, number_Of_Cycles):
             self.motion.refresh_Orientation()
             rotation = initial_body_yaw + cycle * yaw_increment_at_side_step - self.motion.imu_body_yaw() * 1

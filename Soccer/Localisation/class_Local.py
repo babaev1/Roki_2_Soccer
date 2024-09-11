@@ -358,9 +358,11 @@ class Local():
         else: print('coord_visible:', coord)
         self.landmarks_for_PF.update(landmarks)
         self.coord_for_PF = coord
-        #self.call_Par_Filter.update(self.landmarks_for_PF, self.coord_for_PF)
-        #self.coord_for_PF =[]
-        #self.landmarks_for_PF={}
+        start = time.perf_counter()
+        self.call_Par_Filter.update(self.landmarks_for_PF, self.coord_for_PF)
+        print('resampling time :', time.perf_counter() - start)
+        self.coord_for_PF =[]
+        self.landmarks_for_PF={}
 
     def particle_filter_update(self):
         landmarks = self.copy.deepcopy(self.landmarks_for_PF)
@@ -419,6 +421,7 @@ class Local():
         self.correct_yaw_in_pf()
         self.glob.pf_coord = self.call_Par_Filter.return_coord()
         #if self.glob.wifi_params['WIFI_IS_ON']: self.report_to_WIFI()
+        if self.glob.monitor_is_on: self.glob.monitor()
         if (self.glob.SIMULATION == 1 or self.glob.SIMULATION == 0 or self.glob.SIMULATION == 3):
             timer1 = time.perf_counter() - self.timer0
             Dummy_PF_position = [self.glob.pf_coord[0] * self.side_factor,

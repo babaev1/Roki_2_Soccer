@@ -1,3 +1,5 @@
-pos_list = [3,1,2]
-pos = pos_list.index(min(pos_list))
-print(pos)
+a = [1,2]
+b = [3,4]
+a = b
+b = [5,6]
+print(a)

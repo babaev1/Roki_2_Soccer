@@ -565,7 +565,7 @@ class Motion_real(Motion):
     def verify_ball_position(self, kick_by_Right, kick_direction):
         print("verify_ball_position")
         def moving_direction(kick_by_Right):
-            if self.glob.ball_distance <= 0: return False , 0, 0, kick_by_Right
+            if self.glob.ball_distance <= 0 or self.glob.robot_see_ball < 0: return False , 0, 0, kick_by_Right
             #ball_x = self.glob.ball_distance * math.cos(self.glob.ball_course) * 1000
             #ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course) * 1000
             #dx = self.glob.ball_coord[0] - self.glob.pf_coord[0]
@@ -688,6 +688,7 @@ class Motion_real(Motion):
         self.head_Return(0, self.neck_play_pose)
         time.sleep(2)
         self.glob.vision.detect_Ball_in_One_Shot()
+        self.local.localisation_Complete()
         ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course)
         kick_by_Right = (ball_y < 0)
         for _ in range(50):
@@ -701,7 +702,7 @@ class Motion_real(Motion):
             if kick_by_Right: side_motion = ball_y + self.glob.params["KICK_OFFSET_OF_BALL"]
             else: side_motion = ball_y - self.glob.params["KICK_OFFSET_OF_BALL"]
             front_motion = ball_x - self.glob.params["KICK_ADJUSTMENT_DISTANCE_2"]
-            if front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance:
+            if (front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance) or self.glob.ball_distance > 0.7 or self.glob.robot_see_ball < 0:
                 break
             if not self.falling_Test() == 0:
                 if self.falling_Flag == 3: uprint('STOP!')
@@ -737,8 +738,9 @@ class Motion_real(Motion):
             result, kick_by_Right = self.verify_ball_position(kick_by_Right, kick_direction)
             self.first_Leg_Is_Right_Leg = True
             kick_by_Right = self.fine_adjustment_before_kick( kick_direction)
-            self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
-            self.pause_in_ms(1000)
+            if self.glob.ball_distance < 0.2:
+                self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
+                self.pause_in_ms(1000)
         return True
 
     def kick_off_ride(self):
@@ -1342,7 +1344,7 @@ class Motion_real(Motion):
                     head_turn(0, self.neck_play_pose)
                     time.sleep(0.1)
 
-    def jump_turn(self, course, jumps_limit = 8):
+    def jump_turn(self, course, jumps_limit = 20):
         motion = [
             #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             #[ 2, -700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0 ],
@@ -1356,6 +1358,7 @@ class Motion_real(Motion):
         self.refresh_Orientation()
         for i in range(jumps_limit):
             correction_yaw = course - self.body_euler_angle['yaw']
+            correction_yaw = self.norm_yaw(correction_yaw)
             if abs(correction_yaw) <  0.09: break
             if correction_yaw > 0:
                 solid_jumps = math.floor(abs(correction_yaw / self.params['CALIBRATED_CCW_YAW']))

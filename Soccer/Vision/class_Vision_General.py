@@ -362,6 +362,7 @@ class Vision_General:
             self.glob.ball_distance = distance
             self.glob.ball_speed = speed
             self.glob.robot_see_ball = 5
+            self.glob.ball_coord[:] = self.glob.local.ball_odometry
         else: self.glob.robot_see_ball -= 1
 
     def detect_Basket_in_One_Shot(self):
