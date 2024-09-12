@@ -376,6 +376,51 @@ class Vision_General:
         img1, frame_number = self.camera.snapshot()
         if frame_number != 0:
             result = True
+            cx, cy = self.glob.neural.basket_detect_single(img1)
+            displacement = self.glob.params["CAMERA_HORIZONTAL_RESOLUTION"]/2 - cx
+            result = not ( cx == 0 and cy == 0)
+            if result: 
+                self.visible_reaction_ball()
+                print('relative displacement from cenetr of picture ', displacement)
+            #img = Image(img1)
+            ##self.display_camera_image(self.image, window = 'Original')
+            #blobs = img.find_blobs([self.TH['orange ball']['th']],
+            #                    pixels_threshold=self.TH['orange ball']['pixel'],
+            #                    area_threshold=self.TH['orange ball']['area'],
+            #                    merge=True, roi = (267, 217, 267, 217))
+            #len_blobs = len(blobs)
+            #height = self.glob.params["CAMERA_VERTICAL_RESOLUTION"]
+            #order = []
+            #for i in range(len_blobs):
+            #    order.append([height - blobs[i].cy(), i,0,0])
+            #sorted_order = sorted(order)
+            #new_order_len = min(10, len_blobs)
+            #new_order = sorted_order[:new_order_len]
+            #if new_order_len != 0:
+            #    result = True
+            #    basket_blob = blobs[new_order[0][1]]
+            #    basket_column = basket_blob.cx()
+            #    displacement = 133 - basket_column
+            #    self.visible_reaction_ball()
+            #    print('relative displacement from cenetr of picture ', displacement)
+            #    rect = [basket_blob.rect()[0]+267, basket_blob.rect()[1]+217, basket_blob.rect()[2], basket_blob.rect()[3]]
+            #    img.draw_rectangle(rect)
+            #    self.display_camera_image(img.img, 'Ball')
+            #else: result = False
+        else: result = False
+        return result, displacement
+
+    def detect_Basket_in_One_Shot_N(self):
+        see_ball = 0
+        position = []
+        displacement = 0
+        frame_number = 0
+        #result, self.camera_elevation = self.glob.motion.camera_elevation()
+        #if result:
+            #result, img1, self.pitch, self.roll, yaw, pan = self.snapshot()
+        img1, frame_number = self.camera.snapshot()
+        if frame_number != 0:
+            result = True
             img = Image(img1)
             #self.display_camera_image(self.image, window = 'Original')
             blobs = img.find_blobs([self.TH['orange ball']['th']],
