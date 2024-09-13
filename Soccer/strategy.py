@@ -584,7 +584,7 @@ class Player():
                 if duty_distance < 0.2 : continue
                 elif duty_distance <  3: #   0.6 :
                     print('goalkeeper turn_To_Course(0)')
-                    self.motion.jum_turn(0)
+                    self.motion.jump_turn(0)
                     duty_direction = coord2yaw(duty_x_position - self.local.coord_odometry[0], duty_y_position - self.local.coord_odometry[1])
                     print('goalkeeper near_distance_omni_motion')
                     self.motion.near_distance_omni_motion(duty_distance * 1000, duty_direction)
