@@ -432,7 +432,7 @@ class Motion_real(Motion):
         self.refresh_Orientation()
         initial_direction = self.imu_body_yaw()
         print('initial_direction', initial_direction)
-        n = int(math.floor((dist_mm*math.cos(napravl)-self.first_step_yield)/self.cycle_step_yield)+1)+1         #calculating the number of potential full steps forward
+        n = int(math.floor((dist_mm*math.cos(napravl)-self.first_step_yield)/self.cycle_step_yield) * 64/30 +1)+1         #calculating the number of potential full steps forward
         displacement = dist_mm*math.sin(napravl)
         first_Leg_Is_Right_Leg_Old = self.first_Leg_Is_Right_Leg
         if displacement > 0:
@@ -444,7 +444,7 @@ class Motion_real(Motion):
         else: invert = -1
         m = int(math.floor(abs(displacement)/side_step_yield)+1)
         if n < m : n = m
-        stepLength = dist_mm*math.cos(napravl)/(self.first_step_yield*1.25+self.cycle_step_yield*(n-1)+ self.cycle_step_yield*0.75)*64
+        stepLength = dist_mm*math.cos(napravl)/(self.first_step_yield*1.25+self.cycle_step_yield*(n-1)+ self.cycle_step_yield*0.75)*64 * 30/64
         number_Of_Cycles = n+2
         sideLength = abs(displacement) /number_Of_Cycles*20/side_step_yield
         if stepLength > 15 and number_Of_Cycles > 4: 
@@ -904,15 +904,15 @@ class Motion_real(Motion):
 
     def far_distance_straight_approach_streaming(self):
         print("far_distance_straight_approach_streaming")
-        proximity = 0.2
+        proximity = self.params["KICK_ADJUSTMENT_DISTANCE_1"] #0.2
         direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
         self.jump_turn(direction_To_Ball)
-        stepLength = 64
+        stepLength = 50 #64
         sideLength = 0
         last_step_factor = 1
         discontinue = False
         L = math.sqrt((self.local.ball_odometry[1] - self.local.coord_odometry[1])**2 + (self.local.ball_odometry[0] - self.local.coord_odometry[0])**2)
-        number_Of_Cycles = math.ceil(abs(L * 1000 / self.cycle_step_yield)) + 8
+        number_Of_Cycles = math.ceil(abs(L * 1000 / self.cycle_step_yield)* 64 / 50) + 8
         if self.glob.robot_see_ball < 0: return
         side_motion = self.glob.ball_distance * math.tan(self.glob.ball_course)
         sideLength = abs(side_motion) * 1000
@@ -1375,6 +1375,10 @@ class Motion_real(Motion):
                 else: 
                     jump_value = 1000 * partial_jump
             motion[1][6] = motion[1][17] = jump_value
+            if not self.falling_Test() == 0:
+                if self.falling_Flag == 3: uprint('STOP!')
+                else: uprint('FALLING!!!', self.falling_Flag)
+                break
             self.play_Soft_Motion_Slot(motion_list = motion)
             time.sleep(0.5)
             self.refresh_Orientation()

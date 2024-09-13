@@ -506,13 +506,15 @@ class Player():
             return danger
         #second_player_timer = time.time()
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
-        #self.motion.near_distance_omni_motion(400, 0)                    # get out from goal
+        self.motion.near_distance_omni_motion(300, 0)                    # get out from goal
         fast_Reaction_On = True
         while (True):
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break
                 self.motion.falling_Flag = 0
                 #self.local.coordinate_fall_reset()
+                self.motion.head_Return(0, self.motion.neck_play_pose)
+            if self.glob.camera_down_Flag == True: self.glob.camera_reset()
             #if self.local.ball_odometry[0] <= 0.15:
             #    success_Code, napravl, dist, speed =  self.motion.watch_Ball_In_Pose()
             #else:
@@ -593,7 +595,7 @@ class Player():
                 else:
                     direction_To_Duty = math.atan2((duty_y_position - self.local.coord_odometry[1]), (duty_x_position - self.local.coord_odometry[0]))
                     self.motion.far_distance_straight_approach([duty_x_position , duty_y_position], direction_To_Duty, gap = 0, stop_Over = False)
-                    self.motion.turn_To_Course(0)
+                    self.motion.jump_turn(0)
 
 
     def FIRA_penalty_Shooter_main_cycle(self):
