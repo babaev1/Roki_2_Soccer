@@ -432,19 +432,21 @@ class Motion_real(Motion):
         self.refresh_Orientation()
         initial_direction = self.imu_body_yaw()
         print('initial_direction', initial_direction)
-        n = int(math.floor((dist_mm*math.cos(napravl)-self.first_step_yield)/self.cycle_step_yield) * 64/30 +1)+1         #calculating the number of potential full steps forward
+        n = int(math.floor(abs((dist_mm*math.cos(napravl))-self.first_step_yield * 30/64 )/self.cycle_step_yield * 64/30) +1)+1         #calculating the number of potential full steps forward
         displacement = dist_mm*math.sin(napravl)
-        first_Leg_Is_Right_Leg_Old = self.first_Leg_Is_Right_Leg
+        #first_Leg_Is_Right_Leg_Old = self.first_Leg_Is_Right_Leg
         if displacement > 0:
             self.first_Leg_Is_Right_Leg = False
             side_step_yield = self.side_step_left_yield
         else:
+            self.first_Leg_Is_Right_Leg = True
             side_step_yield = self.side_step_right_yield
         if self.first_Leg_Is_Right_Leg: invert = 1
         else: invert = -1
         m = int(math.floor(abs(displacement)/side_step_yield)+1)
         if n < m : n = m
-        stepLength = dist_mm*math.cos(napravl)/(self.first_step_yield*1.25+self.cycle_step_yield*(n-1)+ self.cycle_step_yield*0.75)*64 * 30/64
+        #stepLength = dist_mm*math.cos(napravl)/(self.first_step_yield*1.25+self.cycle_step_yield*(n-1)+ self.cycle_step_yield*0.75)*64 * 30/64
+        stepLength = dist_mm*math.cos(napravl)/(self.first_step_yield+self.cycle_step_yield*(n-1))*64
         number_Of_Cycles = n+2
         sideLength = abs(displacement) /number_Of_Cycles*20/side_step_yield
         if stepLength > 15 and number_Of_Cycles > 4: 
@@ -468,7 +470,7 @@ class Motion_real(Motion):
                 if cycle == number_Of_Cycles - 2: stepLength1 = stepLength * 2 / 3
             self.walk_Cycle(stepLength1, sideLength, invert*rotation,cycle,number_Of_Cycles + after_cycle)
         if one_Off_Motion: self.walk_Final_Pose()
-        self.first_Leg_Is_Right_Leg = first_Leg_Is_Right_Leg_Old
+        #self.first_Leg_Is_Right_Leg = first_Leg_Is_Right_Leg_Old
         self.local.coord_odometry[0] += dist * math.cos(napravl)
         self.local.coord_odometry[1] += dist * math.sin(napravl)
         #self.local.coordinate_record(odometry = True)
@@ -702,7 +704,7 @@ class Motion_real(Motion):
             if kick_by_Right: side_motion = ball_y + self.glob.params["KICK_OFFSET_OF_BALL"]
             else: side_motion = ball_y - self.glob.params["KICK_OFFSET_OF_BALL"]
             front_motion = ball_x - self.glob.params["KICK_ADJUSTMENT_DISTANCE_2"]
-            if (front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance) or self.glob.ball_distance > 0.7 or self.glob.robot_see_ball < 0:
+            if (front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance) or self.glob.ball_distance > 0.4 or self.glob.robot_see_ball < 0:
                 break
             if not self.falling_Test() == 0:
                 if self.falling_Flag == 3: uprint('STOP!')
@@ -904,7 +906,7 @@ class Motion_real(Motion):
 
     def far_distance_straight_approach_streaming(self):
         print("far_distance_straight_approach_streaming")
-        proximity = self.params["KICK_ADJUSTMENT_DISTANCE_1"] #0.2
+        proximity = self.params["KICK_ADJUSTMENT_DISTANCE_1"] / 1000  #0.2
         direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
         self.jump_turn(direction_To_Ball)
         stepLength = 50 #64

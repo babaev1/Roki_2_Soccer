@@ -520,11 +520,11 @@ class Player():
             #else:
             #    success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = fast_Reaction_On)
             #time.sleep(1) # this is to look around for ball
-            if self.glob.robot_see_ball <= 0:
-                self.motion.head_Return(0, self.motion.neck_play_pose)
-                success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
-                                                                                  very_Fast = False)
-                self.motion.head_Return(0, self.motion.neck_play_pose)
+            #if self.glob.robot_see_ball <= 0:
+            self.motion.head_Return(0, self.motion.neck_play_pose)
+            success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+                                                                                very_Fast = False)
+            self.motion.head_Return(0, self.motion.neck_play_pose)
             napravl, dist, speed = self.glob.ball_course, self.glob.ball_distance, self.glob.ball_speed
             #if abs(speed[0]) > 0.02 and dist < 1 :                         # if dangerous tangential speed
             #    fast_Reaction_On = True
@@ -902,7 +902,8 @@ class Player():
 
     def go_Around_Ball(self, dist, napravl):
         print('go_Around_Ball')
-        turning_radius = 0.18 # meters
+        turning_radius = 0.25 # meters
+        approach_distance = self.glob.params["KICK_ADJUSTMENT_DISTANCE_1"]
         #first_look_point= self.glob.ball_coord
         #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
         #                                                                  very_Fast = True, first_look_point=first_look_point)
@@ -916,17 +917,27 @@ class Player():
         correction_napravl = math.atan2(correction_y, (correction_x - turning_radius))
         correction_dist = math.sqrt(correction_y**2 + (correction_x - turning_radius)**2)
         #old_neck_pan, old_neck_tilt = self.motion.head_Up()
-        self.motion.first_Leg_Is_Right_Leg = True
+        #self.motion.first_Leg_Is_Right_Leg = True
 
-        self.motion.walk_Initial_Pose()
+        #self.motion.walk_Initial_Pose()
         if napravl * alpha > 0:
-            self.motion.turn_To_Course(self.glob.pf_coord[2] + napravl, one_Off_Motion = False)
+            #self.motion.turn_To_Course(self.glob.pf_coord[2] + napravl, one_Off_Motion = False)
+            self.motion.jump_turn(self.norm_yaw(self.glob.pf_coord[2] + napravl))
             #self.motion.walk_Restart()
-            self.motion.near_distance_omni_motion((dist - turning_radius) * 1000 , 0, one_Off_Motion = False)
+            self.motion.first_Leg_Is_Right_Leg = True
+            self.motion.walk_Initial_Pose()
+            #self.motion.near_distance_omni_motion((dist - turning_radius) * 1000 , 0, one_Off_Motion = False)
+            self.motion.near_distance_omni_motion(dist * 1000 - approach_distance , 0, one_Off_Motion = False)
             alpha = self.motion.norm_yaw(alpha - napravl)
             initial_body_yaw += napravl
         else:
-            self.motion.near_distance_omni_motion(correction_dist*1000, correction_napravl, one_Off_Motion = False)
+            self.motion.jump_turn(self.norm_yaw(self.glob.pf_coord[2] + napravl))
+            displacement = correction_dist*1000 * math.sin(correction_napravl)
+            if displacement > 0:  self.motion.first_Leg_Is_Right_Leg = False
+            else: self.motion.first_Leg_Is_Right_Leg = True
+            self.motion.walk_Initial_Pose()
+            #self.motion.near_distance_omni_motion(correction_dist*1000, correction_napravl, one_Off_Motion = False)
+            self.motion.near_distance_omni_motion(dist * 1000 - approach_distance, 0, one_Off_Motion = False)
         if alpha >= 0:
             if self.motion.first_Leg_Is_Right_Leg == False:
                 change_legs = True
@@ -959,7 +970,7 @@ class Player():
             #rotation = 0
             self.motion.walk_Cycle(stepLength, sideLength, invert*rotation, cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
-        self.motion.first_Leg_Is_Right_Leg = True
+        #self.motion.first_Leg_Is_Right_Leg = True
 
     def basketball_main_cycle(self, pressed_button):
         

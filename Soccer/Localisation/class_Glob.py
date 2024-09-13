@@ -51,9 +51,9 @@ class Glob:
             from Soccer.Vision.camera import Camera
             from Soccer.Motion.class_stm_channel import STM_channel
             from Soccer.Vision.class_Vision_RPI import Vision_RPI
-            self.Camera = Camera
+            #self.Camera = Camera
             self.Vision_RPI = Vision_RPI
-            self.camera = self.Camera()
+            self.camera = Camera()
             self.STM_channel_class = STM_channel
             #import usocket, network
             if self.event_type == 'FIRA': landmarks_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_landmarks_FIRA.json"
@@ -123,7 +123,7 @@ class Glob:
         self.stm_channel = new_stm_channel
         self.rcb = self.stm_channel.rcb
         new_vision = self.Vision_RPI(self)
-        self.camera = self.Camera()
+        #self.camera = self.Camera()
         self.vision = new_vision
         self.motion.vision = self.vision
         self.local.vision = self.vision
