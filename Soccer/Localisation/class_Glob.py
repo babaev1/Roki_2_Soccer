@@ -1,4 +1,5 @@
 import json, array, math, time
+from multiprocessing import Array 
 
 class Glob:
     def __init__(self, simulation, current_work_directory, particles_number = 1000, event_type = 'Robocup'):
@@ -20,17 +21,19 @@ class Glob:
             self.ROWS = 13
         self.current_work_directory = current_work_directory
         self.particles_number = particles_number
-        self.pf_alloc1 = array.array('I',(0 for i in range(particles_number*4)))
-        self.pf_alloc2 = array.array('I',(0 for i in range(particles_number*4)))
-        self.weights = array.array('I',(0 for i in range(particles_number)))
-        self.new_p = array.array('I',(0 for i in range(particles_number)))
+        #self.pf_alloc1 = array.array('I',(0 for i in range(particles_number*4)))
+        #self.pf_alloc2 = array.array('I',(0 for i in range(particles_number*4)))
+        #self.weights = array.array('I',(0 for i in range(particles_number)))
+        #self.new_p = array.array('I',(0 for i in range(particles_number)))
         self.strategy_data = array.array('b',(0 for i in range(self.COLUMNS * self.ROWS * 2)))
         self.SIMULATION = simulation             # 0 - Simulation without physics, 1 - Simulation with physics, 2 - live on openMV
+        self.ball_coord = Array('f', 2)
         self.ball_coord =[0.0, 0.0]                # global coordinate
         self.ball_course = 0                       # local course from robot body
         self.ball_distance = 0                     # local distance from robot body
         self.ball_speed = [0.0, 0.0]      # [tangential_speed, front_speed ]
         self.robot_see_ball = 0
+        self.pf_coort = Array('f', 3)
         self.pf_coord = [0.0,0.0,0.0]
         self.obstacles = []
         self.motion = None
@@ -39,7 +42,7 @@ class Glob:
         self.camera_down_Flag = False
         if self.SIMULATION == 1 or self.SIMULATION == 0 or self.SIMULATION == 3:
             import socket
-            landmarks_filename = current_work_directory + "Init_params/Sim/Sim_landmarks.json"
+            self.landmarks_filename = current_work_directory + "Init_params/Sim/Sim_landmarks.json"
             params_filename = current_work_directory + "Init_params/Sim/" + "Sim_params.json"
             params_2_filename = current_work_directory + "Init_params/Sim/" + "Sim_params_2.json"
             with open(current_work_directory + "Init_params/Sim/" + "wifi_params.json", "r") as f:
@@ -56,14 +59,14 @@ class Glob:
             self.camera = Camera()
             self.STM_channel_class = STM_channel
             #import usocket, network
-            if self.event_type == 'FIRA': landmarks_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_landmarks_FIRA.json"
-            else: landmarks_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_landmarks.json"
+            if self.event_type == 'FIRA': self.landmarks_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_landmarks_FIRA.json"
+            else: self.landmarks_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_landmarks.json"
             params_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_params.json"
             params_2_filename = "/home/pi/Desktop/" + "Init_params/Real/Real_params_2.json"
             self.Roki = None
             self.stm_channel = STM_channel(self)
             self.rcb = self.stm_channel.rcb
-        with open(landmarks_filename, "r") as f:
+        with open(self.landmarks_filename, "r") as f:
             landmarks = json.loads(f.read())
         with open(params_filename, "r") as f:
             self.params = json.loads(f.read())

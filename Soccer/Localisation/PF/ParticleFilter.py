@@ -120,17 +120,18 @@ def gaussian( x, sigma):
 
 
 class ParticleFilter():
-    def __init__(self, myrobot, glob):
+    def __init__(self, myrobot, landmarks_filename, particles_number, current_work_directory):
         self.counter1 = 0
         self.counter2 = 0
-        self.n = glob.particles_number
+        self.n = particles_number
         self.myrobot = myrobot
         self.count = 0
-        self.p = glob.pf_alloc1
-        self.tmp = glob.pf_alloc2
-        self.weights = glob.weights
-        self.new_p = glob.new_p
-        self.landmarks = glob.landmarks
+        self.p = array.array('I',(0 for i in range(self.n*4)))
+        self.tmp = array.array('I',(0 for i in range(self.n*4)))
+        self.weights = array.array('I',(0 for i in range(self.n)))
+        self.new_p = array.array('I',(0 for i in range(self.n)))
+        with open(landmarks_filename, "r") as f:
+            self.landmarks = json.loads(f.read())
         self.landmark_lines_x = array.array('f',self.landmarks['lines']['x'])
         self.landmark_lines_y = array.array('f',self.landmarks['lines']['y'])
         self.land_keys =list(self.landmarks.keys())
@@ -144,7 +145,7 @@ class ParticleFilter():
                 mark1 = array.array('f',self.landmarks[self.land_keys[i]][j])
                 marks.extend(mark1)
             self.array_landmarks.append(marks)
-        with open(glob.current_work_directory + "Soccer/Localisation/PF/pf_constants.json", 'r') as constants:
+        with open(current_work_directory + "Soccer/Localisation/PF/pf_constants.json", 'r') as constants:
             constants = json.load(constants)
         self.forward_noise = constants['noise']['forward_noise']
         self.turn_noise = constants['noise']['turn_noise']
@@ -386,11 +387,11 @@ class ParticleFilter():
             self.weights = weights
         return S
 
-    def custom_reset(self, x, y, yaw):
-        self.myrobot.x = x
-        self.myrobot.y = y
-        self.myrobot.yaw = yaw
-        self.p = gen_n_particles_robot(0)
+    #def custom_reset(self, x, y, yaw):
+    #    self.myrobot.x = x
+    #    self.myrobot.y = y
+    #    self.myrobot.yaw = yaw
+    #    self.p = gen_n_particles_robot(0)
 
     # ------------------------------
     # need to add to handle the fall
@@ -400,6 +401,7 @@ class ParticleFilter():
         self.myrobot.x += gauss(0, self.sense_noise)
         self.myrobot.y += gauss(0, self.sense_noise)
         self.myrobot.yaw += gauss(0, self.yaw_noise)
+        self.myrobot.yaw = self.norm_yaw(self.myrobot.yaw)
         for i in range(self.n):
             x1 = self.p[i * 4] + int(gauss(0, noise) * 1000)
             y1 = self.p[i * 4 + 1] + int(gauss(0, noise) * 1000)
@@ -430,10 +432,10 @@ class ParticleFilter():
             orientation += culc_yaw * w_old
         self.myrobot.x = x
         self.myrobot.y = y
-        self.myrobot.yaw = orientation % (2*math.pi)
+        self.myrobot.yaw = self.myrobot.yaw(orientation % (2*math.pi))
 
     def return_coord(self):
-        return self.myrobot.x, self.myrobot.y, self.norm_yaw(self.myrobot.yaw)
+        return self.myrobot.x, self.myrobot.y, self.myrobot.yaw
 
     def updatePF(self, measurement, other_coord):
         for i in range(self.number_of_res):

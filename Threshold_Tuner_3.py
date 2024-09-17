@@ -22,6 +22,7 @@ from Soccer.Vision.class_Vision_RPI import Vision_RPI as Vision
 from Soccer.Localisation.class_Glob import Glob
 from Soccer.Vision.reload import Image
 from Soccer.Motion.class_Motion_real import Motion_real
+from libcamera import controls
 
 current_work_directory = os.getcwd()
 current_work_directory = current_work_directory.replace('\\', '/') + '/'
@@ -106,8 +107,9 @@ class mywindow(QtWidgets.QMainWindow):
         self.blob_detection = 0
         self.blobs_are_changing = False
         #self.vision
-        self.AutoExposure = True
-        self.ui.actionAutoExposure_ON.setChecked(True)
+        self.AutoExposure = False
+        self.ui.actionAutoExposure_ON.setChecked(False)
+        self.ui.actionAutoExposure_OFF.setChecked(True)
         self.exposure = 0
         self.analogie_gain = 0
         self.color_gains =(0,0) 
@@ -195,6 +197,7 @@ class mywindow(QtWidgets.QMainWindow):
     def On_AutoExposure_ON(self,event):
         try:
             self.vision.camera.picam2.set_controls({"AeEnable": True})
+            self.vision.camera.picam2.set_controls({"AeExposureMode":  controls.AeExposureModeEnum.Short})
             time.sleep(1)
             print("AutoExposure ON")
             self.ui.actionAutoExposure_OFF.setChecked(False)
@@ -262,18 +265,22 @@ class mywindow(QtWidgets.QMainWindow):
     def On_number_input_pixel(self):
         self.threshold_Dict[self.current_device]['pixel'] = int(self.ui.lineEdit_Pixel_TH.text())
         print('pixel :', self.threshold_Dict[self.current_device]['pixel'])
+        self.ui.lineEdit_Pixel_TH.setText(str(self.threshold_Dict[self.current_device]['pixel']))
         self.blobs_are_changing = True
         self.slider_event1.set()
 
     def On_number_input_area(self):
         self.threshold_Dict[self.current_device]['area'] = int(self.ui.lineEdit_Area_TH.text())
         print('area :', self.threshold_Dict[self.current_device]['area'])
+        self.ui.lineEdit_Area_TH.setText(str(self.threshold_Dict[self.current_device]['area']))
         self.blobs_are_changing = True
         self.slider_event1.set()
 
     def On_number_input_exposure(self):
         if not self.AutoExposure:
-            self.threshold_Dict['exposure'] = int(self.ui.lineEdit_Exposure.text())
+            new_exposure = min(int(self.ui.lineEdit_Exposure.text()), 16500)
+            self.threshold_Dict['exposure'] = new_exposure
+            self.ui.lineEdit_Exposure.setText(str(self.threshold_Dict['exposure']))
             print('Exposure :', self.threshold_Dict['exposure'])
             self.vision.camera.picam2.set_controls({"ExposureTime": self.threshold_Dict['exposure']})
             self.slider_event1.set()

@@ -101,7 +101,7 @@ class Local():
             self.re = re
             self.cv2 = cv2
             self.timer0 = time.perf_counter()
-        self.call_Par_Filter = Call_Par_Filter(self.glob, coord_odometry)
+        self.call_Par_Filter = Call_Par_Filter(coord_odometry, self.glob.landmarks_filename, self.glob.particles_number, self.glob.current_work_directory)
         self.max_field_dimension = math.sqrt(self.glob.landmarks['FIELD_WIDTH']**2 + self.glob.landmarks['FIELD_LENGTH']**2)* 1.2
         self.post_data_in_pose = np.zeros((160,3), dtype = np.int16)  # (absolute_course (rad) * 2000, relative_distance (m) * 2000, post Number)
         self.post_data_in_pose_number = 0
