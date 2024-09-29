@@ -9,6 +9,7 @@ from Soccer.Vision.class_Vision_RPI import Vision_RPI
 from Soccer.Localisation.class_Local import *
 from Soccer.strategy import Player
 from Soccer.Motion.class_Motion_real import Motion_real
+from Soccer.Localisation.PF.call_par_filter import particle_filter_create_variables_and_launch
 
 SIMULATION = 5
 current_work_directory = os.getcwd()
@@ -51,7 +52,10 @@ try:
         motion.falling_Flag = 0
         motion.direction_To_Attack = -initial_coord[2]
         motion.activation()
-        local = Local(motion, glob, vision, coord_odometry = initial_coord)
+
+        pf_variables = particle_filter_create_variables_and_launch(glob)
+
+        local = Local(motion, glob, vision, pf_variables, coord_odometry = initial_coord)
         motion.local = local
         local.coordinate_record(odometry = True)
     else:
