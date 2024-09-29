@@ -244,7 +244,7 @@ class Motion_sim(Motion_real):
             #        filename = current_work_directory + "Soccer/CameraStill/VisionSensor" + token + '.png'
             #        isWritten = self.cv2.imwrite(filename, img)
 
-    def simulateMotion(self, number = 0, name = '', motion_list = None):
+    def simulateMotion(self, number = 0, name = '', motion_list = None, hands_on = True):
         #mot = [(0,'Initial_Pose'),(1,0),(2,0),(3,0),(4,0),(5,'Get_Up_Left'),
         #   (6,'Soccer_Get_UP_Stomach_N'),(7,0),(8,'Soccer_Walk_FF'),(9,0),(10,0),
         #   (11,0),(12,0),(13,0),(14,'Soccer_Small_Jump_Forward'),(15,0),
