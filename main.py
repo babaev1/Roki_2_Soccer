@@ -46,8 +46,8 @@ if __name__ == '__main__':
             print('New process')
             with open(filename01, "a") as f01:
                 print(datetime.datetime.now(), file = f01)
-                #p01 = subprocess.Popen(['python', 'main_killable_fira.py'], stderr=f01) #, stdout = f01)
-                p01 = subprocess.Popen(['python', 'main_killable.py'], stderr=f01) #, stdout = f01)
+                p01 = subprocess.Popen(['python', 'main_killable_fira.py'], stderr=f01) #, stdout = f01)
+                #p01 = subprocess.Popen(['python', 'main_killable.py'], stderr=f01) #, stdout = f01)
             message_was_sounded = False
             counter = 0
             while True:
