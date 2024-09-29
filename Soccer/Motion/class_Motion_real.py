@@ -63,7 +63,7 @@ class Motion_real(Motion):
                 i=i-1
                 returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                          self.jointHandle[22] , i * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)
-                self.sim_simxSynchronousTrigger(self.clientID)
+                self.sim.simxSynchronousTrigger(self.clientID)
                 img1 = self.vision_Sensor_Get_Image()
                 img = re.Image(img1)
                 for blob in img.find_blobs([self.vision.TH['orange ball']['th']],
@@ -144,7 +144,7 @@ class Motion_real(Motion):
                 returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                          self.jointHandle[22] , self.neck_tilt * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
                 for j in range(20):
-                    self.sim_simxSynchronousTrigger(self.clientID)
+                    self.sim.simxSynchronousTrigger(self.clientID)
             #self.refresh_Orientation()
             if self.glob.SIMULATION == 5:
                 a, course, dist = self.vision.seek_Ball_In_Frame_N(with_Localization)
@@ -188,7 +188,7 @@ class Motion_real(Motion):
             #    returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
             #                 self.jointHandle[22] , self.neck_tilt * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
             #    for j in range(16):
-            #        self.sim_simxSynchronousTrigger(self.clientID)
+            #        self.sim.simxSynchronousTrigger(self.clientID)
             self.refresh_Orientation()
             if self.glob.SIMULATION == 5:
                 a, course, dist, speed = self.vision.detect_Ball_Speed_N()
@@ -258,7 +258,7 @@ class Motion_real(Motion):
                 returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                          self.jointHandle[22] , self.neck_tilt * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
                 for j in range(20):
-                    self.sim_simxSynchronousTrigger(self.clientID)
+                    self.sim.simxSynchronousTrigger(self.clientID)
             self.refresh_Orientation()
             a, course, dist, speed = self.vision.detect_Ball_Speed()
             if a == True or (a== False and dist !=0): break
@@ -393,7 +393,7 @@ class Motion_real(Motion):
                         self.jointHandle[22] , self.neck_play_pose*0.000589*self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
             for i in range(16):
                 if self.glob.SIMULATION != 0:
-                    self.sim_simxSynchronousTrigger(self.clientID)
+                    self.sim.simxSynchronousTrigger(self.clientID)
         self.refresh_Orientation()
         return old_neck_pan, old_neck_tilt
 
@@ -413,7 +413,7 @@ class Motion_real(Motion):
                         self.jointHandle[22] , old_neck_tilt*0.000589*self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
             for i in range(16):
                 if self.glob.SIMULATION != 0:
-                    self.sim_simxSynchronousTrigger(self.clientID)
+                    self.sim.simxSynchronousTrigger(self.clientID)
         self.neck_pan = old_neck_pan
         self.neck_tilt = old_neck_tilt
         self.refresh_Orientation()
@@ -872,7 +872,7 @@ class Motion_real(Motion):
                     if cycle == number_Of_Cycles - 2: stepLength1 = stepLength - (stepLength ) / 3
                 self.refresh_Orientation()
                 if self.glob.robot_see_ball > 0:
-                    rotation = self.glob.ball_course / 10
+                    rotation = self.glob.ball_course / 10     #???????
                 else:
                     rotation = dest_yaw - self.imu_body_yaw()
                 print('self.glob.ball_course:', self.glob.ball_course)
@@ -1213,7 +1213,7 @@ class Motion_real(Motion):
                         returnCode, Dummy_Hposition= self.sim.simxGetObjectPosition(self.clientID,
                                               self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
                     if self.glob.SIMULATION == 1:
-                        self.sim_simxSynchronousTrigger(self.clientID)
+                        self.sim.simxSynchronousTrigger(self.clientID)
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
@@ -1274,7 +1274,7 @@ class Motion_real(Motion):
                         returnCode, Dummy_Hposition= self.sim.simxGetObjectPosition(self.clientID,
                                               self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
                     if self.glob.SIMULATION == 1:
-                        self.sim_simxSynchronousTrigger(self.clientID)
+                        self.sim.simxSynchronousTrigger(self.clientID)
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
@@ -1315,7 +1315,7 @@ class Motion_real(Motion):
                 returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                             self.jointHandle[22] , tilt * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
                 if self.glob.SIMULATION != 0:
-                    self.sim_simxSynchronousTrigger(self.clientID)
+                    self.sim.simxSynchronousTrigger(self.clientID)
             self.neck_pan = pan
             self.neck_tilt = tilt
 

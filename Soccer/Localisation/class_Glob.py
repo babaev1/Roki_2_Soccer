@@ -1,4 +1,4 @@
-import json, array, math, time
+import json, array, os
 from multiprocessing import Array 
 
 class Glob:
@@ -33,7 +33,6 @@ class Glob:
         self.ball_distance = 0                     # local distance from robot body
         self.ball_speed = [0.0, 0.0]      # [tangential_speed, front_speed ]
         self.robot_see_ball = 0
-        self.pf_coort = Array('f', 3)
         self.pf_coord = [0.0,0.0,0.0]
         self.obstacles = []
         self.motion = None
@@ -72,6 +71,7 @@ class Glob:
             self.params = json.loads(f.read())
         with open(params_2_filename, "r") as f:
             self.params.update(json.loads(f.read()))
+        self.use_particle_filter = self.params['USE_PARTICLE_FILTER']
         if self.SIMULATION == 5 : self.stm_channel.mb.SetBodyQueuePeriod(self.params['FRAME_DELAY'])
         self.first_step_yield = (19 * self.params['RUN_TEST_10_STEPS'] - 9 * self.params['RUN_TEST_20_STEPS']) / 10
         self.cycle_step_yield = ( self.params['RUN_TEST_20_STEPS'] - self.params['RUN_TEST_10_STEPS']) / 10
@@ -119,6 +119,7 @@ class Glob:
 
     def camera_reset(self):
         print('Camera resetting')
+        os.system("espeak -ven-m1 -a"+ '200' + " " + "'Camera resetting'")
         self.camera_down_Flag = False
         self.vision.camera.picam2.close()
         self.vision.event.set()

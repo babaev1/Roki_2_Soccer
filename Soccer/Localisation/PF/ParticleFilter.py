@@ -120,7 +120,7 @@ def gaussian( x, sigma):
 
 
 class ParticleFilter():
-    def __init__(self, myrobot, landmarks_filename, particles_number, current_work_directory):
+    def __init__(self, myrobot, landmarks_filename, particles_number, current_work_directory, global_vars):
         self.counter1 = 0
         self.counter2 = 0
         self.n = particles_number
@@ -164,6 +164,9 @@ class ParticleFilter():
         self.con_threshold = constants['consistency']['con_threshold']
         self.spec_threshold = constants['consistency']['spec_threshold']
         self.gen_particles()
+        #self.unsorted_posts = unsorted_posts
+        #self.post1 = post1
+        self.unsorted_posts, self.post1, self.post2, self.post3, self.post4, self.lines, self.Line_crosses, self.penalty, self.coord_for_PF_global = global_vars
 
     def norm_yaw(self, yaw):
         yaw %= 2 * pi
@@ -351,7 +354,7 @@ class ParticleFilter():
         for i in range(row):
             tempo = int(self.tmp[i * 4 + 3]/S)
             self.tmp[i * 4 + 3] = tempo
-        if not other_coord:
+        if not other_coord or other_coord == [1000,1000,1000]:
             self.gen_n_particles_robot(row)
         else:
             self.gen_n_particles_robot_coord(row, other_coord)
@@ -369,6 +372,12 @@ class ParticleFilter():
             array_observations =[]
             for i in range(len(self.land_keys)):
                 obs = array.array('f',[])
+                if self.land_keys[i] == 'unsorted_posts':
+                    for j in range(int(self.unsorted_posts[0])):
+                        pass
+                if self.land_keys[i] == 'post1':
+                    for j in range(int(self.post1[0])):
+                        pass
                 for j in range(len(observations[self.land_keys[i]])):
                     ob1 = array.array('f',observations[self.land_keys[i]][j])
                     obs.extend(ob1)
@@ -432,14 +441,25 @@ class ParticleFilter():
             orientation += culc_yaw * w_old
         self.myrobot.x = x
         self.myrobot.y = y
-        self.myrobot.yaw = self.myrobot.yaw(orientation % (2*math.pi))
+        self.myrobot.yaw = self.norm_yaw(orientation)
 
     def return_coord(self):
         return self.myrobot.x, self.myrobot.y, self.myrobot.yaw
 
     def updatePF(self, measurement, other_coord):
+        observations = {}
+        for key in self.land_keys + ['lines'] :
+            glob_array = eval('self.'+ key)
+            element_list = []
+            for j in range(int(glob_array[0])):
+                element = [glob_array[j * 3 + 1], glob_array[j * 3 + 2], glob_array[j * 3 + 3]]
+                element_list.append(element)
+            glob_array[0] = 0
+            observations.update({key:element_list})
+        #self.coord_for_PF_global[:] = self.coord_for_PF_global
         for i in range(self.number_of_res):
-            self.resampling(measurement, other_coord)
+            #self.resampling(measurement, other_coord)
+            self.resampling(observations, self.coord_for_PF_global[:])
         return self.return_coord()
 
 class Agent:

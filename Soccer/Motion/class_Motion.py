@@ -222,7 +222,7 @@ class Motion(Robot, Motion_extention_1):
         camera_elevation = com_2_camera_vector[2] - min(right_leg_vector[2], left_leg_vector[2])
         return True, camera_elevation
 
-    def play_Soft_Motion_Slot(self, name = '', motion_list = None):             # the slot from file will be played in robot
+    def play_Soft_Motion_Slot(self, name = '', motion_list = None, hands_on = True):             # the slot from file will be played in robot
         print('playing : ', name) 
         self.motion_slot_progress = True
         if self.glob.SIMULATION == 5:
@@ -263,7 +263,7 @@ class Motion(Robot, Motion_extention_1):
                 #self.pyb.delay(30 * frames_number)
                 #self.pyb.delay(250 )
         else:
-            self.simulateMotion(name = name, motion_list = motion_list)
+            self.simulateMotion(name = name, motion_list = motion_list, hands_on = hands_on)
         self.motion_slot_progress = False
 
     def falling_Test(self):
@@ -273,7 +273,7 @@ class Motion(Robot, Motion_extention_1):
             if self.ms.kbhit():
                 key = self.ms.getch()
             if key == b'p' :
-                self.lock.acquire()
+                #self.lock.acquire()
                 if self.glob.SIMULATION == 3:
                     self.sim.simxPauseSimulation(self.clientID, self.sim.simx_opmode_oneshot)
                 key = 0
@@ -281,22 +281,23 @@ class Motion(Robot, Motion_extention_1):
                     if self.ms.kbhit():
                         key = self.ms.getch()
                     if key == b'p':
-                        self.lock.release()
+                        #self.lock.release()
                         if self.glob.SIMULATION == 3:
                             self.sim.simxStartSimulation(self.clientID, self.sim.simx_opmode_oneshot)
                         key = 0
                         break
-            if key == b's' or self.transfer_Data.stop_Flag:
+            if key == b's': # or self.transfer_Data.stop_Flag:
                 uprint('Simulation STOP by keyboard')
-                self.transfer_Data.stop += 1
+                #self.transfer_Data.stop += 1
                 self.sim_Stop()
-                while True:
-                    if self.transfer_Data.stop == self.numberOfRobots:
-                        self.sim_Disable()
-                        sys.exit(0)
-                    time.sleep(0.1)
+                self.sim_Disable()
+                #while True:
+                #    if self.transfer_Data.stop == self.numberOfRobots:
+                #        self.sim_Disable()
+                #        sys.exit(0)
+                #    time.sleep(0.1)
                 self.falling_Flag = 3
-                self.transfer_Data.stop_Flag = True
+                #self.transfer_Data.stop_Flag = True
                 return self.falling_Flag
             #returnCode, Dummy_1quaternion= self.sim.simxGetObjectQuaternion(self.clientID, self.Dummy_1Handle , -1, self.sim.simx_opmode_buffer)
             #Dummy_1quaternion = self.from_vrep_quat_to_conventional_quat(Dummy_1quaternion)
@@ -477,7 +478,7 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                     if self.glob.SIMULATION == 1:
-                        self.sim_simxSynchronousTrigger(self.clientID)
+                        self.sim.simxSynchronousTrigger(self.clientID)
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
@@ -553,7 +554,7 @@ class Motion(Robot, Motion_extention_1):
         #                #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
         #                #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
         #            if self.glob.SIMULATION == 1:
-        #                self.sim_simxSynchronousTrigger(self.clientID)
+        #                self.sim.simxSynchronousTrigger(self.clientID)
         #        elif self.glob.SIMULATION == 5:
         #            joint_number = len(angles)
         #            if self.model == 'Roki_2':
@@ -734,7 +735,7 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                         if self.glob.SIMULATION == 1:
-                            self.sim_simxSynchronousTrigger(self.clientID)
+                            self.sim.simxSynchronousTrigger(self.clientID)
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     servoDatas = []
@@ -950,7 +951,7 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                         if self.glob.SIMULATION == 1:
-                            self.sim_simxSynchronousTrigger(self.clientID)
+                            self.sim.simxSynchronousTrigger(self.clientID)
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     servoDatas = []
@@ -997,7 +998,9 @@ class Motion(Robot, Motion_extention_1):
         if self.glob.monitor_is_on: self.glob.monitor()
         if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
         else: 
-            self.glob.vision.detect_Ball_in_One_Shot()
+            if self.glob.role == 'marathon':
+                self.glob.vision.detect_Line_Follow_One_Shot()
+            else:  self.glob.vision.detect_Ball_in_One_Shot()
 
 
     def walk_Cycle_With_Tors_v2(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
@@ -1412,7 +1415,7 @@ class Motion(Robot, Motion_extention_1):
                     #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                     #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                     if self.glob.SIMULATION == 1:
-                        self.sim_simxSynchronousTrigger(self.clientID)
+                        self.sim.simxSynchronousTrigger(self.clientID)
             elif self.glob.SIMULATION == 5:
                 joint_number = len(angles)
                 servoDatas = []
@@ -1495,7 +1498,7 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                     if self.glob.SIMULATION == 1:
-                        self.sim_simxSynchronousTrigger(self.clientID)
+                        self.sim.simxSynchronousTrigger(self.clientID)
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     servoDatas = []
@@ -1584,7 +1587,7 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                     if self.glob.SIMULATION == 1:
-                        self.sim_simxSynchronousTrigger(self.clientID)
+                        self.sim.simxSynchronousTrigger(self.clientID)
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
@@ -1728,7 +1731,7 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                         if self.glob.SIMULATION == 1:
-                            self.sim_simxSynchronousTrigger(self.clientID)
+                            self.sim.simxSynchronousTrigger(self.clientID)
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
@@ -1841,7 +1844,7 @@ class Motion(Robot, Motion_extention_1):
                         returnCode, Dummy_Hposition= self.sim.simxGetObjectPosition(self.clientID,
                                               self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
                     if self.glob.SIMULATION == 1:
-                        self.sim_simxSynchronousTrigger(self.clientID)
+                        self.sim.simxSynchronousTrigger(self.clientID)
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':

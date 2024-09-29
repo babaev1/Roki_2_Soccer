@@ -21,7 +21,7 @@ try:
               ['forward_left', 'goalkeeper', 'basketball', 'kick_test'],
               [],
               ['forward_center', 'penalty_Shooter'],
-              ['forward_right', 'penalty_Goalkeeper', 'run_test']]
+              ['forward_right', 'penalty_Goalkeeper', 'run_test', 'jump_test']]
     os.system("espeak -ven-m1 -a200 'Choose Role'")
     button = Button_Test(labels)
     first_pressed_button = button.wait_for_button_pressing(message ="'Choose role'")
@@ -56,6 +56,9 @@ try:
     if first_pressed_button == 'run_test':
         role = 'run_test'
         initial_coord = [0.0, 0.0, 0]
+    if first_pressed_button == 'jump_test':
+        role = 'jump_test'
+        initial_coord = [0.0, 0.0, 0]
     if first_pressed_button == 'basketball':
         role = 'dance'
         initial_coord = [0.0, 0.0, 0]
@@ -73,6 +76,8 @@ try:
     motion.falling_Flag = 0
     if role == 'run_test':
         labels = [[],['side_step_left', 'rotation_left'], [], ['short_run', 'long_run', 'spot_run', 'head_tilt_calibration'], ['side_step_right', 'rotation_right']]
+    if role == 'jump_test':
+        labels = [[],['jump_left'], [], ['jump_forward', 'jump_backward'], ['jump_right']]
     elif role == 'kick_test':
         labels = [[],[],[],['regular', 'new_kick'], []]
     else: 
