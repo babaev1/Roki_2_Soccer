@@ -697,6 +697,7 @@ class Vision_General:
         img = Image(img1)
         centroid_sum = 0
         blob_found = False
+        count_ok_rois = 0
         for i, r in enumerate(ROIS):
             blobs  = img.find_blobs([self.TH['orange ball']['th']], 
                                     pixels_threshold=20, #self.TH['orange ball']['pixel'],
@@ -707,6 +708,7 @@ class Vision_General:
                 blob_found = True
 
             if blobs:
+                count_ok_rois += 1
                 # Find the blob with the most pixels.
                 largest_blob = max(blobs, key=lambda b: b.pixels())
 
@@ -749,7 +751,7 @@ class Vision_General:
         self.glob.deflection.append(deflection_angle)
         if len(self.glob.deflection) > 60:
             self.glob.deflection.pop(0)
-        self.glob.data_quality_is_good = True
+        self.glob.data_quality_is_good = (count_ok_rois == 3)
 
     def quadratic_ransac_curve_fit(self, x, y):
 
