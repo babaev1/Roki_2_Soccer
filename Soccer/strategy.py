@@ -247,7 +247,7 @@ class Player():
         #sys.exit(1)
 
     def jump_test(self, second_pressed_button):
-
+        pass
 
     def rotation_test_main_cycle(self):
         motion = [
