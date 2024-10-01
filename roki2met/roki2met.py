@@ -198,6 +198,7 @@ class roki2met :
     leftClawCurrent = 1147
     leftClawPwm = 1148
     leftClawAddonMix = 1149
+    jump_mode = 1024
 
 
 

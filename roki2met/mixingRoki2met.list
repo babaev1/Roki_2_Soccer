@@ -115,18 +115,18 @@ VBC1_STACK_UP2//remove result, call address and params
 [2:10] ;
 VBC1_RETURN
 ;mixing <void()>
-[1:24] ;leftRightFactor = 100;
+[1:25] ;leftRightFactor = 100;
 VBC1_PUSH_2 //leftRightFactor
 VBC2_PUSH_CONST 100 
 VBC1_POP
-[1:25] ;frontBackFactor = 100;
+[1:26] ;frontBackFactor = 100;
 VBC2_PUSH_CONST 3 //frontBackFactor
 VBC2_PUSH_CONST 100 
 VBC1_POP
-[1:27] ;while(1) {
+[1:28] ;while(1) {
 LAB79: //while condition
 ;
-[1:30] ;leftFootSideAddonMix = -svImuGyroZ * leftRightFactor >> 10;
+[1:31] ;leftFootSideAddonMix = -svImuGyroZ * leftRightFactor >> 10;
 VBC3_PUSH_CONST 1117 //leftFootSideAddonMix
 VBC3_PUSH_GLOBAL 1008 //svImuGyroZ
 VBC1_NEG
@@ -135,7 +135,7 @@ VBC1_MUL
 VBC2_PUSH_CONST 10 
 VBC1_RSHIFT
 VBC1_POP
-[1:31] ;rightFootSideAddonMix = svImuGyroZ * leftRightFactor >> 10;
+[1:32] ;rightFootSideAddonMix = svImuGyroZ * leftRightFactor >> 10;
 VBC3_PUSH_CONST 1113 //rightFootSideAddonMix
 VBC3_PUSH_GLOBAL 1008 //svImuGyroZ
 VBC3_PUSH_GLOBAL 2 //leftRightFactor
@@ -143,7 +143,7 @@ VBC1_MUL
 VBC2_PUSH_CONST 10 
 VBC1_RSHIFT
 VBC1_POP
-[1:34] ;rightFootFrontAddonMix = leftFootFrontAddonMix = -svImuGyroX * frontBackFactor >> 10;
+[1:35] ;rightFootFrontAddonMix = leftFootFrontAddonMix = -svImuGyroX * frontBackFactor >> 10;
 VBC3_PUSH_CONST 1105 //rightFootFrontAddonMix
 VBC3_PUSH_CONST 1109 //leftFootFrontAddonMix
 VBC3_PUSH_GLOBAL 1006 //svImuGyroX
@@ -154,7 +154,7 @@ VBC2_PUSH_CONST 10
 VBC1_RSHIFT
 VBC1_STORE
 VBC1_POP
-[1:38] ;quart = svImuQuaterX * svImuQuaterX + svImuQuaterY * svImuQuaterY + svImuQuaterZ * svImuQuaterZ + svImuQuaterW * svImuQuaterW;
+[1:39] ;quart = svImuQuaterX * svImuQuaterX + svImuQuaterY * svImuQuaterY + svImuQuaterZ * svImuQuaterZ + svImuQuaterW * svImuQuaterW;
 VBC2_PUSH_CONST 4 //quart
 VBC3_PUSH_GLOBAL 1012 //svImuQuaterX
 VBC3_PUSH_GLOBAL 1012 //svImuQuaterX
@@ -172,7 +172,7 @@ VBC3_PUSH_GLOBAL 1015 //svImuQuaterW
 VBC1_MUL
 VBC1_ADD
 VBC1_POP
-[1:40] ;sum = sfFMathSqrt( quart );
+[1:41] ;sum = sfFMathSqrt( quart );
 VBC2_PUSH_CONST 6 //sum
 VBC5_PUSH_CONST 368 | 0x80000000 //import func index sfFMathSqrt
 //alloc addon amount for result
@@ -181,7 +181,7 @@ VBC1_I_TO_F
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC1_POP
-[1:42] ;if( sfAbs(sum - 16384.0) > 164 )
+[1:43] ;if( sfAbs(sum - 16384.0) > 164 )
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 6 //sum
 VBC5_PUSH_CONST 1182793728 
@@ -196,18 +196,18 @@ VBC4_FALSE_JUMP LAB203 //if to false
 VBC2_PUSH_CONST 5 //errCount
 VBC1_INC
 LAB203: //if else
-[1:47] ;sfWaitNextFrame();
+[1:48] ;sfWaitNextFrame();
 VBC1_WAIT
 VBC4_JUMP LAB79 //while forever loop
 LAB208: //while exit
-[1:51] ;
+[1:52] ;
 VBC1_RETURN
 ;main <void()>
-[1:52] ;mixing();
+[1:53] ;mixing();
 VBC2_PUSH_CONST 70  //func address mixing
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-[1:53] ;
+[1:54] ;
 VBC1_RETURN
 //Init table
 //Variables
@@ -410,6 +410,7 @@ leftClawTarget : 1146
 leftClawCurrent : 1147
 leftClawPwm : 1148
 leftClawAddonMix : 1149
+jump_mode : 1024
 leftRightFactor : 2
 frontBackFactor : 3
 quart : 4

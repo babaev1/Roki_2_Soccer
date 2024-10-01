@@ -9,6 +9,7 @@
     svCreateTask( mixing, 50 );
 */
 #include <roki2met.h>
+#include <roki2global.h>
 
 //Факторы определяют степень зависимости поворота стоп от показаний IMU
 int leftRightFactor; //Фактор миксования лево-право

@@ -276,6 +276,7 @@ int 1146:leftClawTarget
 int 1147:leftClawCurrent
 int 1148:leftClawPwm
 int 1149:leftClawAddonMix
+int 1024:jump_mode
 int 2:leftRightFactor
 int 3:frontBackFactor
 int 4:quart
