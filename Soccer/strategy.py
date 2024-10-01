@@ -344,6 +344,10 @@ class Player():
                     + ',\n"ROTATION_YIELD_LEFT": ' + str(params["ROTATION_YIELD_LEFT"]) \
                     + ',\n"CALIBRATED_CW_YAW": ' + str(self.motion.params['CALIBRATED_CW_YAW']) \
                     + ',\n"CALIBRATED_CCW_YAW": ' + str(self.motion.params['CALIBRATED_CCW_YAW']) \
+                    + ',\n"JUMP_FORWARD_TEST": ' + str(self.motion.params['JUMP_FORWARD_TEST']) \
+                    + ',\n"JUMP_BACKWARD_TEST": ' + str(self.motion.params['JUMP_BACKWARD_TEST']) \
+                    + ',\n"JUMP_LEFT_TEST": ' + str(self.motion.params['JUMP_LEFT_TEST']) \
+                    + ',\n"JUMP_RIGHT_TEST": ' + str(self.motion.params['JUMP_RIGHT_TEST']) \
                     + ',\n"MOTION_SHIFT_TEST_X": ' + str(params["MOTION_SHIFT_TEST_X"]) \
                     + ',\n"MOTION_SHIFT_TEST_Y": ' + str(params["MOTION_SHIFT_TEST_Y"]) \
                     + ',\n"SIDE_STEP_RIGHT_TEST_RESULT": ' + str(params["SIDE_STEP_RIGHT_TEST_RESULT"]) \
