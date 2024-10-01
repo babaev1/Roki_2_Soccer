@@ -316,8 +316,8 @@ class Neural:
             # Draw bounding box on the image
                 cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
         # Display the image with bounding boxes
-        # cv2.imshow("Output", frame)
-        # key = cv2.waitKey(10)
+        cv2.imshow("Output", frame)
+        key = cv2.waitKey(10)
         return (cx, cy)
 
     def basket_detect_single(self, frame):
