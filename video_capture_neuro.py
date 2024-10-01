@@ -19,7 +19,7 @@ rcb = Roki.Rcb4(mb)
 sd1 = Roki.Rcb4.ServoData()
 sd1.Id = 12
 sd1.Sio = 2
-sd1.Data = -1227 + 7500
+sd1.Data = -2000 + 7500
 
 sd2 = Roki.Rcb4.ServoData()
 sd2.Id = 4
@@ -43,6 +43,7 @@ sd5.Data = -250 + 7500
 
 
 #rcb.setServoPosAsync([sd1, sd2, sd3, sd4, sd5], 80, 79)
+rcb.setServoPosAsync([sd1], 80, 79)
 
 def letterbox(img, size=(640, 640), color=(114, 114, 114), auto=True, scaleFill=False, scaleup=True):
     # Resize image to a 32-pixel-multiple rectangle https://github.com/ultralytics/yolov3/issues/232

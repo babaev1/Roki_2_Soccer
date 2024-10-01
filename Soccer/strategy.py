@@ -1408,21 +1408,26 @@ class Player():
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
                 print('course :', course, 'distance :', distance)
-                if abs(course) > 10:
-                    if course > 0:
+                x = distance * math.cos(course) * 1000
+                y = distance * math.sin(course) * 1000
+                if abs(y) > 10:
+                    if y > 0:
                         intercom.memISet(var, 103)
-                    if course < 0:
+                    if y < 0:
                         intercom.memISet(var, 104)
                     self.glob.rcb.motionPlay(7)
-                    while(intercom.memIGet(var) != 0): time.sleep(0.1)
+                    #while(intercom.memIGet(var) != 0): time.sleep(0.1)
+                    time.sleep(0.5)
                     self.motion.jump_turn(0)
-                if distance > -50:
+                if x > -50:
                     intercom.memISet(var, 101)
                     self.glob.rcb.motionPlay(7)
-                    while(intercom.memIGet(var) != 0): time.sleep(0.1)
+                    #while(intercom.memIGet(var) != 0): time.sleep(0.1)
+                    time.sleep(0.5)
                     self.motion.jump_turn(0)
-                if abs(course) < 10 and distance < -50: break
-
+                if abs(y) < 10 and x < -50: 
+                    break
+            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_1') 
             return
 
         self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')   
