@@ -964,6 +964,31 @@ class Player():
         #    pickUp[i][20] -= int(self.motion.params['BASKETBALL_CLAMPING'])
         #for i in range(4):
         #    throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
+        if pressed_button == 'approach_test' :
+            var = roki2met.roki2met.jump_mode
+            self.motion.head_Return(0, -2000)
+            for _ in range(500):
+                result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
+                x = distance * math.cos(course) * 1000
+                y = distance * math.sin(course) * 1000
+                if abs(y) > 10:
+                    if y > 0:
+                        intercom.memISet(var, 103)
+                    if y < 0:
+                        intercom.memISet(var, 104)
+                    self.glob.rcb.motionPlay(7)
+                    time.sleep(0.5)
+                    self.motion.jump_turn(0)
+                if x > 0:
+                    intercom.memISet(var, 101)
+                    self.glob.rcb.motionPlay(7)
+                    time.sleep(0.5)
+                    self.motion.jump_turn(0)
+                if abs(y) < 10 and x < 0: 
+                    break
+            self.motion.head_Return(0, 0)
+            return
+
         if pressed_button == 'start' or pressed_button == 'pick_up_test' :
             #self.motion.play_Soft_Motion_Slot( name = 'pickUp', motion_list = pickUp)
             var = roki2met.roki2met.Basketball_PickUp_v2_R2

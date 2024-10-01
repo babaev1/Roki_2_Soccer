@@ -76,7 +76,7 @@ try:
     elif role == 'kick_test':
         labels = [[],[],[],['regular', 'new_kick'], []]
     elif role == 'basketball':
-        labels = [[],[],[],['start', 'throw_test', 'pick_up_test', 'throw_control'], []]
+        labels = [[],[],[],['start', 'throw_test', 'pick_up_test', 'throw_control', 'approach_test'], []]
         #labels = [[],[],[],['throw_test', 'start'], []]
     elif role == 'weight_lifting':
         labels = [[],[],[],['start', 'start_simple', 'start_lifting'], []]
