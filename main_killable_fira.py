@@ -78,6 +78,8 @@ try:
     elif role == 'basketball':
         labels = [[],[],[],['start', 'throw_test', 'pick_up_test', 'throw_control'], []]
         #labels = [[],[],[],['throw_test', 'start'], []]
+    elif role == 'weight_lifting':
+        labels = [[],[],[],['start', 'start_simple', 'start_lifting'], []]
     elif role == 'sprint':
         labels = [[],[],[],['start_attention'], []]
     else: 

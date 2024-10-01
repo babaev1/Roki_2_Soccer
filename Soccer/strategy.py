@@ -1395,15 +1395,18 @@ class Player():
             self.motion.fr1 = fr1 
             self.motion.fr2 = fr2 
 
-        if pressed_button == 'start':  
+        if pressed_button == 'start_simple':  
             #walk_straight(number_Of_Cycles = 9, stepLength = 32)
             walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_INITIAL_STEPS_NUMBER'],
                        stepLength = self.motion.params['WEIGHTLIFTING_INITIAL_STEPLENGTH'])
             self.motion.jump_turn(0)
+            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')
 
-        if pressed_button == 'start_later':
+        if pressed_button == 'start':
             var = roki2met.roki2met.jump_mode
             intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
+            walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_INITIAL_STEPS_NUMBER'],
+                       stepLength = self.motion.params['WEIGHTLIFTING_INITIAL_STEPLENGTH'])
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
@@ -1428,9 +1431,9 @@ class Player():
                 if abs(y) < 10 and x < -50: 
                     break
             self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_1') 
-            return
-
-        self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')   
+        
+        if pressed_button == 'start_lifting':
+            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_1')
 
         self.motion.keep_hands_up = True
         self.motion.ztr0 = - 180
