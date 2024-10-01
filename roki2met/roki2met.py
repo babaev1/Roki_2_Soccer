@@ -1,11 +1,12 @@
 
-#Этот файл автоматически сгенерирован с помощью программы IronArt v0.103
+#Этот файл автоматически сгенерирован с помощью программы IronArt v0.104
 #Не следует его редактировать вручную
 
 class roki2met :
     #Индексы доступных слотов
     mixingRoki2metSlot = 2
     mixingRoki2metSlot = 3
+    jump_motionsSlot = 7
     standUpSlot = 8
     Basketball_ThrowSlot = 9
     Basketball_PickUp_v2_R2Slot = 10
@@ -219,6 +220,13 @@ class roki2met :
         quart = 4
         errCount = 5
         sum = 6
+
+
+    class jump_motions :
+        #Перечень переменных слота jump_motions
+        restart_flag = 2
+        frameCount = 3
+        factor = 4
 
 
     class standUp :
