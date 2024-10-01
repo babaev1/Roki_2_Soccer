@@ -1404,7 +1404,7 @@ class Player():
         if pressed_button == 'start_later':
             self.motion.head_Return(0, -2000)
             for _ in range(500):
-                result, course, distance = self.glob.vision.seek_Ball_In_Frame_N()
+                result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
                 print('course :', course, 'distance :', distance)
             return
 
