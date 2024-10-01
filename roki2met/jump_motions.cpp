@@ -16,25 +16,11 @@ int restart_flag;
 int frameCount;
 int factor;
 
-void turn_CCW() {
+void jump_turn_CCW() {
 	frameCount = 20;
 	sfWaitFrame(frameCount);
 	frameCount = 6;
-	sfPoseGroup(MASK_FOOT_SIDE, 700, frameCount);
-	sfPoseGroup(MASK_RIGHT_PELVIC, -160 * factor, frameCount);
-	sfPoseGroup(MASK_LEFT_PELVIC, 160 * factor, frameCount);
-	sfWaitFrame(frameCount);
-	sfPoseGroup(MASK_FOOT_SIDE, 0, frameCount);
-	sfPoseGroup(MASK_RIGHT_PELVIC, 0, frameCount);
-	sfPoseGroup(MASK_LEFT_PELVIC, 0, frameCount);
-	sfWaitFrame(frameCount);
-}
-
-void turn_CW() {
-	frameCount = 20;
-	sfWaitFrame(frameCount);
-	frameCount = 6;
-	sfPoseGroup(MASK_FOOT_SIDE, 700, frameCount);
+	sfPoseGroup(MASK_FOOT_SIDE, 1000, frameCount);
 	sfPoseGroup(MASK_RIGHT_PELVIC, 160 * factor, frameCount);
 	sfPoseGroup(MASK_LEFT_PELVIC, -160 * factor, frameCount);
 	sfWaitFrame(frameCount);
@@ -44,18 +30,81 @@ void turn_CW() {
 	sfWaitFrame(frameCount);
 }
 
-void forward() {
+void jump_turn_CW() {
 	frameCount = 20;
-  	sfPoseGroup(MASK_FOOT_FRONT, 16 * factor, frameCount);
 	sfWaitFrame(frameCount);
 	frameCount = 6;
-	sfPoseGroup(MASK_FOOT_SIDE, 700, frameCount);
+	sfPoseGroup(MASK_FOOT_SIDE, 1000, frameCount);
+	sfPoseGroup(MASK_RIGHT_PELVIC, -160 * factor, frameCount);
+	sfPoseGroup(MASK_LEFT_PELVIC, 160 * factor, frameCount);
+	sfWaitFrame(frameCount);
+	sfPoseGroup(MASK_FOOT_SIDE, 0, frameCount);
+	sfPoseGroup(MASK_RIGHT_PELVIC, 0, frameCount);
+	sfPoseGroup(MASK_LEFT_PELVIC, 0, frameCount);
+	sfWaitFrame(frameCount);
+}
+
+void jump_forward() {
+	frameCount = 30;
+  	sfPoseGroup(MASK_FOOT_FRONT, 16 * factor, frameCount);
+	sfWaitFrame(frameCount);
+	frameCount = 9;
+	sfPoseGroup(MASK_FOOT_SIDE, 1000, frameCount);
   	sfPoseGroup(MASK_FOOT_FRONT, -48 * factor, frameCount);
 	sfWaitFrame(frameCount);
 	sfPoseGroup(MASK_FOOT_SIDE, 0, frameCount);
 	sfPoseGroup(MASK_FOOT_FRONT, 16 * factor, frameCount);
 	sfWaitFrame(frameCount);
   	sfPoseGroup(MASK_FOOT_FRONT, 0, frameCount);
+	sfWaitFrame(frameCount);
+}
+
+void jump_backward() {
+	frameCount = 30;
+  	sfPoseGroup(MASK_FOOT_FRONT, -16 * factor, frameCount);
+	sfWaitFrame(frameCount);
+	frameCount = 9;
+	sfPoseGroup(MASK_FOOT_SIDE, 1000, frameCount);
+  	sfPoseGroup(MASK_FOOT_FRONT, 48 * factor, frameCount);
+	sfWaitFrame(frameCount);
+	sfPoseGroup(MASK_FOOT_SIDE, 0, frameCount);
+	sfPoseGroup(MASK_FOOT_FRONT, -16 * factor, frameCount);
+	sfWaitFrame(frameCount);
+  	sfPoseGroup(MASK_FOOT_FRONT, 0, frameCount);
+	sfWaitFrame(frameCount);
+}
+
+void jump_left() {
+	frameCount = 30;
+  	sfPoseGroup(MASK_LEFT_FOOT_SIDE, -30 * factor, frameCount);
+  	sfPoseGroup(MASK_RIGHT_FOOT_SIDE, 30 * factor, frameCount);
+  	sfPoseGroup(MASK_LEFT_HIP_SIDE, -30 * factor, frameCount);
+  	sfPoseGroup(MASK_RIGHT_HIP_SIDE, 30 * factor, frameCount);
+	sfWaitFrame(frameCount);
+	frameCount = 9;
+	sfPoseGroup(MASK_FOOT_SIDE, 1000, frameCount);
+	sfWaitFrame(frameCount);
+	sfPoseGroup(MASK_FOOT_SIDE, 0, frameCount);
+	sfPoseGroup(MASK_LEFT_HIP_SIDE, 0, frameCount);
+  	sfPoseGroup(MASK_RIGHT_HIP_SIDE, 0, frameCount);
+	sfWaitFrame(frameCount);
+	sfWaitFrame(frameCount);
+}
+
+void jump_right() {
+	frameCount = 30;
+  	sfPoseGroup(MASK_LEFT_FOOT_SIDE, 30 * factor, frameCount);
+  	sfPoseGroup(MASK_RIGHT_FOOT_SIDE, -30 * factor, frameCount);
+  	sfPoseGroup(MASK_LEFT_HIP_SIDE, 30 * factor, frameCount);
+  	sfPoseGroup(MASK_RIGHT_HIP_SIDE, -30 * factor, frameCount);
+	sfWaitFrame(frameCount);
+	frameCount = 9;
+	sfPoseGroup(MASK_FOOT_SIDE, 1000, frameCount);
+	sfWaitFrame(frameCount);
+	sfPoseGroup(MASK_FOOT_SIDE, 0, frameCount);
+	sfPoseGroup(MASK_LEFT_HIP_SIDE, 0, frameCount);
+  	sfPoseGroup(MASK_RIGHT_HIP_SIDE, 0, frameCount);
+	sfWaitFrame(frameCount);
 	sfWaitFrame(frameCount);
 }
 
@@ -68,9 +117,12 @@ void main() {
   if (factor == 0) factor = 10;
   for (i=0; i < cycle_number; i++){
     mode = jump_mode % 10;
-    if (mode == 1) forward();
-    if (mode == 5) turn_CCW();
-    if (mode == 6) turn_CW();
+    if (mode == 1) jump_forward();
+    if (mode == 2) jump_backward();
+    if (mode == 3) jump_left();
+    if (mode == 4) jump_right();
+    if (mode == 5) jump_turn_CCW();
+    if (mode == 6) jump_turn_CW();
     }
-
+  jump_mode = 0;
 }

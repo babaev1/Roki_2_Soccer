@@ -247,7 +247,25 @@ class Player():
         #sys.exit(1)
 
     def jump_test(self, second_pressed_button):
-        pass
+        var = roki2met.roki2met.jump_mode
+        intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
+        #self.glob.rcb.motionPlay(23)
+        if second_pressed_button == 'jump_forward':
+            intercom.memISet(var, 1001)
+            self.glob.rcb.motionPlay(7)
+            while(intercom.memIGet(var) != 0): time.sleep(0.1)
+        if second_pressed_button == 'jump_backward':
+            intercom.memISet(var, 1002)
+            self.glob.rcb.motionPlay(7)
+            while(intercom.memIGet(var) != 0): time.sleep(0.1)
+        if second_pressed_button == 'jump_left':
+            intercom.memISet(var, 1003)
+            self.glob.rcb.motionPlay(7)
+            while(intercom.memIGet(var) != 0): time.sleep(0.1)
+        if second_pressed_button == 'jump_right':
+            intercom.memISet(var, 1004)
+            self.glob.rcb.motionPlay(7)
+            while(intercom.memIGet(var) != 0): time.sleep(0.1)
 
     def rotation_test_main_cycle(self):
         motion = [

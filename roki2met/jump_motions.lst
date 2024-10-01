@@ -685,11 +685,17 @@ function declare void sfMat3x3RowMul(
 function declare void sfWaitFrame(
  int 2:frame
 ) end function declare
-function declare void turn_CCW(
+function declare void jump_turn_CCW(
 ) end function declare
-function declare void turn_CW(
+function declare void jump_turn_CW(
 ) end function declare
-function declare void forward(
+function declare void jump_forward(
+) end function declare
+function declare void jump_backward(
+) end function declare
+function declare void jump_left(
+) end function declare
+function declare void jump_right(
 ) end function declare
 function declare void main(
 ) end function declare
@@ -1610,7 +1616,7 @@ function declare void sfWaitFrame(
 
 
 
-function declare void turn_CCW(
+function declare void jump_turn_CCW(
 ) end function declare
 {
  {
@@ -1670,7 +1676,7 @@ function declare void turn_CCW(
 
 
 
-function declare void turn_CW(
+function declare void jump_turn_CW(
 ) end function declare
 {
  {
@@ -1730,11 +1736,11 @@ function declare void turn_CW(
 
 
 
-function declare void forward(
+function declare void jump_forward(
 ) end function declare
 {
  {
-  ( <int 3:frameCount> ) = (20) 
+  ( <int 3:frameCount> ) = (30) 
  call  <function declare void sfPoseGroup(
  int 4:unitMask
  int 3:angle
@@ -1745,23 +1751,7 @@ function declare void forward(
  int 2:frame
 ) end function declare
 > 
-  ( <int 3:frameCount> ) = (6) 
- call  <function declare void sfPoseGroup(
- int 4:unitMask
- int 3:angle
- int 2:frameCount
-) end function declare
-> 
- call  <function declare void sfPoseGroup(
- int 4:unitMask
- int 3:angle
- int 2:frameCount
-) end function declare
-> 
- call  <function declare void sfWaitFrame(
- int 2:frame
-) end function declare
-> 
+  ( <int 3:frameCount> ) = (9) 
  call  <function declare void sfPoseGroup(
  int 4:unitMask
  int 3:angle
@@ -1782,6 +1772,238 @@ function declare void forward(
  int 4:unitMask
  int 3:angle
  int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+ return
+ }
+}
+
+
+
+function declare void jump_backward(
+) end function declare
+{
+ {
+  ( <int 3:frameCount> ) = (30) 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+  ( <int 3:frameCount> ) = (9) 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+ return
+ }
+}
+
+
+
+function declare void jump_left(
+) end function declare
+{
+ {
+  ( <int 3:frameCount> ) = (30) 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+  ( <int 3:frameCount> ) = (9) 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+ return
+ }
+}
+
+
+
+function declare void jump_right(
+) end function declare
+{
+ {
+  ( <int 3:frameCount> ) = (30) 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+  ( <int 3:frameCount> ) = (9) 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfPoseGroup(
+ int 4:unitMask
+ int 3:angle
+ int 2:frameCount
+) end function declare
+> 
+ call  <function declare void sfWaitFrame(
+ int 2:frame
 ) end function declare
 > 
  call  <function declare void sfWaitFrame(
@@ -1809,7 +2031,8 @@ function declare void main(
   }
   ( <int -2:cycle_number> ) = ( ( <int 1024:jump_mode> ) / (100) ) 
   ( <int 4:factor> ) = ( ( ( <int 1024:jump_mode> ) mod (100) ) / (10) ) 
- if  loop return
+ if  loop  ( <int 1024:jump_mode> ) = (0) 
+ return
  }
 }
 
