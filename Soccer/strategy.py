@@ -1402,10 +1402,27 @@ class Player():
             self.motion.jump_turn(0)
 
         if pressed_button == 'start_later':
+            var = roki2met.roki2met.jump_mode
+            intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
                 print('course :', course, 'distance :', distance)
+                if abs(course) > 10:
+                    if course > 0:
+                        intercom.memISet(var, 103)
+                    if course < 0:
+                        intercom.memISet(var, 104)
+                    self.glob.rcb.motionPlay(7)
+                    while(intercom.memIGet(var) != 0): time.sleep(0.1)
+                    self.motion.jump_turn(0)
+                if distance > -50:
+                    intercom.memISet(var, 101)
+                    self.glob.rcb.motionPlay(7)
+                    while(intercom.memIGet(var) != 0): time.sleep(0.1)
+                    self.motion.jump_turn(0)
+                if abs(course) < 10 and distance < -50: break
+
             return
 
         self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')   
