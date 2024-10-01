@@ -77,6 +77,10 @@ class Glob:
         self.cycle_step_yield = ( self.params['RUN_TEST_20_STEPS'] - self.params['RUN_TEST_10_STEPS']) / 10
         self.side_step_right_yield = self.params['SIDE_STEP_RIGHT_TEST_RESULT'] / 20
         self.side_step_left_yield = self.params['SIDE_STEP_LEFT_TEST_RESULT'] / 20
+        self.jump_forward_yield = self.params['JUMP_FORWARD_TEST'] / 10
+        self.jump_backward_yield = self.params['JUMP_BACKWARD_TEST'] / 10
+        self.jump_left_yield = self.params['JUMP_LEFT_TEST'] / 10
+        self.jump_right_yield = self.params['JUMP_RIGHT_TEST'] / 10
         #print("self.first_step_yield", self.first_step_yield)
         #print("self.cycle_step_yield", self.cycle_step_yield)
         #print("self.side_step_right_yield", self.side_step_right_yield)
