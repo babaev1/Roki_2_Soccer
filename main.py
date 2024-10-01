@@ -1,6 +1,8 @@
 from genericpath import isfile
+from multiprocessing.dummy import freeze_support
 import sys
 import os
+import platform
 import signal
 import math
 import json
@@ -12,30 +14,31 @@ from rich.traceback import install
 install(show_locals=True)
 import matplotlib.pyplot as plt
 import numpy as np
+from Soccer.Localisation.PF.call_par_filter import particle_filter_create_variables_and_launch
+import threading
 
 
 current_work_directory = os.getcwd()
 current_work_directory = current_work_directory.replace('\\', '/')
 
-try:
+if platform.system() == 'Linux':
     with open('/sys/firmware/devicetree/base/model') as model:     
         RPi_model = model.read()
     if RPi_model[:12]== "Raspberry Pi":
         SIMULATION = 5                          # will be running on Raspberry Pi
     else:
-        # will be running on desktop computer
-        current_work_directory += '/'
-        import threading
+        # will be running on desktop computer with Linux
         SIMULATION = 1
-except Exception:
-    # will be running on desktop computer
+else:
+    # will be running on desktop computer with Windows
     current_work_directory += '/'
-    import threading
     SIMULATION = 1                      # 0 - Simulation without physics, 
                                         # 1 - Simulation synchronous with physics, 
                                         # 3 - Simulation streaming with physics
 
-try:
+if __name__ == '__main__':
+    freeze_support()
+    #try:
     if SIMULATION == 5:
         filename01 = "output.txt"
         while True:
@@ -43,8 +46,8 @@ try:
             print('New process')
             with open(filename01, "a") as f01:
                 print(datetime.datetime.now(), file = f01)
-                #p01 = subprocess.Popen(['python', 'main_killable_fira.py'], stderr=f01) #, stdout = f01)
-                p01 = subprocess.Popen(['python', 'main_killable.py'], stderr=f01) #, stdout = f01)
+                p01 = subprocess.Popen(['python', 'main_killable_fira.py'], stderr=f01) #, stdout = f01)
+                #p01 = subprocess.Popen(['python', 'main_killable.py'], stderr=f01) #, stdout = f01)
             message_was_sounded = False
             counter = 0
             while True:
@@ -97,69 +100,36 @@ try:
         from strategy import Player
         from class_Motion_sim import *
 
-        clientID = []
-        transfer_Datas =[]
-        motion =[]
-        local =[]
-        glob = []
-        vision = []
-        robots_Number = 1
-        robot_IDs = [ '/Telo_Roki_2', '/Telo_Roki_2[1]', '#1', '#2']
-        initial_coord = [[-0.5, 0, 0], [ -1.8, 0, 0], [-1.1, 0, 0], [-1.8, 0, 0]]
-        clientID.append(sim_Enable('127.0.0.1', -19997))
-        print('clientID1 =', clientID[0])
-        if robots_Number > 1:
-            clientID.append(sim_Enable('127.0.0.2', -19998))
-            print('clientID2 =', clientID[1])
-        if robots_Number > 2:
-            clientID.append(sim_Enable('127.0.0.3', -19999))
-            print('clientID3 =', clientID[2])
-        if robots_Number > 3:
-            clientID.append(sim_Enable('127.0.0.4', -20000))
-            print('clientID4 =', clientID[3])
+        #goalkeeper, forward_v2, run_test, penalty_Shooter, rotation_test, penalty_Goalkeeper, spot_walk, dance, quaternion_test, test_walk, kick_test, marathon
+        second_pressed_button = 'start_later'   # side_step_left, side_step_right, short_run, rotation_right, spot_run, start_later
+        role = 'marathon'
 
-        events = []
-        t = []
-        m =[]
-        lock = threading.Lock()
-        transfer_Data = Transfer_Data()
-        for i in range(robots_Number):
-            glob.append(Glob(SIMULATION, current_work_directory, particles_number = 1000))
-            glob[i].pf_coord = initial_coord[i]
-            events.append(threading.Event())
-            transfer_Datas.append(transfer_Data)
-            vision.append(Vision_Sim(glob[i]))
-            motion.append(Motion_sim(glob[i], vision[i], clientID[i] , events[i], lock, transfer_Datas[i], robots_Number, robot_Number = robot_IDs[i]))
-            motion[i].sim_Start()
-            motion[i].direction_To_Attack = -initial_coord[i][2]
-            motion[i].activation()
-            local.append(Local(motion[i], glob[i], vision[i], coord_odometry = initial_coord[i]))
-            motion[i].local = local[i]
-            local[i].coordinate_record(odometry = True)
-            motion[i].falling_Flag = 0
-            #goalkeeper, forward_v2, run_test, penalty_Shooter, rotation_test, penalty_Goalkeeper, spot_walk, dance, quaternion_test, test_walk, kick_test
-            if i == 0 or i == 3:
-                second_pressed_button = 'start_later'   # side_step_left, side_step_right, short_run, rotation_right, spot_run, start_later
-                m.append(Player('forward', second_pressed_button, glob[i], motion[i], local[i])) 
-            if i == 1:
-                second_pressed_button = 'start'
-                m.append(Player('forward', second_pressed_button, glob[i], motion[i], local[i]))
-            if i == 2:
-                second_pressed_button = 'start'
-                m.append(Player('forward_v2', second_pressed_button, glob[i], motion[i], local[i]))
-            
-        if  SIMULATION == 1 :
-            t0 = threading.Thread( target = simulation_Trigger_Accumulator, args=(clientID, events, transfer_Datas, lock))
-        for i in range(robots_Number):
-            t.append(threading.Thread( target = m[i].play_game, args=()))
-        if  SIMULATION == 1 :
-            t0.setDaemon(True)
-            t0.start()
-        for i in range(robots_Number): t[i].start()
-        while True:
-            n = threading.activeCount()
-            if n == 2: break
-            time.sleep(1)
+        particles_number = 1000
+        initial_coord = [-0.5, 0, 0]
+
+        glob = Glob(SIMULATION, current_work_directory, particles_number = particles_number)
+        glob.pf_coord = initial_coord
+
+        pf_variables = particle_filter_create_variables_and_launch(glob)
+
+        robots_Number = 1
+        robot_ID = '/Telo_Roki_2'
+
+        vision = Vision_Sim(glob)
+        motion = Motion_sim(glob, vision, robot_Number = robot_ID)
+        motion.sim_Start()
+        motion.direction_To_Attack = -initial_coord[2]
+        motion.activation()
+        local = Local(motion, glob, vision, pf_variables, coord_odometry = initial_coord)
+        motion.local = local
+        local.coordinate_record(odometry = True)
+        motion.falling_Flag = 0
+
+        
+
+        glob.role = role
+        m = Player(role, second_pressed_button, glob, motion, local)
+        m.play_game()
 
         if os.path.isfile("Export_data.npy"):
             export_data = np.load("Export_data.npy")
@@ -188,16 +158,16 @@ try:
 
 
 
-except Exception as e:
-    if SIMULATION == 5:
-        exc_type, exc_value, exc_traceback = sys.exc_info()
-        f = open("Error.txt",'w')
-        #sys.print_exception(e,f)
-        traceback.print_exception(exc_type, exc_value, exc_traceback,
-                              limit=None, file=f)
-        f.close()
-        #sys.print_exception(e,sys.stdout)
-        traceback.print_exception(exc_type, exc_value, exc_traceback,
-                              limit=None, file=sys.stdout)
-    else:
-        print(e)
+    #except Exception as e:
+    #    if SIMULATION == 5:
+    #        exc_type, exc_value, exc_traceback = sys.exc_info()
+    #        f = open("Error.txt",'w')
+    #        #sys.print_exception(e,f)
+    #        traceback.print_exception(exc_type, exc_value, exc_traceback,
+    #                              limit=None, file=f)
+    #        f.close()
+    #        #sys.print_exception(e,sys.stdout)
+    #        traceback.print_exception(exc_type, exc_value, exc_traceback,
+    #                              limit=None, file=sys.stdout)
+    #    else:
+    #        print(e)

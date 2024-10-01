@@ -223,6 +223,7 @@ class Player():
         if self.role == 'penalty_Shooter': self.penalty_Shooter_main_cycle()
         if self.role == 'FIRA_penalty_Shooter': self.FIRA_penalty_Shooter_main_cycle()
         if self.role == 'run_test': self.run_test_main_cycle(self.second_pressed_button)
+        if self.role == 'jump_test': self.jump_test(self.second_pressed_button)
         if self.role == 'rotation_test': self.rotation_test_main_cycle()
         if self.role == 'sidestep_test': self.sidestep_test_main_cycle()
         if self.role == 'obstacle_runner': self.obstacle_runner_main_cycle()
@@ -244,6 +245,9 @@ class Player():
                 pass
             self.motion.sim_Disable()
         #sys.exit(1)
+
+    def jump_test(self, second_pressed_button):
+        pass
 
     def rotation_test_main_cycle(self):
         motion = [
@@ -453,9 +457,9 @@ class Player():
             #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
             #                                                                  very_Fast = True, first_look_point=first_look_point)
             #time.sleep(1) # this is to look around for ball 
-            if self.glob.robot_see_ball <= 0:
+            if self.glob.robot_see_ball <= 10:   # must be 0
                 self.motion.head_Return(0, self.motion.neck_play_pose)
-                success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+                success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = True,
                                                                                   very_Fast = False)
                 self.motion.head_Return(0, self.motion.neck_play_pose)
             #self.glob.pf_coord = self.local.coord_odometry
@@ -833,72 +837,6 @@ class Player():
                 if ((0.5 < dist < self.glob.landmarks['FIELD_LENGTH']/2) and (-math.pi/18 >= napravl >= -math.pi/4)): self.g.scenario_B3()
                 if ((0.7 < dist < self.glob.landmarks['FIELD_LENGTH']/2) and (-math.pi/4 > napravl >= -math.pi/2)): self.g.scenario_B4()
                 self.motion.head_Return(old_neck_pan, old_neck_tilt)
-
-    #def go_Around_Ball(self, dist, napravl):
-    #    print('go_Around_Ball')
-    #    turning_radius = 0.20 # meters
-    #    #first_look_point= self.local.ball_odometry
-    #    #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
-    #    #                                                                  very_Fast = True, first_look_point=first_look_point)
-    #    #if success_Code != True: return
-    #    if dist > 0.5: return
-    #    correction_x = dist * math.cos(napravl)
-    #    correction_y = dist * math.sin(napravl)
-    #    alpha = self.f.direction_To_Guest - self.local.coord_odometry[2]
-    #    alpha = self.motion.norm_yaw(alpha)
-    #    initial_body_yaw = self.local.coord_odometry[2]
-    #    correction_napravl = math.atan2(correction_y, (correction_x - turning_radius))
-    #    correction_dist = math.sqrt(correction_y**2 + (correction_x - turning_radius)**2)
-    #    old_neck_pan, old_neck_tilt = self.motion.head_Up()
-    #    if napravl * alpha > 0:
-    #        if napravl > 0: self.motion.first_Leg_Is_Right_Leg = False
-    #        self.motion.walk_Initial_Pose()
-    #        if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
-    #        self.motion.turn_To_Course(self.local.coord_odometry[2] + napravl, one_Off_Motion = False)
-    #        if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
-    #        self.motion.walk_Restart()
-    #        if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
-    #        self.motion.near_distance_omni_motion((dist - turning_radius) * 1000 , 0, one_Off_Motion = False)
-    #        alpha = self.motion.norm_yaw(alpha - napravl)
-    #        initial_body_yaw += napravl
-    #    else:
-    #        if correction_napravl > 0: self.motion.first_Leg_Is_Right_Leg = False
-    #        self.motion.walk_Initial_Pose()
-    #        if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
-    #        self.motion.near_distance_omni_motion(correction_dist*1000, correction_napravl, one_Off_Motion = False)
-    #    if alpha >= 0:
-    #        if self.motion.first_Leg_Is_Right_Leg == False:
-    #            change_legs = True
-    #        else:
-    #            change_legs = False
-    #            self.motion.walk_Restart()
-    #        self.motion.first_Leg_Is_Right_Leg = True
-    #        side_step_yield = self.motion.side_step_right_yield
-    #        invert = 1
-    #    else:
-    #        if self.motion.first_Leg_Is_Right_Leg == True:
-    #            change_legs = True
-    #        else:
-    #            change_legs = False
-    #            self.motion.walk_Restart()
-    #        self.motion.first_Leg_Is_Right_Leg = False
-    #        side_step_yield = self.motion.side_step_left_yield
-    #        invert = -1
-    #    #print('6self.motion.first_Leg_Is_Right_Leg:', self.motion.first_Leg_Is_Right_Leg)
-    #    yaw_increment_at_side_step =  math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
-    #    number_Of_Cycles = int(round(abs(alpha / yaw_increment_at_side_step)))+1
-    #    stepLength = 0
-    #    sideLength = 20
-    #    for cycle in range(number_Of_Cycles):
-    #        self.motion.refresh_Orientation()
-    #        rotation = initial_body_yaw + cycle * yaw_increment_at_side_step - self.motion.imu_body_yaw() * 1.1
-    #        rotation = self.motion.normalize_rotation(rotation)
-    #        #rotation = 0
-    #        if self.glob.ball_distance > 0.6: self.motion.falling_Flag = 3
-    #        self.motion.walk_Cycle(stepLength, sideLength, invert*rotation, cycle, number_Of_Cycles)
-    #    if self.motion.falling_Flag == 3 : self.motion.falling_Flag = 0 
-    #    self.motion.walk_Final_Pose()
-    #    self.motion.first_Leg_Is_Right_Leg = True
 
     def go_Around_Ball(self, dist, napravl):
         print('go_Around_Ball')
@@ -1656,20 +1594,23 @@ class Player():
                 stepLength1 = stepLength
                 if cycle ==0 : stepLength1 = stepLength/3
                 if cycle ==1 : stepLength1 = stepLength/3 * 2
-                deflection = sum(self.glob.deflection[-8:]) / 8
+                deflection = sum(self.glob.deflection[-2:]) / 2
                 if self.glob.data_quality_is_good :
-                    rotation = math.radians(deflection)
+                    rotation =  math.radians(deflection)
                     limit = 0.1
                 else:
-                    rotation = 0.5
-                    limit = 0.1
+                    stepLength1 /= 2
+                    rotation = math.copysign(0.5, deflection) #0.5
+                    limit = 0.2
                 self.motion.refresh_Orientation()
                 rotation_imu = - self.motion.body_euler_angle['yaw'] * 1.1
                 #rotation = rotation * 0.83 + rotation_imu * 0.17
                 rotation = self.normalize_rotation(rotation, limit= limit)
                 print("rotatition: ", rotation)
-                if self.glob.shift > 10 : sideLength = -min(self.glob.shift / 3, 20)
-                elif self.glob.shift < -10 : sideLength = -max(self.glob.shift / 3, -20)
+                #if self.glob.shift > 10 : sideLength = -min(self.glob.shift / 3, 20)
+                #elif self.glob.shift < -10 : sideLength = -max(self.glob.shift / 3, -20)
+                if self.glob.shift > 1 : sideLength = -min(self.glob.shift , 20)
+                elif self.glob.shift < -1 : sideLength = -max(self.glob.shift , -20)
                 else: sideLength = 0
                 print('self.glob.shift', self.glob.shift)
                 self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
@@ -1685,7 +1626,9 @@ class Player():
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
             if self.motion.falling_Flag != 0: 
                 self.motion.falling_Flag = 0
-            else:   time.sleep(90)
+            else:
+                if self.glob.camera_down_Flag == True: self.glob.camera_reset()
+                else:  time.sleep(90)                           # cool down knees
 
 
     def normalize_rotation(self, yaw, limit= 0.3):

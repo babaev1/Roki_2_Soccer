@@ -2,10 +2,14 @@
 
 import sys, os, array
 import math, time, json, array
-from Soccer.Localisation.PF.call_par_filter import Call_Par_Filter
+from Soccer.Localisation.PF.call_par_filter import Call_Par_Filter, particle_filter_as_process
 from Soccer.Localisation.PF.ParticleFilter import random
 import threading
-from multiprocessing import Array
+import multiprocessing
+from multiprocessing import Array, Value, Process
+
+#multiprocessing.set_start_method('fork')
+print('multiprocessing.get_start_method :', multiprocessing.get_start_method())
 
 LOCALISATION_VISUALISATION_IS_ON = False
 OBSTACLE_VISUALISATION_IS_ON = False
@@ -48,7 +52,7 @@ class M_blob:
         return (self.x_, self.y_, self.w_, self.h_)
 
 class Local():
-    def __init__ (self, motion,glob, vision, coord_odometry = [0.0,0.0,0.0]):
+    def __init__ (self, motion,glob, vision, pf_variables, coord_odometry = [0.0,0.0,0.0]):
         self.motion = motion
         self.glob = glob
         self.glob.local = self
@@ -70,7 +74,7 @@ class Local():
         self.ball_odometry = [0, 0]
         self.quality = 0
         self.vision = vision
-        self.penalty = []
+        self.penalty_list = []
         self.penalty_points =[]
         self.robot_moved = False
         self.coord_shift = [0.0, 0.0, 0.0]
@@ -101,16 +105,16 @@ class Local():
             self.re = re
             self.cv2 = cv2
             self.timer0 = time.perf_counter()
-        self.call_Par_Filter = Call_Par_Filter(coord_odometry, self.glob.landmarks_filename, self.glob.particles_number, self.glob.current_work_directory)
+        if self.glob.use_particle_filter:
+            global_vars, self.pf_odometry, self.pf_command, self.pf_return_coord = pf_variables
+            self.unsorted_posts, self.post1, self.post2, self.post3, self.post4, self.lines, self.Line_crosses, self.penalty, self.coord_for_PF_global = global_vars
+
         self.max_field_dimension = math.sqrt(self.glob.landmarks['FIELD_WIDTH']**2 + self.glob.landmarks['FIELD_LENGTH']**2)* 1.2
         self.post_data_in_pose = np.zeros((160,3), dtype = np.int16)  # (absolute_course (rad) * 2000, relative_distance (m) * 2000, post Number)
         self.post_data_in_pose_number = 0
         self.last_y = self.glob.params['CAMERA_VERTICAL_RESOLUTION'] - 1
         self.last_x = self.glob.params['CAMERA_HORIZONTAL_RESOLUTION'] - 1
         self.width_of_goals = self.glob.landmarks['post2'][0][1] - self.glob.landmarks['post1'][0][1]
-        #t1 = threading.Thread(target = self.particle_filter_update_in_thread)
-        #t1.setDaemon(True)
-        #t1.start()
 
     def refresh_odometry(self):
         self.coord_odometry[2] = self.motion.imu_body_yaw()
@@ -192,7 +196,7 @@ class Local():
                             if is_post_color == True: post_color_pixels.append(x)
                         if len(post_color_pixels) == 0: blob_cx = blob.cx()
                         else: blob_cx = int((post_color_pixels[0] + post_color_pixels[len(post_color_pixels)-1])/2)
-                        course, dist = self.vision.get_course_and_distance_to_post( blob_cx, blob_y_plus_h )
+                        return_code, course, dist = self.vision.get_course_and_distance_to_post( blob_cx, blob_y_plus_h )
                         if dist > self.max_field_dimension : continue                           # filter off too far measurements
                         distance_in_mm = dist *1000
                         virtual_width_of_post = dist * math.tan(math.radians(blob.w() * self.motion.params['CAMERA_APERTURE'] / self.motion.params['CAMERA_HORIZONTAL_RESOLUTION']))
@@ -332,6 +336,25 @@ class Local():
                 if post[2] == 2:  post2_data.append([x,y,weight])
                 if post[2] == 3:  post3_data.append([x,y,weight])
                 if post[2] == 4:  post4_data.append([x,y,weight])
+                if post[2] == 0 :
+                    counter = int(self.unsorted_posts[0])
+                    if counter == 20: continue
+                    with self.unsorted_posts.get_lock():
+                        self.unsorted_posts[0] += 1
+                        self.unsorted_posts[counter * 3 + 1] = x
+                        self.unsorted_posts[counter * 3 + 2] = y
+                        self.unsorted_posts[counter * 3 + 3] = weight
+                for j in range(4):
+                    if post[2] == 1 + j :
+                        post_n = eval('self.post' + str(j+1))
+                        counter = int(post_n[0])
+                        if counter == 20: continue
+                        with post_n.get_lock():
+                            post_n[0] += 1
+                            post_n[counter * 3 + 1] = x
+                            post_n[counter * 3 + 2] = y
+                            post_n[counter * 3 + 3] = weight
+
         landmarks['unsorted_posts']= unsorted_data
         landmarks['post1']= post1_data
         landmarks['post2']= post2_data
@@ -341,9 +364,33 @@ class Local():
         landmarks['Line_crosses'] = []
         landmarks['penalty'] = []
         if self.USE_LANDMARKS_FOR_LOCALISATION == True:
-            if self.USE_LINES_FOR_LOCALISATION ==True:landmarks['lines'] = self.line_group_compact
-            if self.USE_LINE_CROSSES_FOR_LOCALISATION ==True:landmarks['Line_crosses'] = self.cross_points
-            if self.USE_PENALTY_MARKS_FOR_LOCALISATION ==True: landmarks['penalty'] = self.penalty_points
+            if self.USE_LINES_FOR_LOCALISATION ==True:
+                landmarks['lines'] = self.line_group_compact
+                with self.lines.get_lock():
+                    self.lines[0] = len(self.line_group_compact)
+                    for i in range(len(self.line_group_compact)):
+                        self.lines[i * 3 + 1] = self.line_group_compact[i][0]
+                        self.lines[i * 3 + 2] = self.line_group_compact[i][1]
+                        self.lines[i * 3 + 3] = self.line_group_compact[i][2]
+            else: self.lines[0] = 0
+            if self.USE_LINE_CROSSES_FOR_LOCALISATION ==True:
+                landmarks['Line_crosses'] = self.cross_points
+                with self.Line_crosses.get_lock():
+                    self.Line_crosses[0] = len(self.cross_points)
+                    for i in range(len(self.cross_points)):
+                        self.Line_crosses[i * 3 + 1] = self.cross_points[i][0]
+                        self.Line_crosses[i * 3 + 2] = self.cross_points[i][1]
+                        self.Line_crosses[i * 3 + 3] = self.cross_points[i][2]
+            else: self.Line_crosses[0] = 0
+            if self.USE_PENALTY_MARKS_FOR_LOCALISATION ==True: 
+                landmarks['penalty'] = self.penalty_points
+                with self.penalty.get_lock():
+                    self.penalty[0] = len(self.penalty_points)
+                    for i in range(len(self.penalty_points)):
+                        self.penalty[i * 3 + 1] = self.penalty_points[i][0]
+                        self.penalty[i * 3 + 2] = self.penalty_points[i][1]
+                        self.penalty[i * 3 + 3] = self.penalty_points[i][2]
+            else: self.penalty[0] = 0
             #uprint('self.cross_points = ', self.cross_points)
             #for i in range(len(self.line_group_compact)): print('rho = ', self.line_group_compact[i][0], '\t', 'theta =', math.degrees(self.line_group_compact[i][1]))
         #uprint('Number of cross_points = ', len(self.cross_points), 'lines =', len(self.line_group_compact),
@@ -354,13 +401,16 @@ class Local():
             coord.append(self.coord_visible[0])
             coord.append(self.coord_visible[1])
             coord.append(self.coord_visible[2])
+        else: coord =[1000,1000,1000]
         if self.DIRECT_COORD_MEASUREMENT_BY_PAIRS_OF_POST == False: coord.clear()                   #!!!!!!!!
         else: print('coord_visible:', coord)
         self.landmarks_for_PF.update(landmarks)
         self.coord_for_PF = coord
-        start = time.perf_counter()
-        self.call_Par_Filter.update(self.landmarks_for_PF, self.coord_for_PF)
-        print('resampling time :', time.perf_counter() - start)
+        with self.coord_for_PF_global.get_lock():   self.coord_for_PF_global[:] = coord
+        #start = time.perf_counter()
+        #self.call_Par_Filter.update(self.landmarks_for_PF, self.coord_for_PF)
+        #print('resampling time :', time.perf_counter() - start)
+        with self.pf_command.get_lock():  self.pf_command.value = 3
         self.coord_for_PF =[]
         self.landmarks_for_PF={}
 
@@ -370,8 +420,9 @@ class Local():
         coord = self.coord_for_PF.copy()
         self.coord_for_PF =[]
         #timer1 = time.perf_counter()
-        self.call_Par_Filter.update(landmarks, coord)
+        #self.call_Par_Filter.update(landmarks, coord)
         #print('resampling time =', time.perf_counter() - timer1)
+        with self.pf_command.get_lock(): self.pf_command.value = 3
 
 
     def particle_filter_update_in_thread(self):
@@ -388,18 +439,41 @@ class Local():
 
 
     def correct_yaw_in_pf(self):
-        self.glob.pf_coord = self.call_Par_Filter.return_coord()
-        self.motion.refresh_Orientation()
-        shift__Yaw = self.motion.imu_body_yaw() -  self.glob.pf_coord[2]
-        shifts = {'shift_x': 0, 'shift_y': 0,'shift_yaw': shift__Yaw}
-        self.call_Par_Filter.move(shifts)
+        #self.glob.pf_coord = self.call_Par_Filter.return_coord()
+        if self.glob.use_particle_filter:
+            with self.pf_return_coord.get_lock():
+                if self.pf_return_coord[0] == 1:
+                    self.glob.pf_coord = self.pf_return_coord[1:]
+                    self.pf_return_coord[0] = 0
+            self.motion.refresh_Orientation()
+            shift__Yaw = self.normalize_yaw(self.motion.imu_body_yaw() -  self.glob.pf_coord[2])
+            shifts = {'shift_x': 0, 'shift_y': 0,'shift_yaw': shift__Yaw}
+            #print('shifts: ', shifts)
+            with self.pf_odometry.get_lock():
+                n = int(self.pf_odometry[0])
+                if n > 8: self.pf_odometry[n * 3+ 3] += shift__Yaw
+                else:
+                    self.pf_odometry[0] += 1
+                    self.pf_odometry[n * 3+ 1] = 0
+                    self.pf_odometry[n * 3+ 2] = 0
+                    self.pf_odometry[n * 3+ 3] = shift__Yaw
+            #self.call_Par_Filter.move(shifts)
+            #self.glob.pf_coord = self.call_Par_Filter.return_coord()
+            with self.pf_return_coord.get_lock():
+                if self.pf_return_coord[0] == 1:
+                    self.glob.pf_coord = self.pf_return_coord[1:]
+                    self.pf_return_coord[0] = 0
         self.coord_odometry[2] = self.motion.imu_body_yaw()
-        self.glob.pf_coord = self.call_Par_Filter.return_coord()
 
 
 
     def coordinate_record(self, odometry = False, shift = False):
-        self.glob.pf_coord = self.call_Par_Filter.return_coord()
+        #self.glob.pf_coord = self.call_Par_Filter.return_coord()
+        if self.glob.use_particle_filter:
+            with self.pf_return_coord.get_lock():
+                if self.pf_return_coord[0] == 1:
+                    self.glob.pf_coord = self.pf_return_coord[1:]
+                    self.pf_return_coord[0] = 0
         if odometry == True:
             if shift == False:
                 shift__X = (self.coord_odometry[0] -self.coord_odometry_old[0])
@@ -414,12 +488,30 @@ class Local():
                 shift__Y_local = self.coord_shift[1]
                 shift__Yaw = self.coord_shift[2]
             shifts = {'shift_x': shift__X_local, 'shift_y': shift__Y_local, 'shift_yaw': shift__Yaw}
-            self.call_Par_Filter.move(shifts)
+            #print('shifts: ', shifts)
+            if self.glob.use_particle_filter:
+                with self.pf_odometry.get_lock():
+                    n = int(self.pf_odometry[0])
+                    if n > 8: 
+                        self.pf_odometry[n * 3 + 1] += shift__X_local
+                        self.pf_odometry[n * 3 + 2] += shift__Y_local
+                        self.pf_odometry[n * 3 + 3] += shift__Yaw
+                    else:
+                        self.pf_odometry[0] += 1
+                        self.pf_odometry[n * 3 + 1] = shift__X_local
+                        self.pf_odometry[n * 3 + 2] = shift__Y_local
+                        self.pf_odometry[n * 3 + 3] = shift__Yaw
+            #self.call_Par_Filter.move(shifts)
             self.robot_moved = True
             self.cross_points.clear()
             self.penalty_points.clear()
         self.correct_yaw_in_pf()
-        self.glob.pf_coord = self.call_Par_Filter.return_coord()
+        #self.glob.pf_coord = self.call_Par_Filter.return_coord()
+        if self.glob.use_particle_filter:
+            with self.pf_return_coord.get_lock():
+                if self.pf_return_coord[0] == 1:
+                    self.glob.pf_coord = self.pf_return_coord[1:]
+                    self.pf_return_coord[0] = 0
         #if self.glob.wifi_params['WIFI_IS_ON']: self.report_to_WIFI()
         if self.glob.monitor_is_on: self.glob.monitor()
         if (self.glob.SIMULATION == 1 or self.glob.SIMULATION == 0 or self.glob.SIMULATION == 3):
@@ -520,7 +612,7 @@ class Local():
     def localisation_Complete(self):
         timer1= time.perf_counter()
         returncode = self.process_Post_data_in_Pose()
-        self.pf_update(returncode)
+        if self.glob.use_particle_filter: self.pf_update(returncode)
         alpha, betta = 0.3, 0.7
         if abs(self.coord_visible[0]) > 2 or abs(self.coord_visible[1]) > 1.5 : alpha, betta = 0,1
         self.coordinate[0] = (self.coord_visible[0] * alpha +self.coord_odometry[0] * betta)
@@ -531,8 +623,13 @@ class Local():
         else: self.quality = 0.1/deviation
         #self.coord_odometry = self.coordinate.copy()
         self.correct_yaw_in_pf()
-        self.glob.pf_coord = self.call_Par_Filter.return_coord()
-        self.coord_odometry[:] = self.glob.pf_coord
+        #self.glob.pf_coord = self.call_Par_Filter.return_coord()
+        if self.glob.use_particle_filter:
+            with self.pf_return_coord.get_lock():
+                if self.pf_return_coord[0] == 1:
+                    self.glob.pf_coord = self.pf_return_coord[1:]
+                    self.pf_return_coord[0] = 0
+            self.coord_odometry[:] = self.glob.pf_coord
         print('self.glob.pf_coord : ', round(self.glob.pf_coord[0], 2), round(self.glob.pf_coord[1], 2), round(self.glob.pf_coord[2], 2))
         if self.glob.obstacleAvoidanceIsOn: self.group_obstacles()
         self.coordinate_record()
@@ -1221,7 +1318,7 @@ class Local():
         #else: thresholds =  self.vision.TH['white marking']['th']
         for blob in img1.find_blobs(thresholds, pixels_threshold=self.vision.TH['white marking']['pixel'],
                                    area_threshold=self.vision.TH['white marking']['area'], merge=True):
-            if blob.x() < 5 or blob.y() < 5 or blob.x() + blob.w() > 314 or blob.y() + blob.h() > 234 : continue
+            if blob.x() < 5 or blob.y() < 5 or blob.x() + blob.w() > (self.glob.params["CAMERA_HORIZONTAL_RESOLUTION"] -6) or blob.y() + blob.h() > (self.glob.params["CAMERA_VERTICAL_RESOLUTION"]-6) : continue
             n = 0
             per_R, per_G, per_B = 0.0,0.0,0.0
             if self.glob.SIMULATION == 2 :
@@ -1273,11 +1370,11 @@ class Local():
             img1.draw_rectangle(penalty_marks[i].rect())
         for i in range (len(penalty_marks)):
             #returncode, floor_x, floor_y = self.motion.get_cooord_of_point(penalty_marks[i].cx(), penalty_marks[i].cy())
-            floor_x, floor_y = self.vision.image_point_to_relative_coord_on_floor(penalty_marks[i].cx(), penalty_marks[i].cy())
+            result, floor_x, floor_y = self.vision.image_point_to_relative_coord_on_floor(penalty_marks[i].cx(), penalty_marks[i].cy())
             #if returncode == False: continue
             weight = 1
             #if floor_x**2 + floor_y**2 > 6.25: weight = 0.5
-            self.penalty.append([floor_x, floor_y, weight])
+            self.penalty_list.append([floor_x, floor_y, weight])
         #uprint(penalty_marks)
         #self.cv2.imshow('Vision Binary', img1.img)
         #self.cv2.waitKey(0) & 0xFF
@@ -1285,17 +1382,17 @@ class Local():
     def group_penalty_marks(self):
         self.penalty_points.clear()
         penalty = []
-        m = len(self.penalty)
+        m = len(self.penalty_list)
         for i in range(m):
             if i == 0:
-                penalty.append([self.penalty[i]])
+                penalty.append([self.penalty_list[i]])
             else:
                 was_not_added = True
                 for j in range(len(penalty)):
-                    if (self.penalty[i][0] - penalty[j][0][0])**2 + (self.penalty[i][1] - penalty[j][0][1])**2 < 0.36 :
-                        penalty[j].append(self.penalty[i])
+                    if (self.penalty_list[i][0] - penalty[j][0][0])**2 + (self.penalty_list[i][1] - penalty[j][0][1])**2 < 0.36 :
+                        penalty[j].append(self.penalty_list[i])
                         was_not_added = False
-                if was_not_added == True: penalty.append([self.penalty[i]])
+                if was_not_added == True: penalty.append([self.penalty_list[i]])
         for i in range(len(penalty)):
             n = len(penalty[i])
             x, y, w = 0, 0, 0
@@ -1304,7 +1401,7 @@ class Local():
                 y += penalty[i][j][1]
                 w += penalty[i][j][2]
             if n != 0 : self.penalty_points.append([x/n,y/n,w/n])
-        self.penalty.clear()
+        self.penalty_list.clear()
 
     def detect_obstacles(self, img):
         if self.glob.SIMULATION == 2 :

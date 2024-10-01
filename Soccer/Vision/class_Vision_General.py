@@ -25,6 +25,7 @@ class Vision_General:
         self.camera_thread = threading.Thread(target = self.detect_Ball_in_Stream, args=(self.event,))
         self.camera_thread.setDaemon(True)
         #self.camera_thread.start()
+        self.last_seen_centroid = [0,0,0]
 
     def thinning(self, img, rows, columns, iterations_limit):
         return self.zhangSuen(img, rows, columns, iterations_limit)
@@ -667,33 +668,24 @@ class Vision_General:
             time.sleep(0.1)
 
     def detect_Line_Follow_One_Shot(self):
-        x_size = 200
-        y_size = 160
-        turn = 0
-        shift = 0
-        img1, frame_number = self.camera.snapshot()
-        #th = self.TH['orange ball']['th']
-        #low_th = (int(th[0] * 2.55), th[2] + 128, th[4] + 128)
-        #high_th = (math.ceil(th[1] * 2.55), th[3] + 128, th[5] + 128)
-
-        FRAME_X, FRAME_Y = 400, 320
-
         if self.glob.SIMULATION == 5:
-            img1 = cv2.resize(img1, (FRAME_X, FRAME_Y))
-        
+            img1, frame_number = self.camera.snapshot()
+        else:
+            img1 = self.glob.motion.vision_Sensor_Get_Image()
+        FRAME_X, FRAME_Y = 400, 320
+        img1 = cv2.resize(img1, (FRAME_X, FRAME_Y))
         img = Image(img1)
-
-        #ROIS = [ # [ROI, weight]
-        #        (0, 2*140, 2*200, 2*20, 0.7), # You'll need to tweak the weights for your app
-        #        (0,  2*70, 2*200, 2*20, 0.4), # depending on how your robot is setup.
-        #        (0,   0, 2*200, 2*20, 0.3)
-        #        ]
-
-        ROIS = [ # [ROI, weight]
-                (140, 140, 120, 20, 0.2), # You'll need to tweak the weights for your app
+        ROIS = [ # [ROI, weight] by Osokin
+                (140, 160, 120, 20, 0.2), # You'll need to tweak the weights for your app
                 (130, 110, 140, 20, 0.5), # depending on how your robot is setup.
                 (120,  65, 160, 20, 0.8)
                 ]
+
+        #ROIS = [ # [ROI, weight]
+        #        (0, 140, 400, 20, 0.2), # You'll need to tweak the weights for your app
+        #        (0, 110, 400, 20, 0.5), # depending on how your robot is setup.
+        #        (0,  65, 400, 20, 0.8)
+        #        ]
 
         weight_sum = 0
         weighted_y = 0
@@ -702,10 +694,10 @@ class Vision_General:
             weight_sum += r[4]
             weighted_y += (FRAME_Y - r[1]) * r[4]
 
-        #image = cv2.resize(img1,(x_size, y_size))
         img = Image(img1)
         centroid_sum = 0
         blob_found = False
+        count_ok_rois = 0
         for i, r in enumerate(ROIS):
             blobs  = img.find_blobs([self.TH['orange ball']['th']], 
                                     pixels_threshold=20, #self.TH['orange ball']['pixel'],
@@ -716,18 +708,27 @@ class Vision_General:
                 blob_found = True
 
             if blobs:
+                count_ok_rois += 1
                 # Find the blob with the most pixels.
                 largest_blob = max(blobs, key=lambda b: b.pixels())
 
                 print("largest blob found")
 
                 # Draw a rect around the blob.
-                img.draw_rectangle(largest_blob.rect())
+                img.draw_rectangle((largest_blob.rect()[0] + r[0], largest_blob.rect()[1] + r[1], largest_blob.rect()[2], largest_blob.rect()[3]))
+                img.draw_rectangle(r[:-1], color=(255, 255, 255))
 
-                centroid_sum += (largest_blob.cx() + r[0] - r[2] / 2) * r[4] # r[4] is the roi weight.
+                centroid_sum += (largest_blob.cx() - r[2] / 2) * r[4] # r[4] is the roi weight.
                 if i == 0: self.glob.shift = r[2] / 2 - largest_blob.cx()
+                self.last_seen_centroid[i] = largest_blob.cx() - r[2] / 2
+            else:
+                if self.last_seen_centroid[i] > 0:
+                    centroid_sum += r[2] / 2 * r[4] # r[4] is the roi weight.
+                elif self.last_seen_centroid[i] < 0:
+                    centroid_sum += - r[2] / 2 * r[4] # r[4] is the roi weight.
+
         
-        img1 = cv2.resize(img1, (800, 650))
+        img1 = cv2.resize(img.img, (800, 650))
         cv2.imshow('Track',img1)
         cv2.waitKey(10)
         if (blob_found == False):
@@ -740,16 +741,17 @@ class Vision_General:
 
             weighted_y /= weight_sum
 
-            deflection_angle = math.atan((center_pos - (FRAME_X / 2 + 30)) / weighted_y)#FRAME_Y * 2)
+            #deflection_angle = math.atan((center_pos - (FRAME_X / 2 + 30)) / weighted_y)#FRAME_Y * 2) # by Osokin
+            deflection_angle = - math.atan(center_pos / weighted_y)
             # Convert angle in radians to degrees.
             deflection_angle = math.degrees(deflection_angle)
 
-            print("center_pos, deflection, weighy", center_pos, deflection_angle, weighted_y)
+            print("center_pos, deflection, weight_y", center_pos, deflection_angle, weighted_y)
         
         self.glob.deflection.append(deflection_angle)
         if len(self.glob.deflection) > 60:
             self.glob.deflection.pop(0)
-        self.glob.data_quality_is_good = True
+        self.glob.data_quality_is_good = (count_ok_rois == 3)
 
     def quadratic_ransac_curve_fit(self, x, y):
 

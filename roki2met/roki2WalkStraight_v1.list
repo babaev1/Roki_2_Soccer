@@ -1,5 +1,5 @@
 //====================================================================
-//      SvCompiler V6.06
+//      SvCompiler V9.06
 //By A.Sibilev
 //====================================================================
 //cblock
@@ -22,6 +22,7 @@
 ;sfStop <void()>
 ;sfStartSlot <void(,int)>
 ;sfBip <void(,int,int)>
+;sfWriteFlash <void()>
 ;sfFreeGroup <void(,int)>
 ;sfPoseGroup <void(,int,int,int)>
 ;sfPoseGroupDelay <void(,int,int,int,int)>
@@ -82,8 +83,29 @@
 ;sfFMathFAbs <float(,float)>
 ;sfFMathFloor <float(,float)>
 ;sfFMathFMod <float(,float,float)>
+;sfQuaternionToMatrix <void(,*:SfMatrix3x3,float,float,float,float)>
+;sfQuaternionToMatrixImu <void(,*:SfMatrix3x3)>
+;sfGravityVector <void(,*:SfVector3)>
+;sfVec3Set <void(,*:SfVector3,float,float,float)>
+;sfVec3Sum <void(,*:SfVector3,*:SfVector3,*:SfVector3)>
+;sfVec3Diff <void(,*:SfVector3,*:SfVector3,*:SfVector3)>
+;sfVec3MulRowColCx <float(,*:SfVector3,float,float,float)>
+;sfVec3MulRowCol <float(,*:SfVector3,*:SfVector3)>
+;sfVec3ScSum <void(,*:SfVector3,*:SfVector3,float)>
+;sfVec3ScDiff <void(,*:SfVector3,*:SfVector3,float)>
+;sfVec3ScMul <void(,*:SfVector3,*:SfVector3,float)>
+;sfVec3ScDiv <void(,*:SfVector3,*:SfVector3,float)>
+;sfMat3x3Set <void(,*:SfMatrix3x3,float,float,float,float,float,float,float,float,float)>
+;sfMat3x3SetAll <void(,*:SfMatrix3x3,float)>
+;sfMat3x3SetDiag <void(,*:SfMatrix3x3,float)>
+;sfMat3x3Copy <void(,*:SfMatrix3x3,*:SfMatrix3x3)>
+;sfMat3x3Transpose <void(,*:SfMatrix3x3,*:SfMatrix3x3)>
+;sfMat3x3Mul <void(,*:SfMatrix3x3,*:SfMatrix3x3,*:SfMatrix3x3)>
+;sfMat3x3ScMul <void(,*:SfMatrix3x3,*:SfMatrix3x3,float)>
+;sfMat3x3MulCol <void(,*:SfVector3,*:SfMatrix3x3,*:SfVector3)>
+;sfMat3x3RowMul <void(,*:SfVector3,*:SfVector3,*:SfMatrix3x3)>
 ;sfWaitFrame <void(,int)>
-[3:348] ;sfWaitFrameOut( frame + svFrameCount );
+[3:466] ;sfWaitFrameOut( frame + svFrameCount );
 VBC5_PUSH_CONST 17 | 0x80000000 //import func index sfWaitFrameOut
 VBC2_PUSH_LOCAL 2 //frame
 VBC3_PUSH_GLOBAL 1 //svFrameCount

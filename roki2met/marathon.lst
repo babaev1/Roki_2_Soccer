@@ -1,5 +1,5 @@
 //*****************************************************************
-// Script Compiler V6.06
+// Script Compiler V9.06
 // Author: Sibilev A.S.
 // Web: www.rc.saliLab.com
 //*****************************************************************
@@ -45,6 +45,35 @@ empty type <float(,float,float)>
 empty type <float(,float,*int)>
 empty type <float(,float,int)>
 empty type <float(,float,*float)>
+class SfVector3 {
+members:
+ float 0:x
+ float 1:y
+ float 2:z
+class SfMatrix3x3 {
+members:
+ []float 0:m
+float[9] []float
+class SfMatrix4x4 {
+members:
+ []float 0:m
+*SfMatrix3x3 *:SfMatrix3x3
+empty type <void(,*:SfMatrix3x3,float,float,float,float)>
+empty type <void(,*:SfMatrix3x3)>
+*SfVector3 *:SfVector3
+empty type <void(,*:SfVector3)>
+empty type <void(,*:SfVector3,float,float,float)>
+empty type <void(,*:SfVector3,*:SfVector3,*:SfVector3)>
+empty type <float(,*:SfVector3,float,float,float)>
+empty type <float(,*:SfVector3,*:SfVector3)>
+empty type <void(,*:SfVector3,*:SfVector3,float)>
+empty type <void(,*:SfMatrix3x3,float,float,float,float,float,float,float,float,float)>
+empty type <void(,*:SfMatrix3x3,float)>
+empty type <void(,*:SfMatrix3x3,*:SfMatrix3x3)>
+empty type <void(,*:SfMatrix3x3,*:SfMatrix3x3,*:SfMatrix3x3)>
+empty type <void(,*:SfMatrix3x3,*:SfMatrix3x3,float)>
+empty type <void(,*:SfVector3,*:SfMatrix3x3,*:SfVector3)>
+empty type <void(,*:SfVector3,*:SfVector3,*:SfMatrix3x3)>
 
 //==================
 // global variables
@@ -393,6 +422,8 @@ function declare void sfBip(
  int 3:bipCount
  int 2:seriesCount
 ) end function declare
+function declare void sfWriteFlash(
+) end function declare
 function declare void sfFreeGroup(
  int 2:unitMask
 ) end function declare
@@ -621,6 +652,113 @@ function declare float sfFMathFloor(
 function declare float sfFMathFMod(
  float 3:x
  float 2:y
+) end function declare
+function declare void sfQuaternionToMatrix(
+ *:SfMatrix3x3 6:mat
+ float 5:qx
+ float 4:qy
+ float 3:qz
+ float 2:qw
+) end function declare
+function declare void sfQuaternionToMatrixImu(
+ *:SfMatrix3x3 2:mat
+) end function declare
+function declare void sfGravityVector(
+ *:SfVector3 2:vec
+) end function declare
+function declare void sfVec3Set(
+ *:SfVector3 5:vec
+ float 4:x
+ float 3:y
+ float 2:z
+) end function declare
+function declare void sfVec3Sum(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec1
+ *:SfVector3 2:srcVec2
+) end function declare
+function declare void sfVec3Diff(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec1
+ *:SfVector3 2:srcVec2
+) end function declare
+function declare float sfVec3MulRowColCx(
+ *:SfVector3 5:row
+ float 4:c0
+ float 3:c1
+ float 2:c2
+) end function declare
+function declare float sfVec3MulRowCol(
+ *:SfVector3 3:row
+ *:SfVector3 2:col
+) end function declare
+function declare void sfVec3ScSum(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec
+ float 2:scalar
+) end function declare
+function declare void sfVec3ScDiff(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec
+ float 2:scalar
+) end function declare
+function declare void sfVec3ScMul(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec
+ float 2:scalar
+) end function declare
+function declare void sfVec3ScDiv(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec
+ float 2:scalar
+) end function declare
+function declare void sfMat3x3Set(
+ *:SfMatrix3x3 11:destMat
+ float 10:m00
+ float 9:m01
+ float 8:m02
+ float 7:m10
+ float 6:m11
+ float 5:m12
+ float 4:m20
+ float 3:m21
+ float 2:m22
+) end function declare
+function declare void sfMat3x3SetAll(
+ *:SfMatrix3x3 3:destMat
+ float 2:val
+) end function declare
+function declare void sfMat3x3SetDiag(
+ *:SfMatrix3x3 3:destMat
+ float 2:val
+) end function declare
+function declare void sfMat3x3Copy(
+ *:SfMatrix3x3 3:destMat
+ *:SfMatrix3x3 2:srcMat
+) end function declare
+function declare void sfMat3x3Transpose(
+ *:SfMatrix3x3 3:destMat
+ *:SfMatrix3x3 2:srcMat
+) end function declare
+function declare void sfMat3x3Mul(
+ *:SfMatrix3x3 4:destMat
+ *:SfMatrix3x3 3:srcMat1
+ *:SfMatrix3x3 2:srcMat2
+) end function declare
+function declare void sfMat3x3ScMul(
+ *:SfMatrix3x3 4:destMat
+ *:SfMatrix3x3 3:srcMat
+ float 2:scalar
+) end function declare
+function declare void sfMat3x3MulCol(
+ *:SfVector3 4:destVec
+ *:SfMatrix3x3 3:srcMat
+ *:SfVector3 2:colVec
+) end function declare
+function declare void sfMat3x3RowMul(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:rowVec
+ *:SfMatrix3x3 2:srcMat
 ) end function declare
 function declare void sfWaitFrame(
  int 2:frame
@@ -817,6 +955,13 @@ function declare void sfBip(
 
 
 
+function declare void sfWriteFlash(
+) end function declare
+{
+}
+
+
+
 function declare void sfFreeGroup(
  int 2:unitMask
 ) end function declare
@@ -1340,6 +1485,218 @@ function declare float sfFMathFloor(
 function declare float sfFMathFMod(
  float 3:x
  float 2:y
+) end function declare
+{
+}
+
+
+
+function declare void sfQuaternionToMatrix(
+ *:SfMatrix3x3 6:mat
+ float 5:qx
+ float 4:qy
+ float 3:qz
+ float 2:qw
+) end function declare
+{
+}
+
+
+
+function declare void sfQuaternionToMatrixImu(
+ *:SfMatrix3x3 2:mat
+) end function declare
+{
+}
+
+
+
+function declare void sfGravityVector(
+ *:SfVector3 2:vec
+) end function declare
+{
+}
+
+
+
+function declare void sfVec3Set(
+ *:SfVector3 5:vec
+ float 4:x
+ float 3:y
+ float 2:z
+) end function declare
+{
+}
+
+
+
+function declare void sfVec3Sum(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec1
+ *:SfVector3 2:srcVec2
+) end function declare
+{
+}
+
+
+
+function declare void sfVec3Diff(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec1
+ *:SfVector3 2:srcVec2
+) end function declare
+{
+}
+
+
+
+function declare float sfVec3MulRowColCx(
+ *:SfVector3 5:row
+ float 4:c0
+ float 3:c1
+ float 2:c2
+) end function declare
+{
+}
+
+
+
+function declare float sfVec3MulRowCol(
+ *:SfVector3 3:row
+ *:SfVector3 2:col
+) end function declare
+{
+}
+
+
+
+function declare void sfVec3ScSum(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec
+ float 2:scalar
+) end function declare
+{
+}
+
+
+
+function declare void sfVec3ScDiff(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec
+ float 2:scalar
+) end function declare
+{
+}
+
+
+
+function declare void sfVec3ScMul(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec
+ float 2:scalar
+) end function declare
+{
+}
+
+
+
+function declare void sfVec3ScDiv(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:srcVec
+ float 2:scalar
+) end function declare
+{
+}
+
+
+
+function declare void sfMat3x3Set(
+ *:SfMatrix3x3 11:destMat
+ float 10:m00
+ float 9:m01
+ float 8:m02
+ float 7:m10
+ float 6:m11
+ float 5:m12
+ float 4:m20
+ float 3:m21
+ float 2:m22
+) end function declare
+{
+}
+
+
+
+function declare void sfMat3x3SetAll(
+ *:SfMatrix3x3 3:destMat
+ float 2:val
+) end function declare
+{
+}
+
+
+
+function declare void sfMat3x3SetDiag(
+ *:SfMatrix3x3 3:destMat
+ float 2:val
+) end function declare
+{
+}
+
+
+
+function declare void sfMat3x3Copy(
+ *:SfMatrix3x3 3:destMat
+ *:SfMatrix3x3 2:srcMat
+) end function declare
+{
+}
+
+
+
+function declare void sfMat3x3Transpose(
+ *:SfMatrix3x3 3:destMat
+ *:SfMatrix3x3 2:srcMat
+) end function declare
+{
+}
+
+
+
+function declare void sfMat3x3Mul(
+ *:SfMatrix3x3 4:destMat
+ *:SfMatrix3x3 3:srcMat1
+ *:SfMatrix3x3 2:srcMat2
+) end function declare
+{
+}
+
+
+
+function declare void sfMat3x3ScMul(
+ *:SfMatrix3x3 4:destMat
+ *:SfMatrix3x3 3:srcMat
+ float 2:scalar
+) end function declare
+{
+}
+
+
+
+function declare void sfMat3x3MulCol(
+ *:SfVector3 4:destVec
+ *:SfMatrix3x3 3:srcMat
+ *:SfVector3 2:colVec
+) end function declare
+{
+}
+
+
+
+function declare void sfMat3x3RowMul(
+ *:SfVector3 4:destVec
+ *:SfVector3 3:rowVec
+ *:SfMatrix3x3 2:srcMat
 ) end function declare
 {
 }

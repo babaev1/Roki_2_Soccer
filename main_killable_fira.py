@@ -9,6 +9,7 @@ from Soccer.Vision.class_Vision_RPI import Vision_RPI
 from Soccer.Localisation.class_Local import *
 from Soccer.strategy import Player
 from Soccer.Motion.class_Motion_real import Motion_real
+from Soccer.Localisation.PF.call_par_filter import particle_filter_create_variables_and_launch
 
 SIMULATION = 5
 current_work_directory = os.getcwd()
@@ -21,7 +22,7 @@ try:
               ['basketball', 'triple_jump', 'weight_lifting',  'kick_test'],
               [],
               ['sprint', 'marathon', 'forward'],
-              ['FIRA_penalty_Shooter', 'penalty_Goalkeeper', 'run_test']]
+              ['FIRA_penalty_Shooter', 'penalty_Goalkeeper', 'run_test', 'jump_test']]
     os.system("espeak -ven-m1 -a200 'Choose Role'")
     button = Button_Test(labels)
     first_pressed_button = button.wait_for_button_pressing(message ="'Choose role'")
@@ -51,7 +52,10 @@ try:
         motion.falling_Flag = 0
         motion.direction_To_Attack = -initial_coord[2]
         motion.activation()
-        local = Local(motion, glob, vision, coord_odometry = initial_coord)
+
+        pf_variables = particle_filter_create_variables_and_launch(glob)
+
+        local = Local(motion, glob, vision, pf_variables, coord_odometry = initial_coord)
         motion.local = local
         local.coordinate_record(odometry = True)
     else:
@@ -67,6 +71,8 @@ try:
     
     if role == 'run_test':
         labels = [[],['side_step_left', 'rotation_left'], [], ['short_run', 'long_run', 'spot_run', 'run_backwards'], ['side_step_right', 'rotation_right']]
+    if role == 'jump_test':
+        labels = [[],['jump_left'], [], ['jump_forward', 'jump_backward'], ['jump_right']]
     elif role == 'kick_test':
         labels = [[],[],[],['regular', 'new_kick'], []]
     elif role == 'basketball':

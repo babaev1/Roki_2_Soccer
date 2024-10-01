@@ -44,7 +44,7 @@ class Transfer_Data():
 
 def sim_Enable(ip_address, port):
     simThreadCycleInMs = 2
-    uprint ('Simulation started')
+    print ('Simulation started')
     #sim.simxFinish(-1) # just in case, close all opened connections
     clientID = sim.simxStart(ip_address, port, True, True, 5000, simThreadCycleInMs)
     if clientID != -1:
@@ -88,7 +88,7 @@ def simulation_Trigger_Accumulator(clientIDs, events, transfer_Datas, lock):
 
 
 class Motion_sim(Motion_real):
-    def __init__(self, glob, vision, clientID , motion_EventID,  lock, transfer_Data, numberOfRobots, robot_Number = ''):
+    def __init__(self, glob, vision, robot_Number = ''):
         self.FRAMELENGTH = 0.02
         import random as random
         self.random = random
@@ -116,13 +116,13 @@ class Motion_sim(Motion_real):
         self.BallHandle = 0
         self.VisionHandle = 0
         self.Ballposition = []
-        self.transfer_Data = transfer_Data
-        self.lock = lock
-        self.motion_Event = motion_EventID
-        self.clientID = clientID
+        #self.transfer_Data = transfer_Data
+        #self.lock = lock
+        #self.motion_Event = motion_EventID
+        self.clientID = None
         self.robot_Number = robot_Number
         self.sim_step_counter = 0
-        self.numberOfRobots = numberOfRobots
+        #self.numberOfRobots = numberOfRobots
         super().__init__(glob, vision)
         with open(current_work_directory + "Init_params/Sim/" + "Sim_calibr.json", "r") as f:
             data1 = json.loads(f.read())
@@ -142,14 +142,14 @@ class Motion_sim(Motion_real):
                 self.sim_step_counter = tim 
                 break
             time.sleep(0.004)
-            if self.transfer_Data.stop > 0:
-                self.transfer_Data.stop += 1
-                self.sim_Stop()
-                while True:
-                    if self.transfer_Data.stop == self.numberOfRobots:
-                        self.sim_Disable()
-                        sys.exit(0)
-                    time.sleep(0.1)
+            #if self.transfer_Data.stop > 0:
+            #    self.transfer_Data.stop += 1
+            #    self.sim_Stop()
+            #    while True:
+            #        if self.transfer_Data.stop == self.numberOfRobots:
+            #            self.sim_Disable()
+            #            sys.exit(0)
+            #        time.sleep(0.1)
 
     def getSimTime(self):
         inputInts=[]
@@ -208,19 +208,20 @@ class Motion_sim(Motion_real):
 
 
     def vision_Sensor_Get_Image(self):
-        #if self.glob.SIMULATION == 1 : self.sim_simxSynchronousTrigger(self.clientID)
+        #if self.glob.SIMULATION == 1 : self.sim.simxSynchronousTrigger(self.clientID)
         #while (self.motion_Event.is_set()): time.sleep(0.001)
         #self.motion_Event.set()
         #while(self.lock.locked()): time.sleep(0.001)
         #self.lock.acquire()
         #self.sim.simxSynchronousTrigger(self.clientID)
         while True:
-            #self.sim_simxSynchronousTrigger(self.clientID)
-            self.sim.simxPauseCommunication(self.clientID, True)
+            #self.sim.simxSynchronousTrigger(self.clientID)
+            #self.sim.simxPauseCommunication(self.clientID, True)
             returnCode, resolution, image_Data = self.sim.simxGetVisionSensorImage(self.clientID, self.VisionHandle, 0 ,self.sim.simx_opmode_buffer)
-            self.sim.simxPauseCommunication(self.clientID, False)
+            #self.sim.simxPauseCommunication(self.clientID, False)
             #print('returnCode: ', returnCode)
-            if returnCode == 0: break
+            if returnCode == 0 or returnCode == 64: break
+        if returnCode == 64: return None
         #self.lock.release()
         #self.motion_Event.clear()
         nuimg = self.np.array(image_Data, dtype=self.np.uint8)
@@ -231,7 +232,7 @@ class Motion_sim(Motion_real):
 
     def vision_Sensor_Display(self, img, window = 'Vision Sensor'):
         if self.Vision_Sensor_Display_On:
-            self.cv2.imshow(window+ self.robot_Number, img)
+            self.cv2.imshow(window, img)
             self.cv2.waitKey(10) & 0xFF
             #if self.robot_Number != '':
             #    self.cv2.waitKey(10) & 0xFF
@@ -243,7 +244,7 @@ class Motion_sim(Motion_real):
             #        filename = current_work_directory + "Soccer/CameraStill/VisionSensor" + token + '.png'
             #        isWritten = self.cv2.imwrite(filename, img)
 
-    def simulateMotion(self, number = 0, name = '', motion_list = None):
+    def simulateMotion(self, number = 0, name = '', motion_list = None, hands_on = True):
         #mot = [(0,'Initial_Pose'),(1,0),(2,0),(3,0),(4,0),(5,'Get_Up_Left'),
         #   (6,'Soccer_Get_UP_Stomach_N'),(7,0),(8,'Soccer_Walk_FF'),(9,0),(10,0),
         #   (11,0),(12,0),(13,0),(14,'Soccer_Small_Jump_Forward'),(15,0),
@@ -280,7 +281,7 @@ class Motion_sim(Motion_real):
                                  tempActivePose*self.ACTIVESERVOS[j][3] +self.trims[j], self.sim.simx_opmode_streaming)
                 #self.sim.simxPauseCommunication(self.clientID, False)
                 if self.glob.SIMULATION == 1:
-                    self.sim_simxSynchronousTrigger(self.clientID)
+                    self.sim.simxSynchronousTrigger(self.clientID)
         return
 
 
@@ -288,14 +289,14 @@ class Motion_sim(Motion_real):
         #uprint ('Simulation started')
         if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0 or self.glob.SIMULATION == 3:
             #self.sim.simxFinish(-1) # just in case, close all opened connections
-            #self.clientID=self.sim.simxStart('127.0.0.1',19997,True,True,5000,self.simThreadCycleInMs) # Connect to V-REP
-            #if self.clientID!=-1:
-            #    uprint ('Connected to remote API server')
-            #else:
-            #    uprint ('Failed connecting to remote API server')
-            #    uprint ('Program ended')
-            #    exit(0)
-            ## Collect Joint Handles and trims from model
+            self.clientID=self.sim.simxStart('127.0.0.1',-19997,True,True,5000, 2) # Connect to V-REP
+            if self.clientID!=-1:
+                uprint ('Connected to remote API server')
+            else:
+                uprint ('Failed connecting to remote API server')
+                uprint ('Program ended')
+                exit(0)
+            # Collect Joint Handles and trims from model
             returnCode, self.Dummy_HHandle = self.sim.simxGetObjectHandle(self.clientID, self.robot_Number+'/'+'Dummy_H', self.sim.simx_opmode_blocking)
             returnCode, self.Dummy_1Handle = self.sim.simxGetObjectHandle(self.clientID, self.robot_Number+'/'+'Dummy1', self.sim.simx_opmode_blocking)
             returnCode, self.BallHandle = self.sim.simxGetObjectHandle(self.clientID, 'Ball', self.sim.simx_opmode_blocking)
@@ -330,7 +331,7 @@ class Motion_sim(Motion_real):
                 #uprint(quaternion_to_euler_angle(Dummy_Hquaternion))
                 self.timeElapsed = self.timeElapsed +1
                 #self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
-                if self.glob.SIMULATION == 1 : self.sim_simxSynchronousTrigger(self.clientID)
+                if self.glob.SIMULATION == 1 : self.sim.simxSynchronousTrigger(self.clientID)
                 if self.glob.SIMULATION == 3 : 
                     time.sleep(0.005)
                     self.wait_sim_step() 
@@ -407,7 +408,7 @@ class Motion_sim(Motion_real):
     def sim_Disable(self):            # Now close the connection to V-REP:
         time.sleep(0.2)
         self.sim.simxFinish(self.clientID)
-        self.transfer_Data.finish_Flag = True
+        #self.transfer_Data.finish_Flag = True
         pass
 
 

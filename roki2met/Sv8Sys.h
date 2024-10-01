@@ -43,6 +43,7 @@
 #define VPS_STOP                      41 //Останов скрипта
 #define VPS_START_SLOT                42 //Запустить на выполнение заданный слот
 #define VPS_BIP                       43 //Звуковой сигнал
+#define VPS_WRITE_FLASH               44 //Запись во флэш текущих флэш-значений
 
 #define VPS_FREE_GROUP                50 //Отключить управление движками
 #define VPS_POSE_GROUP                51 //Задание новой позиции группы механизмов
@@ -88,6 +89,10 @@
 #define VPS_MATH_SIN                 301
 #define VPS_QUATERNION_TO_EULER      302
 #define VPS_QUATERNION_TO_EULER_IMU  303
+#define VPS_QUATERNION_TO_MATRIX     304 //Преобразовать кватернион в матрицу поворота
+#define VPS_QUATERNION_TO_MATRIX_IMU 305 //Преобразовать кватернион из IMU в матрицу поворота
+#define VPS_GRAVITY_VECTOR           306 //Получить вектор гравитации
+
 
 #define VPS_FMATH_ACOS               351 //Вычисляет арккосинус в диапазоне -PI до +PI для аргумента в диапазоне -1 до +1
 #define VPS_FMATH_ASIN               352 //Вычисляет арксинус в диапазоне -PI до +PI для аргумента в диапазоне -1 до +1
@@ -114,6 +119,27 @@
 #define VPS_FMATH_FLOOR              371 //Вычисляет наибольшее целочисленное значение, не превышающее num. (Округление в меньшую сторону)
 #define VPS_FMATH_FMOD               372 //Вычисляет остаток с плавающей запятой от операции деления x / y.
 
+
+#define VPS_MAT_VEC3_SET             500 //Установка элементов вектора
+#define VPS_MAT_VEC3_SUM             501 //Поэлементная сумма векторов
+#define VPS_MAT_VEC3_DIFF            502 //Поэлементная разность векторов
+#define VPS_MAT_VEC3_MUL_ROW_COL_CX  503 //Умножение вектора-строки на вектор столбец по правилам матричного умножения.
+#define VPS_MAT_VEC3_MUL_ROW_COL     504 //Умножение вектора-строки на вектор столбец по правилам матричного умножения.
+
+#define VPS_MAT_VEC3_SC_SUM          510 //Почленная сумма вектора и скаляра
+#define VPS_MAT_VEC3_SC_DIFF         511 //Почленная разность вектора и скаляра
+#define VPS_MAT_VEC3_SC_MUL          512 //Почленное умножение вектора и скаляра
+#define VPS_MAT_VEC3_SC_DIV          513 //Почленное деление вектора и скаляра
+
+#define VPS_MAT_MAT3X3_SET           520 //Установить элементы матрицы матрицы 3х3
+#define VPS_MAT_MAT3X3_SET_ALL       521 //Установка все элементов матрицы 3х3 в заданное значение
+#define VPS_MAT_MAT3X3_SET_DIAG      522 //Установка элементов главной диагонали в заданное значение
+#define VPS_MAT_MAT3X3_COPY          523 //Копировать матрицу 3х3
+#define VPS_MAT_MAT3X3_TRANSPOSE     524 //Транспонирование матрицы 3х3. Строки становятся столбцами
+#define VPS_MAT_MAT3X3_MUL           525 //Выполняет произведение матриц 3х3
+#define VPS_MAT_MAT3X3_SC_MUL        526 //Умножает матрицу на скаляр. Каждый элемент матрицы умножается на скаляр
+#define VPS_MAT_MAT3X3_MUL_COL       527 //Умножает матрицу 3х3 на вектор-столбец
+#define VPS_MAT_MAT3X3_ROW_MUL       528 //Умножает вектор-строку на матрицу 3х3
 
 
 #define MATH_PI                3.141592654
@@ -170,6 +196,8 @@ import VPS_STOP             void sfStop();
 import VPS_START_SLOT       void sfStartSlot( int slotIndex );
 //Формирует звуковой сигнал
 import VPS_BIP              void sfBip( int bipCount, int seriesCount );
+//Записывает текущие значения флэш-памяти во флэш
+import VPS_WRITE_FLASH      void sfWriteFlash();
 
 
 //Отключает управление для группы двигателей
@@ -272,6 +300,7 @@ import VPS_QUATERNION_TO_EULER_IMU  void sfQuaternionToEulerImu();
 
 
 
+
 //Вычисляет арккосинус в диапазоне -PI до +PI для аргумента в диапазоне -1 до +1
 import VPS_FMATH_ACOS               float sfFMathACos( float v );
 
@@ -339,6 +368,95 @@ import VPS_FMATH_FLOOR              float sfFMathFloor( float v );
 //Вычисляет остаток с плавающей запятой от операции деления x / y.
 import VPS_FMATH_FMOD               float sfFMathFMod( float x, float y );
 
+
+
+
+//                Векторные вычисления
+
+//Вектор из трех элементов
+struct SfVector3 {
+    float x;
+    float y;
+    float z;
+  };
+
+
+//Представляет собой квадратную матрицу 3х3
+//Элементы расположены по строкам (сначала первая строка, затем - вторая)
+struct SfMatrix3x3 {
+    float m[9];
+  };
+
+//Представляет собой квадратную матрицу 4x4
+//Элементы расположены по строкам (сначала первая строка, затем - вторая)
+struct SfMatrix4x4 {
+    float m[16];
+  };
+
+//Преобразовать кватернион в матрицу поворота
+import VPS_QUATERNION_TO_MATRIX      void sfQuaternionToMatrix( SfMatrix3x3 *mat, float qx, float qy, float qz, float qw );
+
+//Преобразовать кватернион из IMU в матрицу поворота
+import VPS_QUATERNION_TO_MATRIX_IMU  void sfQuaternionToMatrixImu( SfMatrix3x3 *mat );
+
+//Получить вектор гравитации
+import VPS_GRAVITY_VECTOR            void sfGravityVector( SfVector3 *vec );
+
+
+
+//Установка элементов вектора. vec Вектор. x, y, z Элементы
+import VPS_MAT_VEC3_SET              void sfVec3Set( SfVector3 *vec, float x, float y, float z );
+
+//Поэлементная сумма векторов. destVec Результирующий вектор. srcVec1, srcVec2  Исходные вектора
+import VPS_MAT_VEC3_SUM              void sfVec3Sum( SfVector3 *destVec, SfVector3 *srcVec1, SfVector3 *srcVec2 );
+
+//Поэлементная разность векторов. destVec Результирующий вектор. srcVec1, srcVec2  Исходные вектора
+import VPS_MAT_VEC3_DIFF             void sfVec3Diff( SfVector3 *destVec, SfVector3 *srcVec1, SfVector3 *srcVec2 );
+
+//Умножение вектора-строки на вектор столбец по правилам матричного умножения. row Вектор-строка. c0,c1,c2 Значения вектора-столбца
+import VPS_MAT_VEC3_MUL_ROW_COL_CX   float sfVec3MulRowColCx( SfVector3 *row, float c0, float c1, float c2 );
+
+//Умножение вектора-строки на вектор столбец по правилам матричного умножения. row Вектор-строка. col Вектор-столбец
+import VPS_MAT_VEC3_MUL_ROW_COL      float sfVec3MulRowCol( SfVector3 *row, SfVector3 *col );
+
+//Сложение вектора и скаляра. Скаляр прибавляется к каждому элементу вектора. destVec Результирующий вектор. srcVec Исходный вектор. scalar Скаляр
+import VPS_MAT_VEC3_SC_SUM void sfVec3ScSum( SfVector3 *destVec, SfVector3 *srcVec, float scalar );
+
+//Вычитание скаляра из вектора. Скаляр вычитается из каждого элемента вектора. destVec Результирующий вектор. srcVec Исходный вектор. scalar Скаляр
+import VPS_MAT_VEC3_SC_DIFF void sfVec3ScDiff( SfVector3 *destVec, SfVector3 *srcVec, float scalar );
+
+//Умножение вектора на скаляр. Скаляр умножается на каждый элемент вектора. destVec Результирующий вектор. srcVec Исходный вектор. scalar Скаляр
+import VPS_MAT_VEC3_SC_MUL void sfVec3ScMul( SfVector3 *destVec, SfVector3 *srcVec, float scalar );
+
+//Деление вектора на скаляр. Каждый элемент вектора делится на скаляр. destVec Результирующий вектор. srcVec Исходный вектор. scalar Скаляр
+import VPS_MAT_VEC3_SC_DIV void sfVec3ScDiv( SfVector3 *destVec, SfVector3 *srcVec, float scalar );
+
+//Установка элементов матрицы 3х3. destMat Результирующая матрица. m00...m22 Элементы матрицы построчно
+import VPS_MAT_MAT3X3_SET void sfMat3x3Set( SfMatrix3x3 *destMat, float m00, float m01, float m02, float m10, float m11, float m12, float m20, float m21, float m22 );
+
+//Установка все элементов матрицы 3х3 в заданное значение. destMat Результирующая матрица. val Значение всех элементов матрицы
+import VPS_MAT_MAT3X3_SET_ALL void sfMat3x3SetAll( SfMatrix3x3 *destMat, float val );
+
+//Установка элементов главной диагонали в заданное значение. destMat Результирующая матрица. val Значение элементов главной диагонали матрицы
+import VPS_MAT_MAT3X3_SET_DIAG void sfMat3x3SetDiag( SfMatrix3x3 *destMat, float val );
+
+//Копировать матрицу 3х3. destMat Результирующая матрица. srcMat Исходная матрица
+import VPS_MAT_MAT3X3_COPY void sfMat3x3Copy( SfMatrix3x3 *destMat, SfMatrix3x3 *srcMat );
+
+//Транспонирование матрицы 3х3. Строки становятся столбцами. destMat Результирующая матрица. srcMat Исходная матрица
+import VPS_MAT_MAT3X3_TRANSPOSE void sfMat3x3Transpose( SfMatrix3x3 *destMat, SfMatrix3x3 *srcMat );
+
+//Выполняет произведение матриц 3х3. destMat Результирующая матрица. srcMat1,srcMat2 Исходные матрицы
+import VPS_MAT_MAT3X3_MUL void sfMat3x3Mul( SfMatrix3x3 *destMat, SfMatrix3x3 *srcMat1, SfMatrix3x3 *srcMat2 );
+
+//Умножает матрицу на скаляр. Каждый элемент матрицы умножается на скаляр. destMat Результирующая матрица. srcMat Исходная матрица. scalar Скаляр
+import VPS_MAT_MAT3X3_SC_MUL void sfMat3x3ScMul( SfMatrix3x3 *destMat, SfMatrix3x3 *srcMat, float scalar );
+
+//Умножает матрицу 3х3 на вектор-столбец. destVec Результирующий вектор-столбец. srcMat Исходная матрица 3х3. colVec Вектор-столбец
+import VPS_MAT_MAT3X3_MUL_COL void sfMat3x3MulCol( SfVector3 *destVec, SfMatrix3x3 *srcMat, SfVector3 *colVec );
+
+//Умножает вектор-строку на матрицу 3х3. destVec Результирующий вектор-строка. rowVec Исходный вектор-строка. srcMat Исходная матрица 3х3
+import VPS_MAT_MAT3X3_ROW_MUL void sfMat3x3RowMul( SfVector3 *destVec, SfVector3 *rowVec, SfMatrix3x3 *srcMat );
 
 
 

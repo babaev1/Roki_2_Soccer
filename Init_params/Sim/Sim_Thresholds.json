@@ -8,14 +8,14 @@
 	"blue posts": {
 
 		"th": [ 0, 100, -128, 127, -128, -23 ],
-		"pixel": 50,
-		"area": 50
+		"pixel": 5,
+		"area": 5
 	},
 	"yellow posts": {
 
 		"th": [ 0, 100, -55, -8, 57, 127 ],
-		"pixel": 50,
-		"area": 50
+		"pixel": 5,
+		"area": 5
 	},
 	"white posts": {
 
