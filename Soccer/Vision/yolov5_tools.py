@@ -49,7 +49,11 @@ logging.basicConfig(format="[ %(levelname)s ] %(message)s", level=logging.INFO, 
 log = logging.getLogger()
 
 
-def build_argparser():
+def build_argparser(role = 'other'):
+    if role == 'weight_lifting':
+        weights_file = "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/stanga.xml"
+    else:
+        weights_file = "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/orange_ball_basket.xml"
     parser = ArgumentParser(add_help=False)
     args = parser.add_argument_group('Options')
     args.add_argument('-h', '--help', action='help', default=SUPPRESS, help='Show this help message and exit.')
@@ -58,7 +62,7 @@ def build_argparser():
                       #required=False, default="/home/pi/yolo_roma/yolov5_a_fp32.xml", type=str)
                         #required=False, default="/home/pi/yolo_roma/yolov5_a.xml", type=str)
                         #required=False, default="/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/yolov5_b.xml", type=str)
-                        required=False, default="/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/orange_ball_basket.xml", type=str)
+                        required=False, default=weights_file, type=str)
     args.add_argument("-d", "--device",
                       help="Optional. Specify the target device to infer on; CPU, GPU, FPGA, HDDL or MYRIAD is"
                            " acceptable. The sample will look for a suitable plugin for device specified. "
@@ -255,8 +259,8 @@ def neural_ball_detect(name):
     cv2.destroyAllWindows()
 
 class Neural:
-    def __init__(self):
-        args = build_argparser().parse_args()
+    def __init__(self, role = 'other'):
+        args = build_argparser(role).parse_args()
         # ------------- 1. Plugin initialization for specified device and load extensions library if specified -------------
         log.info("Creating Inference Engine...")
         # ie = IECore()

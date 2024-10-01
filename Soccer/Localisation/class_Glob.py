@@ -119,7 +119,7 @@ class Glob:
 
     def neural_vision_enable(self):
         from Soccer.Vision.yolov5_tools import Neural
-        self.neural = Neural()
+        self.neural = Neural(self.role)
 
     def camera_reset(self):
         print('Camera resetting')

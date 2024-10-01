@@ -1401,6 +1401,12 @@ class Player():
                        stepLength = self.motion.params['WEIGHTLIFTING_INITIAL_STEPLENGTH'])
             self.motion.jump_turn(0)
 
+        if pressed_button == 'start_later':
+            for _ in range(500):
+                result, course, distance = self.glob.vision.seek_Ball_In_Frame_N()
+                print('course :', course, 'distance :', distance)
+            return
+
         self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')   
 
         self.motion.keep_hands_up = True

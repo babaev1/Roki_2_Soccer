@@ -40,10 +40,10 @@ try:
         initial_coord = [-landmarks['FIELD_LENGTH'] / 2, 0, 0]
 
     if role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper' or\
-                    role == 'basketball' or role == 'marathon' :   #or role == 'run_test' or role == 'weight_lifting':
+                    role == 'basketball' or role == 'marathon' or role == 'weight_lifting':   #or role == 'run_test' or role == 'weight_lifting':
         glob = Glob(SIMULATION, current_work_directory, particles_number = 100, event_type = 'FIRA')
         glob.pf_coord = initial_coord
-        if (role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper'):
+        if (role == 'forward' or role == 'FIRA_penalty_Shooter' or role == 'penalty_Goalkeeper'or role == 'weight_lifting'):
             glob.neural_vision_enable()
             glob.neural_vision = True
         glob.role = role
