@@ -1015,18 +1015,18 @@ class Player():
                     if (shift_x) < 0:
                         if abs(shift_x) > self.glob.jump_backward_yield / 1000:
                             intercom.memISet(jump_mode, 102)   # jump backward
-                            self.local.coord_shift[0] = - self.jump_backward_yield / 1000
+                            self.local.coord_shift[0] = - self.glob.jump_backward_yield / 1000
                         else:
-                            attenuation = int(abs(shift_x) /  self.jump_backward_yield * 1000 * 10)
+                            attenuation = int(abs(shift_x) /  self.glob.jump_backward_yield * 1000 * 10)
                             jump_command = 100 + 2 + attenuation * 10
                             intercom.memISet(jump_mode, jump_command)   # jump backward
                             self.local.coord_shift[0] = - abs(shift_x)
                     else:
                         if abs(shift_x) > self.glob.jump_forward_yield / 1000:
                             intercom.memISet(jump_mode, 101)   # jump forward
-                            self.local.coord_shift[0] = self.jump_forward_yield / 1000
+                            self.local.coord_shift[0] = self.glob.jump_forward_yield / 1000
                         else:
-                            attenuation = int(abs(shift_x) /  self.jump_forward_yield * 1000 * 10)
+                            attenuation = int(abs(shift_x) /  self.glob.jump_forward_yield * 1000 * 10)
                             jump_command = 100 + 1 + attenuation * 10
                             intercom.memISet(jump_mode, jump_command)   # jump forward
                             self.local.coord_shift[0] =  abs(shift_x)
@@ -1037,18 +1037,18 @@ class Player():
                     if (shift_y) < 0:
                         if abs(shift_y) > self.glob.jump_right_yield / 1000:
                             intercom.memISet(jump_mode, 104)   # jump right
-                            self.local.coord_shift[1] = - self.jump_right_yield / 1000
+                            self.local.coord_shift[1] = - self.glob.jump_right_yield / 1000
                         else:
-                            attenuation = int(abs(shift_y) /  self.jump_right_yield * 1000 * 10)
+                            attenuation = int(abs(shift_y) /  self.glob.jump_right_yield * 1000 * 10)
                             jump_command = 100 + 4 + attenuation * 10
                             intercom.memISet(jump_mode, jump_command)   # jump right
                             self.local.coord_shift[1] = - abs(shift_y)
                     else:
                         if abs(shift_y) > self.glob.jump_left_yield / 1000:
                             intercom.memISet(jump_mode, 103)   # jump left
-                            self.local.coord_shift[1] = self.jump_left_yield / 1000
+                            self.local.coord_shift[1] = self.glob.jump_left_yield / 1000
                         else:
-                            attenuation = int(abs(shift_y) /  self.jump_left_yield * 1000 * 10)
+                            attenuation = int(abs(shift_y) /  self.glob.jump_left_yield * 1000 * 10)
                             jump_command = 100 + 3 + attenuation * 10
                             intercom.memISet(jump_mode, jump_command)   # jump left
                             self.local.coord_shift[1] =  abs(shift_y)
