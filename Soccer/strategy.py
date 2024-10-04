@@ -1009,8 +1009,8 @@ class Player():
             # Basketball_PickUp end
             target_pos = [0, -0.08, 0]
             for _ in range(500):
-                shift_x = target_pos[0] - self.coord_odometry[0]
-                shift_y = target_pos[1] - self.coord_odometry[1]
+                shift_x = target_pos[0] - self.local.coord_odometry[0]
+                shift_y = target_pos[1] - self.local.coord_odometry[1]
                 if abs(shift_x) > 0.005:
                     if (shift_x) < 0:
                         if abs(shift_x) > self.glob.jump_backward_yield / 1000:
