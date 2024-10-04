@@ -977,13 +977,13 @@ class Player():
                         self.local.coord_shift[1] = self.glob.jump_left_yield / 1000
                     if y < 0:
                         intercom.memISet(jump_mode, 104) # jump right
-                        self.local.coord_shift[1] = - self.jump_right_yield / 1000
+                        self.local.coord_shift[1] = - self.glob.jump_right_yield / 1000
                     self.glob.rcb.motionPlay(7)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
                 if x > 0:
                     intercom.memISet(jump_mode, 101)   # jump forward
-                    self.local.coord_shift[0] = self.jump_forward_yield / 1000
+                    self.local.coord_shift[0] = self.glob.jump_forward_yield / 1000
                     self.glob.rcb.motionPlay(7)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
