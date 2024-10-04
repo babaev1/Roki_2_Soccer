@@ -994,8 +994,8 @@ class Player():
                     break
             self.motion.head_Return(0, 0)
             # Basketball_PickUp start
-            var = roki2met.roki2met.Basketball_PickUp_v2_R2
-            self.glob.rcb.motionPlay(10)                                # Basketball_PickUp
+            var = roki2met.roki2met.Basketball_PickUp_v2_S1
+            self.glob.rcb.motionPlay(13)                                # Basketball_PickUp
             while True:
                 ok, frameCount = intercom.memIGet(var.frameCount)
                 if ok: print('frameCount :', frameCount)
@@ -1059,6 +1059,20 @@ class Player():
                 self.local.coordinate_record(odometry = True, shift = True)
                 self.local.refresh_odometry()
                 if abs(shift_y) < 0.005 and abs(shift_x) < 0.005: break
+            # Basketball_PickUp start
+            var = roki2met.roki2met.Basketball_PickUp_v2_S2
+            self.glob.rcb.motionPlay(14)                                # Basketball_PickUp
+            while True:
+                ok, frameCount = intercom.memIGet(var.frameCount)
+                if ok: print('frameCount :', frameCount)
+                else: print(intercom.GetError())
+                if frameCount == 1: break
+                time.sleep(0.25)
+            intercom.memISet(var.clamping, int(self.motion.params['BASKETBALL_CLAMPING']))         # clamping gap for ball gripping -50 best value
+            intercom.memISet(var.steps, 0)    # side shift steps to provide 80mm shifting to right. 17 is the best value
+            intercom.memISet(var.pitStop, 1)                                                       # ignition
+            time.sleep(35)
+            # Basketball_PickUp end
 
             return
 
