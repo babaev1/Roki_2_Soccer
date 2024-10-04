@@ -981,7 +981,7 @@ class Player():
                     self.glob.rcb.motionPlay(7)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
-                if x > 0:
+                if x > 10:
                     intercom.memISet(jump_mode, 101)   # jump forward
                     self.local.coord_shift[0] = self.glob.jump_forward_yield / 1000
                     self.glob.rcb.motionPlay(7)
