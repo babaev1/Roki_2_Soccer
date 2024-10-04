@@ -965,7 +965,7 @@ class Player():
         #for i in range(4):
         #    throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
         if pressed_button == 'approach_test' :
-            var = roki2met.roki2met.jump_mode
+            jump_mode = roki2met.roki2met.jump_mode
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
@@ -973,20 +973,93 @@ class Player():
                 y = distance * math.sin(course) * 1000
                 if abs(y) > 10:
                     if y > 0:
-                        intercom.memISet(var, 103)
+                        intercom.memISet(jump_mode, 103) # jump left
+                        self.local.coord_shift[1] = self.glob.jump_left_yield / 1000
                     if y < 0:
-                        intercom.memISet(var, 104)
+                        intercom.memISet(jump_mode, 104) # jump right
+                        self.local.coord_shift[1] = - self.jump_right_yield / 1000
                     self.glob.rcb.motionPlay(7)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
                 if x > 0:
-                    intercom.memISet(var, 101)
+                    intercom.memISet(jump_mode, 101)   # jump forward
+                    self.local.coord_shift[0] = self.jump_forward_yield / 1000
                     self.glob.rcb.motionPlay(7)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
+                self.motion.refresh_Orientation()
+                self.local.coordinate_record(odometry = True, shift = True)
+                self.local.refresh_odometry()
                 if abs(y) < 10 and x < 0: 
                     break
             self.motion.head_Return(0, 0)
+            # Basketball_PickUp start
+            var = roki2met.roki2met.Basketball_PickUp_v2_R2
+            self.glob.rcb.motionPlay(10)                                # Basketball_PickUp
+            while True:
+                ok, frameCount = intercom.memIGet(var.frameCount)
+                if ok: print('frameCount :', frameCount)
+                else: print(intercom.GetError())
+                if frameCount == 1: break
+                time.sleep(0.25)
+            intercom.memISet(var.clamping, int(self.motion.params['BASKETBALL_CLAMPING']))         # clamping gap for ball gripping -50 best value
+            intercom.memISet(var.steps, 0)    # side shift steps to provide 80mm shifting to right. 17 is the best value
+            intercom.memISet(var.pitStop, 1)                                                       # ignition
+            time.sleep(35)
+            # Basketball_PickUp end
+            target_pos = [0, -0.08, 0]
+            for _ in range(500):
+                shift_x = target_pos[0] - self.coord_odometry[0]
+                shift_y = target_pos[1] - self.coord_odometry[1]
+                if abs(shift_x) > 0.005:
+                    if (shift_x) < 0:
+                        if abs(shift_x) > self.glob.jump_backward_yield / 1000:
+                            intercom.memISet(jump_mode, 102)   # jump backward
+                            self.local.coord_shift[0] = - self.jump_backward_yield / 1000
+                        else:
+                            attenuation = int(abs(shift_x) /  self.jump_backward_yield * 1000 * 10)
+                            jump_command = 100 + 2 + attenuation * 10
+                            intercom.memISet(jump_mode, jump_command)   # jump backward
+                            self.local.coord_shift[0] = - abs(shift_x)
+                    else:
+                        if abs(shift_x) > self.glob.jump_forward_yield / 1000:
+                            intercom.memISet(jump_mode, 101)   # jump forward
+                            self.local.coord_shift[0] = self.jump_forward_yield / 1000
+                        else:
+                            attenuation = int(abs(shift_x) /  self.jump_forward_yield * 1000 * 10)
+                            jump_command = 100 + 1 + attenuation * 10
+                            intercom.memISet(jump_mode, jump_command)   # jump forward
+                            self.local.coord_shift[0] =  abs(shift_x)
+                    self.glob.rcb.motionPlay(7)
+                    time.sleep(0.5)
+                    self.motion.jump_turn(0)
+                if abs(shift_y) > 0.005:
+                    if (shift_y) < 0:
+                        if abs(shift_y) > self.glob.jump_right_yield / 1000:
+                            intercom.memISet(jump_mode, 104)   # jump right
+                            self.local.coord_shift[1] = - self.jump_right_yield / 1000
+                        else:
+                            attenuation = int(abs(shift_y) /  self.jump_right_yield * 1000 * 10)
+                            jump_command = 100 + 4 + attenuation * 10
+                            intercom.memISet(jump_mode, jump_command)   # jump right
+                            self.local.coord_shift[1] = - abs(shift_y)
+                    else:
+                        if abs(shift_y) > self.glob.jump_left_yield / 1000:
+                            intercom.memISet(jump_mode, 103)   # jump left
+                            self.local.coord_shift[1] = self.jump_left_yield / 1000
+                        else:
+                            attenuation = int(abs(shift_y) /  self.jump_left_yield * 1000 * 10)
+                            jump_command = 100 + 3 + attenuation * 10
+                            intercom.memISet(jump_mode, jump_command)   # jump left
+                            self.local.coord_shift[1] =  abs(shift_y)
+                    self.glob.rcb.motionPlay(7)
+                    time.sleep(0.5)
+                    self.motion.jump_turn(0)
+                self.motion.refresh_Orientation()
+                self.local.coordinate_record(odometry = True, shift = True)
+                self.local.refresh_odometry()
+                if abs(shift_y) < 0.005 and abs(shift_x) < 0.005: break
+
             return
 
         if pressed_button == 'start' or pressed_button == 'pick_up_test' :
