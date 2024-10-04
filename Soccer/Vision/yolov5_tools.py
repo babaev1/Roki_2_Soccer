@@ -419,6 +419,6 @@ if __name__ == '__main__':
             print("capture fps: ", int(100/(time() - start1)))
             counter = 0
             start1 = time()
-        cv2.imshow("Output", frame)
-        key = cv2.waitKey(10)
+        #cv2.imshow("Output", frame)
+        #key = cv2.waitKey(10)
     
