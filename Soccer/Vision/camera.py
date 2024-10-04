@@ -1,4 +1,5 @@
 from picamera2 import Picamera2
+from libcamera import controls
 import cv2
 import time
 
@@ -31,22 +32,25 @@ class Camera:
         def do_nothing(self, request):
             pass
 
-    def start(self, exposure = None, gain = None, frame_duration_us = 16700):
+    def start(self, exposure = None, gain = None, frame_duration_us = 16700, neural = False):
         self.picam2 = Picamera2(camera_num=0)
         self.frame_number_counter = self.Frame_number_counter()
         self.frame_number_counter.target_frame_duration = frame_duration_us
         self.picam2.pre_callback = self.frame_number_counter.add_farme_number
         #self.picam2.configure(self.picam2.create_still_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)}))
         self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": self.camera_lores}))
-        if exposure != None:
-            self.picam2.set_controls({"ExposureTime": exposure})		# exposure limits: 11 ~ 199953
-        if gain != None:
-            self.picam2.set_controls({"AnalogueGain": gain})
+        if neural:
+            self.picam2.set_controls({"AeExposureMode":  controls.AeExposureModeEnum.Short})
+        else:
+            if exposure != None:
+                self.picam2.set_controls({"ExposureTime": exposure})		# exposure limits: 11 ~ 199953
+            if gain != None:
+                self.picam2.set_controls({"AnalogueGain": gain})
         self.picam2.set_controls({"FrameDurationLimits": (frame_duration_us*2, frame_duration_us*2)})
         self.picam2.start()
         time.sleep(1)
         self.picam2.set_controls({"FrameDurationLimits": (frame_duration_us, frame_duration_us)})
-        self.picam2.set_controls({"AwbEnable": False})
+        if not neural: self.picam2.set_controls({"AwbEnable": False})
         for _ in range(50):
             if len(self.frame_number_counter.list_of_Timestamps) > 0: break
             time.sleep(0.02)

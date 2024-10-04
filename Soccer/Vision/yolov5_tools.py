@@ -43,6 +43,8 @@ from copy import copy
 from multiprocessing import Process, Value
 from multiprocessing.shared_memory import ShareableList, SharedMemory
 import sys
+from libcamera import controls
+
 sys.path.append("/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision")
 
 logging.basicConfig(format="[ %(levelname)s ] %(message)s", level=logging.INFO, stream=sys.stdout)
@@ -371,6 +373,7 @@ if __name__ == '__main__':
     #sys.exit(main() or 0)
     picam2 = Picamera2(camera_num=0)
     picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)})) 
+    picam2.set_controls({"AeExposureMode":  controls.AeExposureModeEnum.Short})
     picam2.start()
     request = picam2.capture_request()
     frame = request.make_array("lores")  
