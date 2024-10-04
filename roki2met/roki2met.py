@@ -12,6 +12,8 @@ class roki2met :
     Basketball_PickUp_v2_R2Slot = 10
     TripleJumpForFIRA2023Slot = 11
     TripleJumpForFIRA2024Slot = 12
+    Basketball_PickUp_v2_S1Slot = 13
+    Basketball_PickUp_v2_S2Slot = 14
     sprint_start_poseSlot = 19
     sprint_v1Slot = 20
     sprint_v2Slot = 21
@@ -276,6 +278,26 @@ class roki2met :
         restart_flag = 2
         frameCount = 3
         factor = 4
+
+
+    class Basketball_PickUp_v2_S1 :
+        #Перечень переменных слота Basketball_PickUp_v2_S1
+        pitStop = 2
+        clamping = 3
+        steps = 4
+        frameCount = 5
+        rotation = 6
+        direction = 7
+
+
+    class Basketball_PickUp_v2_S2 :
+        #Перечень переменных слота Basketball_PickUp_v2_S2
+        pitStop = 2
+        clamping = 3
+        steps = 4
+        frameCount = 5
+        rotation = 6
+        direction = 7
 
 
     class sprint_start_pose :
