@@ -1535,13 +1535,13 @@ class Player():
                     #while(intercom.memIGet(var) != 0): time.sleep(0.1)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
-                if x > -50:
+                if x > -20:
                     intercom.memISet(var, 101)
                     self.glob.rcb.motionPlay(7)
                     #while(intercom.memIGet(var) != 0): time.sleep(0.1)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
-                if abs(y) < 10 and x < -50: 
+                if abs(y) < 10 and x < -20: 
                     break
             self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_1') 
         
