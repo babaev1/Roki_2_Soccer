@@ -965,26 +965,41 @@ class Player():
         #for i in range(4):
         #    throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
         if pressed_button == 'approach_test' :
-            jump_mode = roki2met.roki2met.jump_mode
+            jump_mode = roki2met.roki2met.jump_motions_local.jump_mode_local
+            jump_motions = roki2met.roki2met.jump_motions_local
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
                 x = distance * math.cos(course) * 1000
                 y = distance * math.sin(course) * 1000
                 if abs(y) > 10:
+                    self.glob.rcb.motionPlay(7)
+                    while True:
+                        ok, frameCount = intercom.memIGet(jump_motions.frameCount)
+                        if ok: print('frameCount :', frameCount)
+                        else: print(intercom.GetError())
+                        if frameCount == 1: break
+                        time.sleep(0.25)
                     if y > 0:
                         intercom.memISet(jump_mode, 103) # jump left
                         self.local.coord_shift[1] = self.glob.jump_left_yield / 1000
                     if y < 0:
                         intercom.memISet(jump_mode, 104) # jump right
                         self.local.coord_shift[1] = - self.glob.jump_right_yield / 1000
-                    self.glob.rcb.motionPlay(7)
+                    intercom.memISet(jump_motions.pitStop, 1)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
                 if x > 10:
+                    self.glob.rcb.motionPlay(7)
+                    while True:
+                        ok, frameCount = intercom.memIGet(jump_motions.frameCount)
+                        if ok: print('frameCount :', frameCount)
+                        else: print(intercom.GetError())
+                        if frameCount == 1: break
+                        time.sleep(0.25)
                     intercom.memISet(jump_mode, 101)   # jump forward
                     self.local.coord_shift[0] = self.glob.jump_forward_yield / 1000
-                    self.glob.rcb.motionPlay(7)
+                    intercom.memISet(jump_motions.pitStop, 1)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
                 self.motion.refresh_Orientation()
@@ -1009,9 +1024,17 @@ class Player():
             # Basketball_PickUp end
             target_pos = [0, -0.08, 0]
             for _ in range(500):
+                print('coord_odometry : ', self.local.coord_odometry)
                 shift_x = target_pos[0] - self.local.coord_odometry[0]
                 shift_y = target_pos[1] - self.local.coord_odometry[1]
                 if abs(shift_x) > 0.005:
+                    self.glob.rcb.motionPlay(7)
+                    while True:
+                        ok, frameCount = intercom.memIGet(jump_motions.frameCount)
+                        if ok: print('frameCount :', frameCount)
+                        else: print(intercom.GetError())
+                        if frameCount == 1: break
+                        time.sleep(0.25)
                     if (shift_x) < 0:
                         if abs(shift_x) > self.glob.jump_backward_yield / 1000:
                             intercom.memISet(jump_mode, 102)   # jump backward
@@ -1030,10 +1053,17 @@ class Player():
                             jump_command = 100 + 1 + attenuation * 10
                             intercom.memISet(jump_mode, jump_command)   # jump forward
                             self.local.coord_shift[0] =  abs(shift_x)
-                    self.glob.rcb.motionPlay(7)
+                    intercom.memISet(jump_motions.pitStop, 1)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
                 if abs(shift_y) > 0.005:
+                    self.glob.rcb.motionPlay(7)
+                    while True:
+                        ok, frameCount = intercom.memIGet(jump_motions.frameCount)
+                        if ok: print('frameCount :', frameCount)
+                        else: print(intercom.GetError())
+                        if frameCount == 1: break
+                        time.sleep(0.25)
                     if (shift_y) < 0:
                         if abs(shift_y) > self.glob.jump_right_yield / 1000:
                             intercom.memISet(jump_mode, 104)   # jump right
@@ -1052,7 +1082,7 @@ class Player():
                             jump_command = 100 + 3 + attenuation * 10
                             intercom.memISet(jump_mode, jump_command)   # jump left
                             self.local.coord_shift[1] =  abs(shift_y)
-                    self.glob.rcb.motionPlay(7)
+                    intercom.memISet(jump_motions.pitStop, 1)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
                 self.motion.refresh_Orientation()

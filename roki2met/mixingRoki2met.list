@@ -1,5 +1,5 @@
 //====================================================================
-//      SvCompiler V9.06
+//      SvCompiler V6.06
 //By A.Sibilev
 //====================================================================
 //cblock
@@ -410,7 +410,6 @@ leftClawTarget : 1146
 leftClawCurrent : 1147
 leftClawPwm : 1148
 leftClawAddonMix : 1149
-jump_mode : 1024
 leftRightFactor : 2
 frontBackFactor : 3
 quart : 4

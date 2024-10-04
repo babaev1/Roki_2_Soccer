@@ -1,12 +1,12 @@
 
-#Этот файл автоматически сгенерирован с помощью программы IronArt v0.104
+#Этот файл автоматически сгенерирован с помощью программы IronArt v0.103
 #Не следует его редактировать вручную
 
 class roki2met :
     #Индексы доступных слотов
     mixingRoki2metSlot = 2
     mixingRoki2metSlot = 3
-    jump_motionsSlot = 7
+    jump_motions_localSlot = 7
     standUpSlot = 8
     Basketball_ThrowSlot = 9
     Basketball_PickUp_v2_R2Slot = 10
@@ -200,7 +200,6 @@ class roki2met :
     leftClawCurrent = 1147
     leftClawPwm = 1148
     leftClawAddonMix = 1149
-    jump_mode = 1024
 
 
 
@@ -225,11 +224,12 @@ class roki2met :
         sum = 6
 
 
-    class jump_motions :
-        #Перечень переменных слота jump_motions
-        restart_flag = 2
+    class jump_motions_local :
+        #Перечень переменных слота jump_motions_local
+        pitStop = 2
         frameCount = 3
         factor = 4
+        jump_mode_local = 5
 
 
     class standUp :
