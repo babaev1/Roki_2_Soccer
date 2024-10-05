@@ -699,20 +699,40 @@ class Vision_General:
         blob_found = False
         count_ok_rois = 0
         for i, r in enumerate(ROIS):
-            blobs  = img.find_blobs([self.TH['orange ball']['th']], 
+            blobs1  = img.find_blobs([self.TH['line_follow_1']['th']], 
+                                    pixels_threshold=20, #self.TH['orange ball']['pixel'],
+                                    area_threshold=20, #self.TH['orange ball']['area'],
+                                    merge=True, margin=10, roi=r[0:4])
+            blobs2  = img.find_blobs([self.TH['line_follow_2']['th']], 
                                     pixels_threshold=20, #self.TH['orange ball']['pixel'],
                                     area_threshold=20, #self.TH['orange ball']['area'],
                                     merge=True, margin=10, roi=r[0:4])
 
-            if (len (blobs) != 0):
+            filtered_blobs1 =[]
+            for blob in blobs1:
+                if blob.w_ < 60:
+                    filtered_blobs1.append(blob)
+            filtered_blobs2 =[]
+            for blob in blobs2:
+                if blob.w_ < 60:
+                    filtered_blobs2.append(blob)
+            if (len (filtered_blobs1) != 0):
+                filtered_blobs = filtered_blobs1
+            else:
+                if (len (filtered_blobs2) != 0):
+                    filtered_blobs = filtered_blobs2
+                else: 
+                    filtered_blobs = []
+
+            if (len (filtered_blobs) != 0):
                 blob_found = True
 
-            if blobs:
+            if filtered_blobs:
                 count_ok_rois += 1
                 # Find the blob with the most pixels.
-                largest_blob = max(blobs, key=lambda b: b.pixels())
+                largest_blob = max(filtered_blobs, key=lambda b: b.pixels())
 
-                print("largest blob found")
+                print("largest blob found", ' roi = ', i, ' x_size: ', largest_blob.w_)
 
                 # Draw a rect around the blob.
                 img.draw_rectangle((largest_blob.rect()[0] + r[0], largest_blob.rect()[1] + r[1], largest_blob.rect()[2], largest_blob.rect()[3]))

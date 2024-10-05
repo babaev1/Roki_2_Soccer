@@ -128,19 +128,21 @@ class mywindow(QtWidgets.QMainWindow):
                         if loaded_Dict.get('white posts') != None:
                             if loaded_Dict.get('green field') != None:
                                 if loaded_Dict.get('white marking') != None:
-                                    self.threshold_file_is_loaded = True
-                                    self.threshold_Dict.update(loaded_Dict)
-                                    #for i in range(12,16,1): self.blobs.Enable(i, True) # enable combined blobs
-                                    self.ui.actionOrange_Ball_on_Green_Field.setEnabled(True)
-                                    self.ui.actionBlue_Post_on_Green_Field.setEnabled(True)
-                                    self.ui.actionYellow_Post_on_Green_Field.setEnabled(True)
-                                    self.ui.actionWhite_Post_on_Green_Field.setEnabled(True)
-                                    self.ui.actionLoad_from_File.setEnabled(False)
-                                    items = list(self.threshold_Dict.keys())
-                                    items.pop(items.index('demo'))
-                                    items.pop(items.index('exposure'))
-                                    items.pop(items.index('gain'))
-                                    self.ui.comboBox.addItems(items)
+                                    if loaded_Dict.get('line_follow_1') != None:
+                                        if loaded_Dict.get('line_follow_2') != None:
+                                            self.threshold_file_is_loaded = True
+                                            self.threshold_Dict.update(loaded_Dict)
+                                            #for i in range(12,16,1): self.blobs.Enable(i, True) # enable combined blobs
+                                            self.ui.actionOrange_Ball_on_Green_Field.setEnabled(True)
+                                            self.ui.actionBlue_Post_on_Green_Field.setEnabled(True)
+                                            self.ui.actionYellow_Post_on_Green_Field.setEnabled(True)
+                                            self.ui.actionWhite_Post_on_Green_Field.setEnabled(True)
+                                            self.ui.actionLoad_from_File.setEnabled(False)
+                                            items = list(self.threshold_Dict.keys())
+                                            items.pop(items.index('demo'))
+                                            items.pop(items.index('exposure'))
+                                            items.pop(items.index('gain'))
+                                            self.ui.comboBox.addItems(items)
         print( 'threshold_file_is_loaded =', self.threshold_file_is_loaded)
 
     def display_values(self):
@@ -378,16 +380,18 @@ class mywindow(QtWidgets.QMainWindow):
                         if loaded_Dict.get('white posts') != None:
                             if loaded_Dict.get('green field') != None:
                                 if loaded_Dict.get('white marking') != None:
-                                    self.threshold_file_is_loaded = True
-                                    self.threshold_Dict.update(loaded_Dict)
-                                    self.ui.pushButton_Load_File.setDisabled(True)
-                                    self.ui.actionLoad_from_File.setDisabled(True)
-                                    #for i in range(12,16,1): self.blobs.Enable(i, True) # enable combined blobs
-                                    self.ui.actionOrange_Ball_on_Green_Field.setEnabled(True)
-                                    self.ui.actionBlue_Post_on_Green_Field.setEnabled(True)
-                                    self.ui.actionYellow_Post_on_Green_Field.setEnabled(True)
-                                    self.ui.actionWhite_Post_on_Green_Field.setEnabled(True)
-                                    self.ui.comboBox.addItems(list(self.threshold_Dict.keys())[1:])
+                                    if loaded_Dict.get('line_follow_1') != None:
+                                        if loaded_Dict.get('line_follow_2') != None:
+                                            self.threshold_file_is_loaded = True
+                                            self.threshold_Dict.update(loaded_Dict)
+                                            self.ui.pushButton_Load_File.setDisabled(True)
+                                            self.ui.actionLoad_from_File.setDisabled(True)
+                                            #for i in range(12,16,1): self.blobs.Enable(i, True) # enable combined blobs
+                                            self.ui.actionOrange_Ball_on_Green_Field.setEnabled(True)
+                                            self.ui.actionBlue_Post_on_Green_Field.setEnabled(True)
+                                            self.ui.actionYellow_Post_on_Green_Field.setEnabled(True)
+                                            self.ui.actionWhite_Post_on_Green_Field.setEnabled(True)
+                                            self.ui.comboBox.addItems(list(self.threshold_Dict.keys())[1:])
         print( 'threshold_file_is_loaded =', self.threshold_file_is_loaded)
 
     def closeEvent(self, event):
