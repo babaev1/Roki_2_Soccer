@@ -60,6 +60,11 @@ def camera_process(size, side_shift, aruco_angle_horizontal, distance, stopFlag)
     picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)})) 
     picam2.set_controls({"AeExposureMode":  controls.AeExposureModeEnum.Short})
     picam2.start()
+    picam2.set_controls({"ExposureTime": 2000})
+    picam2.set_controls({"AnalogueGain": 8.0})
+    time.sleep(0.5)
+    print("exposure : ", picam2.capture_metadata()["ExposureTime"])
+    print("gain : ", picam2.capture_metadata()["AnalogueGain"])
     count = 0
     start_time = time.perf_counter()
     while not stopFlag.value:

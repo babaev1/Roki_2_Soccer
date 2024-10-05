@@ -1253,7 +1253,7 @@ class Player():
                     if cycle ==0 : stepLength1 = stepLength/3
                     if cycle ==1 : stepLength1 = stepLength/3 * 2
                     self.motion.refresh_Orientation()
-                    rotation = direction -self.motion.imu_body_yaw() * 1.1
+                    rotation = direction #-self.motion.imu_body_yaw() * 1.0
                     rotation = self.motion.normalize_rotation(rotation)
                     self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                     aruco_angle = aruco_angle_horizontal.value 
@@ -1261,14 +1261,14 @@ class Player():
                     if aruco_size == 0: corr = 1.1
                     else:
                         corr = aruco_size / self.glob.params['SPRINT_ARUCO_SIZE']  + 1.1 / aruco_size
-                    corr = 0
-                    if cycle > 20:  direction +=  aruco_angle * corr 
-                    
+                    #corr = 0
+                    if cycle > 2:  direction =  aruco_angle * corr
+                    print('direction : ', direction )
                     aruco_dist = distance.value
                     #if 0 < aruco_dist < self.glob.params['SPRINT_REVERSE_DISTANCE_CM'] * 2 :
                     if aruco_size > self.glob.params['SPRINT_ARUCO_SIZE'] : reverseFlag = True
                     if reverseFlag: countdown += 1
-                    if countdown == 3:
+                    if countdown == 2:
                         print('Reverse')
                         #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 1)
                         #self.motion.walk_Final_Pose()
@@ -1284,7 +1284,7 @@ class Player():
                         self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                         break
                 if self.motion.falling_Flag != 0: continue
-                number_Of_Cycles = 10
+                number_Of_Cycles = 20
                 stepLength = -50
                 self.motion.stepHeight = 40
                 #self.glob.params['BODY_TILT_AT_WALK'] -= 0.01
