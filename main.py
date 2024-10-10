@@ -102,7 +102,7 @@ if __name__ == '__main__':
 
         #goalkeeper, forward_v2, run_test, penalty_Shooter, rotation_test, penalty_Goalkeeper, spot_walk, dance, quaternion_test, test_walk, kick_test, marathon
         second_pressed_button = 'start_later'   # side_step_left, side_step_right, short_run, rotation_right, spot_run, start_later
-        role = 'marathon'
+        role = 'FIRA_penalty_Shooter'
 
         particles_number = 1000
         initial_coord = [-0.5, 0, 0]

@@ -1000,7 +1000,8 @@ class Motion(Robot, Motion_extention_1):
         else: 
             if self.glob.role == 'marathon':
                 self.glob.vision.detect_Line_Follow_One_Shot()
-            else:  self.glob.vision.detect_Ball_in_One_Shot()
+            else:  
+                if self.with_Vision: self.glob.vision.detect_Ball_in_One_Shot()
 
 
     def walk_Cycle_With_Tors_v2(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
