@@ -632,12 +632,14 @@ class Player():
         first_look_point = [2.0 , 0]
         self.motion.head_Return(0, -1500)
         time.sleep(1)
+        """
         self.motion.jump_turn(self.motion.params['PENALTY_JUMP_TURN_ANGLE'], jumps_limit = 2) # 0.5
         self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
         self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
         self.motion.jump_turn(self.f.direction_To_Guest)
         self.motion.near_distance_omni_motion(300, math.pi/2)
+        """
         #number_Of_Cycles = 5
         #stepLength = 64
         #sideLength = 0
@@ -1771,7 +1773,7 @@ class Player():
         while True:
 
             self.motion.with_Vision = True
-            self.motion.head_Return(0, -2000)
+            self.motion.head_Return(0, -2300)
             stepLength = self.motion.params['MARATHON_STEP_LENGTH']
             self.motion.gaitHeight = 180
             number_Of_Cycles = 600
