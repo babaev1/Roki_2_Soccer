@@ -827,22 +827,23 @@ class Motion_real(Motion):
         acceleration = False
         deceleration = False
         self.gaitHeight= 180
-        self.walk_Initial_Pose()
-# initial arc
-        dest_yaw = target_yaw
-        delta_yaw = self.norm_yaw(dest_yaw - start_yaw)
-        number_Of_Cycles = math.ceil(abs(delta_yaw / 0.2))
-        if number_Of_Cycles == 0: number_Of_Cycles = 1
-        delta_yaw_step = delta_yaw / number_Of_Cycles
-        stepLength = 0
-        for cycle in range(number_Of_Cycles):
-            self.refresh_Orientation()
-            rotation = start_yaw + delta_yaw_step * (cycle + 1) - self.imu_body_yaw()
-            rotation = self.normalize_rotation(rotation)
-            self.walk_Cycle(stepLength, sideLength, rotation, cycle, number_Of_Cycles+1)
-        print('target yaw', target_yaw)
+#        self.walk_Initial_Pose()
+## initial arc
+#        dest_yaw = target_yaw
+#        delta_yaw = self.norm_yaw(dest_yaw - start_yaw)
+#        number_Of_Cycles = math.ceil(abs(delta_yaw / 0.2))
+#        if number_Of_Cycles == 0: number_Of_Cycles = 1
+#        delta_yaw_step = delta_yaw / number_Of_Cycles
+#        stepLength = 0
+#        for cycle in range(number_Of_Cycles):
+#            self.refresh_Orientation()
+#            rotation = start_yaw + delta_yaw_step * (cycle + 1) - self.imu_body_yaw()
+#            rotation = self.normalize_rotation(rotation)
+#            self.walk_Cycle(stepLength, sideLength, rotation, cycle, number_Of_Cycles+1)
+#        print('target yaw', target_yaw)
         #self.turn_To_Course(target_yaw, accurate = True)
-        #self.walk_Initial_Pose()
+        self.jump_turn(target_yaw)
+        self.walk_Initial_Pose()
         self.refresh_Orientation()
         print('imu_body_yaw', self.imu_body_yaw())
         acceleration = False

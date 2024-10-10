@@ -665,6 +665,7 @@ class Player():
                 self.local.coordinate_fall_reset()
             success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
                                                                               very_Fast = False, first_look_point=first_look_point )
+            self.motion.head_Return(0, -1500)
             first_look_point = self.glob.ball_coord
             self.f.dir_To_Guest()
             print('ball_coord = ', self.glob.ball_coord)
