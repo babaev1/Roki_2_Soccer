@@ -134,6 +134,7 @@ class Motion_real(Motion):
                 self.local.quality =0
                 if self.falling_Flag == 3: uprint('STOP!')
                 else: uprint('FALLING!!!', self.falling_Flag)
+                self.head_Return(0, self.neck_play_pose)
                 return False, 0, 0, [0, 0]
             if self.glob.SIMULATION == 5:
                 self.head_Return(self.neck_pan, self.neck_tilt)
@@ -169,6 +170,7 @@ class Motion_real(Motion):
                     self.glob.ball_coord = [dist * math.cos(course_global_rad) + self.glob.pf_coord[0],
                                             dist * math.sin(course_global_rad) + self.glob.pf_coord[1]]
                     self.local.ball_odometry = self.glob.ball_coord
+                    self.head_Return(0, self.neck_play_pose)
                     return(a, course1, dist, [0, 0])
             #self.neck_pan =int( - course1/ self.TIK2RAD)
             pos_list = [abs(course1), abs(-math.pi/2 - course1), abs(math.pi/2 - course1)]
@@ -206,6 +208,7 @@ class Motion_real(Motion):
                 self.glob.ball_distance = dist
                 self.glob.ball_speed = speed
                 self.glob.robot_see_ball = 5
+                self.head_Return(0, self.neck_play_pose)
                 return(a, course, dist, speed)
             else:
                 if distance1 !=0:
@@ -218,10 +221,12 @@ class Motion_real(Motion):
                     self.glob.ball_course = course1
                     self.glob.ball_distance = dist
                     self.glob.robot_see_ball = 5
+                    self.head_Return(0, self.neck_play_pose)
                     return(a, course1, dist, [0, 0])
         #if with_Localization: self.local.localisation_Complete()
         self.local.localisation_Complete()
         self.glob.robot_see_ball -= 1
+        self.head_Return(0, self.neck_play_pose)
         return False, 0, 0, [0, 0]
 
     def watch_Ball_In_Pose(self, penalty_Goalkeeper = False):
@@ -850,6 +855,7 @@ class Motion_real(Motion):
         deceleration = False
 # straight segment 
         print('far_distance_straight_approach: straight segment')
+        L1 = self.glob.ball_distance - gap
         L = math.sqrt((ball_coord[0]-self.local.coord_odometry[0])**2 + (ball_coord[1]-self.local.coord_odometry[1])**2) - gap
         number_Of_Cycles = math.ceil(abs(L * 1000 / self.cycle_step_yield))
         stepLength = L * 1000 / number_Of_Cycles * 64 / self.cycle_step_yield
@@ -1387,10 +1393,12 @@ class Motion_real(Motion):
             self.refresh_Orientation()
         self.refresh_Orientation()
         if self.glob.with_Local:
+            old_orientation = self.local.coord_odometry[2]
             self.local.coord_odometry[2] = self.body_euler_angle['yaw']
             self.local.coord_shift = [0,0,0]
             self.local.coordinate_record(odometry = True, shift = True)
             self.local.refresh_odometry()
+            self.glob.ball_course = self.norm_yaw(self.glob.ball_course + old_orientation - self.local.coord_odometry[2])
 
 
 if __name__=="__main__":
