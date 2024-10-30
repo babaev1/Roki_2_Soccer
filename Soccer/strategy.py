@@ -973,6 +973,92 @@ class Player():
         #for i in range(4):
         #    throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
         if pressed_button == 'approach_test' :
+            self.motion.head_Return(0, -2000)
+            for _ in range(500):
+                result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
+                x = distance * math.cos(course) * 1000
+                y = distance * math.sin(course) * 1000
+                if abs(y) > 10:
+                    if y > 0:
+                        fraction = min(1, abs(y) / self.glob.jump_left_yield)
+                        self.motion.one_jump_left(fraction)
+                        self.local.coord_shift[1] = self.glob.jump_left_yield * fraction / 1000
+                    if y < 0:
+                        fraction = min(1, abs(y) / self.glob.jump_right_yield)
+                        self.motion.one_jump_right(fraction)
+                        self.local.coord_shift[1] = - self.glob.jump_right_yield * fraction/ 1000
+                    self.motion.jump_turn(0)
+                if x > 10:
+                    fraction = min(1, abs(x) / self.glob.jump_forward_yield)
+                    self.motion.one_jump_forward(fraction)
+                    self.local.coord_shift[0] = self.glob.jump_forward_yield * fraction / 1000
+                    self.motion.jump_turn(0)
+                self.motion.refresh_Orientation()
+                self.local.coordinate_record(odometry = True, shift = True)
+                self.local.refresh_odometry()
+                if abs(y) < 10 and x < 0: 
+                    break
+            self.motion.head_Return(0, 0)
+            # Basketball_PickUp start
+            var = roki2met.roki2met.Basketball_PickUp_v2_S1
+            self.glob.rcb.motionPlay(13)                                # Basketball_PickUp
+            while True:
+                ok, frameCount = intercom.memIGet(var.frameCount)
+                if ok: print('frameCount :', frameCount)
+                else: print(intercom.GetError())
+                if frameCount == 1: break
+                time.sleep(0.25)
+            intercom.memISet(var.clamping, int(self.motion.params['BASKETBALL_CLAMPING']))         # clamping gap for ball gripping -50 best value
+            intercom.memISet(var.steps, 0)    # side shift steps to provide 80mm shifting to right. 17 is the best value
+            intercom.memISet(var.pitStop, 1)                                                       # ignition
+            time.sleep(35)
+            # Basketball_PickUp end
+            target_pos = [0, -0.08, 0]
+            for _ in range(500):
+                print('coord_odometry : ', self.local.coord_odometry)
+                shift_x = target_pos[0] - self.local.coord_odometry[0]
+                shift_y = target_pos[1] - self.local.coord_odometry[1]
+                if abs(shift_x) > 0.005:
+                    if (shift_x) < 0:
+                        fraction = min(1, abs(shift_x * 1000) / self.glob.jump_backward_yield)
+                        self.motion.one_jump_backward(fraction)
+                        self.local.coord_shift[0] = - self.glob.jump_backward_yield * fraction/ 1000
+                    else:
+                        fraction = min(1, abs(shift_x * 1000) / self.glob.jump_forward_yield)
+                        self.motion.one_jump_forward(fraction)
+                        self.local.coord_shift[0] = self.glob.jump_forward_yield * fraction/ 1000
+                    self.motion.jump_turn(0)
+                if abs(shift_y) > 0.005:
+                    if (shift_y) < 0:
+                        fraction = min(1, abs(shift_y * 1000) / self.glob.jump_right_yield)
+                        self.motion.one_jump_right(fraction)
+                        self.local.coord_shift[1] = - self.glob.jump_right_yield * fraction / 1000
+                    else:
+                        fraction = min(1, abs(shift_y * 1000) / self.glob.jump_left_yield)
+                        self.motion.one_jump_left(fraction)
+                        self.local.coord_shift[1] = self.glob.jump_left_yield * fraction / 1000
+                    self.motion.jump_turn(0)
+                self.motion.refresh_Orientation()
+                self.local.coordinate_record(odometry = True, shift = True)
+                self.local.refresh_odometry()
+                if abs(shift_y) < 0.005 and abs(shift_x) < 0.005: break
+            # Basketball_PickUp start
+            var = roki2met.roki2met.Basketball_PickUp_v2_S2
+            self.glob.rcb.motionPlay(14)                                # Basketball_PickUp
+            while True:
+                ok, frameCount = intercom.memIGet(var.frameCount)
+                if ok: print('frameCount :', frameCount)
+                else: print(intercom.GetError())
+                if frameCount == 1: break
+                time.sleep(0.25)
+            intercom.memISet(var.clamping, int(self.motion.params['BASKETBALL_CLAMPING']))         # clamping gap for ball gripping -50 best value
+            intercom.memISet(var.steps, 0)    # side shift steps to provide 80mm shifting to right. 17 is the best value
+            intercom.memISet(var.pitStop, 1)                                                       # ignition
+            time.sleep(35)
+            # Basketball_PickUp end
+            return
+
+        if pressed_button == 'approach_test_low_level' :
             jump_mode = roki2met.roki2met.jump_motions_local.jump_mode_local
             jump_motions = roki2met.roki2met.jump_motions_local
             self.motion.head_Return(0, -2000)
@@ -1568,18 +1654,21 @@ class Player():
                 if abs(y) > 10:
                     if y > 0:
                         #intercom.memISet(var, 103)
-                        self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_left)
+                        fraction = min(1, abs(y) / self.glob.jump_left_yield)
+                        self.motion.one_jump_left(fraction)
                     if y < 0:
                         #intercom.memISet(var, 104)
-                        self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_right)
+                        fraction = min(1, abs(y) / self.glob.jump_right_yield)
+                        self.motion.one_jump_right(fraction)
                     #self.glob.rcb.motionPlay(7)
-                    time.sleep(0.5)
+                    #time.sleep(0.5)
                     self.motion.jump_turn(0)
                 if x > -20:
                     #intercom.memISet(var, 101)
                     #self.glob.rcb.motionPlay(7)
-                    self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_forward)
-                    time.sleep(0.5)
+                    fraction = min(1, (x + 20) / self.glob.jump_right_yield)
+                    self.motion.one_jump_forward(fraction)
+                    #time.sleep(0.5)
                     self.motion.jump_turn(0)
                 if abs(y) < 10 and x < -20: 
                     break

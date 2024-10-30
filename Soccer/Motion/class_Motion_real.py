@@ -44,6 +44,28 @@ class Motion_real(Motion):
             [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
 
+    def one_jump_forward(self, fraction = 1):
+        motion_list =  self.jump_motion_forward.copy()
+        motion_list[1][2] = int(motion_list[1][2] * fraction )
+        motion_list[1][13] = int(motion_list[1][13] * fraction )
+        self.play_Soft_Motion_Slot(motion_list = motion_list)
+
+    def one_jump_backward(self, fraction = 1):
+        motion_list =  self.jump_motion_backward.copy()
+        motion_list[1][2] = int(motion_list[1][2] * fraction )
+        motion_list[1][13] = int(motion_list[1][13] * fraction )
+        self.play_Soft_Motion_Slot(motion_list = motion_list)
+
+    def one_jump_left(self, fraction = 1):
+        motion_list =  self.jump_motion_left.copy()
+        motion_list[0][1] = motion_list[0][5] = motion_list[0][12] = motion_list[0][16] = motion_list[1][5] = motion_list[1][16] = int(-200 * fraction)
+        self.play_Soft_Motion_Slot(motion_list = motion_list)
+
+    def one_jump_right(self, fraction = 1):
+        motion_list =  self.jump_motion_right.copy()
+        motion_list[0][1] = motion_list[0][5] = motion_list[0][12] = motion_list[0][16] = motion_list[1][5] = motion_list[1][16] = int( 200 * fraction)
+        self.play_Soft_Motion_Slot(motion_list = motion_list)
+
     def head_Tilt_Calibration(self):
             # Калибрация Наклона камеры. Установить мяч на расстоянии (100 см)по низу мяча.
             # Полученная величина наклона камеры эквивалентна (69) градуса от вертикали.
