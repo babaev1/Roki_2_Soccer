@@ -102,7 +102,7 @@ if __name__ == '__main__':
 
         #goalkeeper, forward_v2, run_test, penalty_Shooter, rotation_test, penalty_Goalkeeper, spot_walk, dance, quaternion_test, test_walk, kick_test, marathon, FIRA_penalty_Shooter
         second_pressed_button = 'start'   # side_step_left, side_step_right, short_run, rotation_right, spot_run, start_later
-        role = 'sprint'
+        role = 'weight_lifting'
 
         particles_number = 1000
         initial_coord = [-0.5, 0, 0]
@@ -154,7 +154,7 @@ if __name__ == '__main__':
             ax.grid(True)
             plt.show()
             os.remove("Export_data.npy")
-            print('average timing for 3m : ', 3 / (Dummy_HDataX[-1] - Dummy_HDataX[0]) * len(Dummy_HDataX) * 0.010)
+            #print('average timing for 3m : ', 3 / (Dummy_HDataX[-1] - Dummy_HDataX[0]) * len(Dummy_HDataX) * 0.010)
 
 
 

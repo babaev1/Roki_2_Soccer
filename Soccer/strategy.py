@@ -247,25 +247,31 @@ class Player():
         #sys.exit(1)
 
     def jump_test(self, second_pressed_button):
-        var = roki2met.roki2met.jump_mode
-        intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
+        #var = roki2met.roki2met.jump_mode
+        #intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
         #self.glob.rcb.motionPlay(23)
+        self.motion.head_Return(0, -2000)
         if second_pressed_button == 'jump_forward':
-            intercom.memISet(var, 1001)
-            self.glob.rcb.motionPlay(7)
-            while(intercom.memIGet(var) != 0): time.sleep(0.1)
+            #intercom.memISet(var, 1001)
+            #self.glob.rcb.motionPlay(7)
+            #while(intercom.memIGet(var) != 0): time.sleep(0.1)
+            for _ in range(10): self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_forward)
         if second_pressed_button == 'jump_backward':
-            intercom.memISet(var, 1002)
-            self.glob.rcb.motionPlay(7)
-            while(intercom.memIGet(var) != 0): time.sleep(0.1)
+            #intercom.memISet(var, 1002)
+            #self.glob.rcb.motionPlay(7)
+            #while(intercom.memIGet(var) != 0): time.sleep(0.1)
+            for _ in range(10): self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_backward)
         if second_pressed_button == 'jump_left':
-            intercom.memISet(var, 1003)
-            self.glob.rcb.motionPlay(7)
-            while(intercom.memIGet(var) != 0): time.sleep(0.1)
+            #intercom.memISet(var, 1003)
+            #self.glob.rcb.motionPlay(7)
+            #while(intercom.memIGet(var) != 0): time.sleep(0.1)
+            for _ in range(10): self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_left)
         if second_pressed_button == 'jump_right':
-            intercom.memISet(var, 1004)
-            self.glob.rcb.motionPlay(7)
-            while(intercom.memIGet(var) != 0): time.sleep(0.1)
+            #intercom.memISet(var, 1004)
+            #self.glob.rcb.motionPlay(7)
+            #while(intercom.memIGet(var) != 0): time.sleep(0.1)
+            for _ in range(10): self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_right)
+        pass
 
     def rotation_test_main_cycle(self):
         motion = [
@@ -1309,7 +1315,7 @@ class Player():
             while True:
                 if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
                 stepLength = 64
-                number_Of_Cycles = 10
+                number_Of_Cycles = 200
                 self.motion.walk_Initial_Pose()
                 for cycle in range(number_Of_Cycles):
                     if self.motion.falling_Flag != 0: break
@@ -1547,30 +1553,32 @@ class Player():
             self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')
 
         if pressed_button == 'start':
-            var = roki2met.roki2met.jump_mode
-            intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
+            #var = roki2met.roki2met.jump_mode
+            #intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
             walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_INITIAL_STEPS_NUMBER'],
                        stepLength = self.motion.params['WEIGHTLIFTING_INITIAL_STEPLENGTH'])
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
             self.motion.head_Return(0, -2000)
             for _ in range(500):
-                result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
+                if self.glob.SIMULATION == 5: result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
+                else: result, course, distance, ball_blob = self.glob.vision.seek_Ball_In_Frame(with_Localization = False)
                 print('course :', course, 'distance :', distance)
                 x = distance * math.cos(course) * 1000
                 y = distance * math.sin(course) * 1000
                 if abs(y) > 10:
                     if y > 0:
-                        intercom.memISet(var, 103)
+                        #intercom.memISet(var, 103)
+                        self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_left)
                     if y < 0:
-                        intercom.memISet(var, 104)
-                    self.glob.rcb.motionPlay(7)
-                    #while(intercom.memIGet(var) != 0): time.sleep(0.1)
+                        #intercom.memISet(var, 104)
+                        self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_right)
+                    #self.glob.rcb.motionPlay(7)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
                 if x > -20:
-                    intercom.memISet(var, 101)
-                    self.glob.rcb.motionPlay(7)
-                    #while(intercom.memIGet(var) != 0): time.sleep(0.1)
+                    #intercom.memISet(var, 101)
+                    #self.glob.rcb.motionPlay(7)
+                    self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_forward)
                     time.sleep(0.5)
                     self.motion.jump_turn(0)
                 if abs(y) < 10 and x < -20: 
