@@ -450,6 +450,28 @@ class Vision_General:
         else: result = False
         return result, displacement
 
+    def seek_Launch_Pad_In_Frame(self):
+        see_pad = 0
+        camera_result, img1, pitch, roll, yaw, pan = self.snapshot()
+        if camera_result:
+            img = Image(img1)
+            #self.display_camera_image(img1, window = 'Original')
+            ball_column, ball_row = 0, 0
+            for blob in img.find_blobs([self.TH['orange ball']['th']],
+                                pixels_threshold=self.TH['orange ball']['pixel'],
+                                area_threshold=self.TH['orange ball']['area'],
+                                merge=True):
+                if blob.cy() > ball_row:
+                    ball_row = blob.cy()
+                    ball_column = blob.cx()
+                    ball_blob = blob
+                    see_pad += 1
+        if see_pad == 0: return False, 0, 0
+        else:
+            result, relative_x_on_floor, relative_y_on_floor = self.image_point_to_relative_coord_on_floor( column, row, for_ball = False, absolute = False)
+            if result: return True, relative_x_on_floor, relative_y_on_floor
+            else: return False, 0, 0
+
     def detect_Line_Follow_Stream_(self, event, turn_shift, direction_from_vision):
         x_size = 200
         y_size = 80

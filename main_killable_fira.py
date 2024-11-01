@@ -82,6 +82,8 @@ try:
         labels = [[],[],[],['start', 'start_simple', 'start_lifting'], []]
     elif role == 'sprint':
         labels = [[],[],[],['start_attention'], []]
+    elif role == 'triple_jump':
+        labels = [[],[],[],['start', 'start_with_approach'], []]
     else: 
         labels = [[], [], [], ['start', 'start_later'], []]
     if role == 'forward':

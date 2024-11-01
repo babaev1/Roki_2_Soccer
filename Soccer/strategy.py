@@ -973,6 +973,7 @@ class Player():
         #for i in range(4):
         #    throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
         if pressed_button == 'approach_test' :
+            position_x, position_y = 0, 0
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
@@ -982,20 +983,18 @@ class Player():
                     if y > 0:
                         fraction = min(1, abs(y) / self.glob.jump_left_yield)
                         self.motion.one_jump_left(fraction)
-                        self.local.coord_shift[1] = self.glob.jump_left_yield * fraction / 1000
+                        position_y += self.glob.jump_left_yield * fraction
                     if y < 0:
                         fraction = min(1, abs(y) / self.glob.jump_right_yield)
                         self.motion.one_jump_right(fraction)
-                        self.local.coord_shift[1] = - self.glob.jump_right_yield * fraction/ 1000
+                        position_y -= self.glob.jump_right_yield * fraction
                     self.motion.jump_turn(0)
                 if x > 10:
                     fraction = min(1, abs(x) / self.glob.jump_forward_yield)
                     self.motion.one_jump_forward(fraction)
-                    self.local.coord_shift[0] = self.glob.jump_forward_yield * fraction / 1000
+                    position_x += self.glob.jump_forward_yield * fraction
                     self.motion.jump_turn(0)
                 self.motion.refresh_Orientation()
-                self.local.coordinate_record(odometry = True, shift = True)
-                self.local.refresh_odometry()
                 if abs(y) < 10 and x < 0: 
                     break
             self.motion.head_Return(0, 0)
@@ -1013,35 +1012,31 @@ class Player():
             intercom.memISet(var.pitStop, 1)                                                       # ignition
             time.sleep(35)
             # Basketball_PickUp end
-            target_pos = [0, -0.08, 0]
+            target_pos = [0, -80]
             for _ in range(500):
-                print('coord_odometry : ', self.local.coord_odometry)
-                shift_x = target_pos[0] - self.local.coord_odometry[0]
-                shift_y = target_pos[1] - self.local.coord_odometry[1]
-                if abs(shift_x) > 0.005:
+                shift_x = target_pos[0] - position_x
+                shift_y = target_pos[1] - position_y
+                if abs(shift_x) > 5:
                     if (shift_x) < 0:
-                        fraction = min(1, abs(shift_x * 1000) / self.glob.jump_backward_yield)
+                        fraction = min(1, abs(shift_x) / self.glob.jump_backward_yield)
                         self.motion.one_jump_backward(fraction)
-                        self.local.coord_shift[0] = - self.glob.jump_backward_yield * fraction/ 1000
+                        position_x -= self.glob.jump_backward_yield * fraction
                     else:
-                        fraction = min(1, abs(shift_x * 1000) / self.glob.jump_forward_yield)
+                        fraction = min(1, abs(shift_x) / self.glob.jump_forward_yield)
                         self.motion.one_jump_forward(fraction)
-                        self.local.coord_shift[0] = self.glob.jump_forward_yield * fraction/ 1000
+                        position_x += self.glob.jump_forward_yield * fraction
                     self.motion.jump_turn(0)
-                if abs(shift_y) > 0.005:
+                if abs(shift_y) > 5:
                     if (shift_y) < 0:
-                        fraction = min(1, abs(shift_y * 1000) / self.glob.jump_right_yield)
+                        fraction = min(1, abs(shift_y) / self.glob.jump_right_yield)
                         self.motion.one_jump_right(fraction)
-                        self.local.coord_shift[1] = - self.glob.jump_right_yield * fraction / 1000
+                        position_y -= self.glob.jump_right_yield * fraction
                     else:
                         fraction = min(1, abs(shift_y * 1000) / self.glob.jump_left_yield)
                         self.motion.one_jump_left(fraction)
-                        self.local.coord_shift[1] = self.glob.jump_left_yield * fraction / 1000
+                        position_y += self.glob.jump_left_yield * fraction
                     self.motion.jump_turn(0)
-                self.motion.refresh_Orientation()
-                self.local.coordinate_record(odometry = True, shift = True)
-                self.local.refresh_odometry()
-                if abs(shift_y) < 0.005 and abs(shift_x) < 0.005: break
+                if abs(shift_y) < 5 and abs(shift_x) < 5: break
             # Basketball_PickUp start
             var = roki2met.roki2met.Basketball_PickUp_v2_S2
             self.glob.rcb.motionPlay(14)                                # Basketball_PickUp
@@ -1591,22 +1586,36 @@ class Player():
             #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
         if self.glob.SIMULATION == 1:
             self.motion.sim_Progress(10)
+
+    def walk_straight(self, number_Of_Cycles = 0, stepLength = 0, sideLength = 0, respect_body_tilt = False):
+        self.motion.walk_Initial_Pose()
+        number_Of_Cycles += 2
+        for cycle in range(number_Of_Cycles):
+            stepLength1 = stepLength
+            if cycle ==0 or cycle == number_Of_Cycles-1 : stepLength1 = stepLength/3
+            if cycle ==1 or cycle == number_Of_Cycles-2 : stepLength1 = stepLength/3 * 2
+            self.motion.refresh_Orientation()
+            #self.motion.body_euler_angle_calc()
+            rotation = - self.motion.body_euler_angle['yaw'] * 1.0
+            rotation = self.motion.normalize_rotation(rotation)
+            self.motion.walk_Cycle(stepLength1, sideLength, rotation,cycle, number_Of_Cycles)
+        self.motion.walk_Final_Pose(respect_body_tilt = respect_body_tilt)
         
     def weight_lifting(self, pressed_button):
         self.motion.with_Vision = False
-        def walk_straight(number_Of_Cycles = 0, stepLength = 0, sideLength = 0, respect_body_tilt = False):
-            self.motion.walk_Initial_Pose()
-            number_Of_Cycles += 2
-            for cycle in range(number_Of_Cycles):
-                stepLength1 = stepLength
-                if cycle ==0 or cycle == number_Of_Cycles-1 : stepLength1 = stepLength/3
-                if cycle ==1 or cycle == number_Of_Cycles-2 : stepLength1 = stepLength/3 * 2
-                self.motion.refresh_Orientation()
-                #self.motion.body_euler_angle_calc()
-                rotation = - self.motion.body_euler_angle['yaw'] * 1.0
-                rotation = self.motion.normalize_rotation(rotation)
-                self.motion.walk_Cycle(stepLength1, sideLength, rotation,cycle, number_Of_Cycles)
-            self.motion.walk_Final_Pose(respect_body_tilt = respect_body_tilt)
+        #def walk_straight(number_Of_Cycles = 0, stepLength = 0, sideLength = 0, respect_body_tilt = False):
+        #    self.motion.walk_Initial_Pose()
+        #    number_Of_Cycles += 2
+        #    for cycle in range(number_Of_Cycles):
+        #        stepLength1 = stepLength
+        #        if cycle ==0 or cycle == number_Of_Cycles-1 : stepLength1 = stepLength/3
+        #        if cycle ==1 or cycle == number_Of_Cycles-2 : stepLength1 = stepLength/3 * 2
+        #        self.motion.refresh_Orientation()
+        #        #self.motion.body_euler_angle_calc()
+        #        rotation = - self.motion.body_euler_angle['yaw'] * 1.0
+        #        rotation = self.motion.normalize_rotation(rotation)
+        #        self.motion.walk_Cycle(stepLength1, sideLength, rotation,cycle, number_Of_Cycles)
+        #    self.motion.walk_Final_Pose(respect_body_tilt = respect_body_tilt)
 
         def walk_straight_slow(number_Of_Cycles = 0, stepLength = 0, sideLength = 0):
             amplitude = self.motion.amplitude
@@ -1633,7 +1642,7 @@ class Player():
 
         if pressed_button == 'start_simple':  
             #walk_straight(number_Of_Cycles = 9, stepLength = 32)
-            walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_INITIAL_STEPS_NUMBER'],
+            self.walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_INITIAL_STEPS_NUMBER'],
                        stepLength = self.motion.params['WEIGHTLIFTING_INITIAL_STEPLENGTH'])
             self.motion.jump_turn(0)
             self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')
@@ -1641,7 +1650,7 @@ class Player():
         if pressed_button == 'start':
             #var = roki2met.roki2met.jump_mode
             #intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
-            walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_INITIAL_STEPS_NUMBER'],
+            self.walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_INITIAL_STEPS_NUMBER'],
                        stepLength = self.motion.params['WEIGHTLIFTING_INITIAL_STEPLENGTH'])
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
             self.motion.head_Return(0, -2000)
@@ -1686,7 +1695,7 @@ class Player():
         self.motion.first_Leg_Is_Right_Leg = True
         self.motion.stepHeight = 20
         #walk_straight(number_Of_Cycles = 16, stepLength = 30, respect_body_tilt = True)
-        walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_NEXT_STEPS_NUMBER'],
+        self.walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_NEXT_STEPS_NUMBER'],
                        stepLength = self.motion.params['WEIGHTLIFTING_NEXT_STEPLENGTH'])
         self.motion.params['BODY_TILT_AT_WALK'] -= self.motion.params['WEIGHTLIFTING_NEXT_BODYTILT']
 
@@ -1698,11 +1707,36 @@ class Player():
         self.motion.params['BODY_TILT_AT_WALK'] += self.motion.params['WEIGHTLIFTING_LAST_BODYTILT']  #333333333333333333333333333333333333333
         #if self.glob.SIMULATION != 5 :  self.motion.params['BODY_TILT_AT_WALK'] = 0
         self.motion.stepHeight = self.motion.params['WEIGHTLIFTING_LAST_STEPHEIGHT']
-        walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_LAST_STEPS_NUMBER'],
+        self.walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_LAST_STEPS_NUMBER'],
                        stepLength = self.motion.params['WEIGHTLIFTING_LAST_STEPLENGTH'])
         return
     
-    def triple_jump_main_cycle(self):
+    def triple_jump_main_cycle(self, pressed_button):
+        if pressed_button == 'start_with_approach':
+            self.walk_straight(number_Of_Cycles = 5, stepLength = 30)
+            self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
+            self.motion.head_Return(0, -2000)
+            for _ in range(500):
+                result, x, y = self.glob.vision.seek_Launch_Pad_In_Frame()
+                if result:
+                    print('x :', x, 'y :', y)
+                    x = x + 20
+                    if abs(y) > 10:
+                        if y > 0:
+                            fraction = min(1, abs(y) / self.glob.jump_left_yield)
+                            self.motion.one_jump_left(fraction)
+                        if y < 0:
+                            fraction = min(1, abs(y) / self.glob.jump_right_yield)
+                            self.motion.one_jump_right(fraction)
+                        self.motion.jump_turn(0)
+                    if x > 0:
+                        fraction = min(1, (x) / self.glob.jump_right_yield)
+                        self.motion.one_jump_forward(fraction)
+                        self.motion.jump_turn(0)
+                    if abs(y) < 10 and x < -20: 
+                        break
+                else:
+                    pass
         var = roki2met.roki2met.TripleJumpForFIRA2023
         intercom = self.glob.stm_channel.zubr 
         #self.motion.params['TRIPLE_JUMP_TUNER'] = 0
