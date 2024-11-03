@@ -977,7 +977,7 @@ class Player():
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
-                x = distance * math.cos(course) * 1000
+                x = distance * math.cos(course) * 1000 - 10
                 y = distance * math.sin(course) * 1000
                 if abs(y) > 10:
                     if y > 0:
@@ -988,15 +988,18 @@ class Player():
                         fraction = min(1, abs(y) / self.glob.jump_right_yield)
                         self.motion.one_jump_right(fraction)
                         position_y -= self.glob.jump_right_yield * fraction
+                    time.sleep(0.2)
                     self.motion.jump_turn(0)
                 if x > 10:
                     fraction = min(1, abs(x) / self.glob.jump_forward_yield)
                     self.motion.one_jump_forward(fraction)
                     position_x += self.glob.jump_forward_yield * fraction
+                    time.sleep(0.2)
                     self.motion.jump_turn(0)
                 self.motion.refresh_Orientation()
-                if abs(y) < 10 and x < 0: 
+                if abs(y) < 10 and x < 10: 
                     break
+                
             self.motion.head_Return(0, 0)
             # Basketball_PickUp start
             var = roki2met.roki2met.Basketball_PickUp_v2_S1
@@ -1025,6 +1028,7 @@ class Player():
                         fraction = min(1, abs(shift_x) / self.glob.jump_forward_yield)
                         self.motion.one_jump_forward(fraction, hands_on = False)
                         position_x += self.glob.jump_forward_yield * fraction
+                    time.sleep(0.2)
                     self.motion.jump_turn(0)
                 if abs(shift_y) > 5:
                     if (shift_y) < 0:
@@ -1035,6 +1039,7 @@ class Player():
                         fraction = min(1, abs(shift_y * 1000) / self.glob.jump_left_yield)
                         self.motion.one_jump_left(fraction, hands_on = False)
                         position_y += self.glob.jump_left_yield * fraction
+                    time.sleep(0.2)
                     self.motion.jump_turn(0)
                 if abs(shift_y) < 5 and abs(shift_x) < 5: break
             # Basketball_PickUp start
