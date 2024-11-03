@@ -222,7 +222,7 @@ class Motion(Robot, Motion_extention_1):
         camera_elevation = com_2_camera_vector[2] - min(right_leg_vector[2], left_leg_vector[2])
         return True, camera_elevation
 
-    def play_Soft_Motion_Slot(self, name = '', motion_list = None, hands_on = True):             # the slot from file will be played in robot
+    def play_Soft_Motion_Slot_(self, name = '', motion_list = None, hands_on = True):             # the slot from file will be played in robot
         print('playing : ', name) 
         self.motion_slot_progress = True
         if self.glob.SIMULATION == 5:
@@ -252,6 +252,54 @@ class Motion(Robot, Motion_extention_1):
                         for i in range(joint_number):
                             pos = int(motion[i+1] * self.ACTIVESERVOS[i][2] + 7500) 
                             servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                            #print(i, servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data, file=log_file)
+                    frames_number = int(motion[0]) 
+                    a=self.rcb.setServoPosAsync(servoDatas, frames_number, frames_number-1)
+                    time.sleep(self.glob.params['FRAME_DELAY']/1000 * (frames_number-1))
+            self.wait_for_gueue_end(with_Vision = False)
+            # while True:
+            #     if self.stm_channel.mb.GetBodyQueueInfo()[1].Size < 1: break
+            #     time.sleep(0.02)
+                #self.pyb.delay(30 * frames_number)
+                #self.pyb.delay(250 )
+        else:
+            self.simulateMotion(name = name, motion_list = motion_list, hands_on = hands_on)
+        self.motion_slot_progress = False
+
+    def play_Soft_Motion_Slot(self, name = '', motion_list = None, hands_on = True):             # the slot from file will be played in robot
+        print('playing : ', name) 
+        self.motion_slot_progress = True
+        if self.glob.SIMULATION == 5:
+            if motion_list == None:
+                with open(self.glob.current_work_directory + "Soccer/Motion/motion_slots/" + name + ".json", "r") as f:
+                    slots = json.loads(f.read())
+                motion_list = slots[name]
+            #joint_number = len(self.ACTIVESERVOS)
+            with open('Slot_log.txt', "a") as log_file:
+                print('playing slot', file=log_file)
+                motion_num = 0
+                for motion in motion_list:
+                    motion_num += 1
+                    print('pose number = ', motion_num, file=log_file)
+                    joint_number = len(motion) -1
+                    servoDatas = []
+                    for i in range(joint_number):
+                        if (self.ACTIVESERVOS[i][0] in self.hand_joints) and (not hands_on): continue
+                        if self.model == 'Roki_2':
+                            if self.ACTIVESERVOS[i][0] == 8:
+                                pos = int(motion[i+1] * self.ACTIVESERVOS[i][2]/2 + 7500)
+                                servoData = self.Roki.Rcb4.ServoData()
+                                servoData.Id, servoData.Sio, servoData.Data = 13, self.ACTIVESERVOS[i][1], pos
+                                servoDatas.append(servoData)
+                            else: pos = int(motion[i+1] * self.ACTIVESERVOS[i][2] + 7500)
+                            servoData = self.Roki.Rcb4.ServoData()
+                            servoData.Id, servoData.Sio, servoData.Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                            servoDatas.append(servoData)
+                        else:
+                            pos = int(motion[i+1] * self.ACTIVESERVOS[i][2] + 7500) 
+                            servoData = self.Roki.Rcb4.ServoData()
+                            servoData.Id, servoData.Sio, servoData.Data = self.ACTIVESERVOS[i][0], self.ACTIVESERVOS[i][1], pos
+                            servoDatas.append(servoData)
                             #print(i, servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data, file=log_file)
                     frames_number = int(motion[0]) 
                     a=self.rcb.setServoPosAsync(servoDatas, frames_number, frames_number-1)

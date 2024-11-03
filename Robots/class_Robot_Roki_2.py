@@ -37,7 +37,7 @@ class Robot:
             (14,        1,          1,      1,           0,    2281,    'MASK_RIGHT_CLAW',             1),              # Прав Кисть
             (14,        2,          1,      1,           0,    2281,    'MASK_LEFT_CLAW',              1)               # Лев Кисть
             ]
-
+        self.hand_joints = [1,2,3,4,11,14]
         self.jointLimits = []
         for servo in self.ACTIVESERVOS:
             self.jointLimits.append((servo[4], servo[5]))
