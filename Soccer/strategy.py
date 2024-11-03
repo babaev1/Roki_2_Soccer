@@ -1019,21 +1019,21 @@ class Player():
                 if abs(shift_x) > 5:
                     if (shift_x) < 0:
                         fraction = min(1, abs(shift_x) / self.glob.jump_backward_yield)
-                        self.motion.one_jump_backward(fraction)
+                        self.motion.one_jump_backward(fraction, hands_on = False)
                         position_x -= self.glob.jump_backward_yield * fraction
                     else:
                         fraction = min(1, abs(shift_x) / self.glob.jump_forward_yield)
-                        self.motion.one_jump_forward(fraction)
+                        self.motion.one_jump_forward(fraction, hands_on = False)
                         position_x += self.glob.jump_forward_yield * fraction
                     self.motion.jump_turn(0)
                 if abs(shift_y) > 5:
                     if (shift_y) < 0:
                         fraction = min(1, abs(shift_y) / self.glob.jump_right_yield)
-                        self.motion.one_jump_right(fraction)
+                        self.motion.one_jump_right(fraction, hands_on = False)
                         position_y -= self.glob.jump_right_yield * fraction
                     else:
                         fraction = min(1, abs(shift_y * 1000) / self.glob.jump_left_yield)
-                        self.motion.one_jump_left(fraction)
+                        self.motion.one_jump_left(fraction, hands_on = False)
                         position_y += self.glob.jump_left_yield * fraction
                     self.motion.jump_turn(0)
                 if abs(shift_y) < 5 and abs(shift_x) < 5: break
