@@ -18,7 +18,7 @@ class Vision_General:
         self.pan = 0
         self.pitch = 0
         self.roll = 0
-        self.elevation = 0
+        self.camera_elevation = 410
         self.yaw = 0
         self.image = None
         self.event = threading.Event()
@@ -453,21 +453,31 @@ class Vision_General:
     def seek_Launch_Pad_In_Frame(self):
         see_pad = 0
         camera_result, img1, pitch, roll, yaw, pan = self.snapshot()
+        if self.glob.event_type == "FIRA":
+            self.camera_elevation = 410
         if camera_result:
             img = Image(img1)
             #self.display_camera_image(img1, window = 'Original')
-            ball_column, ball_row = 0, 0
-            for blob in img.find_blobs([self.TH['orange ball']['th']],
-                                pixels_threshold=self.TH['orange ball']['pixel'],
-                                area_threshold=self.TH['orange ball']['area'],
-                                merge=True):
-                if blob.cy() > ball_row:
-                    ball_row = blob.cy()
-                    ball_column = blob.cx()
-                    ball_blob = blob
-                    see_pad += 1
+            left_x = right_x = int(self.glob.params['CAMERA_HORIZONTAL_RESOLUTION']/2)
+            top_y = bottom_y =  int(self.glob.params['CAMERA_VERTICAL_RESOLUTION']/2)
+            blobs = img.find_blobs([self.TH['blue posts']['th']],pixels_threshold=20, area_threshold=20, merge=True)
+            for i in range(len(blobs)) :
+                if i == 0:
+                    left_x = blobs[i].x()
+                    right_x = blobs[i].x() + blobs[i].w()
+                    top_y = blobs[i].y()
+                    right_y = blobs[i].y() + blobs[i].h()
+                else:
+                    if blobs[i].x() < left_x : left_x = blobs[i].x()
+                    if blobs[i].x() + blobs[i].w() > right_x: right_x = blobs[i].x() + blobs[i].w()
+                    if blobs[i].y() < top_y: top_y = blobs[i].y()
+                    if blobs[i].y() + blobs[i].h() > right_y: right_y = blobs[i].y() + blobs[i].h()
+                see_pad += 1
         if see_pad == 0: return False, 0, 0
         else:
+            self.visible_reaction_ball()
+            column = int((left_x + right_x)/2)
+            row = int((top_y + bottom_y)/2)
             result, relative_x_on_floor, relative_y_on_floor = self.image_point_to_relative_coord_on_floor( column, row, for_ball = False, absolute = False)
             if result: return True, relative_x_on_floor, relative_y_on_floor
             else: return False, 0, 0
