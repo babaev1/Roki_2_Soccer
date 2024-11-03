@@ -255,22 +255,30 @@ class Player():
             #intercom.memISet(var, 1001)
             #self.glob.rcb.motionPlay(7)
             #while(intercom.memIGet(var) != 0): time.sleep(0.1)
-            for _ in range(10): self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_forward)
+            for _ in range(10): 
+                self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_forward)
+                time.sleep(0.2)
         if second_pressed_button == 'jump_backward':
             #intercom.memISet(var, 1002)
             #self.glob.rcb.motionPlay(7)
             #while(intercom.memIGet(var) != 0): time.sleep(0.1)
-            for _ in range(10): self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_backward)
+            for _ in range(10): 
+                self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_backward)
+                time.sleep(0.2)
         if second_pressed_button == 'jump_left':
             #intercom.memISet(var, 1003)
             #self.glob.rcb.motionPlay(7)
             #while(intercom.memIGet(var) != 0): time.sleep(0.1)
-            for _ in range(10): self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_left)
+            for _ in range(10): 
+                self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_left)
+                time.sleep(0.2)
         if second_pressed_button == 'jump_right':
             #intercom.memISet(var, 1004)
             #self.glob.rcb.motionPlay(7)
             #while(intercom.memIGet(var) != 0): time.sleep(0.1)
-            for _ in range(10): self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_right)
+            for _ in range(10): 
+                self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_right)
+                time.sleep(0.2)
         pass
 
     def rotation_test_main_cycle(self):
@@ -977,7 +985,7 @@ class Player():
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
-                x = distance * math.cos(course) * 1000 - 10
+                x = distance * math.cos(course) * 1000 - 20
                 y = distance * math.sin(course) * 1000
                 if abs(y) > 10:
                     if y > 0:
@@ -999,8 +1007,6 @@ class Player():
                 self.motion.refresh_Orientation()
                 if abs(y) < 10 and x < 10: 
                     break
-                
-            self.motion.head_Return(0, 0)
             # Basketball_PickUp start
             var = roki2met.roki2met.Basketball_PickUp_v2_S1
             self.glob.rcb.motionPlay(13)                                # Basketball_PickUp
@@ -1013,7 +1019,7 @@ class Player():
             intercom.memISet(var.clamping, int(self.motion.params['BASKETBALL_CLAMPING']))         # clamping gap for ball gripping -50 best value
             intercom.memISet(var.steps, 0)    # side shift steps to provide 80mm shifting to right. 17 is the best value
             intercom.memISet(var.pitStop, 1)                                                       # ignition
-            time.sleep(35)
+            time.sleep(13)
             # Basketball_PickUp end
             target_pos = [0, -80]
             for _ in range(500):
@@ -1043,6 +1049,7 @@ class Player():
                     self.motion.jump_turn(0)
                 if abs(shift_y) < 5 and abs(shift_x) < 5: break
             # Basketball_PickUp start
+            self.motion.head_Return(0, 0)
             var = roki2met.roki2met.Basketball_PickUp_v2_S2
             self.glob.rcb.motionPlay(14)                                # Basketball_PickUp
             while True:
