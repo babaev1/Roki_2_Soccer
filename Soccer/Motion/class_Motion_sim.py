@@ -270,7 +270,7 @@ class Motion_sim(Motion_real):
             self.activePose =[]
             #for j in range(len(self.ACTIVEJOINTS) - 4):
             for j in range(len(motion_list[i]) - 1):
-                if (not hands_on) and (self.ACTIVESERVOS[j][0] in self.hand_joints) :
+                if (not hands_on) and (self.ACTIVESERVOS[j][0] in self.hand_servo_ids) :
                     self.activePose.append(activePoseOld[j])
                 else:
                     self.activePose.append(0.017*motion_list[i][j+1]*0.03375)

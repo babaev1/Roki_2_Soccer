@@ -284,7 +284,7 @@ class Motion(Robot, Motion_extention_1):
                     joint_number = len(motion) -1
                     servoDatas = []
                     for i in range(joint_number):
-                        if (self.ACTIVESERVOS[i][0] in self.hand_joints) and (not hands_on): continue
+                        if (self.ACTIVESERVOS[i][0] in self.hand_servo_ids) and (not hands_on): continue
                         if self.model == 'Roki_2':
                             if self.ACTIVESERVOS[i][0] == 8:
                                 pos = int(motion[i+1] * self.ACTIVESERVOS[i][2]/2 + 7500)
