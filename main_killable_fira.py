@@ -84,7 +84,7 @@ try:
     elif role == 'sprint':
         labels = [[],[],[],['start_attention'], []]
     elif role == 'triple_jump':
-        labels = [[],[],[],['start', 'start_with_approach'], []]
+        labels = [[],[],[],['start', 'start_with_approach', 'find_launch_bar'], []]
     else: 
         labels = [[], [], [], ['start', 'start_later'], []]
     if role == 'forward':

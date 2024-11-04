@@ -1743,7 +1743,7 @@ class Player():
     
     def triple_jump_main_cycle(self, pressed_button):
         self.motion.with_Vision = False
-        if pressed_button == 'start_with_approach':
+        if pressed_button == 'start_with_approach' or pressed_button == 'find_launch_bar':
             self.walk_straight(number_Of_Cycles = 5, stepLength = 30)
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
             self.motion.head_Return(0, -2000)
@@ -1768,28 +1768,29 @@ class Player():
                         break
                 else:
                     pass
-        self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
-        self.motion.head_Return(0, 0)
-        if self.glob.SIMULATION == 5:
-            os.system("espeak -ven-m1 -a"+ '200' + " " + "'I ready to jump'")
-            var = roki2met.roki2met.TripleJumpForFIRA2023
-            intercom = self.glob.stm_channel.zubr 
-            #self.motion.params['TRIPLE_JUMP_TUNER'] = 0
-            #self.motion.params['TRIPLE_JUMP_FACTOR'] = 0.9
-            #self.glob.stm_channel.mb.SetBodyQueuePeriod(15)
-            time.sleep(5)
-            #self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
-            self.glob.rcb.motionPlay(11)
-            while True:
-                ok, restart_flag = intercom.memIGet(var.restart_flag)
-                if ok: print('restart_flag :', restart_flag)
-                else: print(intercom.GetError())
-                if restart_flag == 0: break
-                time.sleep(0.25)
-            intercom.memISet(var.tuner, self.motion.params['TRIPLE_JUMP_TUNER'])
-            intercom.memISet(var.hip_at_landing, self.motion.params['TRIPLE_JUMP_HIP_AT_LANDING'])
-            intercom.memFSet(var.factor, self.motion.params['TRIPLE_JUMP_FACTOR'])
-            intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
+        if pressed_button != 'find_launch_bar':
+            self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
+            self.motion.head_Return(0, 0)
+            if self.glob.SIMULATION == 5:
+                os.system("espeak -ven-m1 -a"+ '200' + " " + "'I ready to jump'")
+                var = roki2met.roki2met.TripleJumpForFIRA2023
+                intercom = self.glob.stm_channel.zubr 
+                #self.motion.params['TRIPLE_JUMP_TUNER'] = 0
+                #self.motion.params['TRIPLE_JUMP_FACTOR'] = 0.9
+                #self.glob.stm_channel.mb.SetBodyQueuePeriod(15)
+                time.sleep(5)
+                #self.motion.play_Soft_Motion_Slot(name = 'TripleJumpForFIRA2023')
+                self.glob.rcb.motionPlay(11)
+                while True:
+                    ok, restart_flag = intercom.memIGet(var.restart_flag)
+                    if ok: print('restart_flag :', restart_flag)
+                    else: print(intercom.GetError())
+                    if restart_flag == 0: break
+                    time.sleep(0.25)
+                intercom.memISet(var.tuner, self.motion.params['TRIPLE_JUMP_TUNER'])
+                intercom.memISet(var.hip_at_landing, self.motion.params['TRIPLE_JUMP_HIP_AT_LANDING'])
+                intercom.memFSet(var.factor, self.motion.params['TRIPLE_JUMP_FACTOR'])
+                intercom.memISet(var.pitStop, 1)                    # 1 - go on, 0 - stop waiting
 
 
     def marathon_main_cycle_(self):

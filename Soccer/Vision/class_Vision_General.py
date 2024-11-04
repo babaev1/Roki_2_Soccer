@@ -462,6 +462,7 @@ class Vision_General:
             top_y = bottom_y =  int(self.glob.params['CAMERA_VERTICAL_RESOLUTION']/2)
             blobs = img.find_blobs([self.TH['blue posts']['th']],pixels_threshold=20, area_threshold=20, merge=True)
             for i in range(len(blobs)) :
+                img.draw_rectangle(blobs[i].rect())
                 if i == 0:
                     left_x = blobs[i].x()
                     right_x = blobs[i].x() + blobs[i].w()
@@ -473,6 +474,7 @@ class Vision_General:
                     if blobs[i].y() < top_y: top_y = blobs[i].y()
                     if blobs[i].y() + blobs[i].h() > right_y: right_y = blobs[i].y() + blobs[i].h()
                 see_pad += 1
+            self.display_camera_image(img.img, window = 'Original')
         if see_pad == 0: return False, 0, 0
         else:
             self.visible_reaction_ball()
