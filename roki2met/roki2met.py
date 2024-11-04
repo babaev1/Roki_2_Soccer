@@ -1,5 +1,5 @@
 
-#Этот файл автоматически сгенерирован с помощью программы IronArt v0.103
+#Этот файл автоматически сгенерирован с помощью программы IronArt v0.110
 #Не следует его редактировать вручную
 
 class roki2met :
@@ -52,6 +52,9 @@ class roki2met :
     svButtonRight = 1022
     svButtonPress = 1023
     svHeadControlMask = 1024
+    svEulerYaw = 1025
+    svEulerPitch = 1026
+    svEulerRoll = 1027
     svRemoteStatus = 1190
     svRemoteButton = 1191
     svRemoteLeftJoystick = 1192
@@ -77,6 +80,28 @@ class roki2met :
     svHumoModelAngKnee = 1201
     svHumoModelAngFoot = 1202
     svHumoModelAngFootSide = 1203
+    svIkA5 = 1215
+    svIkB5 = 1216
+    svIkC5 = 1217
+    svIkA6 = 1218
+    svIkA7 = 1219
+    svIkA8 = 1220
+    svIkA9 = 1221
+    svIkA10 = 1222
+    svIkB10 = 1223
+    svIkC10 = 1224
+    svIkLimA5min = 1225
+    svIkLimA5max = 1226
+    svIkLimA6min = 1227
+    svIkLimA6max = 1228
+    svIkLimA7min = 1229
+    svIkLimA7max = 1230
+    svIkLimA8min = 1231
+    svIkLimA8max = 1232
+    svIkLimA9min = 1233
+    svIkLimA9max = 1234
+    svIkLimA10min = 1235
+    svIkLimA10max = 1236
     svIkOutPresent = 1237
     svIkEncA5 = 1238
     svIkEncA6 = 1239
