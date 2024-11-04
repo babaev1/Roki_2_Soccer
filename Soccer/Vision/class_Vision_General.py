@@ -467,12 +467,12 @@ class Vision_General:
                     left_x = blobs[i].x()
                     right_x = blobs[i].x() + blobs[i].w()
                     top_y = blobs[i].y()
-                    right_y = blobs[i].y() + blobs[i].h()
+                    bottom_y = blobs[i].y() + blobs[i].h()
                 else:
                     if blobs[i].x() < left_x : left_x = blobs[i].x()
                     if blobs[i].x() + blobs[i].w() > right_x: right_x = blobs[i].x() + blobs[i].w()
                     if blobs[i].y() < top_y: top_y = blobs[i].y()
-                    if blobs[i].y() + blobs[i].h() > right_y: right_y = blobs[i].y() + blobs[i].h()
+                    if blobs[i].y() + blobs[i].h() > bottom_y: bottom_y = blobs[i].y() + blobs[i].h()
                 see_pad += 1
             self.display_camera_image(img.img, window = 'Original')
         if see_pad == 0: return False, 0, 0
