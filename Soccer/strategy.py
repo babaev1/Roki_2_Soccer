@@ -1747,7 +1747,9 @@ class Player():
             self.walk_straight(number_Of_Cycles = 5, stepLength = 30)
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
             self.motion.head_Return(0, -1800)
-            for _ in range(50):
+            time.sleep(1)
+            for _ in range(500):
+                time.sleep(1)
                 result, x, y = self.glob.vision.seek_Launch_Pad_In_Frame()
                 if result:
                     print('x :', x, 'y :', y)
