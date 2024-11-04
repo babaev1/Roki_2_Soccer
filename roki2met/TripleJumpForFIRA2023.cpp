@@ -232,6 +232,6 @@ void main() {
   	page_9_1();
   	page_0();
 	//page_10();
-    	sfWaitFrame( 1500 );
+    	sfWaitFrame( 800 );
     }
 }

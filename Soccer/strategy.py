@@ -660,14 +660,14 @@ class Player():
         first_look_point = [2.0 , 0]
         self.motion.head_Return(0, -1500)
         time.sleep(1)
-        """
+
         self.motion.jump_turn(self.motion.params['PENALTY_JUMP_TURN_ANGLE'], jumps_limit = 2) # 0.5
         self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
         self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
         self.motion.jump_turn(self.f.direction_To_Guest)
         self.motion.near_distance_omni_motion(300, math.pi/2)
-        """
+
         #number_Of_Cycles = 5
         #stepLength = 64
         #sideLength = 0
@@ -720,6 +720,7 @@ class Player():
             #if self.f.kick_Power == 3: self.motion.kick_power = 20
             self.motion.kick_power = 100
             success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest)
+            #success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
             first_shoot = False
 
     def penalty_Shooter_main_cycle(self):
@@ -1403,7 +1404,7 @@ class Player():
                         self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                         break
                 if self.motion.falling_Flag != 0: continue
-                number_Of_Cycles = 20
+                number_Of_Cycles = 200
                 stepLength = -50
                 self.motion.stepHeight = 40
                 #self.glob.params['BODY_TILT_AT_WALK'] -= 0.01

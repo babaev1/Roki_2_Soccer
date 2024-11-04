@@ -1040,9 +1040,9 @@ VBC1_STACK_UP1//remove result, call address and params
 VBC2_PUSH_CONST 70  //func address page_0
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-[1:235] ;sfWaitFrame( 1500 );
+[1:235] ;sfWaitFrame( 800 );
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
-VBC3_PUSH_CONST 1500 
+VBC3_PUSH_CONST 800 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 LAB1750: //for step
