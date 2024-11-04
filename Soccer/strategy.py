@@ -1746,7 +1746,7 @@ class Player():
         if pressed_button == 'start_with_approach' or pressed_button == 'find_launch_bar':
             self.walk_straight(number_Of_Cycles = 5, stepLength = 30)
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
-            self.motion.head_Return(0, -2000)
+            self.motion.head_Return(0, -1800)
             for _ in range(50):
                 result, x, y = self.glob.vision.seek_Launch_Pad_In_Frame()
                 if result:
