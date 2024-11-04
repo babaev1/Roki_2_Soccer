@@ -1402,7 +1402,7 @@ class Motion_real(Motion):
                     head_turn(0, self.neck_play_pose)
                     time.sleep(0.1)
 
-    def jump_turn(self, course, jumps_limit = 20, accuracy = 0.09):
+    def jump_turn(self, course, jumps_limit = 20, accuracy = 0.09, hands_on = True):
         motion = [
             #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             #[ 2, -700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0 ],
@@ -1437,7 +1437,7 @@ class Motion_real(Motion):
                 if self.falling_Flag == 3: uprint('STOP!')
                 else: uprint('FALLING!!!', self.falling_Flag)
                 break
-            self.play_Soft_Motion_Slot(motion_list = motion)
+            self.play_Soft_Motion_Slot(motion_list = motion, hands_on = hands_on)
             time.sleep(0.5)
             self.refresh_Orientation()
         self.refresh_Orientation()

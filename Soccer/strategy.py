@@ -1051,7 +1051,7 @@ class Player():
                         self.motion.one_jump_forward(fraction, hands_on = False)
                         position_x += self.glob.jump_forward_yield * fraction
                     time.sleep(0.5)
-                    self.motion.jump_turn(0)
+                    self.motion.jump_turn(0, hands_on = False)
                     time.sleep(0.5)
                 if abs(shift_y) > 5:
                     if (shift_y) < 0:
@@ -1063,7 +1063,7 @@ class Player():
                         self.motion.one_jump_left(fraction, hands_on = False)
                         position_y += self.glob.jump_left_yield * fraction
                     time.sleep(0.5)
-                    self.motion.jump_turn(0)
+                    self.motion.jump_turn(0, hands_on = False)
                     time.sleep(0.5)
                 if abs(shift_y) < 5 and abs(shift_x) < 5: break
             # Basketball_PickUp start
