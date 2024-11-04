@@ -452,6 +452,8 @@ class Vision_General:
 
     def seek_Launch_Pad_In_Frame(self):
         see_pad = 0
+        roi_x = 150
+        roi_y = 100
         camera_result, img1, pitch, roll, yaw, pan = self.snapshot()
         if self.glob.event_type == "FIRA":
             self.camera_elevation = 410
@@ -460,7 +462,7 @@ class Vision_General:
             #self.display_camera_image(img1, window = 'Original')
             left_x = right_x = int(self.glob.params['CAMERA_HORIZONTAL_RESOLUTION']/2)
             top_y = bottom_y =  int(self.glob.params['CAMERA_VERTICAL_RESOLUTION']/2)
-            blobs = img.find_blobs([self.TH['blue posts']['th']],pixels_threshold=20, area_threshold=20, merge=True)
+            blobs = img.find_blobs([self.TH['blue posts']['th']],pixels_threshold=20, area_threshold=20, merge=True, roi=(roi_x,roi_y,500,400))
             for i in range(len(blobs)) :
                 img.draw_rectangle(blobs[i].rect())
                 if i == 0:
@@ -474,12 +476,13 @@ class Vision_General:
                     if blobs[i].y() < top_y: top_y = blobs[i].y()
                     if blobs[i].y() + blobs[i].h() > bottom_y: bottom_y = blobs[i].y() + blobs[i].h()
                 see_pad += 1
+            img.draw_rectangle(roi, color = (0, 0, 255))
             self.display_camera_image(img.img, window = 'Original')
         if see_pad == 0: return False, 0, 0
         else:
             self.visible_reaction_ball()
-            column = int((left_x + right_x)/2)
-            row = int((top_y + bottom_y)/2)
+            column = int((left_x + right_x)/2) + roi_x
+            row = int((top_y + bottom_y)/2) + roi_y
             result, relative_x_on_floor, relative_y_on_floor = self.image_point_to_relative_coord_on_floor( column, row, for_ball = False, absolute = False)
             if result: return True, relative_x_on_floor, relative_y_on_floor
             else: return False, 0, 0
