@@ -72,7 +72,7 @@ try:
     if role == 'run_test':
         labels = [[],['side_step_left', 'rotation_left'], [], ['short_run', 'long_run', 'spot_run', 'run_backwards'], ['side_step_right', 'rotation_right']]
     elif role == 'jump_test':
-        labels = [[],['jump_left'], [], ['jump_forward', 'jump_backward'], ['jump_right']]
+        labels = [[],['jump_left'], [], ['jump_forward', 'jump_backward', 'jump_on_spot'], ['jump_right']]
     elif role == 'kick_test':
         labels = [[],[],[],['regular', 'new_kick'], []]
     elif role == 'basketball':

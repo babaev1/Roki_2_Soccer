@@ -33,8 +33,9 @@ class Motion_real(Motion):
             ]
         self.jump_motion_forward = [
             [ 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, -100, 0, 0, 0, 0, 0, 0, 0],
-            [ 3, -700, -300, 0, 0, 0, 0, 0, 0, 0, 0, 00, 700, 300, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 3, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -100, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 3, -700, -500, 0, 0, 0, 0, 0, 0, 0, 0, 00, 700, 500, 0, 0, 0, 0, 0, 0, 0, 0],
+            #[ 3, 0, -100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
         self.jump_motion_backward = [
@@ -46,12 +47,16 @@ class Motion_real(Motion):
 
     def one_jump_forward(self, fraction = 1, hands_on = True):
         motion_list =  self.jump_motion_forward.copy()
+        motion_list[0][2] = int(motion_list[0][2] * fraction )
+        motion_list[0][13] = int(motion_list[0][13] * fraction )
         motion_list[1][2] = int(motion_list[1][2] * fraction )
         motion_list[1][13] = int(motion_list[1][13] * fraction )
         self.play_Soft_Motion_Slot(motion_list = motion_list, hands_on = hands_on)
 
     def one_jump_backward(self, fraction = 1, hands_on = True):
         motion_list =  self.jump_motion_backward.copy()
+        motion_list[0][2] = int(motion_list[0][2] * fraction )
+        motion_list[0][13] = int(motion_list[0][13] * fraction )
         motion_list[1][2] = int(motion_list[1][2] * fraction )
         motion_list[1][13] = int(motion_list[1][13] * fraction )
         self.play_Soft_Motion_Slot(motion_list = motion_list, hands_on = hands_on)

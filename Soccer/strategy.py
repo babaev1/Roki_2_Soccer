@@ -258,6 +258,8 @@ class Player():
             for _ in range(10): 
                 self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_forward)
                 time.sleep(0.5)
+                self.motion.jump_turn(0)
+                time.sleep(0.5)
         if second_pressed_button == 'jump_backward':
             #intercom.memISet(var, 1002)
             #self.glob.rcb.motionPlay(7)
@@ -278,6 +280,12 @@ class Player():
             #while(intercom.memIGet(var) != 0): time.sleep(0.1)
             for _ in range(10): 
                 self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_right)
+                time.sleep(0.5)
+        if second_pressed_button == 'jump_on_spot':
+            for _ in range(10): 
+                self.motion.one_jump_forward( fraction = 0)
+                time.sleep(0.5)
+                self.motion.jump_turn(0)
                 time.sleep(0.5)
         pass
 
