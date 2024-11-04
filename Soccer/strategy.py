@@ -258,7 +258,7 @@ class Player():
             for _ in range(10): 
                 self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_forward)
                 time.sleep(0.5)
-                self.motion.jump_turn(0)
+                self.motion.jump_turn(0, accuracy = 0.04)
                 time.sleep(0.5)
         if second_pressed_button == 'jump_backward':
             #intercom.memISet(var, 1002)
@@ -267,12 +267,16 @@ class Player():
             for _ in range(10): 
                 self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_backward)
                 time.sleep(0.5)
+                self.motion.jump_turn(0, accuracy = 0.04)
+                time.sleep(0.5)
         if second_pressed_button == 'jump_left':
             #intercom.memISet(var, 1003)
             #self.glob.rcb.motionPlay(7)
             #while(intercom.memIGet(var) != 0): time.sleep(0.1)
             for _ in range(10): 
                 self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_left)
+                time.sleep(0.5)
+                self.motion.jump_turn(0, accuracy = 0.04)
                 time.sleep(0.5)
         if second_pressed_button == 'jump_right':
             #intercom.memISet(var, 1004)
@@ -281,11 +285,13 @@ class Player():
             for _ in range(10): 
                 self.motion.play_Soft_Motion_Slot(motion_list = self.motion.jump_motion_right)
                 time.sleep(0.5)
+                self.motion.jump_turn(0, accuracy = 0.04)
+                time.sleep(0.5)
         if second_pressed_button == 'jump_on_spot':
             for _ in range(10): 
                 self.motion.one_jump_forward( fraction = 0)
                 time.sleep(0.5)
-                self.motion.jump_turn(0)
+                self.motion.jump_turn(0, accuracy = 0.04)
                 time.sleep(0.5)
         pass
 
@@ -1005,13 +1011,13 @@ class Player():
                         self.motion.one_jump_right(fraction)
                         position_y -= self.glob.jump_right_yield * fraction
                     time.sleep(0.5)
-                    self.motion.jump_turn(0)
+                    self.motion.jump_turn(0, accuracy = 0.04)
                 if x > 10:
                     fraction = min(1, abs(x) / self.glob.jump_forward_yield)
                     self.motion.one_jump_forward(fraction)
                     position_x += self.glob.jump_forward_yield * fraction
                     time.sleep(0.5)
-                    self.motion.jump_turn(0)
+                    self.motion.jump_turn(0, accuracy = 0.04)
                     time.sleep(0.5)
                 self.motion.refresh_Orientation()
                 if abs(y) < 10 and x < 10: 
@@ -1044,7 +1050,7 @@ class Player():
                         self.motion.one_jump_forward(fraction, hands_on = False)
                         position_x += self.glob.jump_forward_yield * fraction
                     time.sleep(0.5)
-                    self.motion.jump_turn(0)
+                    self.motion.jump_turn(0, accuracy = 0.04)
                     time.sleep(0.5)
                 if abs(shift_y) > 5:
                     if (shift_y) < 0:
@@ -1056,7 +1062,7 @@ class Player():
                         self.motion.one_jump_left(fraction, hands_on = False)
                         position_y += self.glob.jump_left_yield * fraction
                     time.sleep(0.5)
-                    self.motion.jump_turn(0)
+                    self.motion.jump_turn(0, accuracy = 0.04)
                     time.sleep(0.5)
                 if abs(shift_y) < 5 and abs(shift_x) < 5: break
             # Basketball_PickUp start

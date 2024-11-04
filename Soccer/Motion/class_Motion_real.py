@@ -1402,7 +1402,7 @@ class Motion_real(Motion):
                     head_turn(0, self.neck_play_pose)
                     time.sleep(0.1)
 
-    def jump_turn(self, course, jumps_limit = 20):
+    def jump_turn(self, course, jumps_limit = 20, accuracy = 0.09):
         motion = [
             #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
             #[ 2, -700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 0 ],
@@ -1417,7 +1417,7 @@ class Motion_real(Motion):
         for i in range(jumps_limit):
             correction_yaw = course - self.body_euler_angle['yaw']
             correction_yaw = self.norm_yaw(correction_yaw)
-            if abs(correction_yaw) <  0.09: break
+            if abs(correction_yaw) <  accuracy: break
             if correction_yaw > 0:
                 solid_jumps = math.floor(abs(correction_yaw / self.params['CALIBRATED_CCW_YAW']))
                 partial_jump = abs(correction_yaw % self.params['CALIBRATED_CCW_YAW'])
