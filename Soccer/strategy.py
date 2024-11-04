@@ -999,7 +999,7 @@ class Player():
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
-                x = distance * math.cos(course) * 1000 - 20
+                x = distance * math.cos(course) * 1000 - 10
                 y = distance * math.sin(course) * 1000
                 if abs(y) > 10:
                     if y > 0:
@@ -1744,7 +1744,7 @@ class Player():
     def triple_jump_main_cycle(self, pressed_button):
         self.motion.with_Vision = False
         if pressed_button == 'start_with_approach':
-            self.walk_straight(number_Of_Cycles = 9, stepLength = 30)
+            self.walk_straight(number_Of_Cycles = 5, stepLength = 30)
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
             self.motion.head_Return(0, -2000)
             for _ in range(50):
