@@ -129,7 +129,7 @@ class Local():
         self.motion.refresh_Orientation()
         #self.refresh_odometry()
         self.correct_yaw_in_pf()
-        self.call_Par_Filter.pf.fall_reset()
+        #self.call_Par_Filter.pf.fall_reset()
 
     def coordinate_trust_estimation(self):
         return self.call_Par_Filter.pf.consistency
