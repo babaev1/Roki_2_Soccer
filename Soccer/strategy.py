@@ -1245,10 +1245,11 @@ class Player():
         if pressed_button == 'start' or pressed_button == 'start_with_approach' or pressed_button == 'throw_test' or pressed_button == 'throw_control':
             var = roki2met.roki2met.Basketball_Throw
             
-            int_voltage = self.motion.stm_channel.read_voltage_from_body()[1]
-            voltage = int_voltage / 270.2
-            print("voltage = ", round(voltage, 2), " 'BASKETBALL_DISTANCE': ", 
-                  int(self.motion.params['BASKETBALL_DISTANCE']))
+            #int_voltage = self.motion.stm_channel.read_voltage_from_body()[1]
+            #voltage = int_voltage / 270.2
+            voltage = 12
+            #print("voltage = ", round(voltage, 2), " 'BASKETBALL_DISTANCE': ", 
+            #      int(self.motion.params['BASKETBALL_DISTANCE']))
             #self.motion.play_Soft_Motion_Slot( name = 'throw', motion_list = throw)
             self.glob.rcb.motionPlay(9)                                # Basketball_Throw
             while True:
