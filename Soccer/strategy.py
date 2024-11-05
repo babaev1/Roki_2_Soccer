@@ -995,7 +995,8 @@ class Player():
         #    pickUp[i][20] -= int(self.motion.params['BASKETBALL_CLAMPING'])
         #for i in range(4):
         #    throw[i][19] += int(self.motion.params['BASKETBALL_DIRECTION'])
-        if pressed_button == 'approach_test' :
+
+        if pressed_button == 'approach_test' or pressed_button == 'start_with_approach' :
             position_x, position_y = 0, 0
             self.motion.head_Return(0, -2000)
             for _ in range(500):
@@ -1241,7 +1242,7 @@ class Player():
             intercom.memISet(var.pitStop, 1)                                                       # ignition
             time.sleep(35)
 
-        if pressed_button == 'start' or pressed_button == 'throw_test' or pressed_button == 'throw_control':
+        if pressed_button == 'start' or pressed_button == 'start_with_approach' or pressed_button == 'throw_test' or pressed_button == 'throw_control':
             var = roki2met.roki2met.Basketball_Throw
             
             int_voltage = self.motion.stm_channel.read_voltage_from_body()[1]
@@ -1268,7 +1269,8 @@ class Player():
                 os.system("espeak -ven-m1 -a"+ '200' + " " + "'I don_t see basket'")
             time.sleep(3)
             corrected_direction = int(self.motion.params['BASKETBALL_DIRECTION']) + int(displacement/10 /360 * 16384)
-            if pressed_button == 'start' or pressed_button == 'throw_control':
+
+            if pressed_button == 'start' or pressed_button == 'start_with_approach' or pressed_button == 'throw_control':
                 if int(self.motion.params['BASKETBALL_BATTERY_NUMBER']) == 1:
                     voltage_correction = 10469.14829 + -1506.46893 * voltage + 55.11101 * voltage ** 2  
                 elif int(self.motion.params['BASKETBALL_BATTERY_NUMBER']) == 3:
@@ -1281,6 +1283,7 @@ class Player():
             intercom.memISet(var.direction, corrected_direction)       # direction to correct 200 best value
             intercom.memISet(var.startStop, 1)                                                       # ignition
             time.sleep(3)
+
             if pressed_button == 'throw_test':
                 labels = [[], [], [], ['good', 'Bad'], []]
                 pressed_button = self.motion.push_Button(labels, message = "'Give me feed back'")
