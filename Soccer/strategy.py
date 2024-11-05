@@ -1409,7 +1409,7 @@ class Player():
                         break
                 if self.motion.falling_Flag != 0: continue
                 number_Of_Cycles = 200
-                stepLength = -50
+                stepLength = -40
                 self.motion.stepHeight = 40
                 #self.glob.params['BODY_TILT_AT_WALK'] -= 0.01
                 #self.motion.walk_Initial_Pose()
