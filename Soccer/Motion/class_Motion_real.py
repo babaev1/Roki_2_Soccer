@@ -883,7 +883,7 @@ class Motion_real(Motion):
         self.gaitHeight= 180
 #        self.walk_Initial_Pose()
 ## initial arc
-#        dest_yaw = target_yaw
+        dest_yaw = target_yaw
 #        delta_yaw = self.norm_yaw(dest_yaw - start_yaw)
 #        number_Of_Cycles = math.ceil(abs(delta_yaw / 0.2))
 #        if number_Of_Cycles == 0: number_Of_Cycles = 1
