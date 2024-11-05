@@ -143,7 +143,7 @@ class Local():
             else:
                 img = self.re.Image(img_)
                 labimg = self.cv2.cvtColor (img_, self.cv2.COLOR_BGR2LAB)
-                self.motion.vision_Sensor_Display( img_)
+                #self.motion.vision_Sensor_Display( img_)
             if all_goal_is_in_picture == 1 :
                 all_goal_is_in_picture = all_goal_is_in_picture + 1
             #if self.glob.SIMULATION == 2 :
