@@ -184,7 +184,7 @@ class Local():
                     if blob_Is_Post == True:
                         if self.glob.SIMULATION != 2 :
                             img.draw_rectangle(blob.rect(), color = (255, 255, 255))
-                            self.motion.vision_Sensor_Display( img.img)
+                            #self.motion.vision_Sensor_Display( img.img)
                         blob_y_plus_h = blob.y() + blob.h()
                         y = blob_y_plus_h - 2
                         post_color_pixels = []
