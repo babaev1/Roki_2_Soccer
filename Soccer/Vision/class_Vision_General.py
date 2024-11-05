@@ -366,7 +366,7 @@ class Vision_General:
             self.glob.ball_coord[:] = self.glob.local.ball_odometry
         else: self.glob.robot_see_ball -= 1
 
-    def detect_Basket_in_One_Shot(self):
+    def detect_Basket_in_One_Shot_N(self):
         see_ball = 0
         position = []
         displacement = 0
@@ -411,7 +411,7 @@ class Vision_General:
         else: result = False
         return result, displacement
 
-    def detect_Basket_in_One_Shot_N(self):
+    def detect_Basket_in_One_Shot(self):
         see_ball = 0
         position = []
         displacement = 0
