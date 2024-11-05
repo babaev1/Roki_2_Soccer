@@ -351,6 +351,37 @@ class Neural:
         key = cv2.waitKey(10)
         return (cx, cy)
 
+    def object_detect_single(self, frame, object):
+        if object == "ball": object_label = 0
+        elif object == "basket": object_label = 1
+        frame = letterbox(frame)
+        in_frame = np.expand_dims(frame, 0)
+        infer_request = self.compiled_model.create_infer_request()
+        infer_request.infer({0: in_frame})
+        # Step 7. Retrieve inference results 
+        output = infer_request.get_output_tensor()
+        # Step 8. Postprocessing including NMS
+        detections = nms_postprocess(output.data[0])
+        cx, cy = 0, 0
+        for result in detections:
+            class_label = result["class_index"]
+            if class_label == object_label:
+                box = result["box"]
+                box = np.clip(box, 0, 640)
+                x_min = int(box[0].item())
+                y_min = int(box[1].item())
+                x_max = int(box[2].item())
+                y_max = int(box[3].item())
+                cx = int((x_max + x_min)/2 / 640 * 800)
+                cy = int(((y_max + y_min)/2 - 60) / 640 *800 )
+            
+            # Draw bounding box on the image
+                cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), (0, 255, 0), 2)
+        # Display the image with bounding boxes
+        cv2.imshow("Output", frame)
+        key = cv2.waitKey(10)
+        return (cx, cy)
+
 def example(name):
     shm = SharedMemory(name = name)
     print('name', name)

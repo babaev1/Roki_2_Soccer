@@ -129,7 +129,7 @@ class Vision_General:
         for number in range (2):
             camera_result, img, pitch, roll, yaw, pan = self.snapshot()
             if camera_result:
-                ball_column, ball_row = self.glob.neural.ball_detect_single(img)
+                ball_column, ball_row = self.glob.neural.object_detect_single(img, "ball")
                 if ball_column or ball_row: 
                     if self.glob.event_type == "FIRA":
                         self.camera_elevation = 410
@@ -377,7 +377,7 @@ class Vision_General:
         img1, frame_number = self.camera.snapshot()
         if frame_number != 0:
             result = True
-            cx, cy = self.glob.neural.basket_detect_single(img1)
+            cx, cy = self.glob.neural.object_detect_single(img1, "basket")
             displacement = self.glob.params["CAMERA_HORIZONTAL_RESOLUTION"]/2 - cx
             result = not ( cx == 0 and cy == 0)
             if result: 
