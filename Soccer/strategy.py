@@ -1081,9 +1081,9 @@ class Player():
             intercom.memISet(var.clamping, int(self.motion.params['BASKETBALL_CLAMPING']))         # clamping gap for ball gripping -50 best value
             intercom.memISet(var.steps, 0)    # side shift steps to provide 80mm shifting to right. 17 is the best value
             intercom.memISet(var.pitStop, 1)                                                       # ignition
-            time.sleep(35)
+            time.sleep(25)
             # Basketball_PickUp end
-            return
+            #return
 
         if pressed_button == 'approach_test_low_level' :
             jump_mode = roki2met.roki2met.jump_motions_local.jump_mode_local
