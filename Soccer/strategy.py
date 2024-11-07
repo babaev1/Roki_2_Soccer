@@ -1262,7 +1262,7 @@ class Player():
             intercom.memISet(var.pitStop, 1)                                                       # ignition
             time.sleep(3)
             for i in range(10):
-                result, displacement = self.glob.vision.detect_Basket_in_One_Shot_N()
+                result, displacement = self.glob.vision.detect_Basket_in_One_Shot()
                 if result: break
             if result:
                 os.system("espeak -ven-m1 -a"+ '200' + " " + "'I see basket'")
