@@ -159,6 +159,56 @@ class Motion_real(Motion):
                 self.simulateMotion(name = 'Initial_Pose')
             self.robot_In_0_Pose = True
         variants = []
+        if self.glob.SIMULATION == 5:
+            self.head_Return(0, self.neck_play_pose)
+            time.sleep(1)
+        else:
+            returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
+                        self.jointHandle[21] , 0 , self.sim.simx_opmode_oneshot)   # Шея поворот
+            returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
+                        self.jointHandle[22] , self.neck_play_pose * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
+            for j in range(20):
+                self.sim.simxSynchronousTrigger(self.clientID)
+
+        if self.glob.SIMULATION == 5:
+            a, course, dist = self.vision.seek_Ball_In_Frame_N(with_Localization)
+        else:
+            a, course, dist, ball_blob = self.vision.seek_Ball_In_Frame(with_Localization)
+        if a == True: 
+            variants.append ((course, dist *1000))
+        course = 0
+        distance = 0
+        if len(variants)>0:
+            for i in range (len(variants)):
+                course = course + variants[i][0]
+                distance = distance + variants[i][1]
+            course1  = course /len(variants)
+            distance1 = distance /len(variants)
+            if distance1 !=0:
+                self.local.localisation_Complete()
+                dist = distance1 / 1000
+                course_global_rad = course1 + self.glob.pf_coord[2]
+                self.glob.ball_coord = [dist * math.cos(course_global_rad) + self.glob.pf_coord[0],
+                                        dist * math.sin(course_global_rad) + self.glob.pf_coord[1]]
+                self.local.ball_odometry = self.glob.ball_coord
+                self.glob.ball_course = course1
+                self.glob.ball_distance = dist
+                self.glob.ball_speed = [0,0]
+                self.glob.robot_see_ball = 5
+                return(a, course1, dist, [0, 0])
+        self.local.localisation_Complete()
+        self.glob.robot_see_ball -= 1
+        return False, 0, 0, [0, 0]
+
+    def seek_Ball_In_Pose_(self, fast_Reaction_On, penalty_Goalkeeper = False, with_Localization = True, very_Fast = False, first_look_point= None):
+        self.local.correct_yaw_in_pf()
+        if self.robot_In_0_Pose == False:
+            if self.glob.SIMULATION == 5:
+                self.play_Soft_Motion_Slot(name = 'Initial_Pose')
+            else:
+                self.simulateMotion(name = 'Initial_Pose')
+            self.robot_In_0_Pose = True
+        variants = []
         first_look_point = None
         if first_look_point == None:
             course_to_ball = 0
@@ -169,7 +219,7 @@ class Motion_real(Motion):
         head_pose = [(-2667,c), (-1333, c) , ( 0, c) , (1333, c) , (2667,c),
                      (-2667, c-700),(-1333, c-700), (0, c-700), (1333,c-700),(2667, c-700),
                     (-2667, c-1400), (-1333, c-1400), ( 0, c-1400), (1333, c-1400), (2667, c-1400)]
-        head_pose_seq = [2] #[2,4,0]
+        head_pose_seq = [2,4,0]
         for i in range(len(head_pose_seq)+1):
             if  i == 0:
                 self.neck_pan = -int(course_to_ball/self.TIK2RAD)
