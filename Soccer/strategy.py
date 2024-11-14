@@ -681,7 +681,8 @@ class Player():
             print('direction_To_Guest = ', math.degrees(self.f.direction_To_Guest), 'degrees')
             if dist == 0 and success_Code == False or success_Code == False:
                 os.system("espeak -ven-m1 -a"+ '200' + " " + "'jump_turn'")
-                self.motion.jump_turn(self.glob.pf_coord[2]+ 2 * math.pi / 3)
+                #self.motion.jump_turn(self.motion.imu_body_yaw()+ 2 * math.pi / 3)
+                self.motion.jump_turn(self.norm_yaw(self.glob.pf_coord[2]+ 2 * math.pi / 3))
                 continue
             player_from_ball_yaw = coord2yaw(self.glob.pf_coord[0] - self.glob.ball_coord[0],
                                                           self.glob.pf_coord[1] - self.glob.ball_coord[1]) - self.f.direction_To_Guest

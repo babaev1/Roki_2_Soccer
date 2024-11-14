@@ -897,6 +897,8 @@ class Motion_real(Motion):
 #        print('target yaw', target_yaw)
         #self.turn_To_Course(target_yaw, accurate = True)
         self.jump_turn(target_yaw)
+        shift = -self.glob.ball_distance * math.tan(self.glob.ball_course)
+        self.first_Leg_Is_Right_Leg = (shift <= 0)
         self.walk_Initial_Pose()
         self.refresh_Orientation()
         print('imu_body_yaw', self.imu_body_yaw())
@@ -916,8 +918,7 @@ class Motion_real(Motion):
                 deceleration = True
                 number_Of_Cycles += 1
             for cycle in range(number_Of_Cycles):
-                shift = -self.glob.ball_distance * math.tan(self.glob.ball_course)
-                if  abs(shift) > 0.025: sideLength = math.copysign(20, shift)
+                if  abs(shift) > 0.020: sideLength = math.copysign(20, shift)
                 else: sideLength = shift * 1000
                 stepLength1 = stepLength
                 if acceleration:
@@ -942,7 +943,6 @@ class Motion_real(Motion):
                     number_Of_Cycles += 1
             else: deceleration = False
             for cycle in range(1, number_Of_Cycles + 1, 1):
-                shift = -self.glob.ball_distance * math.tan(self.glob.ball_course)
                 if  abs(shift) > 0.025: sideLength = math.copysign(20, shift)
                 else: sideLength = shift * 1000
                 stepLength1 = stepLength
