@@ -679,7 +679,8 @@ class Player():
             self.f.dir_To_Guest()
             print('ball_coord = ', self.glob.ball_coord)
             print('direction_To_Guest = ', math.degrees(self.f.direction_To_Guest), 'degrees')
-            if dist == 0 and success_Code == False:
+            if dist == 0 and success_Code == False or success_Code == False:
+                os.system("espeak -ven-m1 -a"+ '200' + " " + "'jump_turn'")
                 self.motion.jump_turn(self.glob.pf_coord[2]+ 2 * math.pi / 3)
                 continue
             player_from_ball_yaw = coord2yaw(self.glob.pf_coord[0] - self.glob.ball_coord[0],
@@ -691,9 +692,11 @@ class Player():
                 if dist > 1: stop_Over = True
                 else: stop_Over = False
                 direction_To_Ball = math.atan2((self.glob.ball_coord[1] - self.glob.pf_coord[1]), (self.glob.ball_coord[0] - self.glob.pf_coord[0]))
+                os.system("espeak -ven-m1 -a"+ '200' + " " + "'far_distance_straight_approach'")
                 self.motion.far_distance_straight_approach(self.glob.ball_coord, direction_To_Ball, stop_Over = stop_Over)
                 continue
             if player_in_front_of_ball or not player_in_fast_kick_position:
+                os.system("espeak -ven-m1 -a"+ '200' + " " + "'go_Around_Ball'")
                 self.go_Around_Ball(dist, napravl)
             self.motion.jump_turn(self.f.direction_To_Guest)
             #if first_shoot:
@@ -701,6 +704,7 @@ class Player():
             #if self.f.kick_Power == 2: self.motion.kick_power = 60
             #if self.f.kick_Power == 3: self.motion.kick_power = 20
             self.motion.kick_power = 100
+            os.system("espeak -ven-m1 -a"+ '200' + " " + "'near_distance_ball_approach_and_kick'")
             success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest)
             #success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
             first_shoot = False
