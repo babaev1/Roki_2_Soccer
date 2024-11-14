@@ -287,20 +287,21 @@ class Local():
     def read_Localization_marks(self, img):
         timer1 = time.perf_counter()
         self.quality = 0
-        post_list1 = self.detect_Post_In_image(img, "blue posts")
-        for post in post_list1:
-            self.post_data_in_pose[self.post_data_in_pose_number][0] = int(post[0] * 2000)
-            self.post_data_in_pose[self.post_data_in_pose_number][1] = int(post[1] * 2000)
-            self.post_data_in_pose_number += 1
-        #if len(post_list1) != 0:
-        #    self.post_data_in_pose.extend(post_list1)
-        post_list2 = self.detect_Post_In_image(img, "yellow posts")
-        for post in post_list2:
-            self.post_data_in_pose[self.post_data_in_pose_number][0] = int(post[0] * 2000)
-            self.post_data_in_pose[self.post_data_in_pose_number][1] = int(post[1] * 2000)
-            self.post_data_in_pose_number += 1
-        #if len(post_list2) != 0:
-        #    self.post_data_in_pose.extend(post_list2)
+        if self.DIRECT_COORD_MEASUREMENT_BY_PAIRS_OF_POST or self.USE_SINGLE_POST_MEASUREMENT:
+            post_list1 = self.detect_Post_In_image(img, "blue posts")
+            for post in post_list1:
+                self.post_data_in_pose[self.post_data_in_pose_number][0] = int(post[0] * 2000)
+                self.post_data_in_pose[self.post_data_in_pose_number][1] = int(post[1] * 2000)
+                self.post_data_in_pose_number += 1
+            #if len(post_list1) != 0:
+            #    self.post_data_in_pose.extend(post_list1)
+            post_list2 = self.detect_Post_In_image(img, "yellow posts")
+            for post in post_list2:
+                self.post_data_in_pose[self.post_data_in_pose_number][0] = int(post[0] * 2000)
+                self.post_data_in_pose[self.post_data_in_pose_number][1] = int(post[1] * 2000)
+                self.post_data_in_pose_number += 1
+            #if len(post_list2) != 0:
+            #    self.post_data_in_pose.extend(post_list2)
         if self.USE_LANDMARKS_FOR_LOCALISATION == True:
             if self.USE_PENALTY_MARKS_FOR_LOCALISATION ==True: self.detect_penalty_marks(img)
             if self.USE_LINES_FOR_LOCALISATION == True : self.detect_line_in_image(img)
