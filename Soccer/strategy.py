@@ -694,7 +694,8 @@ class Player():
                 else: stop_Over = False
                 direction_To_Ball = math.atan2((self.glob.ball_coord[1] - self.glob.pf_coord[1]), (self.glob.ball_coord[0] - self.glob.pf_coord[0]))
                 os.system("espeak -ven-m1 -a"+ '200' + " " + "'far_distance_straight_approach'")
-                self.motion.far_distance_straight_approach(self.glob.ball_coord, direction_To_Ball, stop_Over = stop_Over)
+                #self.motion.far_distance_straight_approach(self.glob.ball_coord, direction_To_Ball, stop_Over = stop_Over)
+                self.motion.far_distance_straight_approach_streaming()
                 continue
             if player_in_front_of_ball or not player_in_fast_kick_position:
                 os.system("espeak -ven-m1 -a"+ '200' + " " + "'go_Around_Ball'")
@@ -706,8 +707,8 @@ class Player():
             #if self.f.kick_Power == 3: self.motion.kick_power = 20
             self.motion.kick_power = 100
             os.system("espeak -ven-m1 -a"+ '200' + " " + "'near_distance_ball_approach_and_kick'")
-            success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest)
-            #success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
+            #success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest)
+            success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
             first_shoot = False
 
     def penalty_Shooter_main_cycle(self):
