@@ -906,7 +906,7 @@ class Motion_real(Motion):
         print('far_distance_straight_approach: straight segment')
         L1 = self.glob.ball_distance - gap
         L = math.sqrt((ball_coord[0]-self.local.coord_odometry[0])**2 + (ball_coord[1]-self.local.coord_odometry[1])**2) - gap
-        number_Of_Cycles = math.ceil(abs(L * 1000 / self.cycle_step_yield))
+        number_Of_Cycles = math.ceil(abs(L * 1000 / self.cycle_step_yield)) + 1
         stepLength = L * 1000 / number_Of_Cycles * 64 / self.cycle_step_yield
         if stepLength > 22 :
             acceleration = True

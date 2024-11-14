@@ -668,24 +668,6 @@ class Player():
         self.motion.jump_turn(self.f.direction_To_Guest)
         self.motion.near_distance_omni_motion(300, math.pi/2)
 
-        #number_Of_Cycles = 5
-        #stepLength = 64
-        #sideLength = 0
-        #self.motion.walk_Initial_Pose()
-        #for cycle in range(number_Of_Cycles):
-        #    stepLength1 = stepLength
-        #    if cycle == 0 : stepLength1 = stepLength/3
-        #    if cycle == 1 : stepLength1 = stepLength/3 * 2
-        #    self.motion.refresh_Orientation()
-        #    rotation = math.pi/4 - self.motion.imu_body_yaw() * 1.1
-        #    rotation = self.motion.normalize_rotation(rotation)
-        #    self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
-        #self.motion.walk_Final_Pose()
-
-        #return
-        #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
-        #return
-
         while (True):
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break
@@ -697,7 +679,8 @@ class Player():
             self.f.dir_To_Guest()
             print('ball_coord = ', self.glob.ball_coord)
             print('direction_To_Guest = ', math.degrees(self.f.direction_To_Guest), 'degrees')
-            if dist == 0 and success_Code == False:
+            if dist == 0 and success_Code == False or success_Code == False:
+                os.system("espeak -ven-m1 -a"+ '200' + " " + "'jump_turn'")
                 self.motion.jump_turn(self.glob.pf_coord[2]+ 2 * math.pi / 3)
                 continue
             player_from_ball_yaw = coord2yaw(self.glob.pf_coord[0] - self.glob.ball_coord[0],
@@ -709,9 +692,11 @@ class Player():
                 if dist > 1: stop_Over = True
                 else: stop_Over = False
                 direction_To_Ball = math.atan2((self.glob.ball_coord[1] - self.glob.pf_coord[1]), (self.glob.ball_coord[0] - self.glob.pf_coord[0]))
+                os.system("espeak -ven-m1 -a"+ '200' + " " + "'far_distance_straight_approach'")
                 self.motion.far_distance_straight_approach(self.glob.ball_coord, direction_To_Ball, stop_Over = stop_Over)
                 continue
             if player_in_front_of_ball or not player_in_fast_kick_position:
+                os.system("espeak -ven-m1 -a"+ '200' + " " + "'go_Around_Ball'")
                 self.go_Around_Ball(dist, napravl)
             self.motion.jump_turn(self.f.direction_To_Guest)
             #if first_shoot:
@@ -719,6 +704,7 @@ class Player():
             #if self.f.kick_Power == 2: self.motion.kick_power = 60
             #if self.f.kick_Power == 3: self.motion.kick_power = 20
             self.motion.kick_power = 100
+            os.system("espeak -ven-m1 -a"+ '200' + " " + "'near_distance_ball_approach_and_kick'")
             success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest)
             #success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
             first_shoot = False
@@ -1730,6 +1716,7 @@ class Player():
         self.motion.params['BODY_TILT_AT_WALK'] += self.motion.params['WEIGHTLIFTING_NEXT_BODYTILT']  #22222222222222222222222222222222222
         self.motion.first_Leg_Is_Right_Leg = True
         self.motion.stepHeight = 20
+        self.motion.initPoses *= 10                                             # factor of extention of initial pose timing 
         #walk_straight(number_Of_Cycles = 16, stepLength = 30, respect_body_tilt = True)
         self.walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_NEXT_STEPS_NUMBER'],
                        stepLength = self.motion.params['WEIGHTLIFTING_NEXT_STEPLENGTH'])
@@ -1944,18 +1931,18 @@ class Player():
                     #self.glob.vision.camera_thread.start()
 
     def marathon_main_cycle(self):
-        self.motion.with_Vision = False
+        self.motion.with_Vision = True
+        number_Of_Cycles = 600
+        self.motion.amplitude = 32
+        self.motion.refresh_Orientation()
+        last_good_direction = self.motion.body_euler_angle['yaw']
+        line_was_lost = False
         while True:
-
-            self.motion.with_Vision = True
             self.motion.head_Return(0, -2300)
             stepLength = self.motion.params['MARATHON_STEP_LENGTH']
             self.motion.gaitHeight = 180
-            number_Of_Cycles = 600
-            self.motion.amplitude = 32
             sideLength = 0
             self.motion.walk_Initial_Pose()
-            direction = 0
             for cycle in range(number_Of_Cycles):
                 if self.motion.falling_Flag != 0: break
                 stepLength1 = stepLength
@@ -1963,12 +1950,23 @@ class Player():
                 if cycle ==1 : stepLength1 = stepLength/3 * 2
                 deflection = sum(self.glob.deflection[-2:]) / 2
                 if self.glob.data_quality_is_good :
+                    if line_was_lost:
+                        if abs(self.norm_yaw(last_good_direction - self.motion.body_euler_angle['yaw'])) > math.pi/2:
+                            stepLength1 = stepLength/3 * 2
+                            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle + 2)
+                            stepLength1 = stepLength/3
+                            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, cycle+1)
+                            self.motion.falling_Flag = 5                                                # wrong direction
+                            break
                     rotation =  math.radians(deflection)
                     limit = 0.1
+                    last_good_direction = self.motion.body_euler_angle['yaw']
+                    line_was_lost = False
                 else:
                     stepLength1 /= 2
                     rotation = math.copysign(0.5, deflection) #0.5
                     limit = 0.2
+                    line_was_lost = True
                 self.motion.refresh_Orientation()
                 rotation_imu = - self.motion.body_euler_angle['yaw'] * 1.1
                 #rotation = rotation * 0.83 + rotation_imu * 0.17
@@ -1992,6 +1990,8 @@ class Player():
             
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
             if self.motion.falling_Flag != 0: 
+                if self.motion.falling_Flag == 5:
+                    self.motion.jump_turn(self.motion.body_euler_angle['yaw'] + math.pi)    # turn around due to wrong direction
                 self.motion.falling_Flag = 0
             else:
                 if self.glob.camera_down_Flag == True: self.glob.camera_reset()
@@ -2007,90 +2007,16 @@ class Player():
         return yaw
 
     def test_walk_main_cycle(self):
-        motion_turn = [
-            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 3, -700, 0, 0, 0, 0, 1000, 0, 0, 0, 0, 0, 700, 0, 0, 0, 0, 1000, 0, 0, 0, 0],
-            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            #[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ]
-        motion_right = [
-            [ 10, 200, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, 200, 0, 0, 0, 200, 0, 0, 0, 0, 0],
-            [ 3, -711, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0, -650, 0, 0, 0, 200, 0, 0, 0, 0, 0],
-            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            #[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ]
-        motion_left = [
-            [ 10,-200, 0, 0, 0, -200, 0, 0, 0, 0, 0, 0, -200, 0, 0, 0, -200, 0, 0, 0, 0, 0],
-            [ 3, 650, 0, 0, 0, -200, 0, 0, 0, 0, 0, 0, 711, 0, 0, 0, -200, 0, 0, 0, 0, 0],
-            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            #[ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ]
-        motion_forward = [
-            [ 10, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, -100, 0, 0, 0, 0, 0, 0, 0],
-            [ 3, -700, -300, 0, 0, 0, 0, 0, 0, 0, 0, 00, 700, 300, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 3, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -100, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ]
-        motion_backward = [
-            [ 10, 0, -100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 00, 100, 0, 0, 0, 0, 0, 0, 0],
-            [ 3, -700, 300, 0, 0, 0, 0, 0, 0, 0, 0, 00, 700, -300, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-            ]
-        self.glob.vision.detect_Ball_in_One_Shot()
-        start = time.perf_counter()
-        self.glob.camera_reset()
-        self.glob.vision.detect_Ball_in_One_Shot()
-        time_elapsed = time.perf_counter() - start
-        print("camera reset time_elapsed : ", time_elapsed)
-
-        start = time.perf_counter()
-        self.glob.local.particle_filter_update()
-        time_elapsed = time.perf_counter() - start
-        print("pf time_elapsed : ", time_elapsed)
-
-        front_motion_tolerance = 10
-        side_motion_tolerance = 10
-        self.motion.head_Return(0, self.motion.neck_play_pose)
-        time.sleep(2)
-        self.glob.vision.detect_Ball_in_One_Shot()
-        ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course)
-        kick_by_Right = (ball_y < 0)
-        for _ in range(50):
-            self.glob.vision.detect_Ball_in_One_Shot()
-            ball_y = self.glob.ball_distance * math.sin(self.glob.ball_course) * 1000
-            ball_x = self.glob.ball_distance * math.cos(self.glob.ball_course) * 1000
-            kick_by_Right = (ball_y < 0)
-            if kick_by_Right: side_motion = ball_y + self.glob.params["KICK_OFFSET_OF_BALL"]
-            else: side_motion = ball_y - self.glob.params["KICK_OFFSET_OF_BALL"]
-            front_motion = ball_x - self.glob.params["KICK_ADJUSTMENT_DISTANCE_2"]
-            if front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance:
-                break
-            if front_motion > front_motion_tolerance: self.motion.play_Soft_Motion_Slot(motion_list = motion_forward)
-            if front_motion < -front_motion_tolerance: self.motion.play_Soft_Motion_Slot(motion_list = motion_backward)
-            if side_motion > side_motion_tolerance: self.motion.play_Soft_Motion_Slot(motion_list = motion_left)
-            if side_motion < -side_motion_tolerance: self.motion.play_Soft_Motion_Slot(motion_list = motion_right)
-            self.motion.jump_turn(0)
-            time.sleep(0.25)
-        self.motion.kick(kick_by_Right)
-        self.motion.walk_Final_Pose_After_Kick()
-        #for _ in range(20):
-        #    #self.motion.play_Soft_Motion_Slot(motion_list = motion_right)
-        #    self.motion.play_Soft_Motion_Slot(motion_list = motion_left)
-        #    #self.motion.play_Soft_Motion_Slot(name = "Small_Jump")
-        #    time.sleep(0.25)
-
-        return
-        self.motion.jump_turn(1)
-        self.motion.fr1 = 40 #40 #50
-        self.motion.fr2 = 20 #12 #20
-        self.motion.amplitude = 110 #110
+        self.motion.with_Vision = False
+        #self.motion.fr1 = 40 #40 #50
+        #self.motion.fr2 = 20 #12 #20
+        #self.motion.amplitude = 110 #110
         stepLength = 64
-        self.motion.gaitHeight = 210
+        #self.motion.gaitHeight = 210
         #self.motion.stepHeight = 40
         number_Of_Cycles = 10
         #self.motion.amplitude = 32
-        sideLength = 0
+        sideLength = 25
         #self.motion.first_Leg_Is_Right_Leg = False
         if self.motion.first_Leg_Is_Right_Leg: invert = -1
         else: invert = 1
@@ -2105,7 +2031,7 @@ class Player():
             #if rotation > 0: rotation *= 1.5
             rotation = self.motion.normalize_rotation(rotation)
             #rotation = 0
-            self.motion.walk_Cycle_slow(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
         
 
