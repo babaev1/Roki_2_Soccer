@@ -651,8 +651,66 @@ class Player():
                     self.motion.far_distance_straight_approach([duty_x_position , duty_y_position], direction_To_Duty, gap = 0, stop_Over = False)
                     self.motion.jump_turn(0)
 
-
     def FIRA_penalty_Shooter_main_cycle(self):
+        self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
+        self.motion.head_Return(0, -1500)
+        time.sleep(1)
+        self.motion.jump_turn(self.motion.params['PENALTY_JUMP_TURN_ANGLE'], jumps_limit = 2) # 0.5
+        self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
+        self.motion.kick(True, small = True)
+        self.motion.walk_Final_Pose_After_Kick()
+        for _ in range(5):
+            self.motion.falling_Test()
+            time.sleep(0.5)
+        self.motion.jump_turn(self.f.direction_To_Guest)
+        self.motion.near_distance_omni_motion(300, math.pi/2)
+
+        if self.glob.SIMULATION == 5:
+            self.motion.rcb.motionPlay(25)          # zummer
+            labels = [[], [], [], ['start', 'start_later'], []]
+            pressed_button = self.motion.push_Button(labels)
+        second_player_timer = time.time()
+        while (True):
+            if self.motion.falling_Flag != 0:
+                if self.motion.falling_Flag == 3: break
+                self.motion.falling_Flag = 0
+                #self.local.coordinate_fall_reset()
+                self.motion.head_Return(0, self.motion.neck_play_pose)
+            if self.glob.camera_down_Flag == True: self.glob.camera_reset()
+            if self.glob.robot_see_ball <= 10:   # must be 0
+                self.motion.head_Return(0, self.motion.neck_play_pose)
+                success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = True,
+                                                                                  very_Fast = False)
+            self.glob.local.localisation_Complete()
+            self.f.dir_To_Guest()
+            print('direction_To_Guest = ', round(math.degrees(self.f.direction_To_Guest)), 'degrees')
+            print('coord =', round(self.local.coord_odometry[0],2), round(self.local.coord_odometry[1],2), 'ball =', round(self.local.ball_odometry[0],2), round(self.local.ball_odometry[1],2))
+            if self.glob.robot_see_ball < 0:
+                print('Seek ball')
+                self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
+                continue
+            player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0],
+                                                          self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
+            player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
+            player_in_front_of_ball = -math.pi/2 < player_from_ball_yaw < math.pi/2
+            player_in_fast_kick_position = (player_from_ball_yaw > 2.0 or player_from_ball_yaw < -2.0) and self.glob.ball_distance < 0.6
+            if self.glob.ball_distance > 0.35  and not player_in_fast_kick_position:
+                direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
+                print('napravl :', self.glob.ball_course)
+                print('direction_To_Ball', direction_To_Ball)
+                self.motion.far_distance_straight_approach_streaming()
+                continue
+            if player_in_front_of_ball or not player_in_fast_kick_position:
+                self.go_Around_Ball(self.glob.ball_distance, self.glob.ball_course)
+                continue
+            if player_in_fast_kick_position:
+                self.motion.jump_turn(self.f.direction_To_Guest)
+                if self.f.kick_Power == 1: self.motion.kick_power = 100
+                if self.f.kick_Power == 2: self.motion.kick_power = 60
+                if self.f.kick_Power == 3: self.motion.kick_power = 20
+                success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
+
+    def FIRA_penalty_Shooter_main_cycle_(self):
         self.motion.with_Vision = False
         self.glob.camera_streaming = False
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
@@ -665,6 +723,9 @@ class Player():
         self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
         self.motion.kick(True, small = True)
         self.motion.walk_Final_Pose_After_Kick()
+        for _ in range(5):
+            self.motion.falling_Test()
+            time.sleep(0.5)
         self.motion.jump_turn(self.f.direction_To_Guest)
         self.motion.near_distance_omni_motion(300, math.pi/2)
 
@@ -890,9 +951,13 @@ class Player():
         if dist > 0.5: return
         correction_x = dist * math.cos(napravl)
         correction_y = dist * math.sin(napravl)
-        alpha = self.f.direction_To_Guest - self.glob.pf_coord[2]
+        if self.glob.use_particle_filter:
+            current_yaw = self.glob.pf_coord[2]
+        else:
+            current_yaw = self.local.coord_odometry[2]
+        alpha = self.f.direction_To_Guest - current_yaw
         alpha = self.motion.norm_yaw(alpha)
-        initial_body_yaw = self.glob.pf_coord[2]
+        initial_body_yaw = current_yaw
         correction_napravl = math.atan2(correction_y, (correction_x - turning_radius))
         correction_dist = math.sqrt(correction_y**2 + (correction_x - turning_radius)**2)
         #old_neck_pan, old_neck_tilt = self.motion.head_Up()
@@ -901,7 +966,7 @@ class Player():
         #self.motion.walk_Initial_Pose()
         if napravl * alpha > 0:
             #self.motion.turn_To_Course(self.glob.pf_coord[2] + napravl, one_Off_Motion = False)
-            self.motion.jump_turn(self.norm_yaw(self.glob.pf_coord[2] + napravl))
+            self.motion.jump_turn(self.norm_yaw(current_yaw + napravl))
             #self.motion.walk_Restart()
             self.motion.first_Leg_Is_Right_Leg = True
             self.motion.walk_Initial_Pose()
@@ -910,7 +975,7 @@ class Player():
             alpha = self.motion.norm_yaw(alpha - napravl)
             initial_body_yaw += napravl
         else:
-            self.motion.jump_turn(self.norm_yaw(self.glob.pf_coord[2] + napravl))
+            self.motion.jump_turn(self.norm_yaw(current_yaw + napravl))
             displacement = correction_dist*1000 * math.sin(correction_napravl)
             if displacement > 0:  self.motion.first_Leg_Is_Right_Leg = False
             else: self.motion.first_Leg_Is_Right_Leg = True
@@ -940,9 +1005,13 @@ class Player():
         #print('6self.motion.first_Leg_Is_Right_Leg:', self.motion.first_Leg_Is_Right_Leg)
         yaw_increment_at_side_step =  math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
         number_Of_Cycles = int(round(abs(alpha / yaw_increment_at_side_step)))+1
-        stepLength = 0
         sideLength = 20
         for cycle in range(1, number_Of_Cycles):
+            stepLength = 0
+            if self.glob.robot_see_ball == 5:
+                stepLength = self.glob.ball_distance * 1000 * math.cos(self.glob.ball_course) - approach_distance
+                if abs(stepLength) > 30: stepLength *= 30/abs(stepLength)
+                print("stepLength: ", stepLength)
             self.motion.refresh_Orientation()
             rotation = initial_body_yaw + cycle * yaw_increment_at_side_step - self.motion.imu_body_yaw() * 1
             rotation = self.motion.normalize_rotation(rotation)
