@@ -169,7 +169,7 @@ class Motion_real(Motion):
         head_pose = [(-2667,c), (-1333, c) , ( 0, c) , (1333, c) , (2667,c),
                      (-2667, c-700),(-1333, c-700), (0, c-700), (1333,c-700),(2667, c-700),
                     (-2667, c-1400), (-1333, c-1400), ( 0, c-1400), (1333, c-1400), (2667, c-1400)]
-        head_pose_seq = [2,4,0]
+        head_pose_seq = [4] #[2,4,0]
         for i in range(len(head_pose_seq)+1):
             if  i == 0:
                 self.neck_pan = -int(course_to_ball/self.TIK2RAD)
