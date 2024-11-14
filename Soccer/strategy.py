@@ -1001,7 +1001,7 @@ class Player():
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
-                x = distance * math.cos(course) * 1000 - 5
+                x = distance * math.cos(course) * 1000 + 15
                 y = distance * math.sin(course) * 1000
                 if abs(y) > 10:
                     if y > 0:
@@ -1366,7 +1366,7 @@ class Player():
             while True:
                 direction = 0
                 if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
-                stepLength = 64
+                stepLength = 45
                 number_Of_Cycles = 200
                 self.motion.walk_Initial_Pose()
                 reverseFlag = False
@@ -1409,7 +1409,7 @@ class Player():
                         break
                 if self.motion.falling_Flag != 0: continue
                 number_Of_Cycles = 200
-                stepLength = -40
+                stepLength = -10
                 self.motion.stepHeight = 40
                 #self.glob.params['BODY_TILT_AT_WALK'] -= 0.01
                 #self.motion.walk_Initial_Pose()
@@ -1680,7 +1680,8 @@ class Player():
             self.walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_INITIAL_STEPS_NUMBER'],
                        stepLength = self.motion.params['WEIGHTLIFTING_INITIAL_STEPLENGTH'])
             self.motion.jump_turn(0)
-            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')
+            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_3')
+            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_2')
 
         if pressed_button == 'start':
             #var = roki2met.roki2met.jump_mode
@@ -1716,10 +1717,10 @@ class Player():
                     self.motion.jump_turn(0)
                 if abs(y) < 10 and x < -20: 
                     break
-            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_1') 
+            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_2') 
         
         if pressed_button == 'start_lifting':
-            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_1')
+            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_2')
 
         self.motion.keep_hands_up = True
         self.motion.ztr0 = - 180
@@ -1734,7 +1735,7 @@ class Player():
                        stepLength = self.motion.params['WEIGHTLIFTING_NEXT_STEPLENGTH'])
         self.motion.params['BODY_TILT_AT_WALK'] -= self.motion.params['WEIGHTLIFTING_NEXT_BODYTILT']
 
-        self.motion.play_Soft_Motion_Slot(name = 'Shtanga_2')          # Weight_Lift_2-2023
+        self.motion.play_Soft_Motion_Slot(name = 'Shtanga_2_2')          # Weight_Lift_2-2023
         self.motion.keep_hands_up = True
         self.motion.ztr0 = - 170
         self.motion.ztl0 = - 170
@@ -1749,7 +1750,7 @@ class Player():
     def triple_jump_main_cycle(self, pressed_button):
         self.motion.with_Vision = False
         if pressed_button == 'start_with_approach' or pressed_button == 'find_launch_bar':
-            self.walk_straight(number_Of_Cycles = 5, stepLength = 30)
+            self.walk_straight(number_Of_Cycles = 3, stepLength = 30)
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
             self.motion.head_Return(0, -1800)
             time.sleep(1)

@@ -60,8 +60,8 @@ def camera_process(size, side_shift, aruco_angle_horizontal, distance, stopFlag)
     picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)})) 
     picam2.set_controls({"AeExposureMode":  controls.AeExposureModeEnum.Short})
     picam2.start()
-    picam2.set_controls({"ExposureTime": 2000})
-    picam2.set_controls({"AnalogueGain": 8.0})
+    picam2.set_controls({"ExposureTime": 1500})
+    picam2.set_controls({"AnalogueGain": 10.0})
     time.sleep(0.5)
     print("exposure : ", picam2.capture_metadata()["ExposureTime"])
     print("gain : ", picam2.capture_metadata()["AnalogueGain"])
@@ -70,11 +70,16 @@ def camera_process(size, side_shift, aruco_angle_horizontal, distance, stopFlag)
     while not stopFlag.value:
         request = picam2.capture_request()
         im = request.make_array("lores")  
+        time.sleep(100)
+        #cv2.waitKey(50)
         request.release()
+        #cv2.waitKey(50)
         im = cv2.cvtColor(im, cv2.COLOR_YUV420p2GRAY)
+        cv2.imshow("Camera1", im)
+        cv2.waitKey(20)
         im, size.value, side_shift.value, aruco_angle_horizontal.value, distance.value = detect_aruco_markers(im, led)     # Обнаружение аруко маркеров
         cv2.imshow("Camera", im)
-        cv2.waitKey(10)
+        cv2.waitKey(20)
         count += 1
         if count == 100:
             count = 0
@@ -82,6 +87,7 @@ def camera_process(size, side_shift, aruco_angle_horizontal, distance, stopFlag)
             print('Rate : ', int(100 / time_elapsed), ' FPS')
             start_time = time.perf_counter()
         if size.value > 180 : 
+            print('exit')
             stopFlag.value = True
             break
     cv2.destroyAllWindows()

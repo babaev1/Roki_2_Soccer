@@ -425,8 +425,8 @@ class Vision_General:
             img = Image(img1)
             #self.display_camera_image(self.image, window = 'Original')
             blobs = img.find_blobs([self.TH['orange ball']['th']],
-                                pixels_threshold=self.TH['orange ball']['pixel'],
-                                area_threshold=self.TH['orange ball']['area'],
+                                pixels_threshold= 20,
+                                area_threshold= 20,
                                 merge=True, roi = (267, 217, 267, 217))
             len_blobs = len(blobs)
             height = self.glob.params["CAMERA_VERTICAL_RESOLUTION"]
