@@ -898,7 +898,7 @@ class Motion_real(Motion):
         #self.turn_To_Course(target_yaw, accurate = True)
         self.jump_turn(target_yaw)
         shift = -self.glob.ball_distance * math.tan(self.glob.ball_course)
-        self.first_Leg_Is_Right_Leg = (shift <= 0)
+        self.first_Leg_Is_Right_Leg = (shift > 0)
         self.walk_Initial_Pose()
         self.refresh_Orientation()
         print('imu_body_yaw', self.imu_body_yaw())
