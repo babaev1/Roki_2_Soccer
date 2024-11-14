@@ -50,6 +50,8 @@ def detect_aruco_markers(frame, led):
                 u, v = undistortPointMap[cx * 2, cy * 2]
                 aruco_angle_horizontal = math.atan((undistort_cx -u)/ focal_length_horizontal)
                 #print('size = ', size, 'side_shift = ', side_shift )
+            else:
+                size = side_shift = aruco_angle_horizontal = 0
     else:
         size = side_shift = aruco_angle_horizontal = 0
     return frame , size, side_shift, aruco_angle_horizontal, distance
@@ -61,7 +63,7 @@ def camera_process(size, side_shift, aruco_angle_horizontal, distance, stopFlag)
     picam2.set_controls({"AeExposureMode":  controls.AeExposureModeEnum.Short})
     picam2.start()
     picam2.set_controls({"ExposureTime": 1500})
-    picam2.set_controls({"AnalogueGain": 10.0})
+    picam2.set_controls({"AnalogueGain": 8.0})
     time.sleep(0.5)
     print("exposure : ", picam2.capture_metadata()["ExposureTime"])
     print("gain : ", picam2.capture_metadata()["AnalogueGain"])
@@ -70,16 +72,16 @@ def camera_process(size, side_shift, aruco_angle_horizontal, distance, stopFlag)
     while not stopFlag.value:
         request = picam2.capture_request()
         im = request.make_array("lores")  
-        time.sleep(100)
+        #time.sleep(100)
         #cv2.waitKey(50)
         request.release()
         #cv2.waitKey(50)
         im = cv2.cvtColor(im, cv2.COLOR_YUV420p2GRAY)
-        cv2.imshow("Camera1", im)
-        cv2.waitKey(20)
+        #cv2.imshow("Camera1", im)
+        #cv2.waitKey(10)
         im, size.value, side_shift.value, aruco_angle_horizontal.value, distance.value = detect_aruco_markers(im, led)     # Обнаружение аруко маркеров
         cv2.imshow("Camera", im)
-        cv2.waitKey(20)
+        cv2.waitKey(10)
         count += 1
         if count == 100:
             count = 0
