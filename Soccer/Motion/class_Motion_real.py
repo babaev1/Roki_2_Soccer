@@ -187,9 +187,14 @@ class Motion_real(Motion):
             if distance1 !=0:
                 self.local.localisation_Complete()
                 dist = distance1 / 1000
-                course_global_rad = course1 + self.glob.pf_coord[2]
-                self.glob.ball_coord = [dist * math.cos(course_global_rad) + self.glob.pf_coord[0],
-                                        dist * math.sin(course_global_rad) + self.glob.pf_coord[1]]
+                if self.glob.use_particle_filter:
+                    course_global_rad = course1 + self.glob.pf_coord[2]
+                    self.glob.ball_coord = [dist * math.cos(course_global_rad) + self.glob.pf_coord[0],
+                                            dist * math.sin(course_global_rad) + self.glob.pf_coord[1]]
+                else:
+                    course_global_rad = course1 + self.local.coord_odometry[2]
+                    self.glob.ball_coord = [dist * math.cos(course_global_rad) + self.local.coord_odometry[0],
+                                            dist * math.sin(course_global_rad) + self.local.coord_odometry[1]]
                 self.local.ball_odometry = self.glob.ball_coord
                 self.glob.ball_course = course1
                 self.glob.ball_distance = dist
