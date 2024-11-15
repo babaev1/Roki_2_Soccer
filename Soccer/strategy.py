@@ -665,11 +665,6 @@ class Player():
         self.motion.jump_turn(self.f.direction_To_Guest)
         self.motion.near_distance_omni_motion(300, math.pi/2)
 
-        if self.glob.SIMULATION == 5:
-            self.motion.rcb.motionPlay(25)          # zummer
-            labels = [[], [], [], ['start', 'start_later'], []]
-            pressed_button = self.motion.push_Button(labels)
-        second_player_timer = time.time()
         while (True):
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break
