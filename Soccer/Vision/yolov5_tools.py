@@ -442,7 +442,8 @@ if __name__ == '__main__':
         request.release()
         frame = cv2.cvtColor(frame, cv2.COLOR_YUV420p2RGB)
         frame = frame[0:650,0:800,0:3]
-        cx, cy = neural.ball_detect_single(frame)
+        #cx, cy = neural.basket_detect_single(frame)
+        cx, cy = neural.object_detect_single(frame, "basket")
         cv2.circle(frame, (cx, cy), 20, (0, 255, 0), 5)
         print('(cx,cy)= ', cx, cy)
         counter += 1

@@ -429,23 +429,40 @@ class Vision_General:
                                 area_threshold= 20,
                                 merge=True, roi = (267, 217, 267, 217))
             len_blobs = len(blobs)
-            height = self.glob.params["CAMERA_VERTICAL_RESOLUTION"]
-            order = []
+            biggest_blob_area = 0
+            biggest_blob_number = 0
             for i in range(len_blobs):
-                order.append([height - blobs[i].cy(), i,0,0])
-            sorted_order = sorted(order)
-            new_order_len = min(10, len_blobs)
-            new_order = sorted_order[:new_order_len]
-            if new_order_len != 0:
+                if blobs[i].pixels() > biggest_blob_area:
+                    biggest_blob_area = blobs[i].pixels()
+                    biggest_blob_number = i
+            if len_blobs != 0:
                 result = True
-                basket_blob = blobs[new_order[0][1]]
+                basket_blob = blobs[biggest_blob_number]
                 basket_column = basket_blob.cx()
                 displacement = 133 - basket_column
                 self.visible_reaction_ball()
                 print('relative displacement from cenetr of picture ', displacement)
                 rect = [basket_blob.rect()[0]+267, basket_blob.rect()[1]+217, basket_blob.rect()[2], basket_blob.rect()[3]]
                 img.draw_rectangle(rect)
-                self.display_camera_image(img.img, 'Ball')
+                self.display_camera_image(img.img, 'Basket')
+
+            #height = self.glob.params["CAMERA_VERTICAL_RESOLUTION"]
+            #order = []
+            #for i in range(len_blobs):
+            #    order.append([height - blobs[i].cy(), i,0,0])
+            #sorted_order = sorted(order)
+            #new_order_len = min(10, len_blobs)
+            #new_order = sorted_order[:new_order_len]
+            #if new_order_len != 0:
+            #    result = True
+            #    basket_blob = blobs[new_order[0][1]]
+            #    basket_column = basket_blob.cx()
+            #    displacement = 133 - basket_column
+            #    self.visible_reaction_ball()
+            #    print('relative displacement from cenetr of picture ', displacement)
+            #    rect = [basket_blob.rect()[0]+267, basket_blob.rect()[1]+217, basket_blob.rect()[2], basket_blob.rect()[3]]
+            #    img.draw_rectangle(rect)
+            #    self.display_camera_image(img.img, 'Basket')
             else: result = False
         else: result = False
         return result, displacement
