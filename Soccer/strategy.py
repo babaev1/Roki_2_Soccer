@@ -1782,7 +1782,7 @@ class Player():
         self.motion.params['BODY_TILT_AT_WALK'] += self.motion.params['WEIGHTLIFTING_NEXT_BODYTILT']  #22222222222222222222222222222222222
         self.motion.first_Leg_Is_Right_Leg = True
         self.motion.stepHeight = 20
-        self.motion.initPoses *= 50                                             # factor of extention of initial pose timing 
+        #self.motion.initPoses *= 50                                             # factor of extention of initial pose timing 
         #walk_straight(number_Of_Cycles = 16, stepLength = 30, respect_body_tilt = True)
         self.walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_NEXT_STEPS_NUMBER'],
                        stepLength = self.motion.params['WEIGHTLIFTING_NEXT_STEPLENGTH'])
