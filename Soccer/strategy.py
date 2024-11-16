@@ -1775,9 +1775,9 @@ class Player():
             self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_2')
 
         self.motion.keep_hands_up = True
-        self.motion.ztr0 = - 180
-        self.motion.ztl0 = - 180
-        self.motion.zt0 = - 180
+        #self.motion.ztr0 = - 180
+        #self.motion.ztl0 = - 180
+        #self.motion.zt0 = - 180
         self.motion.gaitHeight = 170
         self.motion.params['BODY_TILT_AT_WALK'] += self.motion.params['WEIGHTLIFTING_NEXT_BODYTILT']  #22222222222222222222222222222222222
         self.motion.first_Leg_Is_Right_Leg = True
