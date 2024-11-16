@@ -1053,7 +1053,7 @@ class Player():
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
-                x = distance * math.cos(course) * 1000 + 15
+                x = distance * math.cos(course) * 1000 - 15
                 y = distance * math.sin(course) * 1000
                 if abs(y) > 10:
                     if y > 0:
