@@ -1419,7 +1419,7 @@ class Player():
                 direction = 0
                 if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
                 stepLength = 45
-                number_Of_Cycles = 200
+                number_Of_Cycles = 300
                 self.motion.walk_Initial_Pose()
                 reverseFlag = False
                 countdown = 0
@@ -1460,7 +1460,7 @@ class Player():
                         self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
                         break
                 if self.motion.falling_Flag != 0: continue
-                number_Of_Cycles = 200
+                number_Of_Cycles = 600
                 stepLength = -10
                 self.motion.stepHeight = 40
                 #self.glob.params['BODY_TILT_AT_WALK'] -= 0.01
@@ -1483,7 +1483,7 @@ class Player():
             while True:
                 if self.motion.falling_Flag != 0: self.motion.falling_Flag = 0
                 stepLength = 64
-                number_Of_Cycles = 200
+                number_Of_Cycles = 300
                 self.motion.walk_Initial_Pose()
                 for cycle in range(number_Of_Cycles):
                     if self.motion.falling_Flag != 0: break

@@ -55,7 +55,8 @@ def build_argparser(role = 'other'):
     if role == 'weight_lifting':
         weights_file = "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/stanga.xml"
     else:
-        weights_file = "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/orange_ball_basket.xml"
+        #weights_file = "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/orange_ball_basket.xml"
+        weights_file = "/home/pi/Desktop/Roki_2_Soccer/Soccer/Vision/yolo_roma/basketball_techno.xml"
     parser = ArgumentParser(add_help=False)
     args = parser.add_argument_group('Options')
     args.add_argument('-h', '--help', action='help', default=SUPPRESS, help='Show this help message and exit.')
