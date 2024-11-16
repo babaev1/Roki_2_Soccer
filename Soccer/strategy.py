@@ -1790,9 +1790,9 @@ class Player():
 
         self.motion.play_Soft_Motion_Slot(name = 'Shtanga_2_2')          # Weight_Lift_2-2023
         self.motion.keep_hands_up = True
-        self.motion.ztr0 = - 170
-        self.motion.ztl0 = - 170
-        self.motion.zt0 = - 170
+        #self.motion.ztr0 = - 170
+        #self.motion.ztl0 = - 170
+        #self.motion.zt0 = - 170
         self.motion.params['BODY_TILT_AT_WALK'] += self.motion.params['WEIGHTLIFTING_LAST_BODYTILT']  #333333333333333333333333333333333333333
         #if self.glob.SIMULATION != 5 :  self.motion.params['BODY_TILT_AT_WALK'] = 0
         self.motion.stepHeight = self.motion.params['WEIGHTLIFTING_LAST_STEPHEIGHT']
