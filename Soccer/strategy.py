@@ -1732,8 +1732,9 @@ class Player():
             self.walk_straight(number_Of_Cycles = self.motion.params['WEIGHTLIFTING_INITIAL_STEPS_NUMBER'],
                        stepLength = self.motion.params['WEIGHTLIFTING_INITIAL_STEPLENGTH'])
             self.motion.jump_turn(0)
-            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_3')
-            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_2')
+            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1')
+            #self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_3')
+            #self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_2')
 
         if pressed_button == 'start':
             #var = roki2met.roki2met.jump_mode
@@ -1743,12 +1744,13 @@ class Player():
             self.motion.play_Soft_Motion_Slot(name = 'Initial_Pose')
             self.motion.head_Return(0, -2000)
             for _ in range(500):
+                time.sleep(1)
                 if self.glob.SIMULATION == 5: result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
                 else: result, course, distance, ball_blob = self.glob.vision.seek_Ball_In_Frame(with_Localization = False)
                 print('course :', course, 'distance :', distance)
                 x = distance * math.cos(course) * 1000
                 y = distance * math.sin(course) * 1000
-                if abs(y) > 10:
+                if abs(y) > 20:
                     if y > 0:
                         #intercom.memISet(var, 103)
                         fraction = min(1, abs(y) / self.glob.jump_left_yield)
@@ -1759,20 +1761,22 @@ class Player():
                         self.motion.one_jump_right(fraction)
                     #self.glob.rcb.motionPlay(7)
                     #time.sleep(0.5)
+                    time.sleep(1)
                     self.motion.jump_turn(0)
-                if x > -20:
+                if x > -60:
                     #intercom.memISet(var, 101)
                     #self.glob.rcb.motionPlay(7)
-                    fraction = min(1, (x + 20) / self.glob.jump_right_yield)
+                    fraction = min(1, abs((x + 60) / self.glob.jump_forward_yield))
                     self.motion.one_jump_forward(fraction)
                     #time.sleep(0.5)
+                    time.sleep(1)
                     self.motion.jump_turn(0)
-                if abs(y) < 10 and x < -20: 
+                if abs(y) < 20 and x < -60: 
                     break
-            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_2') 
+            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_1') 
         
         if pressed_button == 'start_lifting':
-            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_2')
+            self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_1')
 
         self.motion.keep_hands_up = True
         #self.motion.ztr0 = - 180
