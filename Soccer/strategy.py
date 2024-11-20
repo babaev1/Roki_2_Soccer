@@ -1461,7 +1461,7 @@ class Player():
                         break
                 if self.motion.falling_Flag != 0: continue
                 number_Of_Cycles = 600
-                stepLength = -10
+                stepLength = -20
                 self.motion.stepHeight = 40
                 #self.glob.params['BODY_TILT_AT_WALK'] -= 0.01
                 #self.motion.walk_Initial_Pose()
@@ -1763,15 +1763,15 @@ class Player():
                     #time.sleep(0.5)
                     time.sleep(1)
                     self.motion.jump_turn(0)
-                if x > -60:
+                if x > -50:
                     #intercom.memISet(var, 101)
                     #self.glob.rcb.motionPlay(7)
-                    fraction = min(1, abs((x + 60) / self.glob.jump_forward_yield))
+                    fraction = min(1, abs((x + 50) / self.glob.jump_forward_yield))
                     self.motion.one_jump_forward(fraction)
                     #time.sleep(0.5)
                     time.sleep(1)
                     self.motion.jump_turn(0)
-                if abs(y) < 20 and x < -60: 
+                if abs(y) < 20 and x < -50: 
                     break
             self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_1') 
         
