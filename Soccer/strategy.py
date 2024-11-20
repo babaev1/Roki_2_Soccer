@@ -1320,6 +1320,7 @@ class Player():
                 os.system("espeak -ven-m1 -a"+ '200' + " " + "'I see basket'")
             else: 
                 os.system("espeak -ven-m1 -a"+ '200' + " " + "'I don_t see basket'")
+                displacement = 0
             time.sleep(3)
             corrected_direction = int(self.motion.params['BASKETBALL_DIRECTION']) + int(displacement/10 /360 * 16384)
 
