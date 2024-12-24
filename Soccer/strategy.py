@@ -1400,37 +1400,37 @@ class Player():
         self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17r')
         return
             
-            self.glob.record_motions = True
-            self.motion.with_Vision = False
-            stepLength = 45
-            sideLength , rotation = 0, 0
-            number_Of_Cycles = 2
-            self.motion.first_Leg_Is_Right_Leg = True
-            self.motion.walk_Initial_Pose()
-            for cycle in range(number_Of_Cycles):
-                stepLength1 = stepLength
-                self.motion.refresh_Orientation()
-                rotation = -self.motion.imu_body_yaw() * 1.0
-                rotation = self.motion.normalize_rotation(rotation)
-                rotation = 0
-                if not self.motion.first_Leg_Is_Right_Leg: rotation *= -1
-                self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1, half = True)
+        self.glob.record_motions = True
+        self.motion.with_Vision = False
+        stepLength = 45
+        sideLength , rotation = 0, 0
+        number_Of_Cycles = 2
+        self.motion.first_Leg_Is_Right_Leg = True
+        self.motion.walk_Initial_Pose()
+        for cycle in range(number_Of_Cycles):
+            stepLength1 = stepLength
+            self.motion.refresh_Orientation()
+            rotation = -self.motion.imu_body_yaw() * 1.0
+            rotation = self.motion.normalize_rotation(rotation)
+            rotation = 0
+            if not self.motion.first_Leg_Is_Right_Leg: rotation *= -1
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
+        self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1, half = True)
 
-            record_name = 'record-'+ str(datetime.date.today().isoformat())
-            record_dict = {}
-            record_data = []
-            pageNames = []
-            for i in range(len(self.motion.motions_recorded)):
-                record_line = [1]
-                for j in range(len(self.motion.motions_recorded[i])):
-                    record_line.append(int(self.motion.motions_recorded[i][j] * 1698))
-                record_data.append(record_line)
-                pageNames.append('page ' + str(i))
-            record_dict = {record_name: record_data, 'pageNames': pageNames}
-            filename = self.glob.current_work_directory + record_name + ".json"
-            with open(filename, "w") as f:
-                json.dump(record_dict, f)
+        record_name = 'record-'+ str(datetime.date.today().isoformat())
+        record_dict = {}
+        record_data = []
+        pageNames = []
+        for i in range(len(self.motion.motions_recorded)):
+            record_line = [1]
+            for j in range(len(self.motion.motions_recorded[i])):
+                record_line.append(int(self.motion.motions_recorded[i][j] * 1698))
+            record_data.append(record_line)
+            pageNames.append('page ' + str(i))
+        record_dict = {record_name: record_data, 'pageNames': pageNames}
+        filename = self.glob.current_work_directory + record_name + ".json"
+        with open(filename, "w") as f:
+            json.dump(record_dict, f)
 
 
 
