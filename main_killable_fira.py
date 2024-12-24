@@ -21,7 +21,7 @@ try:
     labels = [[],
               ['basketball', 'triple_jump', 'weight_lifting',  'kick_test'],
               [],
-              ['sprint', 'marathon', 'forward'],
+              ['sprint', 'marathon', 'forward', 'dance'],
               ['FIRA_penalty_Shooter', 'penalty_Goalkeeper', 'run_test', 'jump_test']]
     os.system("espeak -ven-m1 -a200 'Choose Role'")
     button = Button_Test(labels)
