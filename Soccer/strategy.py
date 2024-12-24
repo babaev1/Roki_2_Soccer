@@ -1356,7 +1356,7 @@ class Player():
 
 
     def dance_main_cycle(self):
-        if self.glob.SIMULATION == 5:
+        #if self.glob.SIMULATION == 5:
             # while True:
             #     self.motion.refresh_Orientation()
             #     print('\rbody pitch: ', round(self.motion.body_euler_angle['pitch'],3), '\tbody roll : ', round(self.motion.body_euler_angle['roll'], 3),
@@ -1366,7 +1366,7 @@ class Player():
             #           '\thead yaw: ', round(self.motion.euler_angle['yaw'], 3), end='' )
             #     time.sleep(1)
                 
-            self.motion.play_Soft_Motion_Slot( name = 'Basketball3')
+            #self.motion.play_Soft_Motion_Slot( name = 'Basketball3')
 #             while True:
 #                 successCode, u10 = self.motion.rcb.getUserParameter(10)
 #                 #time.sleep(2)
@@ -1383,22 +1383,22 @@ class Player():
 #                         self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
 #                     self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
 #                     self.motion.rcb.setUserParameter(10,0)
-        else:
+        #else:
             #for i in range(10):
             #    self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
             #self.motion.play_Soft_Motion_Slot( name = 'Dance_7')
             #self.motion.play_Soft_Motion_Slot( name = 'Dance_2')
             #self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
             
-            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17')
+        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17')
+        self.motion.pause_in_ms(200)
+        for _ in range(5):
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17rs')
             self.motion.pause_in_ms(200)
-            for _ in range(5):
-                self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17rs')
-                self.motion.pause_in_ms(200)
-                self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17s')
-                self.motion.pause_in_ms(200)
-            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17r')
-            return
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17s')
+            self.motion.pause_in_ms(200)
+        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17r')
+        return
             
             self.glob.record_motions = True
             self.motion.with_Vision = False
