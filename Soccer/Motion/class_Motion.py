@@ -267,7 +267,7 @@ class Motion(Robot, Motion_extention_1):
             self.simulateMotion(name = name, motion_list = motion_list, hands_on = hands_on)
         self.motion_slot_progress = False
 
-    def play_Soft_Motion_Slot(self, name = '', motion_list = None, hands_on = True):             # the slot from file will be played in robot
+    def play_Soft_Motion_Slot(self, name = '', motion_list = None, hands_on = True, soft_factor = 1):   # the slot from file will be played in robot
         print('playing : ', name) 
         self.motion_slot_progress = True
         if self.glob.SIMULATION == 5:
@@ -303,7 +303,7 @@ class Motion(Robot, Motion_extention_1):
                             servoDatas.append(servoData)
                             #print(i, servoDatas[i].Id, servoDatas[i].Sio, servoDatas[i].Data, file=log_file)
                     frames_number = int(motion[0]) 
-                    a=self.rcb.setServoPosAsync(servoDatas, frames_number, frames_number-1)
+                    a=self.rcb.setServoPosAsync(servoDatas, frames_number * soft_factor, frames_number-1)
                     time.sleep(self.glob.params['FRAME_DELAY']/1000 * (frames_number-1))
             self.wait_for_gueue_end(with_Vision = False)
             # while True:
