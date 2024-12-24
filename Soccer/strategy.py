@@ -1390,14 +1390,14 @@ class Player():
             #self.motion.play_Soft_Motion_Slot( name = 'Dance_2')
             #self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
             
-        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17')
+        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17', soft_factor = 2)
         self.motion.pause_in_ms(200)
         for _ in range(5):
-            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17rs')
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17rs', soft_factor = 2)
             self.motion.pause_in_ms(200)
-            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17s')
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17s', soft_factor = 2)
             self.motion.pause_in_ms(200)
-        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17r')
+        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17r', soft_factor = 2)
         return
             
         self.glob.record_motions = True
