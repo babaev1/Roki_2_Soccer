@@ -3,6 +3,7 @@ from multiprocessing import Array
 
 class Glob:
     def __init__(self, simulation, current_work_directory, particles_number = 1000, event_type = 'Robocup'):
+        self.record_motions = False
         self.event_type = event_type
         self.neural_vision = False
         self.neural = None

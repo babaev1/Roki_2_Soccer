@@ -99,6 +99,7 @@ class Motion(Robot, Motion_extention_1):
         self.motion_slot_progress = False
         self.Vision_Sensor_Display_On = self.glob.params['Vision_Sensor_Display_On']
         #self.start_point_for_imu_drift = 0
+        self.motions_recorded = []
         if self.glob.SIMULATION == 5 :
             #import Roki
             self.Roki = self.glob.Roki
@@ -439,6 +440,7 @@ class Motion(Robot, Motion_extention_1):
             if hands_on: angles.append(0.147 + self.xtl/114)  #(-0.524 + self.xtl/57.3)
             else: angles.append(0.0)
         self.activePose = angles
+        if self.glob.record_motions: self.motions_recorded.append(angles)
         return angles
 
     def activation(self):
@@ -940,6 +942,8 @@ class Motion(Robot, Motion_extention_1):
 
             if 2*self.fr1+self.fr2<= iii :                                         # FASA 4
                 self.ztl = -self.gaitHeight + self.stepHeight
+                if iii== (2*self.fr1 + 2*self.fr2 - framestep):
+                    self.ztl = -self.gaitHeight
                 if cycle == number_Of_Cycles - 1:
                     dx0 = dx0_typical * 4 / self.fr2           # 8.75/6
                     dx = (self.stepLength*(self.fr1+self.fr2)/(4*self.fr1)+2*dx0)/(self.fr2- 2 * framestep) *framestep / 1.23076941   # 1.23076941 = podgon
@@ -1050,7 +1054,6 @@ class Motion(Robot, Motion_extention_1):
                 self.glob.vision.detect_Line_Follow_One_Shot()
             else:  
                 if self.with_Vision: self.glob.vision.detect_Ball_in_One_Shot()
-
 
     def walk_Cycle_With_Tors_v2(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
         self.walk_Cycle_With_Tors_v2_init(stepLength,sideLength, rotation)

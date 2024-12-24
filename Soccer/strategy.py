@@ -15,6 +15,7 @@ import numpy as np
 from ctypes import c_bool
 #from Soccer.Motion.Soccer_monitor import launcher
 #from Soccer.Localisation.class_Glob import monitor
+import datetime
 
 
 def coord2yaw(x, y):
@@ -1383,11 +1384,57 @@ class Player():
 #                     self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
 #                     self.motion.rcb.setUserParameter(10,0)
         else:
-            for i in range(10):
-                self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
-            self.motion.play_Soft_Motion_Slot( name = 'Dance_7')
-            self.motion.play_Soft_Motion_Slot( name = 'Dance_2')
-            self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
+            #for i in range(10):
+            #    self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
+            #self.motion.play_Soft_Motion_Slot( name = 'Dance_7')
+            #self.motion.play_Soft_Motion_Slot( name = 'Dance_2')
+            #self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
+            
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17')
+            self.motion.pause_in_ms(200)
+            for _ in range(5):
+                self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17rs')
+                self.motion.pause_in_ms(200)
+                self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17s')
+                self.motion.pause_in_ms(200)
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17r')
+            return
+            
+            self.glob.record_motions = True
+            self.motion.with_Vision = False
+            stepLength = 45
+            sideLength , rotation = 0, 0
+            number_Of_Cycles = 2
+            self.motion.first_Leg_Is_Right_Leg = True
+            self.motion.walk_Initial_Pose()
+            for cycle in range(number_Of_Cycles):
+                stepLength1 = stepLength
+                self.motion.refresh_Orientation()
+                rotation = -self.motion.imu_body_yaw() * 1.0
+                rotation = self.motion.normalize_rotation(rotation)
+                rotation = 0
+                if not self.motion.first_Leg_Is_Right_Leg: rotation *= -1
+                self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
+            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1, half = True)
+
+            record_name = 'record-'+ str(datetime.date.today().isoformat())
+            record_dict = {}
+            record_data = []
+            pageNames = []
+            for i in range(len(self.motion.motions_recorded)):
+                record_line = [1]
+                for j in range(len(self.motion.motions_recorded[i])):
+                    record_line.append(int(self.motion.motions_recorded[i][j] * 1698))
+                record_data.append(record_line)
+                pageNames.append('page ' + str(i))
+            record_dict = {record_name: record_data, 'pageNames': pageNames}
+            filename = self.glob.current_work_directory + record_name + ".json"
+            with open(filename, "w") as f:
+                json.dump(record_dict, f)
+
+
+
+
 
     def sprint(self, second_pressed_button):
         if self.glob.SIMULATION == 5:
