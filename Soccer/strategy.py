@@ -1372,6 +1372,7 @@ class Player():
             
         self.glob.record_motions = True
         self.motion.with_Vision = False
+        self.motion.fr2 = 18
         stepLength = 45
         sideLength , rotation = 0, 0
         number_Of_Cycles = 2
@@ -1385,7 +1386,7 @@ class Player():
             rotation = 0
             if not self.motion.first_Leg_Is_Right_Leg: rotation *= -1
             self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
-        #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1, half = True)
+        self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1, half = True)
 
         record_name = 'record-'+ str(datetime.date.today().isoformat())
         record_dict = {}
