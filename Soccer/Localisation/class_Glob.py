@@ -43,7 +43,8 @@ class Glob:
         if self.SIMULATION == 1 or self.SIMULATION == 0 or self.SIMULATION == 3:
             import socket
             self.landmarks_filename = current_work_directory + "Init_params/Sim/Sim_landmarks.json"
-            params_filename = current_work_directory + "Init_params/Sim/" + "Sim_params.json"
+            #params_filename = current_work_directory + "Init_params/Sim/" + "Sim_params.json"
+            params_filename = current_work_directory + "Init_params/Real/Real_params.json"
             params_2_filename = current_work_directory + "Init_params/Sim/" + "Sim_params_2.json"
             with open(current_work_directory + "Init_params/Sim/" + "wifi_params.json", "r") as f:
                 self.wifi_params = json.loads(f.read())

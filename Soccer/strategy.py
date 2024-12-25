@@ -1357,47 +1357,17 @@ class Player():
 
     def dance_main_cycle(self):
         #if self.glob.SIMULATION == 5:
-            # while True:
-            #     self.motion.refresh_Orientation()
-            #     print('\rbody pitch: ', round(self.motion.body_euler_angle['pitch'],3), '\tbody roll : ', round(self.motion.body_euler_angle['roll'], 3),
-            #           '\tbody yaw: ', round(self.motion.body_euler_angle['yaw'], 3),
-            #           '\thead pitch: ', round(self.motion.euler_angle['pitch'], 3),
-            #           '\thead roll : ', round(self.motion.euler_angle['roll'], 3),
-            #           '\thead yaw: ', round(self.motion.euler_angle['yaw'], 3), end='' )
-            #     time.sleep(1)
-                
             #self.motion.play_Soft_Motion_Slot( name = 'Basketball3')
-#             while True:
-#                 successCode, u10 = self.motion.rcb.getUserParameter(10)
-#                 #time.sleep(2)
-#                 if successCode and u10 == 1:
-#                     self.motion.rcb.motionPlay(26)
-#                     for i in range(10):
-#                         self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
-#                     self.motion.play_Soft_Motion_Slot( name = 'Dance_7-1')
-#                     self.motion.play_Soft_Motion_Slot( name = 'Dance_7-2')
-#                     for i in range(9):
-#                         self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
-#                     self.motion.play_Soft_Motion_Slot( name = 'Dance_2')
-#                     for i in range(2):
-#                         self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
-#                     self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
-#                     self.motion.rcb.setUserParameter(10,0)
         #else:
-            #for i in range(10):
-            #    self.motion.play_Soft_Motion_Slot( name = 'Dance_6_1')
-            #self.motion.play_Soft_Motion_Slot( name = 'Dance_7')
-            #self.motion.play_Soft_Motion_Slot( name = 'Dance_2')
-            #self.motion.play_Soft_Motion_Slot( name = 'Dance_4')
             
-        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17', soft_factor = 2)
+        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24', soft_factor = 2)
         self.motion.pause_in_ms(200)
         for _ in range(5):
-            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17rs', soft_factor = 2)
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24rs', soft_factor = 2)
             self.motion.pause_in_ms(200)
-            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17s', soft_factor = 2)
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24s', soft_factor = 2)
             self.motion.pause_in_ms(200)
-        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-17r', soft_factor = 2)
+        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24r', soft_factor = 2)
         return
             
         self.glob.record_motions = True
