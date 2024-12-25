@@ -944,8 +944,9 @@ class Motion(Robot, Motion_extention_1):
 
             if 2*self.fr1+self.fr2<= iii :                                         # FASA 4
                 self.ztl = -self.gaitHeight + self.stepHeight
-                if iii== (2*self.fr1 + 2*self.fr2 - framestep):
-                    self.ztl = -self.gaitHeight
+                if cycle == number_Of_Cycles - 2:
+                    if iii== (2*self.fr1 + 2*self.fr2 - framestep):
+                        self.ztl = -self.gaitHeight
                 if cycle == number_Of_Cycles - 1:
                     dx0 = dx0_typical * 4 / self.fr2           # 8.75/6
                     dx = (self.stepLength*(self.fr1+self.fr2)/(4*self.fr1)+2*dx0)/(self.fr2- 2 * framestep) *framestep / 1.23076941   # 1.23076941 = podgon

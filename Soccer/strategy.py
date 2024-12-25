@@ -1360,14 +1360,14 @@ class Player():
             #self.motion.play_Soft_Motion_Slot( name = 'Basketball3')
         #else:
             
-        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24', soft_factor = 3)
+        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-25', soft_factor = 3)
         self.motion.pause_in_ms(500)
         for _ in range(5):
-            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24rs', soft_factor = 3)
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-25rs', soft_factor = 3)
             self.motion.pause_in_ms(500)
-            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24s', soft_factor = 3)
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-25s', soft_factor = 3)
             self.motion.pause_in_ms(500)
-        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24r', soft_factor = 3)
+        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-25r', soft_factor = 3)
         return
             
         self.glob.record_motions = True
@@ -1385,7 +1385,7 @@ class Player():
             rotation = 0
             if not self.motion.first_Leg_Is_Right_Leg: rotation *= -1
             self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1)
-        self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1, half = True)
+        #self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles + 1, half = True)
 
         record_name = 'record-'+ str(datetime.date.today().isoformat())
         record_dict = {}
