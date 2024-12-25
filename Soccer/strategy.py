@@ -1360,14 +1360,14 @@ class Player():
             #self.motion.play_Soft_Motion_Slot( name = 'Basketball3')
         #else:
             
-        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24', soft_factor = 2)
-        self.motion.pause_in_ms(1000)
+        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24', soft_factor = 3)
+        self.motion.pause_in_ms(500)
         for _ in range(5):
-            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24rs', soft_factor = 2)
-            self.motion.pause_in_ms(1000)
-            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24s', soft_factor = 2)
-            self.motion.pause_in_ms(1000)
-        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24r', soft_factor = 2)
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24rs', soft_factor = 3)
+            self.motion.pause_in_ms(500)
+            self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24s', soft_factor = 3)
+            self.motion.pause_in_ms(500)
+        self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-24r', soft_factor = 3)
         return
             
         self.glob.record_motions = True
