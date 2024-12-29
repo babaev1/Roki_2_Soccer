@@ -1359,7 +1359,7 @@ class Player():
         #if self.glob.SIMULATION == 5:
             #self.motion.play_Soft_Motion_Slot( name = 'Basketball3')
         #else:
-            
+        self.motion.pause_in_ms(10000)  
         self.motion.play_Soft_Motion_Slot( name = 'record-2024-12-25', soft_factor = 3)
         self.motion.pause_in_ms(500)
         for _ in range(5):
