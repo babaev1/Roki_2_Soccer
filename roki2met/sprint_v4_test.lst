@@ -17,6 +17,8 @@ void void
 fail type undef
 cblock cblock
 *cblock *cblock
+cwblock cwblock
+*cwblock *cwblock
 empty type <int()>
 empty type <void()>
 *empty type *<void()>
@@ -78,204 +80,263 @@ empty type <void(,*:SfVector3,*:SfVector3,*:SfMatrix3x3)>
 //==================
 // global variables
 int 1:svFrameCount
-int 1000:svImuAccX
-int 1001:svImuAccY
-int 1002:svImuAccZ
-int 1003:svImuAccRawX
-int 1004:svImuAccRawY
-int 1005:svImuAccRawZ
-int 1006:svImuGyroX
-int 1007:svImuGyroY
-int 1008:svImuGyroZ
-int 1009:svImuGyroRawX
-int 1010:svImuGyroRawY
-int 1011:svImuGyroRawZ
-int 1012:svImuQuaterX
-int 1013:svImuQuaterY
-int 1014:svImuQuaterZ
-int 1015:svImuQuaterW
-int 1016:svImuQuaterAcc
-int 1017:svImuAccSlowX
-int 1018:svImuAccSlowY
-int 1019:svImuAccSlowZ
-int 1020:svAdc
-int 1021:svButtonLeft
-int 1022:svButtonRight
-int 1023:svButtonPress
-int 1024:svHeadControlMask
-float 1025:svEulerYaw
-float 1026:svEulerPitch
-float 1027:svEulerRoll
-int 1190:svRemoteStatus
-int 1191:svRemoteButton
-int 1192:svRemoteLeftJoystick
-int 1193:svRemoteLeftJoystickX
-int 1194:svRemoteLeftJoystickY
-int 1195:svRemoteRightJoystick
-int 1196:svRemoteRightJoystickX
-int 1197:svRemoteRightJoystickY
-int 1204:svHumoModelDistPelvic
-int 1205:svHumoModelLengthPelvicHip
-int 1206:svHumoModelLengthHipHip
-int 1207:svHumoModelLengthHipKnee
-int 1208:svHumoModelLengthKneeFoot
-int 1209:svHumoModelLengthFootFoot
-int 1210:svHumoModelDistFootFloor
-int 1211:svHumoModelFootLength
-int 1212:svHumoModelFootWidth
-int 1213:svHumoModelFootCenterBack
-int 1214:svHumoModelFootCenterInner
-int 1198:svHumoModelAngPelvic
-int 1200:svHumoModelAngHipSide
-int 1199:svHumoModelAngHip
-int 1201:svHumoModelAngKnee
-int 1202:svHumoModelAngFoot
-int 1203:svHumoModelAngFootSide
-float 1215:svIkA5
-float 1216:svIkB5
-float 1217:svIkC5
-float 1218:svIkA6
-float 1219:svIkA7
-float 1220:svIkA8
-float 1221:svIkA9
-float 1222:svIkA10
-float 1223:svIkB10
-float 1224:svIkC10
-float 1225:svIkLimA5min
-float 1226:svIkLimA5max
-float 1227:svIkLimA6min
-float 1228:svIkLimA6max
-float 1229:svIkLimA7min
-float 1230:svIkLimA7max
-float 1231:svIkLimA8min
-float 1232:svIkLimA8max
-float 1233:svIkLimA9min
-float 1234:svIkLimA9max
-float 1235:svIkLimA10min
-float 1236:svIkLimA10max
-int 1237:svIkOutPresent
-int 1238:svIkEncA5
-int 1239:svIkEncA6
-int 1240:svIkEncA7
-int 1241:svIkEncA8
-int 1242:svIkEncA9
-int 1243:svIkEncA10
-int 1030:headRotateTarget
-int 1031:headRotateCurrent
-int 1032:headRotatePwm
-int 1033:headRotateAddonMix
-int 1034:torsoRotateTarget
-int 1035:torsoRotateCurrent
-int 1036:torsoRotatePwm
-int 1037:torsoRotateAddonMix
-int 1038:rightClavicleTarget
-int 1039:rightClavicleCurrent
-int 1040:rightClaviclePwm
-int 1041:rightClavicleAddonMix
-int 1042:leftClavicleTarget
-int 1043:leftClavicleCurrent
-int 1044:leftClaviclePwm
-int 1045:leftClavicleAddonMix
-int 1046:rightShoulderTarget
-int 1047:rightShoulderCurrent
-int 1048:rightShoulderPwm
-int 1049:rightShoulderAddonMix
-int 1050:leftShoulderTarget
-int 1051:leftShoulderCurrent
-int 1052:leftShoulderPwm
-int 1053:leftShoulderAddonMix
-int 1054:rightElbowSideTarget
-int 1055:rightElbowSideCurrent
-int 1056:rightElbowSidePwm
-int 1057:rightElbowSideAddonMix
-int 1058:leftElbowSideTarget
-int 1059:leftElbowSideCurrent
-int 1060:leftElbowSidePwm
-int 1061:leftElbowSideAddonMix
-int 1062:rightElbowTarget
-int 1063:rightElbowCurrent
-int 1064:rightElbowPwm
-int 1065:rightElbowAddonMix
-int 1066:leftElbowTarget
-int 1067:leftElbowCurrent
-int 1068:leftElbowPwm
-int 1069:leftElbowAddonMix
-int 1070:rightPelvicTarget
-int 1071:rightPelvicCurrent
-int 1072:rightPelvicPwm
-int 1073:rightPelvicAddonMix
-int 1074:leftPelvicTarget
-int 1075:leftPelvicCurrent
-int 1076:leftPelvicPwm
-int 1077:leftPelvicAddonMix
-int 1078:rightHipSideTarget
-int 1079:rightHipSideCurrent
-int 1080:rightHipSidePwm
-int 1081:rightHipSideAddonMix
-int 1082:leftHipSideTarget
-int 1083:leftHipSideCurrent
-int 1084:leftHipSidePwm
-int 1085:leftHipSideAddonMix
-int 1086:rightHipTarget
-int 1087:rightHipCurrent
-int 1088:rightHipPwm
-int 1089:rightHipAddonMix
-int 1090:leftHipTarget
-int 1091:leftHipCurrent
-int 1092:leftHipPwm
-int 1093:leftHipAddonMix
-int 1094:rightKneeTarget
-int 1095:rightKneeCurrent
-int 1096:rightKneePwm
-int 1097:rightKneeAddonMix
-int 1098:leftKneeTarget
-int 1099:leftKneeCurrent
-int 1100:leftKneePwm
-int 1101:leftKneeAddonMix
-int 1102:rightFootFrontTarget
-int 1103:rightFootFrontCurrent
-int 1104:rightFootFrontPwm
-int 1105:rightFootFrontAddonMix
-int 1106:leftFootFrontTarget
-int 1107:leftFootFrontCurrent
-int 1108:leftFootFrontPwm
-int 1109:leftFootFrontAddonMix
-int 1110:rightFootSideTarget
-int 1111:rightFootSideCurrent
-int 1112:rightFootSidePwm
-int 1113:rightFootSideAddonMix
-int 1114:leftFootSideTarget
-int 1115:leftFootSideCurrent
-int 1116:leftFootSidePwm
-int 1117:leftFootSideAddonMix
-int 1118:rightHandTarget
-int 1119:rightHandCurrent
-int 1120:rightHandPwm
-int 1121:rightHandAddonMix
-int 1122:leftHandTarget
-int 1123:leftHandCurrent
-int 1124:leftHandPwm
-int 1125:leftHandAddonMix
-int 1130:headTiltTarget
-int 1131:headTiltCurrent
-int 1132:headTiltPwm
-int 1133:headTiltAddonMix
-int 1134:rightKneeBotTarget
-int 1135:rightKneeBotCurrent
-int 1136:rightKneeBotPwm
-int 1137:rightKneeBotAddonMix
-int 1138:leftKneeBotTarget
-int 1139:leftKneeBotCurrent
-int 1140:leftKneeBotPwm
-int 1141:leftKneeBotAddonMix
-int 1142:rightClawTarget
-int 1143:rightClawCurrent
-int 1144:rightClawPwm
-int 1145:rightClawAddonMix
-int 1146:leftClawTarget
-int 1147:leftClawCurrent
-int 1148:leftClawPwm
-int 1149:leftClawAddonMix
+int 2560:svImuAccX
+int 2561:svImuAccY
+int 2562:svImuAccZ
+int 2563:svImuAccRawX
+int 2564:svImuAccRawY
+int 2565:svImuAccRawZ
+int 2566:svImuGyroX
+int 2567:svImuGyroY
+int 2568:svImuGyroZ
+int 2569:svImuGyroRawX
+int 2570:svImuGyroRawY
+int 2571:svImuGyroRawZ
+int 2572:svImuQuaterX
+int 2573:svImuQuaterY
+int 2574:svImuQuaterZ
+int 2575:svImuQuaterW
+int 2576:svImuQuaterAcc
+int 2577:svImuAccSlowX
+int 2578:svImuAccSlowY
+int 2579:svImuAccSlowZ
+int 2580:svAdc
+int 2581:svButtonLeft
+int 2582:svButtonRight
+int 2583:svButtonPress
+int 2584:svHeadControlMask
+int 2585:svDefFrameCount
+float 2600:svEulerYaw
+float 2601:svEulerPitch
+float 2602:svEulerRoll
+int 3250:svRemoteStatus
+int 3251:svRemoteButton
+int 3252:svRemoteLeftJoystick
+int 3253:svRemoteLeftJoystickX
+int 3254:svRemoteLeftJoystickY
+int 3255:svRemoteRightJoystick
+int 3256:svRemoteRightJoystickX
+int 3257:svRemoteRightJoystickY
+int 3264:svHumoModelDistPelvic
+int 3265:svHumoModelLengthPelvicHip
+int 3266:svHumoModelLengthHipHip
+int 3267:svHumoModelLengthHipKnee
+int 3268:svHumoModelLengthKneeFoot
+int 3269:svHumoModelLengthFootFoot
+int 3270:svHumoModelDistFootFloor
+int 3271:svHumoModelFootLength
+int 3272:svHumoModelFootWidth
+int 3273:svHumoModelFootCenterBack
+int 3274:svHumoModelFootCenterInner
+int 3258:svHumoModelAngPelvic
+int 3260:svHumoModelAngHipSide
+int 3259:svHumoModelAngHip
+int 3261:svHumoModelAngKnee
+int 3262:svHumoModelAngFoot
+int 3263:svHumoModelAngFootSide
+float 3275:svIkA5
+float 3276:svIkB5
+float 3277:svIkC5
+float 3278:svIkA6
+float 3279:svIkA7
+float 3280:svIkA8
+float 3281:svIkA9
+float 3282:svIkA10
+float 3283:svIkB10
+float 3284:svIkC10
+float 3285:svIkLimA5min
+float 3286:svIkLimA5max
+float 3287:svIkLimA6min
+float 3288:svIkLimA6max
+float 3289:svIkLimA7min
+float 3290:svIkLimA7max
+float 3291:svIkLimA8min
+float 3292:svIkLimA8max
+float 3293:svIkLimA9min
+float 3294:svIkLimA9max
+float 3295:svIkLimA10min
+float 3296:svIkLimA10max
+int 3297:svIkOutPresent
+int 3298:svIkEncA5
+int 3299:svIkEncA6
+int 3300:svIkEncA7
+int 3301:svIkEncA8
+int 3302:svIkEncA9
+int 3303:svIkEncA10
+int 2610:headRotateTarget
+int 2611:headRotateCurrent
+int 2612:headRotatePwm
+int 2613:headRotateVelo
+int 2615:headRotateFlags
+int 2617:headRotateAddonMix
+int 2626:torsoRotateTarget
+int 2627:torsoRotateCurrent
+int 2628:torsoRotatePwm
+int 2629:torsoRotateVelo
+int 2631:torsoRotateFlags
+int 2633:torsoRotateAddonMix
+int 2642:rightClavicleTarget
+int 2643:rightClavicleCurrent
+int 2644:rightClaviclePwm
+int 2645:rightClavicleVelo
+int 2647:rightClavicleFlags
+int 2649:rightClavicleAddonMix
+int 2658:leftClavicleTarget
+int 2659:leftClavicleCurrent
+int 2660:leftClaviclePwm
+int 2661:leftClavicleVelo
+int 2663:leftClavicleFlags
+int 2665:leftClavicleAddonMix
+int 2674:rightShoulderTarget
+int 2675:rightShoulderCurrent
+int 2676:rightShoulderPwm
+int 2677:rightShoulderVelo
+int 2679:rightShoulderFlags
+int 2681:rightShoulderAddonMix
+int 2690:leftShoulderTarget
+int 2691:leftShoulderCurrent
+int 2692:leftShoulderPwm
+int 2693:leftShoulderVelo
+int 2695:leftShoulderFlags
+int 2697:leftShoulderAddonMix
+int 2706:rightElbowSideTarget
+int 2707:rightElbowSideCurrent
+int 2708:rightElbowSidePwm
+int 2709:rightElbowSideVelo
+int 2711:rightElbowSideFlags
+int 2713:rightElbowSideAddonMix
+int 2722:leftElbowSideTarget
+int 2723:leftElbowSideCurrent
+int 2724:leftElbowSidePwm
+int 2725:leftElbowSideVelo
+int 2727:leftElbowSideFlags
+int 2729:leftElbowSideAddonMix
+int 2738:rightElbowTarget
+int 2739:rightElbowCurrent
+int 2740:rightElbowPwm
+int 2741:rightElbowVelo
+int 2743:rightElbowFlags
+int 2745:rightElbowAddonMix
+int 2754:leftElbowTarget
+int 2755:leftElbowCurrent
+int 2756:leftElbowPwm
+int 2757:leftElbowVelo
+int 2759:leftElbowFlags
+int 2761:leftElbowAddonMix
+int 2770:rightPelvicTarget
+int 2771:rightPelvicCurrent
+int 2772:rightPelvicPwm
+int 2773:rightPelvicVelo
+int 2775:rightPelvicFlags
+int 2777:rightPelvicAddonMix
+int 2786:leftPelvicTarget
+int 2787:leftPelvicCurrent
+int 2788:leftPelvicPwm
+int 2789:leftPelvicVelo
+int 2791:leftPelvicFlags
+int 2793:leftPelvicAddonMix
+int 2802:rightHipSideTarget
+int 2803:rightHipSideCurrent
+int 2804:rightHipSidePwm
+int 2805:rightHipSideVelo
+int 2807:rightHipSideFlags
+int 2809:rightHipSideAddonMix
+int 2818:leftHipSideTarget
+int 2819:leftHipSideCurrent
+int 2820:leftHipSidePwm
+int 2821:leftHipSideVelo
+int 2823:leftHipSideFlags
+int 2825:leftHipSideAddonMix
+int 2834:rightHipTarget
+int 2835:rightHipCurrent
+int 2836:rightHipPwm
+int 2837:rightHipVelo
+int 2839:rightHipFlags
+int 2841:rightHipAddonMix
+int 2850:leftHipTarget
+int 2851:leftHipCurrent
+int 2852:leftHipPwm
+int 2853:leftHipVelo
+int 2855:leftHipFlags
+int 2857:leftHipAddonMix
+int 2866:rightKneeTarget
+int 2867:rightKneeCurrent
+int 2868:rightKneePwm
+int 2869:rightKneeVelo
+int 2871:rightKneeFlags
+int 2873:rightKneeAddonMix
+int 2882:leftKneeTarget
+int 2883:leftKneeCurrent
+int 2884:leftKneePwm
+int 2885:leftKneeVelo
+int 2887:leftKneeFlags
+int 2889:leftKneeAddonMix
+int 2898:rightFootFrontTarget
+int 2899:rightFootFrontCurrent
+int 2900:rightFootFrontPwm
+int 2901:rightFootFrontVelo
+int 2903:rightFootFrontFlags
+int 2905:rightFootFrontAddonMix
+int 2914:leftFootFrontTarget
+int 2915:leftFootFrontCurrent
+int 2916:leftFootFrontPwm
+int 2917:leftFootFrontVelo
+int 2919:leftFootFrontFlags
+int 2921:leftFootFrontAddonMix
+int 2930:rightFootSideTarget
+int 2931:rightFootSideCurrent
+int 2932:rightFootSidePwm
+int 2933:rightFootSideVelo
+int 2935:rightFootSideFlags
+int 2937:rightFootSideAddonMix
+int 2946:leftFootSideTarget
+int 2947:leftFootSideCurrent
+int 2948:leftFootSidePwm
+int 2949:leftFootSideVelo
+int 2951:leftFootSideFlags
+int 2953:leftFootSideAddonMix
+int 2962:rightHandTarget
+int 2963:rightHandCurrent
+int 2964:rightHandPwm
+int 2965:rightHandVelo
+int 2967:rightHandFlags
+int 2969:rightHandAddonMix
+int 2978:leftHandTarget
+int 2979:leftHandCurrent
+int 2980:leftHandPwm
+int 2981:leftHandVelo
+int 2983:leftHandFlags
+int 2985:leftHandAddonMix
+int 3010:headTiltTarget
+int 3011:headTiltCurrent
+int 3012:headTiltPwm
+int 3013:headTiltVelo
+int 3015:headTiltFlags
+int 3017:headTiltAddonMix
+int 3026:rightKneeBotTarget
+int 3027:rightKneeBotCurrent
+int 3028:rightKneeBotPwm
+int 3029:rightKneeBotVelo
+int 3031:rightKneeBotFlags
+int 3033:rightKneeBotAddonMix
+int 3042:leftKneeBotTarget
+int 3043:leftKneeBotCurrent
+int 3044:leftKneeBotPwm
+int 3045:leftKneeBotVelo
+int 3047:leftKneeBotFlags
+int 3049:leftKneeBotAddonMix
+int 3058:rightClawTarget
+int 3059:rightClawCurrent
+int 3060:rightClawPwm
+int 3061:rightClawVelo
+int 3063:rightClawFlags
+int 3065:rightClawAddonMix
+int 3074:leftClawTarget
+int 3075:leftClawCurrent
+int 3076:leftClawPwm
+int 3077:leftClawVelo
+int 3079:leftClawFlags
+int 3081:leftClawAddonMix
 int 2:restart_flag
 int 3:timeStep
 int 4:orderFromHead
@@ -1743,38 +1804,38 @@ function declare void setup(
   ( <int 7:cycle_number> ) = (1000) 
   ( <float 35:rotationYieldRight> ) = (0.23) 
   ( <float 36:rotationYieldLeft> ) = (0.23) 
-  ( <float 1215:svIkA5> ) = (40.2) 
-  ( <float 1216:svIkB5> ) = (0) 
-  ( <float 1217:svIkC5> ) = (0) 
-  ( <float 1218:svIkA6> ) = (0) 
-  ( <float 1219:svIkA7> ) = (99) 
-  ( <float 1220:svIkA8> ) = (99) 
-  ( <float 1221:svIkA9> ) = (0) 
-  ( <float 1222:svIkA10> ) = (13.7) 
-  ( <float 1223:svIkB10> ) = (23.8) 
-  ( <float 1224:svIkC10> ) = (0) 
+  ( <float 3275:svIkA5> ) = (40.2) 
+  ( <float 3276:svIkB5> ) = (0) 
+  ( <float 3277:svIkC5> ) = (0) 
+  ( <float 3278:svIkA6> ) = (0) 
+  ( <float 3279:svIkA7> ) = (99) 
+  ( <float 3280:svIkA8> ) = (99) 
+  ( <float 3281:svIkA9> ) = (0) 
+  ( <float 3282:svIkA10> ) = (13.7) 
+  ( <float 3283:svIkB10> ) = (23.8) 
+  ( <float 3284:svIkC10> ) = (0) 
   ( <float 54:e10> ) = (55) 
   ( <float 55:d10> ) = (62) 
-  ( <float 1225:svIkLimA5min> ) = ( ( -(90) ) * (0.0174533) ) 
-  ( <float 1226:svIkLimA5max> ) = ( (90) * (0.0174533) ) 
-  ( <float 1227:svIkLimA6min> ) = ( ( -(108) ) * (0.0174533) ) 
-  ( <float 1228:svIkLimA6max> ) = ( (15) * (0.0174533) ) 
-  ( <float 1229:svIkLimA7min> ) = ( ( -(130) ) * (0.0174533) ) 
-  ( <float 1230:svIkLimA7max> ) = ( (50) * (0.0174533) ) 
-  ( <float 1231:svIkLimA8min> ) = ( ( -(180) ) * (0.0174533) ) 
-  ( <float 1232:svIkLimA8max> ) = ( (8) * (0.0174533) ) 
-  ( <float 1233:svIkLimA9min> ) = ( ( -(45) ) * (0.0174533) ) 
-  ( <float 1234:svIkLimA9max> ) = ( (78) * (0.0174533) ) 
-  ( <float 1235:svIkLimA10min> ) = ( ( -(24) ) * (0.0174533) ) 
-  ( <float 1236:svIkLimA10max> ) = ( (24) * (0.0174533) ) 
+  ( <float 3285:svIkLimA5min> ) = ( ( -(90) ) * (0.0174533) ) 
+  ( <float 3286:svIkLimA5max> ) = ( (90) * (0.0174533) ) 
+  ( <float 3287:svIkLimA6min> ) = ( ( -(108) ) * (0.0174533) ) 
+  ( <float 3288:svIkLimA6max> ) = ( (15) * (0.0174533) ) 
+  ( <float 3289:svIkLimA7min> ) = ( ( -(130) ) * (0.0174533) ) 
+  ( <float 3290:svIkLimA7max> ) = ( (50) * (0.0174533) ) 
+  ( <float 3291:svIkLimA8min> ) = ( ( -(180) ) * (0.0174533) ) 
+  ( <float 3292:svIkLimA8max> ) = ( (8) * (0.0174533) ) 
+  ( <float 3293:svIkLimA9min> ) = ( ( -(45) ) * (0.0174533) ) 
+  ( <float 3294:svIkLimA9max> ) = ( (78) * (0.0174533) ) 
+  ( <float 3295:svIkLimA10min> ) = ( ( -(24) ) * (0.0174533) ) 
+  ( <float 3296:svIkLimA10max> ) = ( (24) * (0.0174533) ) 
  call  <function declare void sfIkSetup(
 ) end function declare
 > 
   ( <int 37:framestep> ) = (2) 
   ( <float 22:selfMotionShiftCorrectionX> ) = (0) 
   ( <float 23:selfMotionShiftCorrectionY> ) = (0) 
-  ( <float 61:ztr0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
-  ( <float 62:ztl0> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) 
+  ( <float 61:ztr0> ) = ( -( ( ( ( ( ( ( <float 3277:svIkC5> ) + ( <float 3278:svIkA6> ) ) + ( <float 3279:svIkA7> ) ) + ( <float 3280:svIkA8> ) ) + ( <float 3281:svIkA9> ) ) + ( <float 3283:svIkB10> ) ) - (1) ) ) 
+  ( <float 62:ztl0> ) = ( -( ( ( ( ( ( ( <float 3277:svIkC5> ) + ( <float 3278:svIkA6> ) ) + ( <float 3279:svIkA7> ) ) + ( <float 3280:svIkA8> ) ) + ( <float 3281:svIkA9> ) ) + ( <float 3283:svIkB10> ) ) - (1) ) ) 
   ( <float 43:zr> ) = ( ( <float 51:zl> ) = ( -(1) ) ) 
   ( <int 31:selfInitPoses> ) = (10) 
   ( <float 19:stepLength> ) = (0) 
@@ -1950,7 +2011,7 @@ function declare void stabilizeRotationByIMU(
  call  <function declare void sfQuaternionToEulerImu(
 ) end function declare
 > 
-  ( <float 21:rotation> ) = ( ( ( <float 74:forwardDirection> ) - ( <float 1025:svEulerYaw> ) ) * (1.1) ) 
+  ( <float 21:rotation> ) = ( ( ( <float 74:forwardDirection> ) - ( <float 2600:svEulerYaw> ) ) * (1.1) ) 
  if  if  if  if  if  return
  }
 }
@@ -2100,7 +2161,7 @@ function declare void walkFinalPoseFine(
 {
  {
   ( <float 38:xtr> ) = ( ( <float 46:xtl> ) = (0) ) 
-  ( <float 40:ztr> ) = ( ( <float 48:ztl> ) = ( -( ( ( ( ( ( ( <float 1217:svIkC5> ) + ( <float 1218:svIkA6> ) ) + ( <float 1219:svIkA7> ) ) + ( <float 1220:svIkA8> ) ) + ( <float 1221:svIkA9> ) ) + ( <float 1223:svIkB10> ) ) - (1) ) ) ) 
+  ( <float 40:ztr> ) = ( ( <float 48:ztl> ) = ( -( ( ( ( ( ( ( <float 3277:svIkC5> ) + ( <float 3278:svIkA6> ) ) + ( <float 3279:svIkA7> ) ) + ( <float 3280:svIkA8> ) ) + ( <float 3281:svIkA9> ) ) + ( <float 3283:svIkB10> ) ) - (1) ) ) ) 
   ( <float 39:ytr> ) = ( -( <float 55:d10> ) ) 
   ( <float 47:ytl> ) = ( <float 55:d10> ) 
  call  <function declare void computeAlphaForWalkFine(
@@ -2123,7 +2184,7 @@ function declare void walkInit(
   ( <float 88:stepRotation> ) = ( ( ( <float 75:correctedRotation> ) / ( ( <int 12:fr2> ) - (2) ) ) * (2) ) 
   ( <float 79:dx0Typical> ) = ( ( <float 58:correctedStepLenght> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) 
   ( <float 80:dy0Typical> ) = ( ( <float 59:correctedSideLenght> ) / ( ( (2) * ( <int 11:fr1> ) ) + ( <int 12:fr2> ) ) ) 
-  ( <float 70:dobavka_x_ot_torsa> ) = ( ( ( ( <float 1215:svIkA5> ) * (2) ) * (call  <function declare float sfMathSin(
+  ( <float 70:dobavka_x_ot_torsa> ) = ( ( ( ( <float 3275:svIkA5> ) * (2) ) * (call  <function declare float sfMathSin(
  float 2:r
 ) end function declare
 > ) ) / ( <int 12:fr2> ) ) 
@@ -2392,21 +2453,21 @@ function declare void main(
  call  <function declare void sfQuaternionToEulerImu(
 ) end function declare
 > 
-  ( <float 74:forwardDirection> ) = ( <float 1025:svEulerYaw> ) 
+  ( <float 74:forwardDirection> ) = ( <float 2600:svEulerYaw> ) 
  call  <function declare int sfCreateTask(
  *<void()> 3:fun
  int 2:stackSize
 ) end function declare
 > 
-  ( <int 1022:svButtonRight> ) = ( -(1) ) 
-  ( <int 1021:svButtonLeft> ) = ( -(1) ) 
+  ( <int 2582:svButtonRight> ) = ( -(1) ) 
+  ( <int 2581:svButtonLeft> ) = ( -(1) ) 
  call  <function declare void sfBip(
  int 3:bipCount
  int 2:seriesCount
 ) end function declare
 > 
- loop  ( <int 1022:svButtonRight> ) = (66) 
-  ( <int 1021:svButtonLeft> ) = (69) 
+ loop  ( <int 2582:svButtonRight> ) = (66) 
+  ( <int 2581:svButtonLeft> ) = (69) 
   ( <int 2:restart_flag> ) = (1) 
  call  <function declare void runTest(
 ) end function declare

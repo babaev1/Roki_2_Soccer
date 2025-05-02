@@ -26,3 +26,5 @@ int jump_mode _global_; // 0 - jump at spot, 1-jump forward, 2- backward, 3 - le
 						// Power (tens): 0 - 100%, 10 - 10%, 20 - 20%, 30- 30%, etc.  
 						// Number of jumps (hundreds): 100 - 1 time, 200 - 2 times, etc.
 						// Example: 101 - jump forward one time 100%, 253 - jump left 2 times with 50% of power
+int robot_Serial_Number _global_;
+int splits_Mode _global_;

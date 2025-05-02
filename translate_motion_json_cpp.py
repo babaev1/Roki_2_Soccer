@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 cwd = os.getcwd()
-p = Path(cwd + "\\Soccer\\Motion\\motion_slots")
+p = Path(cwd + "\\Soccer\\Motion\\motion_slots\\test")
 fileList = list(p.glob('**/*.json')) 
 
 robot = Robot()
@@ -33,9 +33,11 @@ for file in fileList:
         cppText += "// " + pages[i] + '\n'
         cppText += "  frameCount = " + str(motionList[i][0]) + ";\n"
         for j in range(len(motionList[i])-1):
-            cppText += "  sfPoseGroup( " + robot.ACTIVESERVOS[j][6] + ", " 
             rokiPosition = int(motionList[i][j+1] * 1.536 *  robot.ACTIVESERVOS[j][7])
-            cppText += str(rokiPosition) + ", frameCount );\n"
+            if i > 0:
+                if rokiPosition == int(motionList[i-1][j+1] * 1.536 *  robot.ACTIVESERVOS[j][7]): continue
+            cppText += "  sfPoseGroup( " + robot.ACTIVESERVOS[j][6] + ", " + str(rokiPosition) + ", frameCount );\n"
+            
         cppText += "  sfWaitFrame( frameCount );\n"
 
     cppText += "}\n"

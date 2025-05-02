@@ -80,8 +80,8 @@ def quadratic_ransac_curve_fit(x, y):
     plt.plot(x[outliers], y[outliers], 'r.', label='outliers')
     plt.plot(xi, yi, label='Quadratic Curve')
 
-    plt.xlabel('x')
-    plt.ylabel('y')
+    plt.xlabel('Voltage')
+    plt.ylabel('Angle, degrees')
     plt.title('Quadratic')
     print('Equation: {0:.5f} + {1:.5f}x + {2:.5f}x^2'.format(coeff[0], coeff[1], coeff[2]))
     print('Y-intercept: {}'.format(coeff[0]))
@@ -121,7 +121,7 @@ def cubic_ransac_curve_fit(x, y):
     
 
 if __name__=="__main__":
-    battery_number = 3
+    battery_number = 1  # 1 or 3
     #voltage = 12
     #a = dist_angle_from_voltage(battery_number, voltage)
     #plt.show()
@@ -136,7 +136,7 @@ if __name__=="__main__":
             #if voltage < 11.6: continue
             if voltage > 12.63: continue
             volt.append(voltage)
-            angle.append(data[i][5])
+            angle.append(data[i][5] * 0.03375 + 20)
     quadratic_ransac_curve_fit(np.array(volt), np.array(angle))
     plt.show()
 
