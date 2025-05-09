@@ -18,7 +18,7 @@ mtx = np.asarray(data['camera_matrix'])
 dist = np.asarray(data['dist_coeff'])
 markerSizeInCM = 16
 
-def detect_aruco_markers(frame, led):
+def detect_aruco_markers(frame, led, ID):
     aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_100)    #  словарь аруко маркеров
     parameters = cv2.aruco.DetectorParameters_create()    # Параметры детектора
 
@@ -34,7 +34,7 @@ def detect_aruco_markers(frame, led):
         # перебор всех обнаруженных маркеры
         for i in range(len(ids)):
             #  координаты углов маркера
-            if ids[i][0] == 88:
+            if ids[i][0] == ID:
                 led.blink.set()
                 corner = corners[i][0]
                 top_left = tuple(corner[0].astype(int))
@@ -56,7 +56,7 @@ def detect_aruco_markers(frame, led):
         size = side_shift = aruco_angle_horizontal = 0
     return frame , size, side_shift, aruco_angle_horizontal, distance
 
-def camera_process(size, side_shift, aruco_angle_horizontal, distance, stopFlag):
+def camera_process(size, side_shift, aruco_angle_horizontal, distance, stopFlag, ID):
     picam2 = Picamera2(camera_num=0)
     led = Led()
     picam2.configure(picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)})) 
@@ -79,7 +79,7 @@ def camera_process(size, side_shift, aruco_angle_horizontal, distance, stopFlag)
         im = cv2.cvtColor(im, cv2.COLOR_YUV420p2GRAY)
         #cv2.imshow("Camera1", im)
         #cv2.waitKey(10)
-        im, size.value, side_shift.value, aruco_angle_horizontal.value, distance.value = detect_aruco_markers(im, led)     # Обнаружение аруко маркеров
+        im, size.value, side_shift.value, aruco_angle_horizontal.value, distance.value = detect_aruco_markers(im, led, ID)     # Обнаружение аруко маркеров
         cv2.imshow("Camera", im)
         cv2.waitKey(10)
         count += 1

@@ -15,7 +15,7 @@ int s;
 
 void main() {
   s = sfSerialGet();
-  sfSerialSet(207);
+  sfSerialSet(288);
   sfStop();
   }
 

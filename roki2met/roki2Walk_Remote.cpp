@@ -167,7 +167,7 @@ void setup() {
 
   framestep = 2;
   
-  gaitHeight = 190;  // Distance between Center of mass and floor in walk pose
+  gaitHeight = 180;  // Distance between Center of mass and floor in walk pose
   stepHeight = 32.0; // elevation of sole over floor
   
   selfMotionShiftCorrectionX = -50.0 / 21.0;
@@ -203,8 +203,8 @@ void setup() {
     amplitude = 110;    // mm side amplitude (maximum distance between most right and most left position of Center of Mass) 53.4*2
     }
   else {
-    fr1 = 8;           // frame number for 1-st phase of gait ( two legs on floor)
-    fr2 = 12;          // frame number for 2-nd phase of gait ( one leg in air)
+    fr1 = 8; //8;           // frame number for 1-st phase of gait ( two legs on floor)
+    fr2 = 10; //12;          // frame number for 2-nd phase of gait ( one leg in air)
     amplitude = 32;    // mm side amplitude (maximum distance between most right and most left position of Center of Mass) 53.4*2
     }
   stepYtr = amplitude / 2.0 / selfInitPoses;
@@ -221,8 +221,8 @@ void setup() {
   //На каждом шаге происходит линейная интерполяция позиций в течение количества
   //фреймов, заданных данной переменной
   //Фактическая длительность шага составляет fps - 1, т.е. она короче на один фрейм
-  fps = 8;
-  walking_frame = 2;
+  fps = 4;
+  walking_frame = 3;
   }
   
 
@@ -1097,8 +1097,8 @@ void movingRemoteControl(){
               walking_frame = 1;
           }
           if (svRemoteButton == ARB_WALK_SLOW) {
-              fps = 8;
-              walking_frame = 2;
+              fps = 4;
+              walking_frame = 3;
           }
 
           sfWaitNextFrame();

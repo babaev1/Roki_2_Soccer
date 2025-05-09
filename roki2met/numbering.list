@@ -123,9 +123,9 @@ VBC5_PUSH_CONST 11 | 0x80000000 //import func index sfSerialGet
 VBC1_CALL0
 //remove call address and params
 VBC1_POP
-[1:18] ;sfSerialSet(207);
+[1:18] ;sfSerialSet(288);
 VBC5_PUSH_CONST 10 | 0x80000000 //import func index sfSerialSet
-VBC3_PUSH_CONST 207 
+VBC3_PUSH_CONST 288 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:19] ;sfStop();

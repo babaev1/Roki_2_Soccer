@@ -1416,9 +1416,10 @@ class Player():
             stopFlag = Value(c_bool, False)
             aruco_angle_horizontal = Value('d', 0)
             distance = Value('d', 0)
+            id = self.glob.params["SPRINT_ARUCO_ID"]
 
             # Process for Vision Pipeline
-            cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift,aruco_angle_horizontal, distance, stopFlag), daemon = True)
+            cam_proc = Process(target=lookARUCO.camera_process, args=(size, side_shift,aruco_angle_horizontal, distance, stopFlag, id), daemon = True)
             # start Process of Vision Pipeline
             cam_proc.start()
             #cam_proc.join()

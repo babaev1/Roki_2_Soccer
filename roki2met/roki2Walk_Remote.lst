@@ -1927,7 +1927,7 @@ function declare void setup(
 ) end function declare
 > 
   ( <int 21:framestep> ) = (2) 
-  ( <float 42:gaitHeight> ) = (190) 
+  ( <float 42:gaitHeight> ) = (180) 
   ( <float 43:stepHeight> ) = (32) 
   ( <float 6:selfMotionShiftCorrectionX> ) = ( ( -(50) ) / (21) ) 
   ( <float 7:selfMotionShiftCorrectionY> ) = ( (70) / (21) ) 
@@ -1949,8 +1949,8 @@ function declare void setup(
  if   ( <float 52:stepYtr> ) = ( ( ( <float 38:amplitude> ) / (2) ) / ( <int 15:selfInitPoses> ) ) 
   ( <float 53:stepYtl> ) = ( ( ( <float 38:amplitude> ) / (2) ) / ( <int 15:selfInitPoses> ) ) 
   ( <float 39:alpha01> ) = (3.14159) 
- if   ( <int 55:fps> ) = (8) 
-  ( <int 56:walking_frame> ) = (2) 
+ if   ( <int 55:fps> ) = (4) 
+  ( <int 56:walking_frame> ) = (3) 
  return
  }
 }
