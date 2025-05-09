@@ -7,6 +7,7 @@ from Soccer.Vision.led_blink import Led
 import math
 import yaml
 from yaml.loader import SafeLoader
+import os
 
 undistortPointMap = np.load("Soccer/Vision/undistortPointMap_x_y.npy")
 P_matrix = np.load("Soccer/Vision/Camera_calibration_P.npy")
@@ -41,6 +42,7 @@ def detect_aruco_markers(frame, led, ID):
         # перебор всех обнаруженных маркеры
         #  координаты углов маркера
         led.blink.set()
+        os.system("espeak -ven-m1 -a100 'Yes'")
         corner = corners[0][0]
         top_left = tuple(corner[0].astype(int))
         top_right = tuple(corner[1].astype(int))

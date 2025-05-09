@@ -8,6 +8,7 @@ import numpy as np
 from Soccer.Vision.camera import Camera
 from Soccer.Vision.class_Vision_General import Vision_General
 from Soccer.Vision.led_blink import Led
+import os
 
 
 CAMERA_FRAME_DURATION_US = 16700
@@ -49,6 +50,7 @@ class Vision_RPI(Vision_General):
 
     def visible_reaction_ball(self):
         self.led.blink.set()
+        os.system("espeak -ven-m1 -a100 'Ball'")
         print('I see ball')
 
     def undistort_points(self, column, row):
