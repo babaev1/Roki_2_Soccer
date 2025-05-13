@@ -50,7 +50,7 @@ class Vision_RPI(Vision_General):
 
     def visible_reaction_ball(self):
         self.led.blink.set()
-        os.system("espeak -ven-m1 -a100 'Ball'")
+        #os.system("espeak -ven-m1 -a100 'Ball'")
         print('I see ball')
 
     def undistort_points(self, column, row):
