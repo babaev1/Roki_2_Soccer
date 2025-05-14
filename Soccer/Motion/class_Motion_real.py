@@ -562,7 +562,7 @@ class Motion_real(Motion):
             deceleration = True
             number_Of_Cycles += 1
         else: deceleration = False
-        self.local.correct_yaw_in_pf()
+        #self.local.correct_yaw_in_pf()
         if one_Off_Motion: 
             self.walk_Initial_Pose()
             after_cycle = 0
