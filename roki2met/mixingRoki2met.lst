@@ -33,11 +33,13 @@ empty type <int(,int,int,int)>
 empty type <void(,int,int)>
 empty type <void(,int,int,int)>
 empty type <void(,int,int,int,int)>
-empty type <void(,int,*cblock,int)>
+empty type <void(,int,int,int,*cblock)>
+empty type <void(,int,int,int,*cwblock)>
 empty type <void(,*int)>
 empty type <void(,*int,*int)>
 empty type <void(,*int,*int,*int)>
 empty type <void(,*int,*int,*int,*int)>
+empty type <int(,int,int,*int)>
 empty type <int(,int,int,*cblock,int)>
 empty type <int(,int,int,int,int)>
 empty type <void(,float,float,float,float,float,float,float)>
@@ -337,11 +339,19 @@ int 3076:leftClawPwm
 int 3077:leftClawVelo
 int 3079:leftClawFlags
 int 3081:leftClawAddonMix
+int 1024:jump_mode
+int 1025:robot_Serial_Number
+int 1026:splits_Mode
+int 1027:lowest_ntc
 int 2:leftRightFactor
 int 3:frontBackFactor
 int 4:quart
 int 5:errCount
 float 6:sum
+int 7:right_knee_ntc
+int 8:left_knee_ntc
+int 9:right_knee_bot_ntc
+int 10:left_knee_bot_ntc
 
 //==================
 //  functions
@@ -371,6 +381,9 @@ function declare int sfIsFrameOut(
 function declare void sfWaitNextFrame(
 ) end function declare
 function declare int sfSlotIndex(
+ cstring 2:str
+) end function declare
+function declare int sfSoundIndex(
  cstring 2:str
 ) end function declare
 function declare int sfAbs(
@@ -407,6 +420,11 @@ function declare void sfBip(
  int 2:seriesCount
 ) end function declare
 function declare void sfWriteFlash(
+) end function declare
+function declare void sfSoundPlay(
+ int 2:soundIndex
+) end function declare
+function declare int sfSoundIsPlay(
 ) end function declare
 function declare void sfFreeGroup(
  int 2:unitMask
@@ -445,9 +463,16 @@ function declare void sfStrainGroup(
  int 2:unitMask
 ) end function declare
 function declare void sfPlaySamples(
- int 4:unitMask
- *cblock 3:samples
- int 2:frameCount
+ int 5:unitMask
+ int 4:from
+ int 3:frameCount
+ *cblock 2:samples
+) end function declare
+function declare void sfPlayWSamples(
+ int 5:unitMask
+ int 4:from
+ int 3:frameCount
+ *cwblock 2:samples
 ) end function declare
 function declare void sfAccumSetup1(
  *int 2:ch0
@@ -470,6 +495,20 @@ function declare void sfAccumSetup4(
 function declare void sfAccumTrigger(
 ) end function declare
 function declare void sfAccumReset(
+) end function declare
+function declare int sfUnitParamQueryRead(
+ int 3:devId
+ int 2:paramIndex
+) end function declare
+function declare int sfUnitParamQueryWrite(
+ int 4:devId
+ int 3:paramIndex
+ int 2:paramValue
+) end function declare
+function declare int sfUnitParamStatusRead(
+ int 4:devId
+ int 3:paramIndex
+ *int 2:paramValue
 ) end function declare
 function declare int sfMathAcos(
  int 3:numerator
@@ -747,6 +786,13 @@ function declare void sfMat3x3RowMul(
 function declare void sfWaitFrame(
  int 2:frame
 ) end function declare
+function declare int sfUnitParamRead(
+ int 4:devId
+ int 3:paramIndex
+ *int 2:paramValue
+) end function declare
+function declare void paramScan(
+) end function declare
 function declare void mixing(
 ) end function declare
 function declare void main(
@@ -820,6 +866,14 @@ function declare void sfWaitNextFrame(
 
 
 function declare int sfSlotIndex(
+ cstring 2:str
+) end function declare
+{
+}
+
+
+
+function declare int sfSoundIndex(
  cstring 2:str
 ) end function declare
 {
@@ -912,6 +966,21 @@ function declare void sfWriteFlash(
 
 
 
+function declare void sfSoundPlay(
+ int 2:soundIndex
+) end function declare
+{
+}
+
+
+
+function declare int sfSoundIsPlay(
+) end function declare
+{
+}
+
+
+
 function declare void sfFreeGroup(
  int 2:unitMask
 ) end function declare
@@ -989,9 +1058,21 @@ function declare void sfStrainGroup(
 
 
 function declare void sfPlaySamples(
- int 4:unitMask
- *cblock 3:samples
- int 2:frameCount
+ int 5:unitMask
+ int 4:from
+ int 3:frameCount
+ *cblock 2:samples
+) end function declare
+{
+}
+
+
+
+function declare void sfPlayWSamples(
+ int 5:unitMask
+ int 4:from
+ int 3:frameCount
+ *cwblock 2:samples
 ) end function declare
 {
 }
@@ -1044,6 +1125,35 @@ function declare void sfAccumTrigger(
 
 
 function declare void sfAccumReset(
+) end function declare
+{
+}
+
+
+
+function declare int sfUnitParamQueryRead(
+ int 3:devId
+ int 2:paramIndex
+) end function declare
+{
+}
+
+
+
+function declare int sfUnitParamQueryWrite(
+ int 4:devId
+ int 3:paramIndex
+ int 2:paramValue
+) end function declare
+{
+}
+
+
+
+function declare int sfUnitParamStatusRead(
+ int 4:devId
+ int 3:paramIndex
+ *int 2:paramValue
 ) end function declare
 {
 }
@@ -1668,6 +1778,36 @@ function declare void sfWaitFrame(
 
 
 
+function declare int sfUnitParamRead(
+ int 4:devId
+ int 3:paramIndex
+ *int 2:paramValue
+) end function declare
+{
+ {
+ if   svWait() 
+  svWait() 
+ return call  <function declare int sfUnitParamStatusRead(
+ int 4:devId
+ int 3:paramIndex
+ *int 2:paramValue
+) end function declare
+> 
+ }
+}
+
+
+
+function declare void paramScan(
+) end function declare
+{
+ {
+ loop return
+ }
+}
+
+
+
 function declare void mixing(
 ) end function declare
 {
@@ -1684,6 +1824,11 @@ function declare void main(
 ) end function declare
 {
  {
+ call  <function declare int sfCreateTask(
+ *<void()> 3:fun
+ int 2:stackSize
+) end function declare
+> 
  call  <function declare void mixing(
 ) end function declare
 > 

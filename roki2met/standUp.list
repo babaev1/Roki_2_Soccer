@@ -13,6 +13,7 @@
 ;sfIsFrameOut <int(,int)>
 ;sfWaitNextFrame <void()>
 ;sfSlotIndex <int(,cstring)>
+;sfSoundIndex <int(,cstring)>
 ;sfAbs <int(,int)>
 ;sfIMin <int(,int,int)>
 ;sfIMax <int(,int,int)>
@@ -23,6 +24,8 @@
 ;sfStartSlot <void(,int)>
 ;sfBip <void(,int,int)>
 ;sfWriteFlash <void()>
+;sfSoundPlay <void(,int)>
+;sfSoundIsPlay <int()>
 ;sfFreeGroup <void(,int)>
 ;sfPoseGroup <void(,int,int,int)>
 ;sfPoseGroupDelay <void(,int,int,int,int)>
@@ -31,13 +34,17 @@
 ;sfPoseIdx <void(,int,int,int)>
 ;sfPoseGroupLin <void(,int,int,int)>
 ;sfStrainGroup <void(,int)>
-;sfPlaySamples <void(,int,*cblock,int)>
+;sfPlaySamples <void(,int,int,int,*cblock)>
+;sfPlayWSamples <void(,int,int,int,*cwblock)>
 ;sfAccumSetup1 <void(,*int)>
 ;sfAccumSetup2 <void(,*int,*int)>
 ;sfAccumSetup3 <void(,*int,*int,*int)>
 ;sfAccumSetup4 <void(,*int,*int,*int,*int)>
 ;sfAccumTrigger <void()>
 ;sfAccumReset <void()>
+;sfUnitParamQueryRead <int(,int,int)>
+;sfUnitParamQueryWrite <int(,int,int,int)>
+;sfUnitParamStatusRead <int(,int,int,*int)>
 ;sfMathAcos <int(,int,int)>
 ;sfMathSqrti <int(,int)>
 ;sfMathAngleOfTriangle <int(,int,int,int)>
@@ -105,21 +112,48 @@
 ;sfMat3x3MulCol <void(,*:SfVector3,*:SfMatrix3x3,*:SfVector3)>
 ;sfMat3x3RowMul <void(,*:SfVector3,*:SfVector3,*:SfMatrix3x3)>
 ;sfWaitFrame <void(,int)>
-[3:466] ;sfWaitFrameOut( frame + svFrameCount );
+[3:491] ;sfWaitFrameOut( frame + svFrameCount );
 VBC5_PUSH_CONST 17 | 0x80000000 //import func index sfWaitFrameOut
 VBC2_PUSH_LOCAL 2 //frame
 VBC3_PUSH_GLOBAL 1 //svFrameCount
 VBC1_ADD
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[2:10] ;
+[3:497] ;
+VBC1_RETURN
+;sfUnitParamRead <int(,int,int,*int)>
+[3:499] ;if( !sfUnitParamQueryRead( devId, paramIndex ) )
+VBC5_PUSH_CONST 66 | 0x80000000 //import func index sfUnitParamQueryRead
+VBC2_PUSH_LOCAL 4 //devId
+VBC2_PUSH_LOCAL 3 //paramIndex
+VBC1_CALL2
+VBC1_STACK_UP2//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB90 //if to false
+;return 0;
+VBC1_PUSH_0 
+VBC2_POP_RESULT 5
+VBC1_RETURN
+LAB90: //if else
+[3:503] ;sfWaitNextFrame();
+VBC1_WAIT
+[3:504] ;sfWaitNextFrame();
+VBC1_WAIT
+[3:505] ;return sfUnitParamStatusRead( devId, paramIndex, paramValue );
+VBC5_PUSH_CONST 68 | 0x80000000 //import func index sfUnitParamStatusRead
+VBC2_PUSH_LOCAL 4 //devId
+VBC2_PUSH_LOCAL 3 //paramIndex
+VBC2_PUSH_LOCAL 2 //paramValue
+VBC1_CALL3
+VBC1_STACK_UP3//remove call address and params
+VBC2_POP_RESULT 5
 VBC1_RETURN
 ;standUp <void()>
 [1:19] ;if (fallingFlag == 1) {  
 VBC3_PUSH_GLOBAL 3 //fallingFlag
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB444 //if to false
+VBC4_FALSE_JUMP LAB482 //if to false
 ;
 [1:21] ;frameCount = 10;
 VBC2_PUSH_CONST 7 //frameCount
@@ -299,12 +333,12 @@ VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 7 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB444: //if else
+LAB482: //if else
 [1:55] ;if (fallingFlag == -1) {  
 VBC3_PUSH_GLOBAL 3 //fallingFlag
 VBC2_PUSH_CONST -1 // -
 VBC1_EQU
-VBC4_FALSE_JUMP LAB927 //if to false
+VBC4_FALSE_JUMP LAB965 //if to false
 ;
 [1:57] ;frameCount = 20;
 VBC2_PUSH_CONST 7 //frameCount
@@ -533,12 +567,12 @@ VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 7 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB927: //if else
+LAB965: //if else
 [1:98] ;if (fallingFlag == 2) {  
 VBC3_PUSH_GLOBAL 3 //fallingFlag
 VBC1_PUSH_2 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1142 //if to false
+VBC4_FALSE_JUMP LAB1180 //if to false
 ;
 [1:100] ;frameCount = 40;
 VBC2_PUSH_CONST 7 //frameCount
@@ -644,12 +678,12 @@ VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 7 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1142: //if else
+LAB1180: //if else
 [1:120] ;if (fallingFlag == -2) {  
 VBC3_PUSH_GLOBAL 3 //fallingFlag
 VBC2_PUSH_CONST -2 // -
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1358 //if to false
+VBC4_FALSE_JUMP LAB1396 //if to false
 ;
 [1:122] ;frameCount = 40;
 VBC2_PUSH_CONST 7 //frameCount
@@ -755,7 +789,7 @@ VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 7 //frameCount
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1358: //if else
+LAB1396: //if else
 [1:146] ;
 VBC1_RETURN
 ;testDrop <void()>
@@ -766,63 +800,63 @@ VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC4_PUSH_CONST 50000 
 VBC1_GREAT
-VBC4_TRUE_JUMP_KEEP LAB1398
+VBC4_TRUE_JUMP_KEEP LAB1436
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 2562 //svImuAccZ
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC4_PUSH_CONST 50000 
 VBC1_GREAT
-VBC4_TRUE_JUMP_KEEP LAB1398
+VBC4_TRUE_JUMP_KEEP LAB1436
 VBC1_PUSH_0
-LAB1398:
-VBC4_FALSE_JUMP LAB1468 //if to false
+LAB1436:
+VBC4_FALSE_JUMP LAB1506 //if to false
 ;
 [1:149] ;if (svImuAccX > 5000) fallingFlag = 1; 
 VBC3_PUSH_GLOBAL 2560 //svImuAccX
 VBC3_PUSH_CONST 5000 
 VBC1_GREAT
-VBC4_FALSE_JUMP LAB1417 //if to false
+VBC4_FALSE_JUMP LAB1455 //if to false
 ;if (svImuAccX > 5000) fallingFlag = 1; 
 VBC2_PUSH_CONST 3 //fallingFlag
 VBC1_PUSH_1 
 VBC1_POP
-LAB1417: //if else
+LAB1455: //if else
 [1:150] ;if (svImuAccX < 5000) fallingFlag = -1; 
 VBC3_PUSH_GLOBAL 2560 //svImuAccX
 VBC3_PUSH_CONST 5000 
 VBC1_LESS
-VBC4_FALSE_JUMP LAB1433 //if to false
+VBC4_FALSE_JUMP LAB1471 //if to false
 ;if (svImuAccX < 5000) fallingFlag = -1; 
 VBC2_PUSH_CONST 3 //fallingFlag
 VBC2_PUSH_CONST -1 // -
 VBC1_POP
-LAB1433: //if else
+LAB1471: //if else
 [1:151] ;if (svImuAccZ > 5000) fallingFlag = 2; 
 VBC3_PUSH_GLOBAL 2562 //svImuAccZ
 VBC3_PUSH_CONST 5000 
 VBC1_GREAT
-VBC4_FALSE_JUMP LAB1448 //if to false
+VBC4_FALSE_JUMP LAB1486 //if to false
 ;if (svImuAccZ > 5000) fallingFlag = 2; 
 VBC2_PUSH_CONST 3 //fallingFlag
 VBC1_PUSH_2 
 VBC1_POP
-LAB1448: //if else
+LAB1486: //if else
 [1:152] ;if (svImuAccZ < 5000) fallingFlag = -2; 
 VBC3_PUSH_GLOBAL 2562 //svImuAccZ
 VBC3_PUSH_CONST 5000 
 VBC1_LESS
-VBC4_FALSE_JUMP LAB1464 //if to false
+VBC4_FALSE_JUMP LAB1502 //if to false
 ;if (svImuAccZ < 5000) fallingFlag = -2; 
 VBC2_PUSH_CONST 3 //fallingFlag
 VBC2_PUSH_CONST -2 // -
 VBC1_POP
-LAB1464: //if else
+LAB1502: //if else
 [1:158] ;standUp();
-VBC2_PUSH_CONST 70  //func address standUp
+VBC2_PUSH_CONST 108  //func address standUp
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB1468: //if else
+LAB1506: //if else
 [1:163] ;
 VBC1_RETURN
 ;mixing <void()>
@@ -835,7 +869,7 @@ VBC2_PUSH_CONST 9 //frontBackFactor
 VBC3_PUSH_CONST 180 
 VBC1_POP
 [1:171] ;while(1) {
-LAB1480: //while condition
+LAB1518: //while condition
 ;
 [1:173] ;leftFootSideAddonMix = -svImuGyroZ * leftRightFactor >> 10;
 VBC3_PUSH_CONST 2953 //leftFootSideAddonMix
@@ -867,8 +901,8 @@ VBC1_STORE
 VBC1_POP
 [1:180] ;sfWaitNextFrame();
 VBC1_WAIT
-VBC4_JUMP LAB1480 //while forever loop
-LAB1533: //while exit
+VBC4_JUMP LAB1518 //while forever loop
+LAB1571: //while exit
 [1:184] ;
 VBC1_RETURN
 ;sitToStart <void()>
@@ -1027,12 +1061,12 @@ VBC1_PUSH_0
 VBC1_POP
 [1:213] ;sfCreateTask( mixing, 20 );
 VBC5_PUSH_CONST 2 | 0x80000000 //import func index sfCreateTask
-VBC3_PUSH_CONST 1469  //func address mixing
+VBC3_PUSH_CONST 1507  //func address mixing
 VBC2_PUSH_CONST 20 
 VBC1_CALL2
 VBC1_STACK_UP3//remove result, call address and params
 [1:215] ;sitToStart();
-VBC3_PUSH_CONST 1534  //func address sitToStart
+VBC3_PUSH_CONST 1572  //func address sitToStart
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:217] ;svButtonRight = -1 ;
@@ -1050,18 +1084,18 @@ VBC1_PUSH_1
 VBC1_CALL2
 VBC1_STACK_UP3//remove result, call address and params
 [1:220] ;while (svButtonPress != 2 ) sfWaitFrame(1); 
-LAB1906: //while condition
+LAB1944: //while condition
 VBC3_PUSH_GLOBAL 2583 //svButtonPress
 VBC1_PUSH_2 
 VBC1_NOT_EQU
-VBC4_FALSE_JUMP LAB1924 //while to exit
+VBC4_FALSE_JUMP LAB1962 //while to exit
 ;while (svButtonPress != 2 ) sfWaitFrame(1); 
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC1_PUSH_1 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-VBC4_JUMP LAB1906 //while forever loop
-LAB1924: //while exit
+VBC4_JUMP LAB1944 //while forever loop
+LAB1962: //while exit
 [1:221] ;svButtonRight = 66 ;
 VBC3_PUSH_CONST 2582 //svButtonRight
 VBC2_PUSH_CONST 66 
@@ -1080,7 +1114,7 @@ VBC2_PUSH_CONST 100
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:228] ;testDrop(); 
-VBC3_PUSH_CONST 1359  //func address testDrop
+VBC3_PUSH_CONST 1397  //func address testDrop
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:230] ;

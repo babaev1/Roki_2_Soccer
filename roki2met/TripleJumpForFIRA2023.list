@@ -13,6 +13,7 @@
 ;sfIsFrameOut <int(,int)>
 ;sfWaitNextFrame <void()>
 ;sfSlotIndex <int(,cstring)>
+;sfSoundIndex <int(,cstring)>
 ;sfAbs <int(,int)>
 ;sfIMin <int(,int,int)>
 ;sfIMax <int(,int,int)>
@@ -23,6 +24,8 @@
 ;sfStartSlot <void(,int)>
 ;sfBip <void(,int,int)>
 ;sfWriteFlash <void()>
+;sfSoundPlay <void(,int)>
+;sfSoundIsPlay <int()>
 ;sfFreeGroup <void(,int)>
 ;sfPoseGroup <void(,int,int,int)>
 ;sfPoseGroupDelay <void(,int,int,int,int)>
@@ -31,13 +34,17 @@
 ;sfPoseIdx <void(,int,int,int)>
 ;sfPoseGroupLin <void(,int,int,int)>
 ;sfStrainGroup <void(,int)>
-;sfPlaySamples <void(,int,*cblock,int)>
+;sfPlaySamples <void(,int,int,int,*cblock)>
+;sfPlayWSamples <void(,int,int,int,*cwblock)>
 ;sfAccumSetup1 <void(,*int)>
 ;sfAccumSetup2 <void(,*int,*int)>
 ;sfAccumSetup3 <void(,*int,*int,*int)>
 ;sfAccumSetup4 <void(,*int,*int,*int,*int)>
 ;sfAccumTrigger <void()>
 ;sfAccumReset <void()>
+;sfUnitParamQueryRead <int(,int,int)>
+;sfUnitParamQueryWrite <int(,int,int,int)>
+;sfUnitParamStatusRead <int(,int,int,*int)>
 ;sfMathAcos <int(,int,int)>
 ;sfMathSqrti <int(,int)>
 ;sfMathAngleOfTriangle <int(,int,int,int)>
@@ -105,14 +112,41 @@
 ;sfMat3x3MulCol <void(,*:SfVector3,*:SfMatrix3x3,*:SfVector3)>
 ;sfMat3x3RowMul <void(,*:SfVector3,*:SfVector3,*:SfMatrix3x3)>
 ;sfWaitFrame <void(,int)>
-[3:466] ;sfWaitFrameOut( frame + svFrameCount );
+[3:491] ;sfWaitFrameOut( frame + svFrameCount );
 VBC5_PUSH_CONST 17 | 0x80000000 //import func index sfWaitFrameOut
 VBC2_PUSH_LOCAL 2 //frame
 VBC3_PUSH_GLOBAL 1 //svFrameCount
 VBC1_ADD
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[2:10] ;
+[3:497] ;
+VBC1_RETURN
+;sfUnitParamRead <int(,int,int,*int)>
+[3:499] ;if( !sfUnitParamQueryRead( devId, paramIndex ) )
+VBC5_PUSH_CONST 66 | 0x80000000 //import func index sfUnitParamQueryRead
+VBC2_PUSH_LOCAL 4 //devId
+VBC2_PUSH_LOCAL 3 //paramIndex
+VBC1_CALL2
+VBC1_STACK_UP2//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB90 //if to false
+;return 0;
+VBC1_PUSH_0 
+VBC2_POP_RESULT 5
+VBC1_RETURN
+LAB90: //if else
+[3:503] ;sfWaitNextFrame();
+VBC1_WAIT
+[3:504] ;sfWaitNextFrame();
+VBC1_WAIT
+[3:505] ;return sfUnitParamStatusRead( devId, paramIndex, paramValue );
+VBC5_PUSH_CONST 68 | 0x80000000 //import func index sfUnitParamStatusRead
+VBC2_PUSH_LOCAL 4 //devId
+VBC2_PUSH_LOCAL 3 //paramIndex
+VBC2_PUSH_LOCAL 2 //paramValue
+VBC1_CALL3
+VBC1_STACK_UP3//remove call address and params
+VBC2_POP_RESULT 5
 VBC1_RETURN
 ;page_0 <void()>
 [1:22] ;frameCount = 250;
@@ -889,155 +923,155 @@ VBC2_PUSH_CONST 7 //hip_at_landing
 VBC1_PUSH_0 
 VBC1_POP
 [1:212] ;while (pitStop == 0) sfWaitFrame(1); 
-LAB1530: //while condition
+LAB1568: //while condition
 VBC3_PUSH_GLOBAL 6 //pitStop
 VBC1_PUSH_0 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1548 //while to exit
+VBC4_FALSE_JUMP LAB1586 //while to exit
 ;while (pitStop == 0) sfWaitFrame(1); 
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC1_PUSH_1 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-VBC4_JUMP LAB1530 //while forever loop
-LAB1548: //while exit
+VBC4_JUMP LAB1568 //while forever loop
+LAB1586: //while exit
 [1:213] ;for( jump = 0; jump < 3; i++ ){
 VBC2_PUSH_B_OFFSET -2 //jump
 VBC1_PUSH_0 
 VBC1_POP
-LAB1552: //for condition
+LAB1590: //for condition
 VBC2_PUSH_LOCAL -2 //jump
 VBC2_PUSH_CONST 3 
 VBC1_LESS
-VBC4_FALSE_JUMP LAB1757 //to for exit
+VBC4_FALSE_JUMP LAB1796 //to for exit
 ;
 [1:214] ;page_1();
-VBC2_PUSH_CONST 109  //func address page_1
+VBC3_PUSH_CONST 147  //func address page_1
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:215] ;page_2();
-VBC3_PUSH_CONST 264  //func address page_2
+VBC3_PUSH_CONST 302  //func address page_2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:217] ;for( i = 0; i < 15 * factor; i++ ) page_3(i);
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB1574: //for condition
+LAB1613: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC2_PUSH_CONST 15 
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_LESS_IF
-VBC4_FALSE_JUMP LAB1601 //to for exit
+VBC4_FALSE_JUMP LAB1640 //to for exit
 ;for( i = 0; i < 15 * factor; i++ ) page_3(i);
-VBC3_PUSH_CONST 324  //func address page_3
+VBC3_PUSH_CONST 362  //func address page_3
 VBC2_PUSH_LOCAL -1 //i
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1594: //for step
+LAB1633: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1574 //to condition
-LAB1601: //for exit
+VBC4_JUMP LAB1613 //to condition
+LAB1640: //for exit
 [1:218] ;for( i = 0; i < 8 * factor; i++ ) page_4(i);
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB1605: //for condition
+LAB1644: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC2_PUSH_CONST 8 
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_LESS_IF
-VBC4_FALSE_JUMP LAB1632 //to for exit
+VBC4_FALSE_JUMP LAB1671 //to for exit
 ;for( i = 0; i < 8 * factor; i++ ) page_4(i);
-VBC3_PUSH_CONST 436  //func address page_4
+VBC3_PUSH_CONST 474  //func address page_4
 VBC2_PUSH_LOCAL -1 //i
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1625: //for step
+LAB1664: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1605 //to condition
-LAB1632: //for exit
+VBC4_JUMP LAB1644 //to condition
+LAB1671: //for exit
 [1:219] ;for( i = 0; i < 3 * factor; i++ ) page_5(i);
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB1636: //for condition
+LAB1675: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC2_PUSH_CONST 3 
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_LESS_IF
-VBC4_FALSE_JUMP LAB1663 //to for exit
+VBC4_FALSE_JUMP LAB1702 //to for exit
 ;for( i = 0; i < 3 * factor; i++ ) page_5(i);
-VBC3_PUSH_CONST 588  //func address page_5
+VBC3_PUSH_CONST 626  //func address page_5
 VBC2_PUSH_LOCAL -1 //i
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1656: //for step
+LAB1695: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1636 //to condition
-LAB1663: //for exit
+VBC4_JUMP LAB1675 //to condition
+LAB1702: //for exit
 [1:220] ;for( i = 0; i < 2 * factor; i++ ) page_6(i);
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB1667: //for condition
+LAB1706: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC1_PUSH_2 
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_LESS_IF
-VBC4_FALSE_JUMP LAB1693 //to for exit
+VBC4_FALSE_JUMP LAB1732 //to for exit
 ;for( i = 0; i < 2 * factor; i++ ) page_6(i);
-VBC3_PUSH_CONST 746  //func address page_6
+VBC3_PUSH_CONST 784  //func address page_6
 VBC2_PUSH_LOCAL -1 //i
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1686: //for step
+LAB1725: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1667 //to condition
-LAB1693: //for exit
+VBC4_JUMP LAB1706 //to condition
+LAB1732: //for exit
 [1:229] ;page_7();
-VBC3_PUSH_CONST 1031  //func address page_7
+VBC3_PUSH_CONST 1069  //func address page_7
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:230] ;for( i = 0; i < 6 * factor; i++ ) page_8(i);
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB1702: //for condition
+LAB1741: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC2_PUSH_CONST 6 
 VBC3_PUSH_GLOBAL 4 //factor
 VBC1_MUL_IF
 VBC1_LESS_IF
-VBC4_FALSE_JUMP LAB1729 //to for exit
+VBC4_FALSE_JUMP LAB1768 //to for exit
 ;for( i = 0; i < 6 * factor; i++ ) page_8(i);
-VBC3_PUSH_CONST 1222  //func address page_8
+VBC3_PUSH_CONST 1260  //func address page_8
 VBC2_PUSH_LOCAL -1 //i
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1722: //for step
+LAB1761: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1702 //to condition
-LAB1729: //for exit
+VBC4_JUMP LAB1741 //to condition
+LAB1768: //for exit
 [1:231] ;page_9();
-VBC3_PUSH_CONST 1347  //func address page_9
+VBC3_PUSH_CONST 1385  //func address page_9
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:232] ;page_9_1();
-VBC3_PUSH_CONST 1370  //func address page_9_1
+VBC3_PUSH_CONST 1408  //func address page_9_1
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:233] ;page_0();
-VBC2_PUSH_CONST 70  //func address page_0
+VBC2_PUSH_CONST 108  //func address page_0
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:235] ;sfWaitFrame( 800 );
@@ -1045,11 +1079,11 @@ VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_CONST 800 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB1750: //for step
+LAB1789: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB1552 //to condition
-LAB1757: //for exit
+VBC4_JUMP LAB1590 //to condition
+LAB1796: //for exit
 [1:237] ;
 VBC1_RETURN
 //Init table

@@ -44,6 +44,8 @@
 #define VPS_START_SLOT                42 //Запустить на выполнение заданный слот
 #define VPS_BIP                       43 //Звуковой сигнал
 #define VPS_WRITE_FLASH               44 //Запись во флэш текущих флэш-значений
+#define VPS_SOUND_PLAY                45 //Воспроизвести звук из таблицы
+#define VPS_SOUND_IS_PLAY             46 //Проверить, воспроизводится ли звук в текущий момент
 
 #define VPS_FREE_GROUP                50 //Отключить управление движками
 #define VPS_POSE_GROUP                51 //Задание новой позиции группы механизмов
@@ -54,6 +56,7 @@
 #define VPS_POSE_GROUP_LIN            56 //Задание новой позиции группы механизмов с линейной интерполяцией
 #define VPS_STRAIN_GROUP              57 //Напрячь движки (держать текущую позицию)
 #define VPS_PLAY_SAMPLES              58 //Проиграть последовательность относительных выборок
+#define VPS_PLAY_WSAMPLES             59 //Проиграть последовательность относительных выборок 16-разрядных чисел
 
 #define VPS_ACCUM_SETUP_1             60 //Настроить аккумулятор
 #define VPS_ACCUM_SETUP_2             61 //Настроить аккумулятор
@@ -61,6 +64,10 @@
 #define VPS_ACCUM_SETUP_4             63 //Настроить аккумулятор
 #define VPS_ACCUM_TRIGGER             64 //Запустить аккумулятор, повторный запуск не возможен пока не будет сделан RESET или SETUP
 #define VPS_ACCUM_RESET               65 //Сброс аккумулятора, после него возможен запуск
+
+#define VPS_UNIT_PARAM_QUERY_READ     66 //Отправляет запрос на чтение параметра в произвольный механизм
+#define VPS_UNIT_PARAM_QUERY_WRITE    67 //Отправляет запрос на запись параметра в произвольный механизм
+#define VPS_UNIT_PARAM_STATUS_READ    68 //Прочитать параметр из произвольного механизма
 
 #define VPS_MATH_ACOS                 80 //Возвращает acos отношения в попугаях энкодера
 #define VPS_MATH_SQRTI                81 //Возвращает квадратный корень для значений от 0 до 300
@@ -177,6 +184,9 @@ import VPS_IS_FRAME_OUT     int  sfIsFrameOut( int frame );
 //Возвращает индекс слота по его имени
                             int  sfSlotIndex( cstring str );
 
+//Возвращает индекс звука по его имени
+                            int  sfSoundIndex( cstring str );
+
 //Возвращает абсолютное значение числа
 import VPS_ABS              int  sfAbs( int val );
 //Возвращает минимальное из двух чисел
@@ -198,6 +208,10 @@ import VPS_START_SLOT       void sfStartSlot( int slotIndex );
 import VPS_BIP              void sfBip( int bipCount, int seriesCount );
 //Записывает текущие значения флэш-памяти во флэш
 import VPS_WRITE_FLASH      void sfWriteFlash();
+//Воспроизвести звук из таблицы
+import VPS_SOUND_PLAY       void sfSoundPlay( int soundIndex );
+//Проверить, воспроизводится ли звук в текущий момент
+import VPS_SOUND_IS_PLAY    int  sfSoundIsPlay();
 
 
 //Отключает управление для группы двигателей
@@ -216,8 +230,11 @@ import VPS_POSE_IDX         void sfPoseIdx( int idx, int angle, int frameCount )
 import VPS_POSE_GROUP_LIN   void sfPoseGroupLin( int unitMask, int angle, int frameCount );
 //Напрячь группу двигателей
 import VPS_STRAIN_GROUP     void sfStrainGroup( int unitMask );
+//Проиграть набор относительных выборок
+import VPS_PLAY_SAMPLES     void sfPlaySamples( int unitMask, int from, int frameCount, cblock *samples );
+//Проиграть последовательность относительных выборок 16-разрядных чисел
+import VPS_PLAY_WSAMPLES    void sfPlayWSamples( int unitMask, int from, int frameCount, cwblock *samples );
 
-import VPS_PLAY_SAMPLES     void sfPlaySamples( int unitMask, cblock *samples, int frameCount );
 
 //Настраивает аккумулятор для одной переменной
 import VPS_ACCUM_SETUP_1    void sfAccumSetup1( int *ch0 );
@@ -231,6 +248,14 @@ import VPS_ACCUM_SETUP_4    void sfAccumSetup4( int *ch0, int *ch1, int *ch2, in
 import VPS_ACCUM_TRIGGER    void sfAccumTrigger();
 //Сбрасывает аккумулятор
 import VPS_ACCUM_RESET      void sfAccumReset();
+
+
+//Отправляет запрос на чтение параметра в произвольный механизм
+import VPS_UNIT_PARAM_QUERY_READ    int sfUnitParamQueryRead( int devId, int paramIndex );
+//Отправляет запрос на запись параметра в произвольный механизм
+import VPS_UNIT_PARAM_QUERY_WRITE   int sfUnitParamQueryWrite( int devId, int paramIndex, int paramValue );
+//Прочитать параметр из произвольного механизма
+import VPS_UNIT_PARAM_STATUS_READ   int sfUnitParamStatusRead( int devId, int paramIndex, int *paramValue );
 
 
 
@@ -464,6 +489,20 @@ import VPS_MAT_MAT3X3_ROW_MUL void sfMat3x3RowMul( SfVector3 *destVec, SfVector3
 //Ожидать пока не пройдет заданное количество фреймов
 void sfWaitFrame( int frame ) {
   sfWaitFrameOut( frame + svFrameCount );
+  }
+
+
+
+//Прочитать значение параметра из произвольного юнита
+int sfUnitParamRead( int devId, int paramIndex, int *paramValue ) {
+  //Сформировать запрос на чтение произвольного параметра из произвольного юнита
+  if( !sfUnitParamQueryRead( devId, paramIndex ) )
+    //Запрос не сформирован, вероятно юнит с таким идентификатором не найден ни на одном канале
+    return 0;
+  //Результат должен быть получен через два фрейма
+  sfWaitNextFrame();
+  sfWaitNextFrame();
+  return sfUnitParamStatusRead( devId, paramIndex, paramValue );
   }
 
 

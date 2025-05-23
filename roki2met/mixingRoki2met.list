@@ -13,6 +13,7 @@
 ;sfIsFrameOut <int(,int)>
 ;sfWaitNextFrame <void()>
 ;sfSlotIndex <int(,cstring)>
+;sfSoundIndex <int(,cstring)>
 ;sfAbs <int(,int)>
 ;sfIMin <int(,int,int)>
 ;sfIMax <int(,int,int)>
@@ -23,6 +24,8 @@
 ;sfStartSlot <void(,int)>
 ;sfBip <void(,int,int)>
 ;sfWriteFlash <void()>
+;sfSoundPlay <void(,int)>
+;sfSoundIsPlay <int()>
 ;sfFreeGroup <void(,int)>
 ;sfPoseGroup <void(,int,int,int)>
 ;sfPoseGroupDelay <void(,int,int,int,int)>
@@ -31,13 +34,17 @@
 ;sfPoseIdx <void(,int,int,int)>
 ;sfPoseGroupLin <void(,int,int,int)>
 ;sfStrainGroup <void(,int)>
-;sfPlaySamples <void(,int,*cblock,int)>
+;sfPlaySamples <void(,int,int,int,*cblock)>
+;sfPlayWSamples <void(,int,int,int,*cwblock)>
 ;sfAccumSetup1 <void(,*int)>
 ;sfAccumSetup2 <void(,*int,*int)>
 ;sfAccumSetup3 <void(,*int,*int,*int)>
 ;sfAccumSetup4 <void(,*int,*int,*int,*int)>
 ;sfAccumTrigger <void()>
 ;sfAccumReset <void()>
+;sfUnitParamQueryRead <int(,int,int)>
+;sfUnitParamQueryWrite <int(,int,int,int)>
+;sfUnitParamStatusRead <int(,int,int,*int)>
 ;sfMathAcos <int(,int,int)>
 ;sfMathSqrti <int(,int)>
 ;sfMathAngleOfTriangle <int(,int,int,int)>
@@ -105,28 +112,125 @@
 ;sfMat3x3MulCol <void(,*:SfVector3,*:SfMatrix3x3,*:SfVector3)>
 ;sfMat3x3RowMul <void(,*:SfVector3,*:SfVector3,*:SfMatrix3x3)>
 ;sfWaitFrame <void(,int)>
-[3:466] ;sfWaitFrameOut( frame + svFrameCount );
+[3:491] ;sfWaitFrameOut( frame + svFrameCount );
 VBC5_PUSH_CONST 17 | 0x80000000 //import func index sfWaitFrameOut
 VBC2_PUSH_LOCAL 2 //frame
 VBC3_PUSH_GLOBAL 1 //svFrameCount
 VBC1_ADD
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[2:10] ;
+[3:497] ;
+VBC1_RETURN
+;sfUnitParamRead <int(,int,int,*int)>
+[3:499] ;if( !sfUnitParamQueryRead( devId, paramIndex ) )
+VBC5_PUSH_CONST 66 | 0x80000000 //import func index sfUnitParamQueryRead
+VBC2_PUSH_LOCAL 4 //devId
+VBC2_PUSH_LOCAL 3 //paramIndex
+VBC1_CALL2
+VBC1_STACK_UP2//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB90 //if to false
+;return 0;
+VBC1_PUSH_0 
+VBC2_POP_RESULT 5
+VBC1_RETURN
+LAB90: //if else
+[3:503] ;sfWaitNextFrame();
+VBC1_WAIT
+[3:504] ;sfWaitNextFrame();
+VBC1_WAIT
+[3:505] ;return sfUnitParamStatusRead( devId, paramIndex, paramValue );
+VBC5_PUSH_CONST 68 | 0x80000000 //import func index sfUnitParamStatusRead
+VBC2_PUSH_LOCAL 4 //devId
+VBC2_PUSH_LOCAL 3 //paramIndex
+VBC2_PUSH_LOCAL 2 //paramValue
+VBC1_CALL3
+VBC1_STACK_UP3//remove call address and params
+VBC2_POP_RESULT 5
+VBC1_RETURN
+;paramScan <void()>
+[1:27] ;while(1) {
+LAB108: //while condition
+;
+[1:28] ;sfUnitParamRead( 16 , 201, &right_knee_ntc );
+VBC2_PUSH_CONST 70  //func address sfUnitParamRead
+VBC2_PUSH_CONST 16 
+VBC3_PUSH_CONST 201 
+VBC2_PUSH_CONST 7 //address
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:29] ;sfUnitParamRead( 17 , 201, &left_knee_ntc );
+VBC2_PUSH_CONST 70  //func address sfUnitParamRead
+VBC2_PUSH_CONST 17 
+VBC3_PUSH_CONST 201 
+VBC2_PUSH_CONST 8 //address
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:30] ;sfUnitParamRead( 26 , 201, &right_knee_bot_ntc );
+VBC2_PUSH_CONST 70  //func address sfUnitParamRead
+VBC2_PUSH_CONST 26 
+VBC3_PUSH_CONST 201 
+VBC2_PUSH_CONST 9 //address
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:31] ;sfUnitParamRead( 27 , 201, &left_knee_bot_ntc );
+VBC2_PUSH_CONST 70  //func address sfUnitParamRead
+VBC2_PUSH_CONST 27 
+VBC3_PUSH_CONST 201 
+VBC2_PUSH_CONST 10 //address
+VBC1_CALL3
+VBC1_STACK_UP4//remove result, call address and params
+[1:32] ;lowest_ntc = right_knee_ntc;
+VBC3_PUSH_CONST 1027 //lowest_ntc
+VBC3_PUSH_GLOBAL 7 //right_knee_ntc
+VBC1_POP
+[1:33] ;if ( lowest_ntc > left_knee_ntc) lowest_ntc = left_knee_ntc;
+VBC3_PUSH_GLOBAL 1027 //lowest_ntc
+VBC3_PUSH_GLOBAL 8 //left_knee_ntc
+VBC1_GREAT
+VBC4_FALSE_JUMP LAB177 //if to false
+;if ( lowest_ntc > left_knee_ntc) lowest_ntc = left_knee_ntc;
+VBC3_PUSH_CONST 1027 //lowest_ntc
+VBC3_PUSH_GLOBAL 8 //left_knee_ntc
+VBC1_POP
+LAB177: //if else
+[1:34] ;if ( lowest_ntc > right_knee_bot_ntc) lowest_ntc = right_knee_bot_ntc;
+VBC3_PUSH_GLOBAL 1027 //lowest_ntc
+VBC3_PUSH_GLOBAL 9 //right_knee_bot_ntc
+VBC1_GREAT
+VBC4_FALSE_JUMP LAB195 //if to false
+;if ( lowest_ntc > right_knee_bot_ntc) lowest_ntc = right_knee_bot_ntc;
+VBC3_PUSH_CONST 1027 //lowest_ntc
+VBC3_PUSH_GLOBAL 9 //right_knee_bot_ntc
+VBC1_POP
+LAB195: //if else
+[1:35] ;if ( lowest_ntc > left_knee_bot_ntc) lowest_ntc = left_knee_bot_ntc;
+VBC3_PUSH_GLOBAL 1027 //lowest_ntc
+VBC3_PUSH_GLOBAL 10 //left_knee_bot_ntc
+VBC1_GREAT
+VBC4_FALSE_JUMP LAB213 //if to false
+;if ( lowest_ntc > left_knee_bot_ntc) lowest_ntc = left_knee_bot_ntc;
+VBC3_PUSH_CONST 1027 //lowest_ntc
+VBC3_PUSH_GLOBAL 10 //left_knee_bot_ntc
+VBC1_POP
+LAB213: //if else
+VBC4_JUMP LAB108 //while forever loop
+LAB217: //while exit
+[1:40] ;
 VBC1_RETURN
 ;mixing <void()>
-[1:25] ;leftRightFactor = 100;
+[1:42] ;leftRightFactor = 100;
 VBC1_PUSH_2 //leftRightFactor
 VBC2_PUSH_CONST 100 
 VBC1_POP
-[1:26] ;frontBackFactor = 100;
+[1:43] ;frontBackFactor = 100;
 VBC2_PUSH_CONST 3 //frontBackFactor
 VBC2_PUSH_CONST 100 
 VBC1_POP
-[1:28] ;while(1) {
-LAB79: //while condition
+[1:45] ;while(1) {
+LAB227: //while condition
 ;
-[1:31] ;leftFootSideAddonMix = -svImuGyroZ * leftRightFactor >> 10;
+[1:48] ;leftFootSideAddonMix = -svImuGyroZ * leftRightFactor >> 10;
 VBC3_PUSH_CONST 2953 //leftFootSideAddonMix
 VBC3_PUSH_GLOBAL 2568 //svImuGyroZ
 VBC1_NEG
@@ -135,7 +239,7 @@ VBC1_MUL
 VBC2_PUSH_CONST 10 
 VBC1_RSHIFT
 VBC1_POP
-[1:32] ;rightFootSideAddonMix = svImuGyroZ * leftRightFactor >> 10;
+[1:49] ;rightFootSideAddonMix = svImuGyroZ * leftRightFactor >> 10;
 VBC3_PUSH_CONST 2937 //rightFootSideAddonMix
 VBC3_PUSH_GLOBAL 2568 //svImuGyroZ
 VBC3_PUSH_GLOBAL 2 //leftRightFactor
@@ -143,7 +247,7 @@ VBC1_MUL
 VBC2_PUSH_CONST 10 
 VBC1_RSHIFT
 VBC1_POP
-[1:35] ;rightFootFrontAddonMix = leftFootFrontAddonMix = -svImuGyroX * frontBackFactor >> 10;
+[1:52] ;rightFootFrontAddonMix = leftFootFrontAddonMix = -svImuGyroX * frontBackFactor >> 10;
 VBC3_PUSH_CONST 2905 //rightFootFrontAddonMix
 VBC3_PUSH_CONST 2921 //leftFootFrontAddonMix
 VBC3_PUSH_GLOBAL 2566 //svImuGyroX
@@ -154,7 +258,7 @@ VBC2_PUSH_CONST 10
 VBC1_RSHIFT
 VBC1_STORE
 VBC1_POP
-[1:39] ;quart = svImuQuaterX * svImuQuaterX + svImuQuaterY * svImuQuaterY + svImuQuaterZ * svImuQuaterZ + svImuQuaterW * svImuQuaterW;
+[1:56] ;quart = svImuQuaterX * svImuQuaterX + svImuQuaterY * svImuQuaterY + svImuQuaterZ * svImuQuaterZ + svImuQuaterW * svImuQuaterW;
 VBC2_PUSH_CONST 4 //quart
 VBC3_PUSH_GLOBAL 2572 //svImuQuaterX
 VBC3_PUSH_GLOBAL 2572 //svImuQuaterX
@@ -172,7 +276,7 @@ VBC3_PUSH_GLOBAL 2575 //svImuQuaterW
 VBC1_MUL
 VBC1_ADD
 VBC1_POP
-[1:41] ;sum = sfFMathSqrt( quart );
+[1:58] ;sum = sfFMathSqrt( quart );
 VBC2_PUSH_CONST 6 //sum
 VBC5_PUSH_CONST 368 | 0x80000000 //import func index sfFMathSqrt
 //alloc addon amount for result
@@ -181,7 +285,7 @@ VBC1_I_TO_F
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC1_POP
-[1:43] ;if( sfAbs(sum - 16384.0) > 164 )
+[1:60] ;if( sfAbs(sum - 16384.0) > 164 )
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 6 //sum
 VBC5_PUSH_CONST 1182793728 
@@ -191,23 +295,29 @@ VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC3_PUSH_CONST 164 
 VBC1_GREAT
-VBC4_FALSE_JUMP LAB203 //if to false
+VBC4_FALSE_JUMP LAB351 //if to false
 ;errCount++;
 VBC2_PUSH_CONST 5 //errCount
 VBC1_INC
-LAB203: //if else
-[1:48] ;sfWaitNextFrame();
+LAB351: //if else
+[1:65] ;sfWaitNextFrame();
 VBC1_WAIT
-VBC4_JUMP LAB79 //while forever loop
-LAB208: //while exit
-[1:52] ;
+VBC4_JUMP LAB227 //while forever loop
+LAB356: //while exit
+[1:69] ;
 VBC1_RETURN
 ;main <void()>
-[1:53] ;mixing();
-VBC2_PUSH_CONST 70  //func address mixing
+[1:70] ;sfCreateTask( paramScan, 20 );
+VBC5_PUSH_CONST 2 | 0x80000000 //import func index sfCreateTask
+VBC2_PUSH_CONST 108  //func address paramScan
+VBC2_PUSH_CONST 20 
+VBC1_CALL2
+VBC1_STACK_UP3//remove result, call address and params
+[1:71] ;mixing();
+VBC3_PUSH_CONST 218  //func address mixing
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-[1:54] ;
+[1:72] ;
 VBC1_RETURN
 //Init table
 //Variables
@@ -469,8 +579,16 @@ leftClawPwm : 3076
 leftClawVelo : 3077
 leftClawFlags : 3079
 leftClawAddonMix : 3081
+jump_mode : 1024
+robot_Serial_Number : 1025
+splits_Mode : 1026
+lowest_ntc : 1027
 leftRightFactor : 2
 frontBackFactor : 3
 quart : 4
 errCount : 5
 sum F: 6
+right_knee_ntc : 7
+left_knee_ntc : 8
+right_knee_bot_ntc : 9
+left_knee_bot_ntc : 10

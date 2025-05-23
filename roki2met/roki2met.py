@@ -306,6 +306,10 @@ class roki2met :
         quart = 4
         errCount = 5
         sum = 6
+        right_knee_ntc = 7
+        left_knee_ntc = 8
+        right_knee_bot_ntc = 9
+        left_knee_bot_ntc = 10
 
 
     class roki2Walk_Remote :

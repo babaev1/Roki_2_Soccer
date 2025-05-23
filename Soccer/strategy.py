@@ -2024,6 +2024,12 @@ class Player():
                     #self.glob.vision.camera_thread.start()
 
     def marathon_main_cycle(self):
+        ntc1 = roki2met.roki2met.mixingRoki2met.right_knee_ntc
+        ntc2 = roki2met.roki2met.mixingRoki2met.left_knee_ntc
+        ntc3 = roki2met.roki2met.mixingRoki2met.right_knee_bot_ntc
+        ntc4 = roki2met.roki2met.mixingRoki2met.left_knee_bot_ntc
+        intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
+        #ok, frameCount = intercom.memIGet(var.frameCount)
         self.motion.with_Vision = True
         number_Of_Cycles = 600
         self.motion.amplitude = 32
@@ -2038,6 +2044,13 @@ class Player():
             self.motion.walk_Initial_Pose()
             for cycle in range(number_Of_Cycles):
                 if self.motion.falling_Flag != 0: break
+                ok1, ntc1_value = intercom.memIGet(ntc1)
+                ok2, ntc2_value = intercom.memIGet(ntc2)
+                ok3, ntc3_value = intercom.memIGet(ntc3)
+                ok4, ntc4_value = intercom.memIGet(ntc4)
+                if ok1 and ok2 and ok3 and ok4:
+                    ntc = min(ntc1_value, ntc2_value, ntc3_value, ntc4_value)
+                    if ntc < 1100: break                                    # risk temperature in knee servos
                 stepLength1 = stepLength
                 if cycle ==0 : stepLength1 = stepLength/3
                 if cycle ==1 : stepLength1 = stepLength/3 * 2
@@ -2088,7 +2101,9 @@ class Player():
                 self.motion.falling_Flag = 0
             else:
                 if self.glob.camera_down_Flag == True: self.glob.camera_reset()
-                else:  time.sleep(90)                           # cool down knees
+                else:  
+                    os.system("espeak -ven-m1 -a200 'I need cooling of knees'")
+                    time.sleep(90)                           # cool down knees
 
 
     def normalize_rotation(self, yaw, limit= 0.3):

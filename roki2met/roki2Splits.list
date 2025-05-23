@@ -13,6 +13,7 @@
 ;sfIsFrameOut <int(,int)>
 ;sfWaitNextFrame <void()>
 ;sfSlotIndex <int(,cstring)>
+;sfSoundIndex <int(,cstring)>
 ;sfAbs <int(,int)>
 ;sfIMin <int(,int,int)>
 ;sfIMax <int(,int,int)>
@@ -23,6 +24,8 @@
 ;sfStartSlot <void(,int)>
 ;sfBip <void(,int,int)>
 ;sfWriteFlash <void()>
+;sfSoundPlay <void(,int)>
+;sfSoundIsPlay <int()>
 ;sfFreeGroup <void(,int)>
 ;sfPoseGroup <void(,int,int,int)>
 ;sfPoseGroupDelay <void(,int,int,int,int)>
@@ -31,13 +34,17 @@
 ;sfPoseIdx <void(,int,int,int)>
 ;sfPoseGroupLin <void(,int,int,int)>
 ;sfStrainGroup <void(,int)>
-;sfPlaySamples <void(,int,*cblock,int)>
+;sfPlaySamples <void(,int,int,int,*cblock)>
+;sfPlayWSamples <void(,int,int,int,*cwblock)>
 ;sfAccumSetup1 <void(,*int)>
 ;sfAccumSetup2 <void(,*int,*int)>
 ;sfAccumSetup3 <void(,*int,*int,*int)>
 ;sfAccumSetup4 <void(,*int,*int,*int,*int)>
 ;sfAccumTrigger <void()>
 ;sfAccumReset <void()>
+;sfUnitParamQueryRead <int(,int,int)>
+;sfUnitParamQueryWrite <int(,int,int,int)>
+;sfUnitParamStatusRead <int(,int,int,*int)>
 ;sfMathAcos <int(,int,int)>
 ;sfMathSqrti <int(,int)>
 ;sfMathAngleOfTriangle <int(,int,int,int)>
@@ -105,14 +112,41 @@
 ;sfMat3x3MulCol <void(,*:SfVector3,*:SfMatrix3x3,*:SfVector3)>
 ;sfMat3x3RowMul <void(,*:SfVector3,*:SfVector3,*:SfMatrix3x3)>
 ;sfWaitFrame <void(,int)>
-[3:466] ;sfWaitFrameOut( frame + svFrameCount );
+[3:491] ;sfWaitFrameOut( frame + svFrameCount );
 VBC5_PUSH_CONST 17 | 0x80000000 //import func index sfWaitFrameOut
 VBC2_PUSH_LOCAL 2 //frame
 VBC3_PUSH_GLOBAL 1 //svFrameCount
 VBC1_ADD
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[2:10] ;
+[3:497] ;
+VBC1_RETURN
+;sfUnitParamRead <int(,int,int,*int)>
+[3:499] ;if( !sfUnitParamQueryRead( devId, paramIndex ) )
+VBC5_PUSH_CONST 66 | 0x80000000 //import func index sfUnitParamQueryRead
+VBC2_PUSH_LOCAL 4 //devId
+VBC2_PUSH_LOCAL 3 //paramIndex
+VBC1_CALL2
+VBC1_STACK_UP2//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB90 //if to false
+;return 0;
+VBC1_PUSH_0 
+VBC2_POP_RESULT 5
+VBC1_RETURN
+LAB90: //if else
+[3:503] ;sfWaitNextFrame();
+VBC1_WAIT
+[3:504] ;sfWaitNextFrame();
+VBC1_WAIT
+[3:505] ;return sfUnitParamStatusRead( devId, paramIndex, paramValue );
+VBC5_PUSH_CONST 68 | 0x80000000 //import func index sfUnitParamStatusRead
+VBC2_PUSH_LOCAL 4 //devId
+VBC2_PUSH_LOCAL 3 //paramIndex
+VBC2_PUSH_LOCAL 2 //paramValue
+VBC1_CALL3
+VBC1_STACK_UP3//remove call address and params
+VBC2_POP_RESULT 5
 VBC1_RETURN
 ;pack_hands <void()>
 [1:28] ;frameCount = 100;
@@ -512,15 +546,15 @@ VBC1_STACK_UP2//remove result, call address and params
 VBC1_RETURN
 ;small_splits <void()>
 [1:124] ;pose1();
-VBC3_PUSH_CONST 170  //func address pose1
+VBC3_PUSH_CONST 208  //func address pose1
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:125] ;pose2();
-VBC3_PUSH_CONST 277  //func address pose2
+VBC3_PUSH_CONST 315  //func address pose2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:126] ;pose3();
-VBC3_PUSH_CONST 333  //func address pose3
+VBC3_PUSH_CONST 371  //func address pose3
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:127] ;sfWaitFrame(100);  
@@ -529,42 +563,42 @@ VBC2_PUSH_CONST 100
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:128] ;pose2();
-VBC3_PUSH_CONST 277  //func address pose2
+VBC3_PUSH_CONST 315  //func address pose2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:129] ;pose4();
-VBC3_PUSH_CONST 444  //func address pose4
+VBC3_PUSH_CONST 482  //func address pose4
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:130] ;pack_hands();
-VBC2_PUSH_CONST 70  //func address pack_hands
+VBC2_PUSH_CONST 108  //func address pack_hands
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:133] ;
 VBC1_RETURN
 ;big_splits <void()>
 [1:134] ;pose1();
-VBC3_PUSH_CONST 170  //func address pose1
+VBC3_PUSH_CONST 208  //func address pose1
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:135] ;pose2();
-VBC3_PUSH_CONST 277  //func address pose2
+VBC3_PUSH_CONST 315  //func address pose2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:136] ;pose3();
-VBC3_PUSH_CONST 333  //func address pose3
+VBC3_PUSH_CONST 371  //func address pose3
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:137] ;pose2();
-VBC3_PUSH_CONST 277  //func address pose2
+VBC3_PUSH_CONST 315  //func address pose2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:138] ;pose5();
-VBC3_PUSH_CONST 485  //func address pose5
+VBC3_PUSH_CONST 523  //func address pose5
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:139] ;pose6();
-VBC3_PUSH_CONST 558  //func address pose6
+VBC3_PUSH_CONST 596  //func address pose6
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:140] ;sfWaitFrame(400);
@@ -573,39 +607,39 @@ VBC3_PUSH_CONST 400
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:141] ;pose7();
-VBC3_PUSH_CONST 616  //func address pose7
+VBC3_PUSH_CONST 654  //func address pose7
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:142] ;pose8();
-VBC3_PUSH_CONST 697  //func address pose8
+VBC3_PUSH_CONST 735  //func address pose8
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:143] ;pose2();
-VBC3_PUSH_CONST 277  //func address pose2
+VBC3_PUSH_CONST 315  //func address pose2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:144] ;pose9();
-VBC3_PUSH_CONST 742  //func address pose9
+VBC3_PUSH_CONST 780  //func address pose9
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:145] ;pose2();
-VBC3_PUSH_CONST 277  //func address pose2
+VBC3_PUSH_CONST 315  //func address pose2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:146] ;pose2();
-VBC3_PUSH_CONST 277  //func address pose2
+VBC3_PUSH_CONST 315  //func address pose2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:147] ;pose2_2();
-VBC3_PUSH_CONST 306  //func address pose2_2
+VBC3_PUSH_CONST 344  //func address pose2_2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:148] ;pack_hands_only();
-VBC3_PUSH_CONST 128  //func address pack_hands_only
+VBC3_PUSH_CONST 166  //func address pack_hands_only
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:149] ;pack_hands();
-VBC2_PUSH_CONST 70  //func address pack_hands
+VBC2_PUSH_CONST 108  //func address pack_hands
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:152] ;
@@ -852,7 +886,7 @@ VBC1_STACK_UP2//remove result, call address and params
 VBC1_RETURN
 ;falling_right <void()>
 [1:207] ;pose10r();
-VBC3_PUSH_CONST 901  //func address pose10r
+VBC3_PUSH_CONST 939  //func address pose10r
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:208] ;sfWaitFrame(400);
@@ -861,11 +895,11 @@ VBC3_PUSH_CONST 400
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:209] ;pose11r();
-VBC3_PUSH_CONST 1088  //func address pose11r
+VBC3_PUSH_CONST 1126  //func address pose11r
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:210] ;pose12r();
-VBC3_PUSH_CONST 1214  //func address pose12r
+VBC3_PUSH_CONST 1252  //func address pose12r
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:211] ;sfStartSlot( sfSlotIndex("standUpRemote.cpp") );
@@ -877,7 +911,7 @@ VBC1_STACK_UP2//remove result, call address and params
 VBC1_RETURN
 ;falling_left <void()>
 [1:216] ;pose10l();
-VBC3_PUSH_CONST 994  //func address pose10l
+VBC3_PUSH_CONST 1032  //func address pose10l
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:217] ;sfWaitFrame(400);
@@ -886,11 +920,11 @@ VBC3_PUSH_CONST 400
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:218] ;pose11l();
-VBC3_PUSH_CONST 1151  //func address pose11l
+VBC3_PUSH_CONST 1189  //func address pose11l
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:219] ;pose12l();
-VBC3_PUSH_CONST 1285  //func address pose12l
+VBC3_PUSH_CONST 1323  //func address pose12l
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:220] ;sfStartSlot( sfSlotIndex("standUpRemote.cpp") );
@@ -905,42 +939,42 @@ VBC1_RETURN
 VBC3_PUSH_GLOBAL 1026 //splits_Mode
 VBC1_PUSH_2 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1435 //if to false
+VBC4_FALSE_JUMP LAB1473 //if to false
 ;if(splits_Mode == 2 ) big_splits();
-VBC3_PUSH_CONST 819  //func address big_splits
+VBC3_PUSH_CONST 857  //func address big_splits
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB1435: //if else
+LAB1473: //if else
 [1:226] ;if (splits_Mode == 1) small_splits();
 VBC3_PUSH_GLOBAL 1026 //splits_Mode
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1449 //if to false
+VBC4_FALSE_JUMP LAB1487 //if to false
 ;if (splits_Mode == 1) small_splits();
-VBC3_PUSH_CONST 783  //func address small_splits
+VBC3_PUSH_CONST 821  //func address small_splits
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB1449: //if else
+LAB1487: //if else
 [1:227] ;if (splits_Mode == 3) falling_right();
 VBC3_PUSH_GLOBAL 1026 //splits_Mode
 VBC2_PUSH_CONST 3 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1464 //if to false
+VBC4_FALSE_JUMP LAB1502 //if to false
 ;if (splits_Mode == 3) falling_right();
-VBC3_PUSH_CONST 1357  //func address falling_right
+VBC3_PUSH_CONST 1395  //func address falling_right
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB1464: //if else
+LAB1502: //if else
 [1:228] ;if (splits_Mode == 4) falling_left();
 VBC3_PUSH_GLOBAL 1026 //splits_Mode
 VBC2_PUSH_CONST 4 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1479 //if to false
+VBC4_FALSE_JUMP LAB1517 //if to false
 ;if (splits_Mode == 4) falling_left();
-VBC3_PUSH_CONST 1389  //func address falling_left
+VBC3_PUSH_CONST 1427  //func address falling_left
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB1479: //if else
+LAB1517: //if else
 [1:229] ;splits_Mode = 0;
 VBC3_PUSH_CONST 1026 //splits_Mode
 VBC1_PUSH_0 
@@ -1215,4 +1249,5 @@ leftClawAddonMix : 3081
 jump_mode : 1024
 robot_Serial_Number : 1025
 splits_Mode : 1026
+lowest_ntc : 1027
 frameCount : 2

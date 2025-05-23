@@ -13,6 +13,7 @@
 ;sfIsFrameOut <int(,int)>
 ;sfWaitNextFrame <void()>
 ;sfSlotIndex <int(,cstring)>
+;sfSoundIndex <int(,cstring)>
 ;sfAbs <int(,int)>
 ;sfIMin <int(,int,int)>
 ;sfIMax <int(,int,int)>
@@ -23,6 +24,8 @@
 ;sfStartSlot <void(,int)>
 ;sfBip <void(,int,int)>
 ;sfWriteFlash <void()>
+;sfSoundPlay <void(,int)>
+;sfSoundIsPlay <int()>
 ;sfFreeGroup <void(,int)>
 ;sfPoseGroup <void(,int,int,int)>
 ;sfPoseGroupDelay <void(,int,int,int,int)>
@@ -31,13 +34,17 @@
 ;sfPoseIdx <void(,int,int,int)>
 ;sfPoseGroupLin <void(,int,int,int)>
 ;sfStrainGroup <void(,int)>
-;sfPlaySamples <void(,int,*cblock,int)>
+;sfPlaySamples <void(,int,int,int,*cblock)>
+;sfPlayWSamples <void(,int,int,int,*cwblock)>
 ;sfAccumSetup1 <void(,*int)>
 ;sfAccumSetup2 <void(,*int,*int)>
 ;sfAccumSetup3 <void(,*int,*int,*int)>
 ;sfAccumSetup4 <void(,*int,*int,*int,*int)>
 ;sfAccumTrigger <void()>
 ;sfAccumReset <void()>
+;sfUnitParamQueryRead <int(,int,int)>
+;sfUnitParamQueryWrite <int(,int,int,int)>
+;sfUnitParamStatusRead <int(,int,int,*int)>
 ;sfMathAcos <int(,int,int)>
 ;sfMathSqrti <int(,int)>
 ;sfMathAngleOfTriangle <int(,int,int,int)>
@@ -105,14 +112,41 @@
 ;sfMat3x3MulCol <void(,*:SfVector3,*:SfMatrix3x3,*:SfVector3)>
 ;sfMat3x3RowMul <void(,*:SfVector3,*:SfVector3,*:SfMatrix3x3)>
 ;sfWaitFrame <void(,int)>
-[3:466] ;sfWaitFrameOut( frame + svFrameCount );
+[3:491] ;sfWaitFrameOut( frame + svFrameCount );
 VBC5_PUSH_CONST 17 | 0x80000000 //import func index sfWaitFrameOut
 VBC2_PUSH_LOCAL 2 //frame
 VBC3_PUSH_GLOBAL 1 //svFrameCount
 VBC1_ADD
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[2:10] ;
+[3:497] ;
+VBC1_RETURN
+;sfUnitParamRead <int(,int,int,*int)>
+[3:499] ;if( !sfUnitParamQueryRead( devId, paramIndex ) )
+VBC5_PUSH_CONST 66 | 0x80000000 //import func index sfUnitParamQueryRead
+VBC2_PUSH_LOCAL 4 //devId
+VBC2_PUSH_LOCAL 3 //paramIndex
+VBC1_CALL2
+VBC1_STACK_UP2//remove call address and params
+VBC1_LNOT
+VBC4_FALSE_JUMP LAB90 //if to false
+;return 0;
+VBC1_PUSH_0 
+VBC2_POP_RESULT 5
+VBC1_RETURN
+LAB90: //if else
+[3:503] ;sfWaitNextFrame();
+VBC1_WAIT
+[3:504] ;sfWaitNextFrame();
+VBC1_WAIT
+[3:505] ;return sfUnitParamStatusRead( devId, paramIndex, paramValue );
+VBC5_PUSH_CONST 68 | 0x80000000 //import func index sfUnitParamStatusRead
+VBC2_PUSH_LOCAL 4 //devId
+VBC2_PUSH_LOCAL 3 //paramIndex
+VBC2_PUSH_LOCAL 2 //paramValue
+VBC1_CALL3
+VBC1_STACK_UP3//remove call address and params
+VBC2_POP_RESULT 5
 VBC1_RETURN
 ;quaternion_to_euler_angle <void()>
 VBC2_STACK -9//local vars 9
@@ -190,24 +224,24 @@ VBC2_PUSH_B_OFFSET -7 //t2
 VBC2_PUSH_LOCAL -7 //t2
 VBC5_PUSH_CONST 1065353216 
 VBC1_GREAT_FF
-VBC4_FALSE_JUMP LAB209
+VBC4_FALSE_JUMP LAB247
 VBC5_PUSH_CONST 1065353216 
-VBC4_JUMP LAB211
-LAB209:
+VBC4_JUMP LAB249
+LAB247:
 VBC2_PUSH_LOCAL -7 //t2
-LAB211:
+LAB249:
 VBC1_POP
 [1:113] ;t2 = (t2 < -1.0 ? -1.0 : t2);
 VBC2_PUSH_B_OFFSET -7 //t2
 VBC2_PUSH_LOCAL -7 //t2
 VBC5_PUSH_CONST -1082130432 // -
 VBC1_LESS_FF
-VBC4_FALSE_JUMP LAB235
+VBC4_FALSE_JUMP LAB273
 VBC5_PUSH_CONST -1082130432 // -
-VBC4_JUMP LAB237
-LAB235:
+VBC4_JUMP LAB275
+LAB273:
 VBC2_PUSH_LOCAL -7 //t2
-LAB237:
+LAB275:
 VBC1_POP
 [1:114] ;
 [1:114] ;float t3 = +2.0 * (w * z + x * y);
@@ -267,7 +301,7 @@ VBC1_POP
 VBC1_RETURN
 ;get_yaw <float()>
 [1:122] ;quaternion_to_euler_angle();
-VBC2_PUSH_CONST 70  //func address quaternion_to_euler_angle
+VBC2_PUSH_CONST 108  //func address quaternion_to_euler_angle
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:123] ;return yaw;
@@ -501,7 +535,7 @@ VBC5_PUSH_CONST 1008981770
 VBC1_POP
 [1:200] ;if( slowWalk ) {
 VBC3_PUSH_GLOBAL 2 //slowWalk
-VBC4_FALSE_JUMP LAB744 //if to false
+VBC4_FALSE_JUMP LAB782 //if to false
 ;
 [1:201] ;fr1 = 50; 
 VBC2_PUSH_CONST 40 //fr1
@@ -515,8 +549,8 @@ VBC1_POP
 VBC2_PUSH_CONST 38 //amplitude
 VBC2_PUSH_CONST 110 
 VBC1_POP_CF
-VBC4_JUMP LAB759 //if to exit
-LAB744: //if else
+VBC4_JUMP LAB797 //if to exit
+LAB782: //if else
 ;
 [1:206] ;fr1 = 8; 
 VBC2_PUSH_CONST 40 //fr1
@@ -530,7 +564,7 @@ VBC1_POP
 VBC2_PUSH_CONST 38 //amplitude
 VBC2_PUSH_CONST 32 
 VBC1_POP_CF
-LAB759: //if exit
+LAB797: //if exit
 [1:210] ;stepYtr = amplitude / 2.0 / selfInitPoses;
 VBC2_PUSH_CONST 52 //stepYtr
 VBC3_PUSH_GLOBAL 38 //amplitude
@@ -555,7 +589,7 @@ VBC1_POP
 VBC3_PUSH_GLOBAL 40 //fr1
 VBC1_PUSH_0 
 VBC1_NOT_EQU
-VBC4_FALSE_JUMP LAB820 //if to false
+VBC4_FALSE_JUMP LAB858 //if to false
 ;alpha01 = alpha01 * 2 / fr1;
 VBC2_PUSH_CONST 39 //alpha01
 VBC3_PUSH_GLOBAL 39 //alpha01
@@ -564,7 +598,7 @@ VBC1_MUL_FI
 VBC3_PUSH_GLOBAL 40 //fr1
 VBC1_DIV_FI
 VBC1_POP
-LAB820: //if else
+LAB858: //if else
 [1:224] ;fps = 4;
 VBC2_PUSH_CONST 55 //fps
 VBC2_PUSH_CONST 4 
@@ -589,13 +623,13 @@ VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
 [1:238] ;if( svIkOutPresent ) {
 VBC3_PUSH_GLOBAL 3297 //svIkOutPresent
-VBC4_FALSE_JUMP LAB1087 //if to false
+VBC4_FALSE_JUMP LAB1125 //if to false
 ;
 [1:240] ;if (selfFirstLegIsRightLeg == 1){
 VBC3_PUSH_GLOBAL 12 //selfFirstLegIsRightLeg
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB983 //if to false
+VBC4_FALSE_JUMP LAB1021 //if to false
 ;
 [1:241] ;sfPoseGroupLin( 1024 , -svIkEncA5, fps );
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -644,8 +678,8 @@ VBC1_NEG
 VBC3_PUSH_GLOBAL 55 //fps
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-VBC4_JUMP LAB1087 //if to exit
-LAB983: //if else
+VBC4_JUMP LAB1125 //if to exit
+LAB1021: //if else
 ;
 [1:249] ;sfPoseGroupLin( 2048 , svIkEncA5, fps );
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -693,8 +727,8 @@ VBC1_NEG
 VBC3_PUSH_GLOBAL 55 //fps
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB1087: //if exit
-LAB1087: //if else
+LAB1125: //if exit
+LAB1125: //if else
 [1:260] ;sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
 VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
 VBC3_PUSH_GLOBAL 29 //xtl
@@ -710,13 +744,13 @@ VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
 [1:261] ;if( svIkOutPresent ) {
 VBC3_PUSH_GLOBAL 3297 //svIkOutPresent
-VBC4_FALSE_JUMP LAB1345 //if to false
+VBC4_FALSE_JUMP LAB1383 //if to false
 ;
 [1:263] ;if (selfFirstLegIsRightLeg == 1){
 VBC3_PUSH_GLOBAL 12 //selfFirstLegIsRightLeg
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1242 //if to false
+VBC4_FALSE_JUMP LAB1280 //if to false
 ;
 [1:264] ;sfPoseGroupLin( 2048 , -svIkEncA5, fps );
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -765,8 +799,8 @@ VBC1_NEG
 VBC3_PUSH_GLOBAL 55 //fps
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-VBC4_JUMP LAB1345 //if to exit
-LAB1242: //if else
+VBC4_JUMP LAB1383 //if to exit
+LAB1280: //if else
 ;
 [1:272] ;sfPoseGroupLin( 1024 , svIkEncA5, fps );
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -814,8 +848,8 @@ VBC1_NEG
 VBC3_PUSH_GLOBAL 55 //fps
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB1345: //if exit
-LAB1345: //if else
+LAB1383: //if exit
+LAB1383: //if else
 [1:282] ;sfWaitFrame(walking_frame);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 56 //walking_frame
@@ -830,7 +864,7 @@ VBC1_RETURN
 VBC3_PUSH_GLOBAL 12 //selfFirstLegIsRightLeg
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1397 //if to false
+VBC4_FALSE_JUMP LAB1435 //if to false
 ;if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
 VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
 VBC3_PUSH_GLOBAL 22 //xtr
@@ -842,8 +876,8 @@ VBC3_PUSH_GLOBAL 27 //zr
 VBC3_PUSH_GLOBAL 28 //wr
 VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
-VBC4_JUMP LAB1428 //if to exit
-LAB1397: //if else
+VBC4_JUMP LAB1466 //if to exit
+LAB1435: //if else
 ;else sfIkAngle(xtl, -ytl, ztl, xl, -yl, zl, -wl);
 VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
 VBC3_PUSH_GLOBAL 29 //xtl
@@ -858,10 +892,10 @@ VBC3_PUSH_GLOBAL 35 //wl
 VBC1_NEG_F
 VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
-LAB1428: //if exit
+LAB1466: //if exit
 [1:290] ;if (svIkOutPresent) {
 VBC3_PUSH_GLOBAL 3297 //svIkOutPresent
-VBC4_FALSE_JUMP LAB1562 //if to false
+VBC4_FALSE_JUMP LAB1600 //if to false
 ;
 [1:292] ;sfPoseGroupLin(1024 , -svIkEncA5, fps);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -922,12 +956,12 @@ VBC1_NEG
 VBC3_PUSH_GLOBAL 55 //fps
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB1562: //if else
+LAB1600: //if else
 [1:301] ;if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
 VBC3_PUSH_GLOBAL 12 //selfFirstLegIsRightLeg
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1605 //if to false
+VBC4_FALSE_JUMP LAB1643 //if to false
 ;if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
 VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
 VBC3_PUSH_GLOBAL 29 //xtl
@@ -941,8 +975,8 @@ VBC3_PUSH_GLOBAL 34 //zl
 VBC3_PUSH_GLOBAL 35 //wl
 VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
-VBC4_JUMP LAB1634 //if to exit
-LAB1605: //if else
+VBC4_JUMP LAB1672 //if to exit
+LAB1643: //if else
 ;else sfIkAngle(xtr, ytr, ztr, xr, yr, zr, -wr);
 VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
 VBC3_PUSH_GLOBAL 22 //xtr
@@ -955,10 +989,10 @@ VBC3_PUSH_GLOBAL 28 //wr
 VBC1_NEG_F
 VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
-LAB1634: //if exit
+LAB1672: //if exit
 [1:303] ;if (svIkOutPresent) {
 VBC3_PUSH_GLOBAL 3297 //svIkOutPresent
-VBC4_FALSE_JUMP LAB1769 //if to false
+VBC4_FALSE_JUMP LAB1807 //if to false
 ;
 [1:305] ;sfPoseGroupLin(2048 , -svIkEncA5, fps);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -1019,7 +1053,7 @@ VBC1_NEG
 VBC3_PUSH_GLOBAL 55 //fps
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB1769: //if else
+LAB1807: //if else
 [1:314] ;sfWaitFrame(walking_frame);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC3_PUSH_GLOBAL 56 //walking_frame
@@ -1043,13 +1077,13 @@ VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
 [1:328] ;if( svIkOutPresent ) {
 VBC3_PUSH_GLOBAL 3297 //svIkOutPresent
-VBC4_FALSE_JUMP LAB2098 //if to false
+VBC4_FALSE_JUMP LAB2136 //if to false
 ;
 [1:330] ;if (selfFirstLegIsRightLeg == 1){
 VBC3_PUSH_GLOBAL 12 //selfFirstLegIsRightLeg
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB1963 //if to false
+VBC4_FALSE_JUMP LAB2001 //if to false
 ;
 [1:331] ;sfPoseGroupLin( 1024 , -svIkEncA5, frames );
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -1117,8 +1151,8 @@ VBC3_PUSH_CONST 5145
 VBC2_PUSH_LOCAL 2 //frames
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-VBC4_JUMP LAB2098 //if to exit
-LAB1963: //if else
+VBC4_JUMP LAB2136 //if to exit
+LAB2001: //if else
 ;
 [1:341] ;sfPoseGroupLin( 2048 , svIkEncA5, frames );
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -1185,8 +1219,8 @@ VBC3_PUSH_CONST 5145
 VBC2_PUSH_LOCAL 2 //frames
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB2098: //if exit
-LAB2098: //if else
+LAB2136: //if exit
+LAB2136: //if else
 [1:354] ;sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
 VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
 VBC3_PUSH_GLOBAL 29 //xtl
@@ -1202,13 +1236,13 @@ VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
 [1:355] ;if( svIkOutPresent ) {
 VBC3_PUSH_GLOBAL 3297 //svIkOutPresent
-VBC4_FALSE_JUMP LAB2418 //if to false
+VBC4_FALSE_JUMP LAB2456 //if to false
 ;
 [1:357] ;if (selfFirstLegIsRightLeg == 1){
 VBC3_PUSH_GLOBAL 12 //selfFirstLegIsRightLeg
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB2284 //if to false
+VBC4_FALSE_JUMP LAB2322 //if to false
 ;
 [1:358] ;sfPoseGroupLin( 2048 , -svIkEncA5, frames );
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -1276,8 +1310,8 @@ VBC3_PUSH_CONST 5145
 VBC2_PUSH_LOCAL 2 //frames
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-VBC4_JUMP LAB2418 //if to exit
-LAB2284: //if else
+VBC4_JUMP LAB2456 //if to exit
+LAB2322: //if else
 ;
 [1:368] ;sfPoseGroupLin( 1024 , svIkEncA5, frames );
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -1344,8 +1378,8 @@ VBC3_PUSH_CONST 5145
 VBC2_PUSH_LOCAL 2 //frames
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB2418: //if exit
-LAB2418: //if else
+LAB2456: //if exit
+LAB2456: //if else
 [1:379] ;sfWaitFrame( frames );
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC2_PUSH_LOCAL 2 //frames
@@ -1358,7 +1392,7 @@ VBC1_RETURN
 VBC3_PUSH_GLOBAL 12 //selfFirstLegIsRightLeg
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB2466 //if to false
+VBC4_FALSE_JUMP LAB2504 //if to false
 ;if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
 VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
 VBC3_PUSH_GLOBAL 22 //xtr
@@ -1370,8 +1404,8 @@ VBC3_PUSH_GLOBAL 27 //zr
 VBC3_PUSH_GLOBAL 28 //wr
 VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
-VBC4_JUMP LAB2497 //if to exit
-LAB2466: //if else
+VBC4_JUMP LAB2535 //if to exit
+LAB2504: //if else
 ;else sfIkAngle(xtl, -ytl, ztl, xl, -yl, zl, -wl);
 VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
 VBC3_PUSH_GLOBAL 29 //xtl
@@ -1386,10 +1420,10 @@ VBC3_PUSH_GLOBAL 35 //wl
 VBC1_NEG_F
 VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
-LAB2497: //if exit
+LAB2535: //if exit
 [1:387] ;if (svIkOutPresent) {
 VBC3_PUSH_GLOBAL 3297 //svIkOutPresent
-VBC4_FALSE_JUMP LAB2639 //if to false
+VBC4_FALSE_JUMP LAB2677 //if to false
 ;
 [1:389] ;sfPoseGroupLin(1024 , -svIkEncA5, frames);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -1457,12 +1491,12 @@ VBC3_PUSH_CONST 5145
 VBC2_PUSH_LOCAL 2 //frames
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB2639: //if else
+LAB2677: //if else
 [1:399] ;if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
 VBC3_PUSH_GLOBAL 12 //selfFirstLegIsRightLeg
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB2682 //if to false
+VBC4_FALSE_JUMP LAB2720 //if to false
 ;if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
 VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
 VBC3_PUSH_GLOBAL 29 //xtl
@@ -1476,8 +1510,8 @@ VBC3_PUSH_GLOBAL 34 //zl
 VBC3_PUSH_GLOBAL 35 //wl
 VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
-VBC4_JUMP LAB2711 //if to exit
-LAB2682: //if else
+VBC4_JUMP LAB2749 //if to exit
+LAB2720: //if else
 ;else sfIkAngle(xtr, ytr, ztr, xr, yr, zr, -wr);
 VBC5_PUSH_CONST 201 | 0x80000000 //import func index sfIkAngle
 VBC3_PUSH_GLOBAL 22 //xtr
@@ -1490,10 +1524,10 @@ VBC3_PUSH_GLOBAL 28 //wr
 VBC1_NEG_F
 VBC1_CALL7
 VBC1_STACK_UP8//remove result, call address and params
-LAB2711: //if exit
+LAB2749: //if exit
 [1:401] ;if (svIkOutPresent) {
 VBC3_PUSH_GLOBAL 3297 //svIkOutPresent
-VBC4_FALSE_JUMP LAB2854 //if to false
+VBC4_FALSE_JUMP LAB2892 //if to false
 ;
 [1:403] ;sfPoseGroupLin(2048 , -svIkEncA5, frames);
 VBC5_PUSH_CONST 56 | 0x80000000 //import func index sfPoseGroupLin
@@ -1561,7 +1595,7 @@ VBC3_PUSH_CONST 5145
 VBC2_PUSH_LOCAL 2 //frames
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB2854: //if else
+LAB2892: //if else
 [1:413] ;sfWaitFrame(frames);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC2_PUSH_LOCAL 2 //frames
@@ -1577,24 +1611,24 @@ VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC4_PUSH_CONST 50000 
 VBC1_GREAT
-VBC4_TRUE_JUMP_KEEP LAB2900
+VBC4_TRUE_JUMP_KEEP LAB2938
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 2562 //svImuAccZ
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC4_PUSH_CONST 50000 
 VBC1_GREAT
-VBC4_TRUE_JUMP_KEEP LAB2900
+VBC4_TRUE_JUMP_KEEP LAB2938
 VBC1_PUSH_0
-LAB2900:
-VBC4_FALSE_JUMP LAB2910 //if to false
+LAB2938:
+VBC4_FALSE_JUMP LAB2948 //if to false
 ;
 [1:426] ;sfWaitFrame(100);
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC2_PUSH_CONST 100 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB2910: //if else
+LAB2948: //if else
 [1:432] ;
 VBC1_RETURN
 ;walkInitialPose <void()>
@@ -1608,11 +1642,11 @@ VBC1_POP
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_0 
 VBC1_POP
-LAB2922: //for condition
+LAB2960: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 15 //selfInitPoses
 VBC1_LESS
-VBC4_FALSE_JUMP LAB3007 //to for exit
+VBC4_FALSE_JUMP LAB3045 //to for exit
 ;
 [1:440] ;ztr = ztr0 - j * stepZtr;
 VBC2_PUSH_CONST 24 //ztr
@@ -1648,19 +1682,19 @@ VBC1_MUL_IF
 VBC1_SUB_FF
 VBC1_POP
 [1:445] ;if( !computeAlphaForWalk() )
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 //remove call address and params
 VBC1_LNOT
-VBC4_FALSE_JUMP LAB3000 //if to false
+VBC4_FALSE_JUMP LAB3038 //if to false
 ;return;
 VBC1_RETURN
-LAB3000: //if else
-LAB3000: //for step
+LAB3038: //if else
+LAB3038: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_INC
-VBC4_JUMP LAB2922 //to condition
-LAB3007: //for exit
+VBC4_JUMP LAB2960 //to condition
+LAB3045: //for exit
 [1:455] ;
 VBC1_RETURN
 ;walkInitialPoseFine <void()>
@@ -1695,7 +1729,7 @@ VBC1_DIV_FF
 VBC1_SUB_FF
 VBC1_POP
 [1:460] ;computeAlphaForWalkFine( 40 );
-VBC3_PUSH_CONST 2425  //func address computeAlphaForWalkFine
+VBC3_PUSH_CONST 2463  //func address computeAlphaForWalkFine
 VBC2_PUSH_CONST 40 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
@@ -1706,11 +1740,11 @@ VBC1_RETURN
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_0 
 VBC1_POP
-LAB3070: //for condition
+LAB3108: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 15 //selfInitPoses
 VBC1_LESS
-VBC4_FALSE_JUMP LAB3173 //to for exit
+VBC4_FALSE_JUMP LAB3211 //to for exit
 ;
 [1:467] ;ztr = -gaitHeight + (j+1) * stepZtr;
 VBC2_PUSH_CONST 24 //ztr
@@ -1760,19 +1794,19 @@ VBC1_MUL_IF
 VBC1_ADD_FF
 VBC1_POP
 [1:472] ;if( !computeAlphaForWalk() )
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 //remove call address and params
 VBC1_LNOT
-VBC4_FALSE_JUMP LAB3166 //if to false
+VBC4_FALSE_JUMP LAB3204 //if to false
 ;return;
 VBC1_RETURN
-LAB3166: //if else
-LAB3166: //for step
+LAB3204: //if else
+LAB3204: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_INC
-VBC4_JUMP LAB3070 //to condition
-LAB3173: //for exit
+VBC4_JUMP LAB3108 //to condition
+LAB3211: //for exit
 [1:483] ;
 VBC1_RETURN
 ;walkFinalPoseFine <void()>
@@ -1811,7 +1845,7 @@ VBC2_PUSH_CONST 30 //ytl
 VBC3_PUSH_GLOBAL 37 //d10
 VBC1_POP
 [1:488] ;computeAlphaForWalkFine( 40 );
-VBC3_PUSH_CONST 2425  //func address computeAlphaForWalkFine
+VBC3_PUSH_CONST 2463  //func address computeAlphaForWalkFine
 VBC2_PUSH_CONST 40 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
@@ -1853,12 +1887,12 @@ VBC1_MUL_FF
 VBC3_PUSH_GLOBAL 5 //rotation
 VBC1_PUSH_0 
 VBC1_LESS_EQU_FI
-VBC4_FALSE_JUMP LAB3304
+VBC4_FALSE_JUMP LAB3342
 VBC3_PUSH_GLOBAL 19 //rotationYieldRight
-VBC4_JUMP LAB3307
-LAB3304:
+VBC4_JUMP LAB3345
+LAB3342:
 VBC3_PUSH_GLOBAL 20 //rotationYieldLeft
-LAB3307:
+LAB3345:
 VBC1_DIV_FF
 VBC1_POP
 [1:510] ;xtl0 = correctedStepLenght * (1 - (fr1 + fr2 + 2.0 * framestep) / (2 * fr1 + fr2 + 2.0 * framestep)) * 1.5;
@@ -1970,11 +2004,11 @@ VBC1_POP
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_0 
 VBC1_POP
-LAB3506: //for condition
+LAB3544: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 40 //fr1
 VBC1_LESS
-VBC4_FALSE_JUMP LAB3655 //to for exit
+VBC4_FALSE_JUMP LAB3693 //to for exit
 ;
 [1:527] ;s = amplitude / 2 * sfMathCos( alpha01 * j / 2 );
 VBC2_PUSH_CONST 69 //s
@@ -2012,10 +2046,10 @@ VBC1_POP
 VBC3_PUSH_GLOBAL 54 //stepType
 VBC1_PUSH_0 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB3583 //if to false
+VBC4_FALSE_JUMP LAB3621 //if to false
 ;if( stepType == 0 ) continue;
-VBC4_JUMP LAB3642 //to loop condition
-LAB3583: //if else
+VBC4_JUMP LAB3680 //to loop condition
+LAB3621: //if else
 [1:532] ;xtl = xtl0 - dx0Typical - dx0Typical * j / framestep;
 VBC2_PUSH_CONST 29 //xtl
 VBC3_PUSH_GLOBAL 64 //xtl0
@@ -2041,27 +2075,27 @@ VBC1_DIV_FI
 VBC1_SUB_FF
 VBC1_POP
 [1:535] ;if( !computeAlphaForWalk() )
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 //remove call address and params
 VBC1_LNOT
-VBC4_FALSE_JUMP LAB3637 //if to false
+VBC4_FALSE_JUMP LAB3675 //if to false
 ;return;
 VBC1_RETURN
-LAB3637: //if else
+LAB3675: //if else
 [1:537] ;testDrop();
-VBC3_PUSH_CONST 2861  //func address testDrop
+VBC3_PUSH_CONST 2899  //func address testDrop
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB3642: //for step
+LAB3680: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_ADD
 VBC1_POP
-VBC4_JUMP LAB3506 //to condition
-LAB3655: //for exit
+VBC4_JUMP LAB3544 //to condition
+LAB3693: //for exit
 [1:542] ;
 VBC1_RETURN
 ;walkPhasa3 <void()>
@@ -2076,11 +2110,11 @@ VBC1_POP
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_0 
 VBC1_POP
-LAB3670: //for condition
+LAB3708: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 40 //fr1
 VBC1_LESS
-VBC4_FALSE_JUMP LAB3784 //to for exit
+VBC4_FALSE_JUMP LAB3822 //to for exit
 ;
 [1:545] ;s = amplitude / 2 * sfMathCos( alpha01 * (j + fr1) / 2 );
 VBC2_PUSH_CONST 69 //s
@@ -2131,27 +2165,27 @@ VBC3_PUSH_GLOBAL 66 //dx0Typical
 VBC1_SUB_FF
 VBC1_POP
 [1:552] ;if( !computeAlphaForWalk() )
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 //remove call address and params
 VBC1_LNOT
-VBC4_FALSE_JUMP LAB3766 //if to false
+VBC4_FALSE_JUMP LAB3804 //if to false
 ;return;
 VBC1_RETURN
-LAB3766: //if else
+LAB3804: //if else
 [1:554] ;testDrop();
-VBC3_PUSH_CONST 2861  //func address testDrop
+VBC3_PUSH_CONST 2899  //func address testDrop
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB3771: //for step
+LAB3809: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_ADD
 VBC1_POP
-VBC4_JUMP LAB3670 //to condition
-LAB3784: //for exit
+VBC4_JUMP LAB3708 //to condition
+LAB3822: //for exit
 [1:558] ;
 VBC1_RETURN
 ;walkPhasa2 <void()>
@@ -2190,7 +2224,7 @@ VBC1_POP
 VBC3_PUSH_GLOBAL 54 //stepType
 VBC1_PUSH_0 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB3881 //if to false
+VBC4_FALSE_JUMP LAB3919 //if to false
 ;dx = correctedStepLenght / (fr2 - 2.0 * framestep) * framestep / 2;
 VBC2_PUSH_CONST 71 //dx
 VBC3_PUSH_GLOBAL 44 //correctedStepLenght
@@ -2205,8 +2239,8 @@ VBC1_MUL_FI
 VBC1_PUSH_2 
 VBC1_DIV_FI
 VBC1_POP
-VBC4_JUMP LAB3905 //if to exit
-LAB3881: //if else
+VBC4_JUMP LAB3943 //if to exit
+LAB3919: //if else
 ;dx = correctedStepLenght / (fr2 - 2.0 * framestep) * framestep;
 VBC2_PUSH_CONST 71 //dx
 VBC3_PUSH_GLOBAL 44 //correctedStepLenght
@@ -2219,22 +2253,22 @@ VBC1_DIV_FF
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_MUL_FI
 VBC1_POP
-LAB3905: //if exit
+LAB3943: //if exit
 [1:587] ;for( j = 0; j < fr2; j += framestep ) {
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_0 
 VBC1_POP
-LAB3909: //for condition
+LAB3947: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 41 //fr2
 VBC1_LESS
-VBC4_FALSE_JUMP LAB4102 //to for exit
+VBC4_FALSE_JUMP LAB4140 //to for exit
 ;
 [1:588] ;if( j == 0 ) {
 VBC3_PUSH_GLOBAL 63 //j
 VBC1_PUSH_0 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB3956 //if to false
+VBC4_FALSE_JUMP LAB3994 //if to false
 ;
 [1:589] ;xtr -= dx0Typical;
 VBC2_PUSH_CONST 22 //xtr
@@ -2251,15 +2285,15 @@ VBC1_SUB_FF
 VBC3_PUSH_GLOBAL 67 //dy0Typical
 VBC1_ADD_FF
 VBC1_POP
-VBC4_JUMP LAB4056 //if to exit
-LAB3956: //if else
+VBC4_JUMP LAB4094 //if to exit
+LAB3994: //if else
 ;else if( j == (fr2 - framestep) ) {
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 41 //fr2
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_SUB
 VBC1_EQU
-VBC4_FALSE_JUMP LAB4004 //if to false
+VBC4_FALSE_JUMP LAB4042 //if to false
 ;
 [1:593] ;xtr -= dx0Typical;
 VBC2_PUSH_CONST 22 //xtr
@@ -2280,8 +2314,8 @@ VBC1_ADD_FF
 VBC3_PUSH_GLOBAL 46 //correctedSideLenght
 VBC1_SUB_FF
 VBC1_POP
-VBC4_JUMP LAB4056 //if to exit
-LAB4004: //if else
+VBC4_JUMP LAB4094 //if to exit
+LAB4042: //if else
 ;
 [1:597] ;xtr += dx;
 VBC2_PUSH_CONST 22 //xtr
@@ -2316,8 +2350,8 @@ VBC1_POP
 VBC2_PUSH_CONST 35 //wl
 VBC3_PUSH_GLOBAL 28 //wr
 VBC1_POP
-LAB4056: //if exit
-LAB4056: //if exit
+LAB4094: //if exit
+LAB4094: //if exit
 [1:602] ;xtl -= dx0Typical;
 VBC2_PUSH_CONST 29 //xtl
 VBC1_PUSH_TOS
@@ -2333,27 +2367,27 @@ VBC3_PUSH_GLOBAL 67 //dy0Typical
 VBC1_ADD_FF
 VBC1_POP
 [1:606] ;if( !computeAlphaForWalk() )
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 //remove call address and params
 VBC1_LNOT
-VBC4_FALSE_JUMP LAB4084 //if to false
+VBC4_FALSE_JUMP LAB4122 //if to false
 ;return;
 VBC1_RETURN
-LAB4084: //if else
+LAB4122: //if else
 [1:608] ;testDrop();
-VBC3_PUSH_CONST 2861  //func address testDrop
+VBC3_PUSH_CONST 2899  //func address testDrop
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB4089: //for step
+LAB4127: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_ADD
 VBC1_POP
-VBC4_JUMP LAB3909 //to condition
-LAB4102: //for exit
+VBC4_JUMP LAB3947 //to condition
+LAB4140: //for exit
 [1:612] ;
 VBC1_RETURN
 ;walkPhasa4 <void()>
@@ -2380,7 +2414,7 @@ VBC1_POP
 VBC3_PUSH_GLOBAL 54 //stepType
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB4217 //if to false
+VBC4_FALSE_JUMP LAB4255 //if to false
 ;
 [1:619] ;dx0 = dx0Typical * 4 / fr2;
 VBC2_PUSH_CONST 74 //dx0
@@ -2416,8 +2450,8 @@ VBC1_MUL_FI
 VBC5_PUSH_CONST 1067289050 
 VBC1_DIV_FF
 VBC1_POP
-VBC4_JUMP LAB4247 //if to exit
-LAB4217: //if else
+VBC4_JUMP LAB4285 //if to exit
+LAB4255: //if else
 ;
 [1:623] ;dx = correctedStepLenght / (fr2 - 2.0 * framestep) * framestep;
 VBC2_PUSH_CONST 71 //dx
@@ -2435,31 +2469,31 @@ VBC1_POP
 VBC2_PUSH_CONST 74 //dx0
 VBC3_PUSH_GLOBAL 66 //dx0Typical
 VBC1_POP
-LAB4247: //if exit
+LAB4285: //if exit
 [1:626] ;for( j = 0; j < fr2; j += framestep ) {
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_0 
 VBC1_POP
-LAB4251: //for condition
+LAB4289: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 41 //fr2
 VBC1_LESS
-VBC4_FALSE_JUMP LAB4473 //to for exit
+VBC4_FALSE_JUMP LAB4511 //to for exit
 ;
 [1:627] ;if( stepType == 1 && j == (fr2 - framestep) ) {
 VBC3_PUSH_GLOBAL 54 //stepType
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP_KEEP LAB4287
+VBC4_FALSE_JUMP_KEEP LAB4325
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 41 //fr2
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_SUB
 VBC1_EQU
-VBC4_FALSE_JUMP_KEEP LAB4287
+VBC4_FALSE_JUMP_KEEP LAB4325
 VBC1_PUSH_1
-LAB4287:
-VBC4_FALSE_JUMP LAB4308 //if to false
+LAB4325:
+VBC4_FALSE_JUMP LAB4346 //if to false
 ;
 [1:628] ;ztl = -gaitHeight;
 VBC2_PUSH_CONST 31 //ztl
@@ -2472,12 +2506,12 @@ VBC3_PUSH_GLOBAL 69 //s
 VBC3_PUSH_GLOBAL 37 //d10
 VBC1_ADD_FF
 VBC1_POP
-LAB4308: //if else
+LAB4346: //if else
 [1:631] ;if( j == 0 ) {
 VBC3_PUSH_GLOBAL 63 //j
 VBC1_PUSH_0 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB4343 //if to false
+VBC4_FALSE_JUMP LAB4381 //if to false
 ;
 [1:632] ;xtl -= dx0;
 VBC2_PUSH_CONST 29 //xtl
@@ -2494,15 +2528,15 @@ VBC1_ADD_FI
 VBC3_PUSH_GLOBAL 47 //correctedSideLenghtHalf
 VBC1_ADD_FF
 VBC1_POP
-VBC4_JUMP LAB4427 //if to exit
-LAB4343: //if else
+VBC4_JUMP LAB4465 //if to exit
+LAB4381: //if else
 ;else if( j == (fr2 - framestep) ) {
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 41 //fr2
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_SUB
 VBC1_EQU
-VBC4_FALSE_JUMP LAB4385 //if to false
+VBC4_FALSE_JUMP LAB4423 //if to false
 ;
 [1:636] ;xtl -= dx0;
 VBC2_PUSH_CONST 29 //xtl
@@ -2519,8 +2553,8 @@ VBC1_ADD_FF
 VBC3_PUSH_GLOBAL 47 //correctedSideLenghtHalf
 VBC1_ADD_FF
 VBC1_POP
-VBC4_JUMP LAB4427 //if to exit
-LAB4385: //if else
+VBC4_JUMP LAB4465 //if to exit
+LAB4423: //if else
 ;
 [1:640] ;xtl += dx;
 VBC2_PUSH_CONST 29 //xtl
@@ -2549,8 +2583,8 @@ VBC1_POP
 VBC2_PUSH_CONST 35 //wl
 VBC3_PUSH_GLOBAL 28 //wr
 VBC1_POP
-LAB4427: //if exit
-LAB4427: //if exit
+LAB4465: //if exit
+LAB4465: //if exit
 [1:645] ;xtr -= dx0;
 VBC2_PUSH_CONST 22 //xtr
 VBC1_PUSH_TOS
@@ -2566,27 +2600,27 @@ VBC3_PUSH_GLOBAL 67 //dy0Typical
 VBC1_ADD_FF
 VBC1_POP
 [1:649] ;if( !computeAlphaForWalk() )
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 //remove call address and params
 VBC1_LNOT
-VBC4_FALSE_JUMP LAB4455 //if to false
+VBC4_FALSE_JUMP LAB4493 //if to false
 ;return;
 VBC1_RETURN
-LAB4455: //if else
+LAB4493: //if else
 [1:651] ;testDrop();
-VBC3_PUSH_CONST 2861  //func address testDrop
+VBC3_PUSH_CONST 2899  //func address testDrop
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB4460: //for step
+LAB4498: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_ADD
 VBC1_POP
-VBC4_JUMP LAB4251 //to condition
-LAB4473: //for exit
+VBC4_JUMP LAB4289 //to condition
+LAB4511: //for exit
 [1:659] ;
 VBC1_RETURN
 ;walkCycle <void(,int)>
@@ -2613,7 +2647,7 @@ VBC3_PUSH_GLOBAL 33 //yl
 VBC1_POP
 [1:671] ;if( slowWalk ) {
 VBC3_PUSH_GLOBAL 2 //slowWalk
-VBC4_FALSE_JUMP LAB4531 //if to false
+VBC4_FALSE_JUMP LAB4569 //if to false
 ;
 [1:676] ;j = j;
 VBC2_PUSH_CONST 63 //j
@@ -2623,44 +2657,44 @@ VBC1_POP
 VBC2_PUSH_LOCAL 2 //half
 VBC1_PUSH_0 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB4527 //if to false
+VBC4_FALSE_JUMP LAB4565 //if to false
 ;
 [1:680] ;j = j;
 VBC2_PUSH_CONST 63 //j
 VBC3_PUSH_GLOBAL 63 //j
 VBC1_POP
-LAB4527: //if else
-VBC4_JUMP LAB4564 //if to exit
-LAB4531: //if else
+LAB4565: //if else
+VBC4_JUMP LAB4602 //if to exit
+LAB4569: //if else
 ;
 [1:685] ;walkInit();
-VBC3_PUSH_CONST 3234  //func address walkInit
+VBC3_PUSH_CONST 3272  //func address walkInit
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:686] ;walkPhasa1();
-VBC3_PUSH_CONST 3492  //func address walkPhasa1
+VBC3_PUSH_CONST 3530  //func address walkPhasa1
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:687] ;walkPhasa2();
-VBC3_PUSH_CONST 3785  //func address walkPhasa2
+VBC3_PUSH_CONST 3823  //func address walkPhasa2
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:688] ;if (half == 0){
 VBC2_PUSH_LOCAL 2 //half
 VBC1_PUSH_0 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB4564 //if to false
+VBC4_FALSE_JUMP LAB4602 //if to false
 ;
 [1:689] ;walkPhasa3();
-VBC3_PUSH_CONST 3656  //func address walkPhasa3
+VBC3_PUSH_CONST 3694  //func address walkPhasa3
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:690] ;walkPhasa4();
-VBC3_PUSH_CONST 4103  //func address walkPhasa4
+VBC3_PUSH_CONST 4141  //func address walkPhasa4
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB4564: //if else
-LAB4564: //if exit
+LAB4602: //if else
+LAB4602: //if exit
 [1:695] ;xr = xrOld;
 VBC2_PUSH_CONST 25 //xr
 VBC2_PUSH_LOCAL -1 //xrOld
@@ -2687,7 +2721,7 @@ VBC1_STACK_UP1//remove result, call address and params
 [1:705] ;rotation = forwardDirection - get_yaw();
 VBC2_PUSH_CONST 5 //rotation
 VBC3_PUSH_GLOBAL 75 //forwardDirection
-VBC3_PUSH_CONST 325  //func address get_yaw
+VBC3_PUSH_CONST 363  //func address get_yaw
 //alloc addon amount for result
 VBC1_CALL0
 //remove call address and params
@@ -2697,7 +2731,7 @@ VBC1_POP
 VBC3_PUSH_GLOBAL 5 //rotation
 VBC5_PUSH_CONST 1078530011 
 VBC1_GREAT_FF
-VBC4_FALSE_JUMP LAB4627 //if to false
+VBC4_FALSE_JUMP LAB4665 //if to false
 ;if( rotation > 3.141592654 ) rotation -= 2 * 3.141592654;
 VBC2_PUSH_CONST 5 //rotation
 VBC1_PUSH_TOS
@@ -2705,12 +2739,12 @@ VBC1_LOAD
 VBC5_PUSH_CONST 1086918619 
 VBC1_SUB_FF
 VBC1_POP
-LAB4627: //if else
+LAB4665: //if else
 [1:707] ;if( rotation < -3.141592654 ) rotation += 2 * 3.141592654;
 VBC3_PUSH_GLOBAL 5 //rotation
 VBC5_PUSH_CONST -1068953637 // -
 VBC1_LESS_FF
-VBC4_FALSE_JUMP LAB4651 //if to false
+VBC4_FALSE_JUMP LAB4689 //if to false
 ;if( rotation < -3.141592654 ) rotation += 2 * 3.141592654;
 VBC2_PUSH_CONST 5 //rotation
 VBC1_PUSH_TOS
@@ -2718,27 +2752,27 @@ VBC1_LOAD
 VBC5_PUSH_CONST 1086918619 
 VBC1_ADD_FF
 VBC1_POP
-LAB4651: //if else
+LAB4689: //if else
 [1:708] ;if( rotation > 0.7 ) rotation = 0.7;
 VBC3_PUSH_GLOBAL 5 //rotation
 VBC5_PUSH_CONST 1060320051 
 VBC1_GREAT_FF
-VBC4_FALSE_JUMP LAB4672 //if to false
+VBC4_FALSE_JUMP LAB4710 //if to false
 ;if( rotation > 0.7 ) rotation = 0.7;
 VBC2_PUSH_CONST 5 //rotation
 VBC5_PUSH_CONST 1060320051 
 VBC1_POP
-LAB4672: //if else
+LAB4710: //if else
 [1:709] ;if( rotation < -0.7 ) rotation = -0.7;
 VBC3_PUSH_GLOBAL 5 //rotation
 VBC5_PUSH_CONST -1087163597 // -
 VBC1_LESS_FF
-VBC4_FALSE_JUMP LAB4693 //if to false
+VBC4_FALSE_JUMP LAB4731 //if to false
 ;if( rotation < -0.7 ) rotation = -0.7;
 VBC2_PUSH_CONST 5 //rotation
 VBC5_PUSH_CONST -1087163597 // -
 VBC1_POP
-LAB4693: //if else
+LAB4731: //if else
 [1:717] ;
 VBC1_RETURN
 ;mixing <void()>
@@ -2751,7 +2785,7 @@ VBC2_PUSH_CONST 77 //frontBackFactor
 VBC2_PUSH_CONST 70 
 VBC1_POP
 [1:725] ;while(1) {
-LAB4704: //while condition
+LAB4742: //while condition
 ;
 [1:727] ;leftFootSideAddonMix = svImuGyroZ * leftRightFactor >> 10;
 VBC3_PUSH_CONST 2953 //leftFootSideAddonMix
@@ -2783,14 +2817,14 @@ VBC1_STORE
 VBC1_POP
 [1:734] ;sfWaitNextFrame();
 VBC1_WAIT
-VBC4_JUMP LAB4704 //while forever loop
-LAB4757: //while exit
+VBC4_JUMP LAB4742 //while forever loop
+LAB4795: //while exit
 [1:744] ;
 VBC1_RETURN
 ;runTest <void()>
 VBC1_STACK_DN1//local vars 1
 [1:746] ;walkInitialPoseFine();
-VBC3_PUSH_CONST 3008  //func address walkInitialPoseFine
+VBC3_PUSH_CONST 3046  //func address walkInitialPoseFine
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:748] ;stepType = 0;
@@ -2802,7 +2836,7 @@ VBC2_PUSH_CONST 3 //stepLength
 VBC5_PUSH_CONST 1099257173 
 VBC1_POP
 [1:750] ;walkCycle(0);
-VBC3_PUSH_CONST 4474  //func address walkCycle
+VBC3_PUSH_CONST 4512  //func address walkCycle
 VBC1_PUSH_0 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
@@ -2815,7 +2849,7 @@ VBC2_PUSH_CONST 3 //stepLength
 VBC5_PUSH_CONST 1107645781 
 VBC1_POP
 [1:755] ;walkCycle(0);
-VBC3_PUSH_CONST 4474  //func address walkCycle
+VBC3_PUSH_CONST 4512  //func address walkCycle
 VBC1_PUSH_0 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
@@ -2828,37 +2862,37 @@ VBC1_POP_CF
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB4809: //for condition
+LAB4847: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC2_PUSH_CONST 20 
 VBC1_LESS
-VBC4_FALSE_JUMP LAB4836 //to for exit
+VBC4_FALSE_JUMP LAB4874 //to for exit
 ;
 [1:761] ;stabilizeRotationByIMU();
-VBC3_PUSH_CONST 4585  //func address stabilizeRotationByIMU
+VBC3_PUSH_CONST 4623  //func address stabilizeRotationByIMU
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:762] ;walkCycle(0);
-VBC3_PUSH_CONST 4474  //func address walkCycle
+VBC3_PUSH_CONST 4512  //func address walkCycle
 VBC1_PUSH_0 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB4829: //for step
+LAB4867: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB4809 //to condition
-LAB4836: //for exit
+VBC4_JUMP LAB4847 //to condition
+LAB4874: //for exit
 [1:765] ;stepType = 1;
 VBC2_PUSH_CONST 54 //stepType
 VBC1_PUSH_1 
 VBC1_POP
 [1:766] ;walkCycle(0);
-VBC3_PUSH_CONST 4474  //func address walkCycle
+VBC3_PUSH_CONST 4512  //func address walkCycle
 VBC1_PUSH_0 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:769] ;walkFinalPoseFine();
-VBC3_PUSH_CONST 3174  //func address walkFinalPoseFine
+VBC3_PUSH_CONST 3212  //func address walkFinalPoseFine
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:776] ;
@@ -2888,12 +2922,12 @@ VBC2_PUSH_CONST 13 //motion_to_right
 VBC3_PUSH_GLOBAL 14 //side_motion
 VBC1_PUSH_0 
 VBC1_LESS_EQU_FI
-VBC4_FALSE_JUMP LAB4900
+VBC4_FALSE_JUMP LAB4938
 VBC1_PUSH_1 
-VBC4_JUMP LAB4901
-LAB4900:
+VBC4_JUMP LAB4939
+LAB4938:
 VBC1_PUSH_0 
-LAB4901:
+LAB4939:
 VBC1_POP
 [1:786] ;return sfAbs (side_motion);
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
@@ -2911,17 +2945,17 @@ VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_GREAT
-VBC4_FALSE_JUMP LAB4948
+VBC4_FALSE_JUMP LAB4986
 VBC3_PUSH_GLOBAL 3253 //svRemoteLeftJoystickX
 VBC1_NEG
 VBC3_PUSH_CONST 260 
 VBC1_MUL
 VBC2_PUSH_CONST 100 
 VBC1_DIV
-VBC4_JUMP LAB4949
-LAB4948:
+VBC4_JUMP LAB4987
+LAB4986:
 VBC1_PUSH_0 
-LAB4949:
+LAB4987:
 VBC2_POP_RESULT 2
 VBC1_RETURN
 ;walkLoop <void()>
@@ -2933,7 +2967,7 @@ VBC1_PUSH_0
 VBC1_POP
 [1:800] ;stepLength = joystickToStepLength() / 3.0;
 VBC2_PUSH_CONST 3 //stepLength
-VBC3_PUSH_CONST 4852  //func address joystickToStepLength
+VBC3_PUSH_CONST 4890  //func address joystickToStepLength
 VBC1_CALL0
 //remove call address and params
 VBC5_PUSH_CONST 1077936128 
@@ -2941,7 +2975,7 @@ VBC1_DIV_IF
 VBC1_POP
 [1:801] ;sideLength = joystickToSideLength();
 VBC2_PUSH_CONST 4 //sideLength
-VBC3_PUSH_CONST 4865  //func address joystickToSideLength
+VBC3_PUSH_CONST 4903  //func address joystickToSideLength
 VBC1_CALL0
 //remove call address and params
 VBC1_POP_CF
@@ -2953,7 +2987,7 @@ VBC1_POP
 VBC2_PUSH_CONST 75 //forwardDirection
 VBC1_PUSH_TOS
 VBC1_LOAD
-VBC3_PUSH_CONST 4916  //func address joystickToRotation
+VBC3_PUSH_CONST 4954  //func address joystickToRotation
 VBC1_CALL0
 //remove call address and params
 VBC5_PUSH_CONST 1148846080 
@@ -2961,11 +2995,11 @@ VBC1_DIV_IF
 VBC1_ADD_FF
 VBC1_POP
 [1:804] ;stabilizeRotationByIMU();
-VBC3_PUSH_CONST 4585  //func address stabilizeRotationByIMU
+VBC3_PUSH_CONST 4623  //func address stabilizeRotationByIMU
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:805] ;walkCycle(0);
-VBC3_PUSH_CONST 4474  //func address walkCycle
+VBC3_PUSH_CONST 4512  //func address walkCycle
 VBC1_PUSH_0 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
@@ -2983,25 +3017,25 @@ VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5108
+VBC4_FALSE_JUMP_KEEP LAB5146
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 3257 //svRemoteRightJoystickY
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5108
+VBC4_FALSE_JUMP_KEEP LAB5146
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 3253 //svRemoteLeftJoystickX
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5108
+VBC4_FALSE_JUMP_KEEP LAB5146
 VBC3_PUSH_GLOBAL 3254 //svRemoteLeftJoystickY
 VBC1_PUSH_0 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5093
+VBC4_FALSE_JUMP_KEEP LAB5131
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC3_PUSH_CONST 2048 
 VBC1_DIV
@@ -3009,28 +3043,28 @@ VBC1_PUSH_2
 VBC1_MOD
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP_KEEP LAB5093
+VBC4_FALSE_JUMP_KEEP LAB5131
 VBC1_PUSH_1
-LAB5093:
+LAB5131:
 VBC1_LNOT
-VBC4_FALSE_JUMP_KEEP LAB5108
+VBC4_FALSE_JUMP_KEEP LAB5146
 VBC3_PUSH_GLOBAL 59 //stepNumber
 VBC1_PUSH_1 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5108
+VBC4_FALSE_JUMP_KEEP LAB5146
 VBC1_PUSH_1
-LAB5108:
-VBC4_FALSE_JUMP LAB5113 //if to false
+LAB5146:
+VBC4_FALSE_JUMP LAB5151 //if to false
 ;return;
 VBC1_RETURN
-LAB5113: //if else
+LAB5151: //if else
 [1:819] ;stepType = 2;
 VBC2_PUSH_CONST 54 //stepType
 VBC1_PUSH_2 
 VBC1_POP
 [1:820] ;stepLength = joystickToStepLength() * 2.0 / 3.0;
 VBC2_PUSH_CONST 3 //stepLength
-VBC3_PUSH_CONST 4852  //func address joystickToStepLength
+VBC3_PUSH_CONST 4890  //func address joystickToStepLength
 VBC1_CALL0
 //remove call address and params
 VBC5_PUSH_CONST 1073741824 
@@ -3040,7 +3074,7 @@ VBC1_DIV_FF
 VBC1_POP
 [1:821] ;sideLength = joystickToSideLength();
 VBC2_PUSH_CONST 4 //sideLength
-VBC3_PUSH_CONST 4865  //func address joystickToSideLength
+VBC3_PUSH_CONST 4903  //func address joystickToSideLength
 VBC1_CALL0
 //remove call address and params
 VBC1_POP_CF
@@ -3052,7 +3086,7 @@ VBC1_POP
 VBC2_PUSH_CONST 75 //forwardDirection
 VBC1_PUSH_TOS
 VBC1_LOAD
-VBC3_PUSH_CONST 4916  //func address joystickToRotation
+VBC3_PUSH_CONST 4954  //func address joystickToRotation
 VBC1_CALL0
 //remove call address and params
 VBC5_PUSH_CONST 1148846080 
@@ -3060,11 +3094,11 @@ VBC1_DIV_IF
 VBC1_ADD_FF
 VBC1_POP
 [1:824] ;stabilizeRotationByIMU();
-VBC3_PUSH_CONST 4585  //func address stabilizeRotationByIMU
+VBC3_PUSH_CONST 4623  //func address stabilizeRotationByIMU
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:825] ;walkCycle(0);
-VBC3_PUSH_CONST 4474  //func address walkCycle
+VBC3_PUSH_CONST 4512  //func address walkCycle
 VBC1_PUSH_0 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
@@ -3082,25 +3116,25 @@ VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5274
+VBC4_FALSE_JUMP_KEEP LAB5312
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 3257 //svRemoteRightJoystickY
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5274
+VBC4_FALSE_JUMP_KEEP LAB5312
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 3253 //svRemoteLeftJoystickX
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5274
+VBC4_FALSE_JUMP_KEEP LAB5312
 VBC3_PUSH_GLOBAL 3254 //svRemoteLeftJoystickY
 VBC1_PUSH_0 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5259
+VBC4_FALSE_JUMP_KEEP LAB5297
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC3_PUSH_CONST 2048 
 VBC1_DIV
@@ -3108,57 +3142,57 @@ VBC1_PUSH_2
 VBC1_MOD
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP_KEEP LAB5259
+VBC4_FALSE_JUMP_KEEP LAB5297
 VBC1_PUSH_1
-LAB5259:
+LAB5297:
 VBC1_LNOT
-VBC4_FALSE_JUMP_KEEP LAB5274
+VBC4_FALSE_JUMP_KEEP LAB5312
 VBC3_PUSH_GLOBAL 59 //stepNumber
 VBC1_PUSH_1 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5274
+VBC4_FALSE_JUMP_KEEP LAB5312
 VBC1_PUSH_1
-LAB5274:
-VBC4_FALSE_JUMP LAB5279 //if to false
+LAB5312:
+VBC4_FALSE_JUMP LAB5317 //if to false
 ;return;
 VBC1_RETURN
-LAB5279: //if else
+LAB5317: //if else
 [1:838] ;while( sfAbs( svRemoteRightJoystickX ) >= 10 || sfAbs( svRemoteRightJoystickY ) >= 10 || sfAbs( svRemoteLeftJoystickX ) >= 10) {
-LAB5279: //while condition
+LAB5317: //while condition
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 3256 //svRemoteRightJoystickX
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_GREAT_EQU
-VBC4_TRUE_JUMP_KEEP LAB5331
+VBC4_TRUE_JUMP_KEEP LAB5369
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 3257 //svRemoteRightJoystickY
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_GREAT_EQU
-VBC4_TRUE_JUMP_KEEP LAB5331
+VBC4_TRUE_JUMP_KEEP LAB5369
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 3253 //svRemoteLeftJoystickX
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_GREAT_EQU
-VBC4_TRUE_JUMP_KEEP LAB5331
+VBC4_TRUE_JUMP_KEEP LAB5369
 VBC1_PUSH_0
-LAB5331:
-VBC4_FALSE_JUMP LAB5521 //while to exit
+LAB5369:
+VBC4_FALSE_JUMP LAB5559 //while to exit
 ;
 [1:840] ;stepLength = joystickToStepLength();
 VBC2_PUSH_CONST 3 //stepLength
-VBC3_PUSH_CONST 4852  //func address joystickToStepLength
+VBC3_PUSH_CONST 4890  //func address joystickToStepLength
 VBC1_CALL0
 //remove call address and params
 VBC1_POP_CF
 [1:841] ;sideLength = joystickToSideLength();
 VBC2_PUSH_CONST 4 //sideLength
-VBC3_PUSH_CONST 4865  //func address joystickToSideLength
+VBC3_PUSH_CONST 4903  //func address joystickToSideLength
 VBC1_CALL0
 //remove call address and params
 VBC1_POP_CF
@@ -3166,7 +3200,7 @@ VBC1_POP_CF
 VBC2_PUSH_CONST 75 //forwardDirection
 VBC1_PUSH_TOS
 VBC1_LOAD
-VBC3_PUSH_CONST 4916  //func address joystickToRotation
+VBC3_PUSH_CONST 4954  //func address joystickToRotation
 VBC1_CALL0
 //remove call address and params
 VBC5_PUSH_CONST 1148846080 
@@ -3174,26 +3208,26 @@ VBC1_DIV_IF
 VBC1_ADD_FF
 VBC1_POP
 [1:843] ;stabilizeRotationByIMU();
-VBC3_PUSH_CONST 4585  //func address stabilizeRotationByIMU
+VBC3_PUSH_CONST 4623  //func address stabilizeRotationByIMU
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:844] ;if (selfFirstLegIsRightLeg != motion_to_right) walkCycle(1); 
 VBC3_PUSH_GLOBAL 12 //selfFirstLegIsRightLeg
 VBC3_PUSH_GLOBAL 13 //motion_to_right
 VBC1_NOT_EQU
-VBC4_FALSE_JUMP LAB5387 //if to false
+VBC4_FALSE_JUMP LAB5425 //if to false
 ;if (selfFirstLegIsRightLeg != motion_to_right) walkCycle(1); 
-VBC3_PUSH_CONST 4474  //func address walkCycle
+VBC3_PUSH_CONST 4512  //func address walkCycle
 VBC1_PUSH_1 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB5387: //if else
+LAB5425: //if else
 [1:845] ;selfFirstLegIsRightLeg = motion_to_right;
 VBC2_PUSH_CONST 12 //selfFirstLegIsRightLeg
 VBC3_PUSH_GLOBAL 13 //motion_to_right
 VBC1_POP
 [1:846] ;walkCycle(0);
-VBC3_PUSH_CONST 4474  //func address walkCycle
+VBC3_PUSH_CONST 4512  //func address walkCycle
 VBC1_PUSH_0 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
@@ -3208,7 +3242,7 @@ VBC1_POP
 VBC3_PUSH_GLOBAL 3254 //svRemoteLeftJoystickY
 VBC1_PUSH_0 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5431
+VBC4_FALSE_JUMP_KEEP LAB5469
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC3_PUSH_CONST 2048 
 VBC1_DIV
@@ -3216,23 +3250,23 @@ VBC1_PUSH_2
 VBC1_MOD
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP_KEEP LAB5431
+VBC4_FALSE_JUMP_KEEP LAB5469
 VBC1_PUSH_1
-LAB5431:
-VBC4_TRUE_JUMP_KEEP LAB5445
+LAB5469:
+VBC4_TRUE_JUMP_KEEP LAB5483
 VBC3_PUSH_GLOBAL 59 //stepNumber
 VBC1_PUSH_0 
 VBC1_GREAT
-VBC4_TRUE_JUMP_KEEP LAB5445
+VBC4_TRUE_JUMP_KEEP LAB5483
 VBC1_PUSH_0
-LAB5445:
-VBC4_FALSE_JUMP LAB5517 //if to false
+LAB5483:
+VBC4_FALSE_JUMP LAB5555 //if to false
 ;
 [1:849] ;if (svRemoteLeftJoystickY < 0 && ((svRemoteButton / 2048) % 2 == 1)) stepNumber = -svRemoteLeftJoystickY;
 VBC3_PUSH_GLOBAL 3254 //svRemoteLeftJoystickY
 VBC1_PUSH_0 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB5474
+VBC4_FALSE_JUMP_KEEP LAB5512
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC3_PUSH_CONST 2048 
 VBC1_DIV
@@ -3240,43 +3274,43 @@ VBC1_PUSH_2
 VBC1_MOD
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP_KEEP LAB5474
+VBC4_FALSE_JUMP_KEEP LAB5512
 VBC1_PUSH_1
-LAB5474:
-VBC4_FALSE_JUMP LAB5485 //if to false
+LAB5512:
+VBC4_FALSE_JUMP LAB5523 //if to false
 ;if (svRemoteLeftJoystickY < 0 && ((svRemoteButton / 2048) % 2 == 1)) stepNumber = -svRemoteLeftJoystickY;
 VBC2_PUSH_CONST 59 //stepNumber
 VBC3_PUSH_GLOBAL 3254 //svRemoteLeftJoystickY
 VBC1_NEG
 VBC1_POP
-LAB5485: //if else
+LAB5523: //if else
 [1:850] ;for( i = 0; i < stepNumber ; i++ ){
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_PUSH_0 
 VBC1_POP
-LAB5489: //for condition
+LAB5527: //for condition
 VBC2_PUSH_LOCAL -1 //i
 VBC3_PUSH_GLOBAL 59 //stepNumber
 VBC1_LESS
-VBC4_FALSE_JUMP LAB5517 //to for exit
+VBC4_FALSE_JUMP LAB5555 //to for exit
 ;
 [1:851] ;stabilizeRotationByIMU();
-VBC3_PUSH_CONST 4585  //func address stabilizeRotationByIMU
+VBC3_PUSH_CONST 4623  //func address stabilizeRotationByIMU
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:852] ;walkCycle(0);
-VBC3_PUSH_CONST 4474  //func address walkCycle
+VBC3_PUSH_CONST 4512  //func address walkCycle
 VBC1_PUSH_0 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB5510: //for step
+LAB5548: //for step
 VBC2_PUSH_B_OFFSET -1 //i
 VBC1_INC
-VBC4_JUMP LAB5489 //to condition
-LAB5517: //for exit
-LAB5517: //if else
-VBC4_JUMP LAB5279 //while forever loop
-LAB5521: //while exit
+VBC4_JUMP LAB5527 //to condition
+LAB5555: //for exit
+LAB5555: //if else
+VBC4_JUMP LAB5317 //while forever loop
+LAB5559: //while exit
 [1:858] ;
 VBC1_RETURN
 ;kick <void(,int,int,int)>
@@ -3339,12 +3373,12 @@ VBC1_POP
 VBC2_PUSH_LOCAL 3 //small
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB5601 //if to false
+VBC4_FALSE_JUMP LAB5639 //if to false
 ;if (small == 1) kick_size = -10;
 VBC2_PUSH_B_OFFSET -4 //kick_size
 VBC2_PUSH_CONST -10 // -
 VBC1_POP_CF
-LAB5601: //if else
+LAB5639: //if else
 [1:871] ;selfFirstLegIsRightLeg = kickByRight;
 VBC2_PUSH_CONST 12 //selfFirstLegIsRightLeg
 VBC2_PUSH_LOCAL 4 //kickByRight
@@ -3417,11 +3451,11 @@ VBC1_POP
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_0 
 VBC1_POP
-LAB5711: //for condition
+LAB5749: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC2_PUSH_LOCAL -6 //pose_taking_cycles
 VBC1_LESS
-VBC4_FALSE_JUMP LAB5797 //to for exit
+VBC4_FALSE_JUMP LAB5835 //to for exit
 ;
 [1:885] ;ztr = ztr0 + j * (-ztr0 - gaitHeightKick) / pose_taking_cycles;
 VBC2_PUSH_CONST 24 //ztr
@@ -3462,18 +3496,18 @@ VBC1_MUL_IF
 VBC1_ADD_FF
 VBC1_POP
 [1:889] ;computeAlphaForWalk();
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB5786: //for step
+LAB5824: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC1_PUSH_1 
 VBC1_ADD
 VBC1_POP
-VBC4_JUMP LAB5711 //to condition
-LAB5797: //for exit
+VBC4_JUMP LAB5749 //to condition
+LAB5835: //for exit
 [1:892] ;ztr = ztl = -gaitHeightKick;
 VBC2_PUSH_CONST 24 //ztr
 VBC2_PUSH_CONST 31 //ztl
@@ -3497,13 +3531,13 @@ VBC1_POP
 VBC2_PUSH_CONST 63 //j
 VBC3_PUSH_GLOBAL 40 //fr1
 VBC1_POP
-LAB5832: //for condition
+LAB5870: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 40 //fr1
 VBC3_PUSH_GLOBAL 41 //fr2
 VBC1_ADD
 VBC1_LESS
-VBC4_FALSE_JUMP LAB6060 //to for exit
+VBC4_FALSE_JUMP LAB6098 //to for exit
 ;
 [1:897] ;ztr = -gaitHeightKick + stepHeightKick;
 VBC2_PUSH_CONST 24 //ztr
@@ -3536,7 +3570,7 @@ VBC1_POP
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 40 //fr1
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB5916
+VBC4_TRUE_JUMP_KEEP LAB5954
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 40 //fr1
 VBC3_PUSH_GLOBAL 41 //fr2
@@ -3544,10 +3578,10 @@ VBC1_ADD
 VBC1_PUSH_2 
 VBC1_SUB
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB5916
+VBC4_TRUE_JUMP_KEEP LAB5954
 VBC1_PUSH_0
-LAB5916:
-VBC4_FALSE_JUMP LAB5942 //if to false
+LAB5954:
+VBC4_FALSE_JUMP LAB5980 //if to false
 ;
 [1:901] ;xtr -= dx0;
 VBC2_PUSH_CONST 22 //xtr
@@ -3562,8 +3596,8 @@ VBC3_PUSH_GLOBAL 69 //s
 VBC2_PUSH_CONST 64 
 VBC1_SUB_FI
 VBC1_POP
-VBC4_JUMP LAB5965 //if to exit
-LAB5942: //if else
+VBC4_JUMP LAB6003 //if to exit
+LAB5980: //if else
 ;xtr += dx * fr2 / (fr2 - 2 * framestep);
 VBC2_PUSH_CONST 22 //xtr
 VBC1_PUSH_TOS
@@ -3579,7 +3613,7 @@ VBC1_SUB
 VBC1_DIV_FI
 VBC1_ADD_FF
 VBC1_POP
-LAB5965: //if exit
+LAB6003: //if exit
 [1:906] ;if (j == fr1 + fr2 - 10)
 VBC3_PUSH_GLOBAL 63 //j
 VBC3_PUSH_GLOBAL 40 //fr1
@@ -3588,7 +3622,7 @@ VBC1_ADD
 VBC2_PUSH_CONST 10 
 VBC1_SUB
 VBC1_EQU
-VBC4_FALSE_JUMP LAB5991 //if to false
+VBC4_FALSE_JUMP LAB6029 //if to false
 ;xtr += kick_size;
 VBC2_PUSH_CONST 22 //xtr
 VBC1_PUSH_TOS
@@ -3596,7 +3630,7 @@ VBC1_LOAD
 VBC2_PUSH_LOCAL -4 //kick_size
 VBC1_ADD_FF
 VBC1_POP
-LAB5991: //if else
+LAB6029: //if else
 [1:908] ;xtl -= kick_size;
 VBC2_PUSH_CONST 29 //xtl
 VBC1_PUSH_TOS
@@ -3612,7 +3646,7 @@ VBC1_ADD
 VBC2_PUSH_CONST 4 
 VBC1_SUB
 VBC1_EQU
-VBC4_FALSE_JUMP LAB6025 //if to false
+VBC4_FALSE_JUMP LAB6063 //if to false
 ;xtr -= kick_size;
 VBC2_PUSH_CONST 22 //xtr
 VBC1_PUSH_TOS
@@ -3620,7 +3654,7 @@ VBC1_LOAD
 VBC2_PUSH_LOCAL -4 //kick_size
 VBC1_SUB_FF
 VBC1_POP
-LAB6025: //if else
+LAB6063: //if else
 [1:911] ;xtl += kick_size;
 VBC2_PUSH_CONST 29 //xtl
 VBC1_PUSH_TOS
@@ -3636,25 +3670,25 @@ VBC3_PUSH_GLOBAL 74 //dx0
 VBC1_SUB_FF
 VBC1_POP
 [1:913] ;computeAlphaForWalk();
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB6047: //for step
+LAB6085: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_ADD
 VBC1_POP
-VBC4_JUMP LAB5832 //to condition
-LAB6060: //for exit
+VBC4_JUMP LAB5870 //to condition
+LAB6098: //for exit
 [1:915] ;for( j = fr1 + fr2; j < 2 * fr1 + fr2; j += framestep ){
 VBC2_PUSH_CONST 63 //j
 VBC3_PUSH_GLOBAL 40 //fr1
 VBC3_PUSH_GLOBAL 41 //fr2
 VBC1_ADD
 VBC1_POP
-LAB6070: //for condition
+LAB6108: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC1_PUSH_2 
 VBC3_PUSH_GLOBAL 40 //fr1
@@ -3662,7 +3696,7 @@ VBC1_MUL
 VBC3_PUSH_GLOBAL 41 //fr2
 VBC1_ADD
 VBC1_LESS
-VBC4_FALSE_JUMP LAB6194 //to for exit
+VBC4_FALSE_JUMP LAB6232 //to for exit
 ;
 [1:916] ;s = (amplitude / 2 ) * sfMathCos(alpha01 * (j - fr2 + framestep) / 2);
 VBC2_PUSH_CONST 69 //s
@@ -3725,18 +3759,18 @@ VBC3_PUSH_GLOBAL 74 //dx0
 VBC1_SUB_FF
 VBC1_POP
 [1:924] ;computeAlphaForWalk();
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB6181: //for step
+LAB6219: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_ADD
 VBC1_POP
-VBC4_JUMP LAB6070 //to condition
-LAB6194: //for exit
+VBC4_JUMP LAB6108 //to condition
+LAB6232: //for exit
 [1:926] ;for( j = 2 * fr1 + fr2; j < 2 * (fr1 + fr2); j += framestep ){
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_2 
@@ -3745,7 +3779,7 @@ VBC1_MUL
 VBC3_PUSH_GLOBAL 41 //fr2
 VBC1_ADD
 VBC1_POP
-LAB6206: //for condition
+LAB6244: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC1_PUSH_2 
 VBC3_PUSH_GLOBAL 40 //fr1
@@ -3753,7 +3787,7 @@ VBC3_PUSH_GLOBAL 41 //fr2
 VBC1_ADD
 VBC1_MUL
 VBC1_LESS
-VBC4_FALSE_JUMP LAB6425 //to for exit
+VBC4_FALSE_JUMP LAB6463 //to for exit
 ;
 [1:927] ;ztl = -gaitHeightKick + stepHeightKick;
 VBC2_PUSH_CONST 31 //ztl
@@ -3806,7 +3840,7 @@ VBC1_ADD
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_SUB
 VBC1_EQU
-VBC4_FALSE_JUMP LAB6324 //if to false
+VBC4_FALSE_JUMP LAB6362 //if to false
 ;
 [1:931] ;ztl = -gaitHeightKick;
 VBC2_PUSH_CONST 31 //ztl
@@ -3819,7 +3853,7 @@ VBC3_PUSH_GLOBAL 69 //s
 VBC3_PUSH_GLOBAL 37 //d10
 VBC1_ADD_FF
 VBC1_POP
-LAB6324: //if else
+LAB6362: //if else
 [1:934] ;if (j == (2 * fr1 + fr2 ) || j == (2 * (fr1 + fr2) - framestep)){
 VBC3_PUSH_GLOBAL 63 //j
 VBC1_PUSH_2 
@@ -3828,7 +3862,7 @@ VBC1_MUL
 VBC3_PUSH_GLOBAL 41 //fr2
 VBC1_ADD
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB6363
+VBC4_TRUE_JUMP_KEEP LAB6401
 VBC3_PUSH_GLOBAL 63 //j
 VBC1_PUSH_2 
 VBC3_PUSH_GLOBAL 40 //fr1
@@ -3838,10 +3872,10 @@ VBC1_MUL
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_SUB
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB6363
+VBC4_TRUE_JUMP_KEEP LAB6401
 VBC1_PUSH_0
-LAB6363:
-VBC4_FALSE_JUMP LAB6389 //if to false
+LAB6401:
+VBC4_FALSE_JUMP LAB6427 //if to false
 ;
 [1:935] ;xtl -= dx0;
 VBC2_PUSH_CONST 29 //xtl
@@ -3856,8 +3890,8 @@ VBC3_PUSH_GLOBAL 69 //s
 VBC2_PUSH_CONST 64 
 VBC1_ADD_FI
 VBC1_POP
-VBC4_JUMP LAB6398 //if to exit
-LAB6389: //if else
+VBC4_JUMP LAB6436 //if to exit
+LAB6427: //if else
 ;xtl += dx;
 VBC2_PUSH_CONST 29 //xtl
 VBC1_PUSH_TOS
@@ -3865,7 +3899,7 @@ VBC1_LOAD
 VBC3_PUSH_GLOBAL 71 //dx
 VBC1_ADD_FF
 VBC1_POP
-LAB6398: //if exit
+LAB6436: //if exit
 [1:940] ;xtr -= dx0;
 VBC2_PUSH_CONST 22 //xtr
 VBC1_PUSH_TOS
@@ -3874,18 +3908,18 @@ VBC3_PUSH_GLOBAL 74 //dx0
 VBC1_SUB_FF
 VBC1_POP
 [1:941] ;computeAlphaForWalk();
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB6412: //for step
+LAB6450: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC3_PUSH_GLOBAL 21 //framestep
 VBC1_ADD
 VBC1_POP
-VBC4_JUMP LAB6206 //to condition
-LAB6425: //for exit
+VBC4_JUMP LAB6244 //to condition
+LAB6463: //for exit
 [1:945] ;pose_taking_cycles = 5;
 VBC2_PUSH_B_OFFSET -6 //pose_taking_cycles
 VBC2_PUSH_CONST 5 
@@ -3899,11 +3933,11 @@ VBC1_POP
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_0 
 VBC1_POP
-LAB6440: //for condition
+LAB6478: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC2_PUSH_LOCAL -6 //pose_taking_cycles
 VBC1_LESS
-VBC4_FALSE_JUMP LAB6542 //to for exit
+VBC4_FALSE_JUMP LAB6580 //to for exit
 ;
 [1:948] ;ztr = -gaitHeightKick + (j + 1 )*(pose_hight_after_kick + gaitHeightKick) / pose_taking_cycles;
 VBC2_PUSH_CONST 24 //ztr
@@ -3958,18 +3992,18 @@ VBC1_DIV_FI
 VBC1_SUB_FF
 VBC1_POP
 [1:952] ;computeAlphaForWalk();
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB6531: //for step
+LAB6569: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC1_PUSH_1 
 VBC1_ADD
 VBC1_POP
-VBC4_JUMP LAB6440 //to condition
-LAB6542: //for exit
+VBC4_JUMP LAB6478 //to condition
+LAB6580: //for exit
 [1:954] ;pose_taking_cycles = 50;
 VBC2_PUSH_B_OFFSET -6 //pose_taking_cycles
 VBC2_PUSH_CONST 50 
@@ -3978,11 +4012,11 @@ VBC1_POP
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_0 
 VBC1_POP
-LAB6551: //for condition
+LAB6589: //for condition
 VBC3_PUSH_GLOBAL 63 //j
 VBC2_PUSH_LOCAL -6 //pose_taking_cycles
 VBC1_LESS
-VBC4_FALSE_JUMP LAB6604 //to for exit
+VBC4_FALSE_JUMP LAB6642 //to for exit
 ;
 [1:956] ;ztr = pose_hight_after_kick + (j + 1) * (ztr0 - pose_hight_after_kick) / pose_taking_cycles;
 VBC2_PUSH_CONST 24 //ztr
@@ -4003,18 +4037,18 @@ VBC2_PUSH_CONST 31 //ztl
 VBC3_PUSH_GLOBAL 24 //ztr
 VBC1_POP
 [1:958] ;computeAlphaForWalk();
-VBC3_PUSH_CONST 1356  //func address computeAlphaForWalk
+VBC3_PUSH_CONST 1394  //func address computeAlphaForWalk
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-LAB6593: //for step
+LAB6631: //for step
 VBC2_PUSH_CONST 63 //j
 VBC1_PUSH_TOS
 VBC1_LOAD
 VBC1_PUSH_1 
 VBC1_ADD
 VBC1_POP
-VBC4_JUMP LAB6551 //to condition
-LAB6604: //for exit
+VBC4_JUMP LAB6589 //to condition
+LAB6642: //for exit
 [1:961] ;xr = xrOld;
 VBC2_PUSH_CONST 25 //xr
 VBC2_PUSH_LOCAL -7 //xrOld
@@ -4044,7 +4078,7 @@ VBC1_POP
 VBC2_PUSH_LOCAL 3 //direction
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB6675 //if to false
+VBC4_FALSE_JUMP LAB6713 //if to false
 ;
 [1:970] ;sfPoseGroup( 1024 , -200 * factor, frames );
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
@@ -4064,12 +4098,12 @@ VBC1_MUL
 VBC2_PUSH_LOCAL -1 //frames
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB6675: //if else
+LAB6713: //if else
 [1:973] ;if (direction == -1){
 VBC2_PUSH_LOCAL 3 //direction
 VBC2_PUSH_CONST -1 // -
 VBC1_EQU
-VBC4_FALSE_JUMP LAB6720 //if to false
+VBC4_FALSE_JUMP LAB6758 //if to false
 ;
 [1:974] ;sfPoseGroup( 1024 , 200 * factor, frames );
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
@@ -4089,7 +4123,7 @@ VBC1_MUL
 VBC2_PUSH_LOCAL -1 //frames
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB6720: //if else
+LAB6758: //if else
 [1:977] ;sfPoseGroup( (2097152  | 1048576 ), 200 * factor, frames );
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC4_PUSH_CONST 3145728 
@@ -4144,7 +4178,7 @@ VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:986] ;forwardDirection = get_yaw();
 VBC2_PUSH_CONST 75 //forwardDirection
-VBC3_PUSH_CONST 325  //func address get_yaw
+VBC3_PUSH_CONST 363  //func address get_yaw
 //alloc addon amount for result
 VBC1_CALL0
 //remove call address and params
@@ -4541,35 +4575,35 @@ VBC1_STACK_UP2//remove result, call address and params
 VBC1_RETURN
 ;movingRemoteControl <void()>
 [1:1059] ;while(1) {
-LAB7507: //while condition
+LAB7545: //while condition
 ;
 [1:1061] ;while (sfAbs(svRemoteRightJoystickX) < 10
-LAB7507: //while condition
+LAB7545: //while condition
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 3256 //svRemoteRightJoystickX
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB7589
+VBC4_FALSE_JUMP_KEEP LAB7627
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 3257 //svRemoteRightJoystickY
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB7589
+VBC4_FALSE_JUMP_KEEP LAB7627
 VBC5_PUSH_CONST 20 | 0x80000000 //import func index sfAbs
 VBC3_PUSH_GLOBAL 3253 //svRemoteLeftJoystickX
 VBC1_CALL1
 VBC1_STACK_UP1//remove call address and params
 VBC2_PUSH_CONST 10 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB7589
+VBC4_FALSE_JUMP_KEEP LAB7627
 VBC3_PUSH_GLOBAL 3254 //svRemoteLeftJoystickY
 VBC1_PUSH_0 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB7583
+VBC4_FALSE_JUMP_KEEP LAB7621
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC3_PUSH_CONST 2048 
 VBC1_DIV
@@ -4577,107 +4611,107 @@ VBC1_PUSH_2
 VBC1_MOD
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP_KEEP LAB7583
+VBC4_FALSE_JUMP_KEEP LAB7621
 VBC1_PUSH_1
-LAB7583:
+LAB7621:
 VBC1_LNOT
-VBC4_FALSE_JUMP_KEEP LAB7589
+VBC4_FALSE_JUMP_KEEP LAB7627
 VBC1_PUSH_1
-LAB7589:
-VBC4_FALSE_JUMP LAB8179 //while to exit
+LAB7627:
+VBC4_FALSE_JUMP LAB8217 //while to exit
 ;
 [1:1065] ;if (svRemoteButton == 1048576) {
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC4_PUSH_CONST 1048576 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7614 //if to false
+VBC4_FALSE_JUMP LAB7652 //if to false
 ;
 [1:1066] ;sfStartSlot(sfSlotIndex("standUpRemote.cpp"));
 VBC5_PUSH_CONST 42 | 0x80000000 //import func index sfStartSlot
 VBC2_PUSH_CONST 15 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB7614: //if else
+LAB7652: //if else
 [1:1070] ;if (svRemoteButton == 262144 || svRemoteButton == 128) kick(1, 0, 1); 
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC4_PUSH_CONST 262144 
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB7638
+VBC4_TRUE_JUMP_KEEP LAB7676
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC3_PUSH_CONST 128 
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB7638
+VBC4_TRUE_JUMP_KEEP LAB7676
 VBC1_PUSH_0
-LAB7638:
-VBC4_FALSE_JUMP LAB7650 //if to false
+LAB7676:
+VBC4_FALSE_JUMP LAB7688 //if to false
 ;if (svRemoteButton == 262144 || svRemoteButton == 128) kick(1, 0, 1); 
-VBC3_PUSH_CONST 5522  //func address kick
+VBC3_PUSH_CONST 5560  //func address kick
 VBC1_PUSH_1 
 VBC1_PUSH_0 
 VBC1_PUSH_1 
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB7650: //if else
+LAB7688: //if else
 [1:1071] ;if (svRemoteButton == 524288 || svRemoteButton == 64) kick(0, 0, 1); 
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC4_PUSH_CONST 524288 
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB7673
+VBC4_TRUE_JUMP_KEEP LAB7711
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC2_PUSH_CONST 64 
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB7673
+VBC4_TRUE_JUMP_KEEP LAB7711
 VBC1_PUSH_0
-LAB7673:
-VBC4_FALSE_JUMP LAB7685 //if to false
+LAB7711:
+VBC4_FALSE_JUMP LAB7723 //if to false
 ;if (svRemoteButton == 524288 || svRemoteButton == 64) kick(0, 0, 1); 
-VBC3_PUSH_CONST 5522  //func address kick
+VBC3_PUSH_CONST 5560  //func address kick
 VBC1_PUSH_0 
 VBC1_PUSH_0 
 VBC1_PUSH_1 
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB7685: //if else
+LAB7723: //if else
 [1:1072] ;if ((svRemoteButton == 16777232 + 128) || (svRemoteButton == 16777232 + 262144)) kick(1, 0, -1); 
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 16777360 
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB7712
+VBC4_TRUE_JUMP_KEEP LAB7750
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 17039376 
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB7712
+VBC4_TRUE_JUMP_KEEP LAB7750
 VBC1_PUSH_0
-LAB7712:
-VBC4_FALSE_JUMP LAB7725 //if to false
+LAB7750:
+VBC4_FALSE_JUMP LAB7763 //if to false
 ;if ((svRemoteButton == 16777232 + 128) || (svRemoteButton == 16777232 + 262144)) kick(1, 0, -1); 
-VBC3_PUSH_CONST 5522  //func address kick
+VBC3_PUSH_CONST 5560  //func address kick
 VBC1_PUSH_1 
 VBC1_PUSH_0 
 VBC2_PUSH_CONST -1 // -
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB7725: //if else
+LAB7763: //if else
 [1:1073] ;if ((svRemoteButton == 33554464 + 64) || (svRemoteButton == 33554464 + 524288)) kick(0, 0, -1); 
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 33554528 
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB7752
+VBC4_TRUE_JUMP_KEEP LAB7790
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 34078752 
 VBC1_EQU
-VBC4_TRUE_JUMP_KEEP LAB7752
+VBC4_TRUE_JUMP_KEEP LAB7790
 VBC1_PUSH_0
-LAB7752:
-VBC4_FALSE_JUMP LAB7765 //if to false
+LAB7790:
+VBC4_FALSE_JUMP LAB7803 //if to false
 ;if ((svRemoteButton == 33554464 + 64) || (svRemoteButton == 33554464 + 524288)) kick(0, 0, -1); 
-VBC3_PUSH_CONST 5522  //func address kick
+VBC3_PUSH_CONST 5560  //func address kick
 VBC1_PUSH_0 
 VBC1_PUSH_0 
 VBC2_PUSH_CONST -1 // -
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-LAB7765: //if else
+LAB7803: //if else
 [1:1074] ;jump_mode = 0;
 VBC3_PUSH_CONST 1024 //jump_mode
 VBC1_PUSH_0 
@@ -4686,142 +4720,142 @@ VBC1_POP
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 16777236 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7790 //if to false
+VBC4_FALSE_JUMP LAB7828 //if to false
 ;if (svRemoteButton == 16777232 + 4) jump_forward(10); 
-VBC3_PUSH_CONST 6819  //func address jump_forward
+VBC3_PUSH_CONST 6857  //func address jump_forward
 VBC2_PUSH_CONST 10 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB7790: //if else
+LAB7828: //if else
 [1:1076] ;if (svRemoteButton == 16777232 + 2) jump_mode = 102;             
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 16777234 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7809 //if to false
+VBC4_FALSE_JUMP LAB7847 //if to false
 ;if (svRemoteButton == 16777232 + 2) jump_mode = 102;             
 VBC3_PUSH_CONST 1024 //jump_mode
 VBC2_PUSH_CONST 102 
 VBC1_POP
-LAB7809: //if else
+LAB7847: //if else
 [1:1077] ;if (svRemoteButton == 16777232 + 1) jump_mode = 103;             
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 16777233 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7828 //if to false
+VBC4_FALSE_JUMP LAB7866 //if to false
 ;if (svRemoteButton == 16777232 + 1) jump_mode = 103;             
 VBC3_PUSH_CONST 1024 //jump_mode
 VBC2_PUSH_CONST 103 
 VBC1_POP
-LAB7828: //if else
+LAB7866: //if else
 [1:1078] ;if (svRemoteButton == 16777232 + 8) jump_mode = 104;             
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 16777240 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7847 //if to false
+VBC4_FALSE_JUMP LAB7885 //if to false
 ;if (svRemoteButton == 16777232 + 8) jump_mode = 104;             
 VBC3_PUSH_CONST 1024 //jump_mode
 VBC2_PUSH_CONST 104 
 VBC1_POP
-LAB7847: //if else
+LAB7885: //if else
 [1:1079] ;if (svRemoteButton == 33554464 + 4) jump_mode = 51;              
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 33554468 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7866 //if to false
+VBC4_FALSE_JUMP LAB7904 //if to false
 ;if (svRemoteButton == 33554464 + 4) jump_mode = 51;              
 VBC3_PUSH_CONST 1024 //jump_mode
 VBC2_PUSH_CONST 51 
 VBC1_POP
-LAB7866: //if else
+LAB7904: //if else
 [1:1080] ;if (svRemoteButton == 33554464 + 2) jump_mode = 52;              
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 33554466 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7885 //if to false
+VBC4_FALSE_JUMP LAB7923 //if to false
 ;if (svRemoteButton == 33554464 + 2) jump_mode = 52;              
 VBC3_PUSH_CONST 1024 //jump_mode
 VBC2_PUSH_CONST 52 
 VBC1_POP
-LAB7885: //if else
+LAB7923: //if else
 [1:1081] ;if (svRemoteButton == 33554464 + 1) jump_mode = 53;              
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 33554465 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7904 //if to false
+VBC4_FALSE_JUMP LAB7942 //if to false
 ;if (svRemoteButton == 33554464 + 1) jump_mode = 53;              
 VBC3_PUSH_CONST 1024 //jump_mode
 VBC2_PUSH_CONST 53 
 VBC1_POP
-LAB7904: //if else
+LAB7942: //if else
 [1:1082] ;if (svRemoteButton == 33554464 + 8) jump_mode = 54;              
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 33554472 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7923 //if to false
+VBC4_FALSE_JUMP LAB7961 //if to false
 ;if (svRemoteButton == 33554464 + 8) jump_mode = 54;              
 VBC3_PUSH_CONST 1024 //jump_mode
 VBC2_PUSH_CONST 54 
 VBC1_POP
-LAB7923: //if else
+LAB7961: //if else
 [1:1083] ;if (jump_mode > 0) sfStartSlot(sfSlotIndex("roki2microJump.cpp"));
 VBC3_PUSH_GLOBAL 1024 //jump_mode
 VBC1_PUSH_0 
 VBC1_GREAT
-VBC4_FALSE_JUMP LAB7941 //if to false
+VBC4_FALSE_JUMP LAB7979 //if to false
 ;if (jump_mode > 0) sfStartSlot(sfSlotIndex("roki2microJump.cpp"));
 VBC5_PUSH_CONST 42 | 0x80000000 //import func index sfStartSlot
 VBC2_PUSH_CONST 4 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB7941: //if else
+LAB7979: //if else
 [1:1084] ;if (svRemoteButton == 1) turn(1, 10); 
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7958 //if to false
+VBC4_FALSE_JUMP LAB7996 //if to false
 ;if (svRemoteButton == 1) turn(1, 10); 
-VBC3_PUSH_CONST 6625  //func address turn
+VBC3_PUSH_CONST 6663  //func address turn
 VBC1_PUSH_1 
 VBC2_PUSH_CONST 10 
 VBC1_CALL2
 VBC1_STACK_UP3//remove result, call address and params
-LAB7958: //if else
+LAB7996: //if else
 [1:1085] ;if (svRemoteButton == 8) turn(-1, 10); 
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC2_PUSH_CONST 8 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7977 //if to false
+VBC4_FALSE_JUMP LAB8015 //if to false
 ;if (svRemoteButton == 8) turn(-1, 10); 
-VBC3_PUSH_CONST 6625  //func address turn
+VBC3_PUSH_CONST 6663  //func address turn
 VBC2_PUSH_CONST -1 // -
 VBC2_PUSH_CONST 10 
 VBC1_CALL2
 VBC1_STACK_UP3//remove result, call address and params
-LAB7977: //if else
+LAB8015: //if else
 [1:1086] ;if (svRemoteButton == 4) turn(1, 5); 
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC2_PUSH_CONST 4 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB7995 //if to false
+VBC4_FALSE_JUMP LAB8033 //if to false
 ;if (svRemoteButton == 4) turn(1, 5); 
-VBC3_PUSH_CONST 6625  //func address turn
+VBC3_PUSH_CONST 6663  //func address turn
 VBC1_PUSH_1 
 VBC2_PUSH_CONST 5 
 VBC1_CALL2
 VBC1_STACK_UP3//remove result, call address and params
-LAB7995: //if else
+LAB8033: //if else
 [1:1087] ;if (svRemoteButton == 2) turn(-1, 5); 
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC1_PUSH_2 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB8013 //if to false
+VBC4_FALSE_JUMP LAB8051 //if to false
 ;if (svRemoteButton == 2) turn(-1, 5); 
-VBC3_PUSH_CONST 6625  //func address turn
+VBC3_PUSH_CONST 6663  //func address turn
 VBC2_PUSH_CONST -1 // -
 VBC2_PUSH_CONST 5 
 VBC1_CALL2
 VBC1_STACK_UP3//remove result, call address and params
-LAB8013: //if else
+LAB8051: //if else
 [1:1088] ;splits_Mode = 0;
 VBC3_PUSH_CONST 1026 //splits_Mode
 VBC1_PUSH_0 
@@ -4830,70 +4864,70 @@ VBC1_POP
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC4_PUSH_CONST 2097152 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB8035 //if to false
+VBC4_FALSE_JUMP LAB8073 //if to false
 ;if (svRemoteButton == 2097152) splits_Mode = 1;
 VBC3_PUSH_CONST 1026 //splits_Mode
 VBC1_PUSH_1 
 VBC1_POP
-LAB8035: //if else
+LAB8073: //if else
 [1:1090] ;if (svRemoteButton == 2097152 + 33554464) splits_Mode = 2;
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 35651616 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB8053 //if to false
+VBC4_FALSE_JUMP LAB8091 //if to false
 ;if (svRemoteButton == 2097152 + 33554464) splits_Mode = 2;
 VBC3_PUSH_CONST 1026 //splits_Mode
 VBC1_PUSH_2 
 VBC1_POP
-LAB8053: //if else
+LAB8091: //if else
 [1:1091] ;if (svRemoteButton == 1048576 + 16777232) splits_Mode = 3;
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 17825808 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB8072 //if to false
+VBC4_FALSE_JUMP LAB8110 //if to false
 ;if (svRemoteButton == 1048576 + 16777232) splits_Mode = 3;
 VBC3_PUSH_CONST 1026 //splits_Mode
 VBC2_PUSH_CONST 3 
 VBC1_POP
-LAB8072: //if else
+LAB8110: //if else
 [1:1092] ;if (svRemoteButton == 2097152 + 16777232) splits_Mode = 4;
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 18874384 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB8091 //if to false
+VBC4_FALSE_JUMP LAB8129 //if to false
 ;if (svRemoteButton == 2097152 + 16777232) splits_Mode = 4;
 VBC3_PUSH_CONST 1026 //splits_Mode
 VBC2_PUSH_CONST 4 
 VBC1_POP
-LAB8091: //if else
+LAB8129: //if else
 [1:1093] ;if (splits_Mode > 0) sfStartSlot(sfSlotIndex("roki2Splits.cpp"));
 VBC3_PUSH_GLOBAL 1026 //splits_Mode
 VBC1_PUSH_0 
 VBC1_GREAT
-VBC4_FALSE_JUMP LAB8109 //if to false
+VBC4_FALSE_JUMP LAB8147 //if to false
 ;if (splits_Mode > 0) sfStartSlot(sfSlotIndex("roki2Splits.cpp"));
 VBC5_PUSH_CONST 42 | 0x80000000 //import func index sfStartSlot
 VBC2_PUSH_CONST 5 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-LAB8109: //if else
+LAB8147: //if else
 [1:1094] ;if (svRemoteButton == 8388608) sfBip(1,1);
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC5_PUSH_CONST 8388608 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB8131 //if to false
+VBC4_FALSE_JUMP LAB8169 //if to false
 ;if (svRemoteButton == 8388608) sfBip(1,1);
 VBC5_PUSH_CONST 43 | 0x80000000 //import func index sfBip
 VBC1_PUSH_1 
 VBC1_PUSH_1 
 VBC1_CALL2
 VBC1_STACK_UP3//remove result, call address and params
-LAB8131: //if else
+LAB8169: //if else
 [1:1095] ;if (svRemoteButton == 65536) {
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC4_PUSH_CONST 65536 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB8152 //if to false
+VBC4_FALSE_JUMP LAB8190 //if to false
 ;
 [1:1096] ;fps = 6;
 VBC2_PUSH_CONST 55 //fps
@@ -4903,12 +4937,12 @@ VBC1_POP
 VBC2_PUSH_CONST 56 //walking_frame
 VBC1_PUSH_1 
 VBC1_POP
-LAB8152: //if else
+LAB8190: //if else
 [1:1099] ;if (svRemoteButton == 131072) {
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC4_PUSH_CONST 131072 
 VBC1_EQU
-VBC4_FALSE_JUMP LAB8174 //if to false
+VBC4_FALSE_JUMP LAB8212 //if to false
 ;
 [1:1100] ;fps = 4;
 VBC2_PUSH_CONST 55 //fps
@@ -4918,14 +4952,14 @@ VBC1_POP
 VBC2_PUSH_CONST 56 //walking_frame
 VBC2_PUSH_CONST 3 
 VBC1_POP
-LAB8174: //if else
+LAB8212: //if else
 [1:1104] ;sfWaitNextFrame();
 VBC1_WAIT
-VBC4_JUMP LAB7507 //while forever loop
-LAB8179: //while exit
+VBC4_JUMP LAB7545 //while forever loop
+LAB8217: //while exit
 [1:1108] ;sideLength = joystickToSideLength();
 VBC2_PUSH_CONST 4 //sideLength
-VBC3_PUSH_CONST 4865  //func address joystickToSideLength
+VBC3_PUSH_CONST 4903  //func address joystickToSideLength
 VBC1_CALL0
 //remove call address and params
 VBC1_POP_CF
@@ -4937,7 +4971,7 @@ VBC1_POP
 VBC3_PUSH_GLOBAL 3254 //svRemoteLeftJoystickY
 VBC1_PUSH_0 
 VBC1_LESS
-VBC4_FALSE_JUMP_KEEP LAB8217
+VBC4_FALSE_JUMP_KEEP LAB8255
 VBC3_PUSH_GLOBAL 3251 //svRemoteButton
 VBC3_PUSH_CONST 2048 
 VBC1_DIV
@@ -4945,22 +4979,22 @@ VBC1_PUSH_2
 VBC1_MOD
 VBC1_PUSH_1 
 VBC1_EQU
-VBC4_FALSE_JUMP_KEEP LAB8217
+VBC4_FALSE_JUMP_KEEP LAB8255
 VBC1_PUSH_1
-LAB8217:
-VBC4_FALSE_JUMP LAB8228 //if to false
+LAB8255:
+VBC4_FALSE_JUMP LAB8266 //if to false
 ;if (svRemoteLeftJoystickY < 0 && ((svRemoteButton / 2048) % 2 == 1)) stepNumber = -svRemoteLeftJoystickY;
 VBC2_PUSH_CONST 59 //stepNumber
 VBC3_PUSH_GLOBAL 3254 //svRemoteLeftJoystickY
 VBC1_NEG
 VBC1_POP
-LAB8228: //if else
+LAB8266: //if else
 [1:1112] ;walkInitialPoseFine();
-VBC3_PUSH_CONST 3008  //func address walkInitialPoseFine
+VBC3_PUSH_CONST 3046  //func address walkInitialPoseFine
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:1113] ;walkLoop();
-VBC3_PUSH_CONST 4952  //func address walkLoop
+VBC3_PUSH_CONST 4990  //func address walkLoop
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:1116] ;stepType = 1;
@@ -4968,18 +5002,18 @@ VBC2_PUSH_CONST 54 //stepType
 VBC1_PUSH_1 
 VBC1_POP
 [1:1117] ;walkCycle(0);
-VBC3_PUSH_CONST 4474  //func address walkCycle
+VBC3_PUSH_CONST 4512  //func address walkCycle
 VBC1_PUSH_0 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:1119] ;walkFinalPoseFine();
-VBC3_PUSH_CONST 3174  //func address walkFinalPoseFine
+VBC3_PUSH_CONST 3212  //func address walkFinalPoseFine
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
-VBC4_JUMP LAB7507 //while forever loop
-LAB8257: //while exit
+VBC4_JUMP LAB7545 //while forever loop
+LAB8295: //while exit
 [1:1123] ;walkFinalPoseFine();
-VBC3_PUSH_CONST 3174  //func address walkFinalPoseFine
+VBC3_PUSH_CONST 3212  //func address walkFinalPoseFine
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:1126] ;
@@ -4990,7 +5024,7 @@ VBC1_PUSH_2 //slowWalk
 VBC1_PUSH_0 
 VBC1_POP
 [1:1128] ;setup();
-VBC3_PUSH_CONST 335  //func address setup
+VBC3_PUSH_CONST 373  //func address setup
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:1129] ;sideLength = 0;
@@ -5007,19 +5041,19 @@ VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:1138] ;forwardDirection = get_yaw();
 VBC2_PUSH_CONST 75 //forwardDirection
-VBC3_PUSH_CONST 325  //func address get_yaw
+VBC3_PUSH_CONST 363  //func address get_yaw
 //alloc addon amount for result
 VBC1_CALL0
 //remove call address and params
 VBC1_POP
 [1:1141] ;sfCreateTask( mixing, 20 );
 VBC5_PUSH_CONST 2 | 0x80000000 //import func index sfCreateTask
-VBC3_PUSH_CONST 4694  //func address mixing
+VBC3_PUSH_CONST 4732  //func address mixing
 VBC2_PUSH_CONST 20 
 VBC1_CALL2
 VBC1_STACK_UP3//remove result, call address and params
 [1:1143] ;movingRemoteControl(); 
-VBC3_PUSH_CONST 7507  //func address movingRemoteControl
+VBC3_PUSH_CONST 7545  //func address movingRemoteControl
 VBC1_CALL0
 VBC1_STACK_UP1//remove result, call address and params
 [1:1148] ;sfStartSlot( sfSlotIndex("roki2TenseUp.cpp") );
@@ -5292,6 +5326,7 @@ leftClawAddonMix : 3081
 jump_mode : 1024
 robot_Serial_Number : 1025
 splits_Mode : 1026
+lowest_ntc : 1027
 slowWalk : 2
 stepLength F: 3
 sideLength F: 4

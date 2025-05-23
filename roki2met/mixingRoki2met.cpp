@@ -9,7 +9,7 @@
     svCreateTask( mixing, 50 );
 */
 #include <roki2met.h>
-//#include <roki2global.h>
+#include <roki2global.h>
 
 //Факторы определяют степень зависимости поворота стоп от показаний IMU
 int leftRightFactor; //Фактор миксования лево-право
@@ -18,6 +18,23 @@ int frontBackFactor; //Фактор миксования вперед-назад
 int quart;
 int errCount;
 float sum;
+int right_knee_ntc;
+int left_knee_ntc;
+int right_knee_bot_ntc;
+int left_knee_bot_ntc;
+
+void paramScan() {
+  while(1) {
+    sfUnitParamRead( IDX_RIGHT_KNEE, 201, &right_knee_ntc );
+    sfUnitParamRead( IDX_LEFT_KNEE, 201, &left_knee_ntc );
+    sfUnitParamRead( IDX_RIGHT_KNEE_BOT, 201, &right_knee_bot_ntc );
+    sfUnitParamRead( IDX_LEFT_KNEE_BOT, 201, &left_knee_bot_ntc );
+    lowest_ntc = right_knee_ntc;
+    if ( lowest_ntc > left_knee_ntc) lowest_ntc = left_knee_ntc;
+    if ( lowest_ntc > right_knee_bot_ntc) lowest_ntc = right_knee_bot_ntc;
+    if ( lowest_ntc > left_knee_bot_ntc) lowest_ntc = left_knee_bot_ntc;
+    }
+}
 
 
 void mixing() {
@@ -50,5 +67,6 @@ void mixing() {
   }
 
 void main() {
+  sfCreateTask( paramScan, 20 );
   mixing();
   }
