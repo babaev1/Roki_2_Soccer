@@ -1783,7 +1783,7 @@ class Player():
                     #time.sleep(0.5)
                     time.sleep(1)
                     self.motion.jump_turn(0)
-                if x > -50:
+                if x > self.motion.params['WEIGHTLIFTING_APPROACH_PROXIMITY']:
                     #intercom.memISet(var, 101)
                     #self.glob.rcb.motionPlay(7)
                     fraction = min(1, abs((x - self.motion.params['WEIGHTLIFTING_APPROACH_PROXIMITY']) / self.glob.jump_forward_yield))

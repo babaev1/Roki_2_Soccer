@@ -39,13 +39,17 @@ class Camera:
         self.picam2.pre_callback = self.frame_number_counter.add_farme_number
         #self.picam2.configure(self.picam2.create_still_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": (800, 650)}))
         self.picam2.configure(self.picam2.create_preview_configuration(main={"format": 'RGB888', "size": (1600, 1300)}, lores={"format": 'YUV420', "size": self.camera_lores}))
-        if neural:
-            self.picam2.set_controls({"AeExposureMode":  controls.AeExposureModeEnum.Short})
-        else:
-            if exposure != None:
-                self.picam2.set_controls({"ExposureTime": exposure})		# exposure limits: 11 ~ 199953
-            if gain != None:
-                self.picam2.set_controls({"AnalogueGain": gain})
+        #if neural:
+        #    self.picam2.set_controls({"AeExposureMode":  controls.AeExposureModeEnum.Short})
+        #else:
+        #    if exposure != None:
+        #        self.picam2.set_controls({"ExposureTime": exposure})		# exposure limits: 11 ~ 199953
+        #    if gain != None:
+        #        self.picam2.set_controls({"AnalogueGain": gain})
+        if exposure != None:
+            self.picam2.set_controls({"ExposureTime": exposure})		# exposure limits: 11 ~ 199953
+        if gain != None:
+            self.picam2.set_controls({"AnalogueGain": gain})
         self.picam2.set_controls({"FrameDurationLimits": (frame_duration_us*2, frame_duration_us*2)})
         self.picam2.start()
         time.sleep(1)
