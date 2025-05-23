@@ -1786,7 +1786,7 @@ class Player():
                 if x > -50:
                     #intercom.memISet(var, 101)
                     #self.glob.rcb.motionPlay(7)
-                    fraction = min(1, abs((x + self.motion.params['WEIGHTLIFTING_APPROACH_PROXIMITY']) / self.glob.jump_forward_yield))
+                    fraction = min(1, abs((x - self.motion.params['WEIGHTLIFTING_APPROACH_PROXIMITY']) / self.glob.jump_forward_yield))
                     self.motion.one_jump_forward(fraction)
                     #time.sleep(0.5)
                     time.sleep(1)
