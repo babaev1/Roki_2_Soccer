@@ -1765,7 +1765,10 @@ class Player():
             self.motion.head_Return(0, -2000)
             for _ in range(500):
                 time.sleep(1)
-                if self.glob.SIMULATION == 5: result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
+                if self.glob.SIMULATION == 5: 
+                    for _ in range(100):
+                        result, course, distance = self.glob.vision.seek_Ball_In_Frame_N(with_Localization = False)
+                        if result: break
                 else: result, course, distance, ball_blob = self.glob.vision.seek_Ball_In_Frame(with_Localization = False)
                 print('course :', course, 'distance :', distance)
                 x = distance * math.cos(course) * 1000
