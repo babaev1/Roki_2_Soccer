@@ -4,7 +4,6 @@
 
 class roki2met :
     #Индексы доступных слотов
-    roki2InitSlot = 1
     roki2TenseUpSlot = 2
     mixingRoki2metSlot = 3
     roki2Walk_RemoteSlot = 4
@@ -294,9 +293,6 @@ class roki2met :
     leftClawVelo = 3077
     leftClawFlags = 3079
     leftClawAddonMix = 3081
-    jump_mode = 1024
-    robot_Serial_Number = 1025
-    splits_Mode = 1026
 
 
 

@@ -1786,12 +1786,12 @@ class Player():
                 if x > -50:
                     #intercom.memISet(var, 101)
                     #self.glob.rcb.motionPlay(7)
-                    fraction = min(1, abs((x + 50) / self.glob.jump_forward_yield))
+                    fraction = min(1, abs((x + self.motion.params['WEIGHTLIFTING_APPROACH_PROXIMITY'])) / self.glob.jump_forward_yield))
                     self.motion.one_jump_forward(fraction)
                     #time.sleep(0.5)
                     time.sleep(1)
                     self.motion.jump_turn(0)
-                if abs(y) < 20 and x < -50: 
+                if abs(y) < 20 and x < -self.motion.params['WEIGHTLIFTING_APPROACH_PROXIMITY']): 
                     break
             self.motion.play_Soft_Motion_Slot(name = 'Shtanga_1_1') 
         
