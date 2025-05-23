@@ -1020,7 +1020,7 @@ class Motion_real(Motion):
         proximity = self.params["KICK_ADJUSTMENT_DISTANCE_1"] / 1000  #0.2
         direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
         self.jump_turn(direction_To_Ball)
-        stepLength = 50 #64
+        stepLength = 30 #64
         sideLength = 0
         last_step_factor = 1
         discontinue = False
