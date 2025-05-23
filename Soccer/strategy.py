@@ -2050,6 +2050,7 @@ class Player():
                 ok4, ntc4_value = intercom.memIGet(ntc4)
                 if ok1 and ok2 and ok3 and ok4:
                     ntc = min(ntc1_value, ntc2_value, ntc3_value, ntc4_value)
+                    print("Lowest NTC: ", nct)
                     if ntc < 1100: break                                    # risk temperature in knee servos
                 stepLength1 = stepLength
                 if cycle ==0 : stepLength1 = stepLength/3
