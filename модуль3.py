@@ -1,3 +1,5 @@
-i = 1
-if i in (2,3,4): print('Yes')
-else: print("No")
+x = []
+y = [1]
+z = [2,3]
+v = []
+print(v + x + v + y + z)

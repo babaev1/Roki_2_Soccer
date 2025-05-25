@@ -756,29 +756,44 @@ class Vision_General:
         count_ok_rois = 0
         for i, r in enumerate(ROIS):
             blobs1  = img.find_blobs([self.TH['line_follow_1']['th']], 
-                                    pixels_threshold=20, #self.TH['orange ball']['pixel'],
-                                    area_threshold=20, #self.TH['orange ball']['area'],
+                                    pixels_threshold=20, 
+                                    area_threshold=20, 
                                     merge=True, margin=10, roi=r[0:4])
             blobs2  = img.find_blobs([self.TH['line_follow_2']['th']], 
-                                    pixels_threshold=20, #self.TH['orange ball']['pixel'],
-                                    area_threshold=20, #self.TH['orange ball']['area'],
+                                    pixels_threshold=20, 
+                                    area_threshold=20, 
+                                    merge=True, margin=10, roi=r[0:4])
+            blobs3  = img.find_blobs([self.TH['line_follow_3']['th']], 
+                                    pixels_threshold=20, 
+                                    area_threshold=20, 
+                                    merge=True, margin=10, roi=r[0:4])
+            blobs4  = img.find_blobs([self.TH['line_follow_4']['th']], 
+                                    pixels_threshold=20, 
+                                    area_threshold=20, 
                                     merge=True, margin=10, roi=r[0:4])
 
             filtered_blobs1 =[]
             for blob in blobs1:
-                if blob.w_ < 60:
+                if blob.w_ < 80:
                     filtered_blobs1.append(blob)
             filtered_blobs2 =[]
             for blob in blobs2:
-                if blob.w_ < 60:
+                if blob.w_ < 80:
                     filtered_blobs2.append(blob)
-            if (len (filtered_blobs1) != 0):
-                filtered_blobs = filtered_blobs1
+            filtered_blobs3 =[]
+            for blob in blobs3:
+                if blob.w_ < 80:
+                    filtered_blobs3.append(blob)
+            filtered_blobs4 =[]
+            for blob in blobs4:
+                if blob.w_ < 80:
+                    filtered_blobs4.append(blob)
+            filtered_blobs = []
+            if (len (filtered_blobs1) != 0 or len (filtered_blobs2) != 0 or len (filtered_blobs3) != 0):
+                filtered_blobs = filtered_blobs1 + filtered_blobs2 + filtered_blobs3
             else:
-                if (len (filtered_blobs2) != 0):
-                    filtered_blobs = filtered_blobs2
-                else: 
-                    filtered_blobs = []
+                if (len (filtered_blobs4) != 0):
+                    filtered_blobs = filtered_blobs4
 
             if (len (filtered_blobs) != 0):
                 blob_found = True
