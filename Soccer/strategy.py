@@ -223,7 +223,7 @@ class Player():
         if self.role == 'forward_v2': self.forward_v2_main_cycle()
         if self.role == 'marathon':  self.marathon_main_cycle()
         if self.role == 'penalty_Shooter': self.penalty_Shooter_main_cycle()
-        if self.role == 'FIRA_penalty_Shooter': self.FIRA_penalty_Shooter_main_cycle()
+        if self.role == 'FIRA_penalty_Shooter': self.FIRA_penalty_Shooter_main_cycle_()
         if self.role == 'run_test': self.run_test_main_cycle(self.second_pressed_button)
         if self.role == 'jump_test': self.jump_test(self.second_pressed_button)
         if self.role == 'rotation_test': self.rotation_test_main_cycle()
@@ -718,66 +718,63 @@ class Player():
                 success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
 
     def FIRA_penalty_Shooter_main_cycle_(self):
-        self.motion.with_Vision = False
-        self.glob.camera_streaming = False
+        if self.glob.camera_streaming: self.glob.vision.camera_thread.start()
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
-        first_shoot = True
-        first_look_point = [2.0 , 0]
         self.motion.head_Return(0, -1500)
         time.sleep(1)
-
-        self.motion.jump_turn(self.motion.params['PENALTY_JUMP_TURN_ANGLE'], jumps_limit = 2) # 0.5
-        self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
-        self.motion.kick(True, small = True)
-        self.motion.walk_Final_Pose_After_Kick()
+        #self.motion.jump_turn(self.motion.params['PENALTY_JUMP_TURN_ANGLE'], jumps_limit = 10) # 0.5
+        #self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
+        #self.motion.kick(True, small = True)
+        self.motion.jump_turn(0.75, jumps_limit = 10)
+        #self.motion.walk_Final_Pose_After_Kick()
         for _ in range(5):
             self.motion.falling_Test()
             time.sleep(0.5)
-        self.motion.jump_turn(self.f.direction_To_Guest)
-        self.motion.near_distance_omni_motion(300, math.pi/2)
-
+        #self.motion.jump_turn(self.f.direction_To_Guest)
+        self.walk_straight(number_Of_Cycles = 50, stepLength = 20, sideLength = 0, respect_body_tilt = False, direction = 0.75)
+        #self.motion.near_distance_omni_motion(500, 0) #math.pi/2)
+        #self.motion.jump_turn(0, jumps_limit = 10)
+        #self.motion.near_distance_omni_motion(300, 0)
+        #return
         while (True):
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break
                 self.motion.falling_Flag = 0
-                self.local.coordinate_fall_reset()
-            success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
-                                                                              very_Fast = False, first_look_point=first_look_point )
-            first_look_point = self.glob.ball_coord
+                #self.local.coordinate_fall_reset()
+                self.motion.head_Return(0, self.motion.neck_play_pose)
+            if self.glob.camera_down_Flag == True: self.glob.camera_reset()
+            if self.glob.robot_see_ball <= 10:   # must be 0
+                self.motion.head_Return(0, self.motion.neck_play_pose)
+                success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = True,
+                                                                                  very_Fast = False)
+            self.glob.local.localisation_Complete()
             self.f.dir_To_Guest()
-            print('ball_coord = ', self.glob.ball_coord)
-            print('direction_To_Guest = ', math.degrees(self.f.direction_To_Guest), 'degrees')
-            if dist == 0 and success_Code == False or success_Code == False:
-                os.system("espeak -ven-m1 -a"+ '200' + " " + "'jump_turn'")
-                self.motion.jump_turn(self.motion.imu_body_yaw()+ 2 * math.pi / 3)
-                #self.motion.jump_turn(self.norm_yaw(self.glob.pf_coord[2]+ 2 * math.pi / 3))
+            print('direction_To_Guest = ', round(math.degrees(self.f.direction_To_Guest)), 'degrees')
+            print('coord =', round(self.local.coord_odometry[0],2), round(self.local.coord_odometry[1],2), 'ball =', round(self.local.ball_odometry[0],2), round(self.local.ball_odometry[1],2))
+            if self.glob.robot_see_ball < 0:
+                print('Seek ball')
+                self.motion.jump_turn(self.local.coord_odometry[2]+ 2 * math.pi / 3)
                 continue
-            player_from_ball_yaw = coord2yaw(self.glob.pf_coord[0] - self.glob.ball_coord[0],
-                                                          self.glob.pf_coord[1] - self.glob.ball_coord[1]) - self.f.direction_To_Guest
+            player_from_ball_yaw = coord2yaw(self.local.coord_odometry[0] - self.local.ball_odometry[0],
+                                                          self.local.coord_odometry[1] - self.local.ball_odometry[1]) - self.f.direction_To_Guest
             player_from_ball_yaw = self.norm_yaw(player_from_ball_yaw)
             player_in_front_of_ball = -math.pi/2 < player_from_ball_yaw < math.pi/2
-            player_in_fast_kick_position = (player_from_ball_yaw > 2.5 or player_from_ball_yaw < -2.5) and dist < 0.6
-            if (dist == 0 or dist > 0.5)  and not player_in_fast_kick_position:
-                if dist > 1: stop_Over = True
-                else: stop_Over = False
-                direction_To_Ball = math.atan2((self.glob.ball_coord[1] - self.glob.pf_coord[1]), (self.glob.ball_coord[0] - self.glob.pf_coord[0]))
-                os.system("espeak -ven-m1 -a"+ '200' + " " + "'far_distance_straight_approach'")
-                #self.motion.far_distance_straight_approach(self.glob.ball_coord, direction_To_Ball, stop_Over = stop_Over)
+            player_in_fast_kick_position = (player_from_ball_yaw > 2.0 or player_from_ball_yaw < -2.0) and self.glob.ball_distance < 0.6
+            if self.glob.ball_distance > 0.35  and not player_in_fast_kick_position:
+                direction_To_Ball = math.atan2((self.local.ball_odometry[1] - self.local.coord_odometry[1]), (self.local.ball_odometry[0] - self.local.coord_odometry[0]))
+                print('napravl :', self.glob.ball_course)
+                print('direction_To_Ball', direction_To_Ball)
                 self.motion.far_distance_straight_approach_streaming()
                 continue
             if player_in_front_of_ball or not player_in_fast_kick_position:
-                os.system("espeak -ven-m1 -a"+ '200' + " " + "'go_Around_Ball'")
-                self.go_Around_Ball(dist, napravl)
-            self.motion.jump_turn(self.f.direction_To_Guest)
-            #if first_shoot:
-            #if self.f.kick_Power == 1: self.motion.kick_power = 100
-            #if self.f.kick_Power == 2: self.motion.kick_power = 60
-            #if self.f.kick_Power == 3: self.motion.kick_power = 20
-            self.motion.kick_power = 100
-            os.system("espeak -ven-m1 -a"+ '200' + " " + "'near_distance_ball_approach_and_kick'")
-            #success_Code = self.motion.near_distance_ball_approach_and_kick(self.f.direction_To_Guest)
-            success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
-            first_shoot = False
+                self.go_Around_Ball(self.glob.ball_distance, self.glob.ball_course)
+                continue
+            if player_in_fast_kick_position:
+                self.motion.jump_turn(self.f.direction_To_Guest)
+                if self.f.kick_Power == 1: self.motion.kick_power = 100
+                if self.f.kick_Power == 2: self.motion.kick_power = 60
+                if self.f.kick_Power == 3: self.motion.kick_power = 20
+                success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
 
     def penalty_Shooter_main_cycle(self):
         #self.f = Forward(self.motion, self.local, self.glob)
@@ -1714,7 +1711,7 @@ class Player():
         if self.glob.SIMULATION == 1:
             self.motion.sim_Progress(10)
 
-    def walk_straight(self, number_Of_Cycles = 0, stepLength = 0, sideLength = 0, respect_body_tilt = False):
+    def walk_straight(self, number_Of_Cycles = 0, stepLength = 0, sideLength = 0, respect_body_tilt = False, direction = 0):
         self.motion.walk_Initial_Pose()
         number_Of_Cycles += 2
         for cycle in range(number_Of_Cycles):
@@ -1723,7 +1720,7 @@ class Player():
             if cycle ==1 or cycle == number_Of_Cycles-2 : stepLength1 = stepLength/3 * 2
             self.motion.refresh_Orientation()
             #self.motion.body_euler_angle_calc()
-            rotation = - self.motion.body_euler_angle['yaw'] * 1.0
+            rotation = direction - self.motion.body_euler_angle['yaw'] * 1.0
             rotation = self.motion.normalize_rotation(rotation)
             self.motion.walk_Cycle(stepLength1, sideLength, rotation,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose(respect_body_tilt = respect_body_tilt)
