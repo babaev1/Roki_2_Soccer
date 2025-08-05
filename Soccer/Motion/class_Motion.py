@@ -7,6 +7,7 @@ from tkinter import FALSE
 import numpy as np
 import starkit
 from math import pi
+from roki2met import roki2met
 from scipy.spatial.transform import Rotation
 from Robots.class_Robot_Roki_2 import Robot
 from Soccer.Motion.class_Motion_extention_1 import Motion_extention_1
@@ -1869,8 +1870,6 @@ class Motion(Robot, Motion_extention_1):
             self.euler_angle['yaw'] -= self.direction_To_Attack
             self.euler_angle['yaw'] += self.imu_drift_speed * (time.perf_counter() - self.start_point_for_imu_drift)
 
-        
-
     def turn(self):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
@@ -1935,6 +1934,18 @@ class Motion(Robot, Motion_extention_1):
                     a=self.rcb.setServoPosAsync(servoDatas, self.frames_per_cycle, 0)
                     time1 = time.perf_counter() - start1
         #self.robot_In_0_Pose = True
+
+    def hard_kick(self, kick_by_right = 1, kick_power = 100, kick_offset = 0):
+        var = roki2met.roki2met
+        intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
+        if kick_offset < -60 : kick_offset = -60
+        if kick_offset > 80 : kick_offset = 80
+        intercom.memISet(var.kick_by_right, kick_by_right)
+        intercom.memISet(var.kick_power, kick_power)
+        intercom.memISet(var.kick_offset, kick_offset)
+        self.glob.rcb.motionPlay(31)
+
+
 
 if __name__=="__main__":
     print('This is not main module!')
