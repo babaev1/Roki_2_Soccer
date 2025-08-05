@@ -229,7 +229,7 @@ class Player():
         if self.role == 'rotation_test': self.rotation_test_main_cycle()
         if self.role == 'sidestep_test': self.sidestep_test_main_cycle()
         if self.role == 'obstacle_runner': self.obstacle_runner_main_cycle()
-        if self.role == 'kick_test': self.test_walk_main_cycle()
+        #if self.role == 'kick_test': self.test_walk_main_cycle()
         if self.role == 'ball_moving': self.ball_moving_main_cycle()
         if self.role == 'dance': self.dance_main_cycle()
         if self.role == 'basketball': self.basketball_main_cycle(self.second_pressed_button)
@@ -238,7 +238,7 @@ class Player():
         if self.role == 'corner_kick_2': self.corner_kick_2_main_cycle()
         if self.role == 'triple_jump': self.triple_jump_main_cycle(self.second_pressed_button)
         if self.role == 'sprint': self.sprint(self.second_pressed_button)
-        #if self.role == 'kick_test': self.kick_test(self.second_pressed_button)
+        if self.role == 'kick_test': self.kick_test(self.second_pressed_button)
         #print('self.glob.SIMULATION:', self.glob.SIMULATION)
         if [0,1,3].count(self.glob.SIMULATION) == 1:
             self.motion.sim_Stop()
