@@ -74,11 +74,11 @@ try:
         initial_coord = [-landmarks_FIRA['FIELD_LENGTH'] / 2, 0, 0]
 
     if role in ('forward', 'penalty_Shooter', 'FIRA_penalty_Shooter', 'penalty_Goalkeeper', 'FIRA_penalty_Goalkeeper',
-               'basketball', 'marathon', 'weight_lifting', 'triple_jump'):
+               'basketball', 'marathon', 'weight_lifting', 'triple_jump', 'kick_test'):
         glob = Glob(SIMULATION, current_work_directory, particles_number = 100, event_type = event_type)
         glob.pf_coord = initial_coord
         glob.role = role
-        if role in ('forward', 'penalty_Shooter', 'FIRA_penalty_Shooter', 'penalty_Goalkeeper', 'FIRA_penalty_Goalkeeper', 'weight_lifting', 'basketball'):
+        if role in ('forward', 'penalty_Shooter', 'FIRA_penalty_Shooter', 'penalty_Goalkeeper', 'FIRA_penalty_Goalkeeper', 'weight_lifting', 'basketball', 'kick_test'):
             glob.neural_vision_enable()
             glob.neural_vision = True
         vision = Vision_RPI(glob)
