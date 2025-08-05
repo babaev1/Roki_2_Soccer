@@ -347,6 +347,9 @@ int 1024:jump_mode
 int 1025:robot_Serial_Number
 int 1026:splits_Mode
 int 1027:lowest_ntc
+int 1028:kick_power
+int 1029:kick_by_right
+int 1030:kick_offset
 int 2:frameCount
 
 //==================

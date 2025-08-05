@@ -1699,7 +1699,16 @@ class Player():
             self.motion.kick_power = 100
             self.motion.kick(True)
         else:
-            self.test_walk_main_cycle()
+            var = roki2met.roki2met
+            intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
+            self.motion.head_Return(0, -1500)
+            success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
+                                                                              very_Fast = False, first_look_point=first_look_point )
+
+            intercom.memISet(var.kcik_by_right, 1)
+            intercom.memISet(var.kcik_power, 100)
+            self.glob.rcb.motionPlay(31)
+            #self.test_walk_main_cycle()
             #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
         if self.glob.SIMULATION == 1:
             self.motion.sim_Progress(10)

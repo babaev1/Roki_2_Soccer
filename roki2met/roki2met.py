@@ -30,6 +30,7 @@ class roki2met :
     sprint_v4_testSlot = 28
     numberingSlot = 29
     roki2Walk_testSlot = 30
+    roki2KickSlot = 31
 
 
     #Перечень доступных звуков
@@ -303,6 +304,9 @@ class roki2met :
     robot_Serial_Number = 1025
     splits_Mode = 1026
     lowest_ntc = 1027
+    kick_power = 1028
+    kick_by_right = 1029
+    kick_offset = 1030
 
 
 
@@ -1161,6 +1165,95 @@ class roki2met :
 
     class roki2Walk_test :
         #Перечень переменных слота roki2Walk_test
+        IKerr = 2
+        stepLength = 3
+        sideLength = 4
+        rotation = 5
+        selfMotionShiftCorrectionX = 6
+        selfMotionShiftCorrectionY = 7
+        selfFirstStepYield = 8
+        selfCycleStepYield = 9
+        selfSideStepRightYield = 10
+        selfSideStepLeftYield = 11
+        selfFirstLegIsRightLeg = 12
+        motion_to_right = 13
+        side_motion = 14
+        selfInitPoses = 15
+        rotationYieldRight = 16
+        rotationYieldLeft = 17
+        framestep = 18
+        x_cap = 19
+        y_cap = 20
+        xtr = 21
+        xtr_cap = 22
+        xr_cap = 23
+        ytr = 24
+        ytr_cap = 25
+        ztr = 26
+        xr = 27
+        yr = 28
+        zr = 29
+        wr = 30
+        xtl = 31
+        xtl_cap = 32
+        xl_cap = 33
+        xt_cap_limit = 34
+        x_cap_limit = 35
+        ytl = 36
+        ytl_cap = 37
+        side_cap = 38
+        yt_cap_limit = 39
+        ztl = 40
+        xl = 41
+        yl = 42
+        zl = 43
+        wl = 44
+        e10 = 45
+        d10 = 46
+        amplitude = 47
+        alpha01 = 48
+        fr1 = 49
+        fr2 = 50
+        gaitHeight = 51
+        stepHeight = 52
+        correctedStepLenght = 53
+        correctedStepLenghtHalf = 54
+        correctedSideLenght = 55
+        correctedSideLenghtHalf = 56
+        ztr0 = 57
+        ztl0 = 58
+        stepZtr = 59
+        stepZtl = 60
+        stepYtr = 61
+        stepYtl = 62
+        stepType = 63
+        fps = 64
+        walking_frame = 65
+        bodyTiltAtWalk = 66
+        solyLandingSkew = 67
+        stepNumber = 68
+        yaw = 69
+        pitch = 70
+        roll = 71
+        j = 72
+        xtl0 = 73
+        xtr0 = 74
+        dx0Typical = 75
+        dy0Typical = 76
+        correctedRotation = 77
+        s = 78
+        fase_offset = 79
+        dx = 80
+        dy = 81
+        stepRotation = 82
+        dx0 = 83
+        forwardDirection = 84
+        leftRightFactor = 85
+        frontBackFactor = 86
+
+
+    class roki2Kick :
+        #Перечень переменных слота roki2Kick
         IKerr = 2
         stepLength = 3
         sideLength = 4

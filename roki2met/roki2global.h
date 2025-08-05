@@ -29,3 +29,6 @@ int jump_mode _global_; // 0 - jump at spot, 1-jump forward, 2- backward, 3 - le
 int robot_Serial_Number _global_;
 int splits_Mode _global_;
 int lowest_ntc _global_;
+int kick_power _global_;  // form 20 to 100
+int kick_by_right _global_; // 1 for right, 0 for left
+int kick_offset _global_;   // value in mm for adding offset. Pozitive value increases distance from body. 

@@ -587,6 +587,9 @@ jump_mode : 1024
 robot_Serial_Number : 1025
 splits_Mode : 1026
 lowest_ntc : 1027
+kick_power : 1028
+kick_by_right : 1029
+kick_offset : 1030
 leftRightFactor : 2
 frontBackFactor : 3
 quart : 4
