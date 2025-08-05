@@ -674,6 +674,8 @@ class Player():
             time.sleep(0.5)
         #self.motion.jump_turn(self.f.direction_To_Guest)
         self.motion.near_distance_omni_motion(500, 0) #math.pi/2)
+        self.motion.jump_turn(0, jumps_limit = 10)
+        self.motion.near_distance_omni_motion(300, 0)
         #return
         while (True):
             if self.motion.falling_Flag != 0:
