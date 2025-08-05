@@ -673,7 +673,7 @@ class Player():
             self.motion.falling_Test()
             time.sleep(0.5)
         #self.motion.jump_turn(self.f.direction_To_Guest)
-        self.motion.near_distance_omni_motion(400, 0) #math.pi/2)
+        self.motion.near_distance_omni_motion(500, 0) #math.pi/2)
         #return
         while (True):
             if self.motion.falling_Flag != 0:
