@@ -31,4 +31,4 @@ int splits_Mode _global_;
 int lowest_ntc _global_;
 int kick_power _global_;  // form 20 to 100
 int kick_by_right _global_; // 1 for right, 0 for left
-int kick_offset _global_;   // value in mm for adding offset. Pozitive value increases distance from body. 
+int kick_offset _global_;   // value in mm for adding offset. Pozitive value increases distance from body. -60 100
