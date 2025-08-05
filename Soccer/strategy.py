@@ -1711,7 +1711,7 @@ class Player():
                 else: kick_by_right = 0
                 kick_offset = int(abs(math.sin(napravl) * dist * 1000)) - 62
                 if kick_offset < -60 : kick_offset = -60
-                if kick_offset > 100 : kick_offset = 100
+                if kick_offset > 80 : kick_offset = 80
             intercom.memISet(var.kick_by_right, kick_by_right)
             intercom.memISet(var.kick_power, 100)
             intercom.memISet(var.kick_offset, kick_offset)
