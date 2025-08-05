@@ -119,6 +119,10 @@ int 3254:svRemoteLeftJoystickY
 int 3255:svRemoteRightJoystick
 int 3256:svRemoteRightJoystickX
 int 3257:svRemoteRightJoystickY
+int 2603:svDebug0
+int 2604:svDebug1
+int 2605:svDebug2
+int 2606:svDebug3
 int 3264:svHumoModelDistPelvic
 int 3265:svHumoModelLengthPelvicHip
 int 3266:svHumoModelLengthHipHip

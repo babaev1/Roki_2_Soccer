@@ -149,32 +149,32 @@ VBC1_STACK_UP3//remove call address and params
 VBC2_POP_RESULT 5
 VBC1_RETURN
 ;main <void()>
-[1:12] ;svButtonRight = sfSlotIndex("roki2Walk_Remote.cpp");
+[1:13] ;svButtonRight = sfSlotIndex("roki2Walk_Remote.cpp");
 VBC3_PUSH_CONST 2582 //svButtonRight
 VBC2_PUSH_CONST 3 
 VBC1_POP
-[1:15] ;sfPoseGroup( 1056964607 , 0, 100 );
+[1:16] ;sfPoseGroup( 1056964607 , 0, 100 );
 VBC5_PUSH_CONST 51 | 0x80000000 //import func index sfPoseGroup
 VBC5_PUSH_CONST 1056964607 
 VBC1_PUSH_0 
 VBC2_PUSH_CONST 100 
 VBC1_CALL3
 VBC1_STACK_UP4//remove result, call address and params
-[1:16] ;sfWaitFrame( 100 );
+[1:17] ;sfWaitFrame( 100 );
 VBC2_PUSH_CONST 56  //func address sfWaitFrame
 VBC2_PUSH_CONST 100 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:17] ;svHeadControlMask = -1;       
+[1:18] ;svHeadControlMask = -1;       
 VBC3_PUSH_CONST 2584 //svHeadControlMask
 VBC2_PUSH_CONST -1 // -
 VBC1_POP
-[1:20] ;sfStartSlot( sfSlotIndex("mixingRoki2met.cpp") );
+[1:21] ;sfStartSlot( sfSlotIndex("mixingRoki2met.cpp") );
 VBC5_PUSH_CONST 42 | 0x80000000 //import func index sfStartSlot
 VBC1_PUSH_2 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:21] ;
+[1:22] ;
 VBC1_RETURN
 //Init table
 //Variables
@@ -216,6 +216,10 @@ svRemoteLeftJoystickY : 3254
 svRemoteRightJoystick : 3255
 svRemoteRightJoystickX : 3256
 svRemoteRightJoystickY : 3257
+svDebug0 : 2603
+svDebug1 : 2604
+svDebug2 : 2605
+svDebug3 : 2606
 svHumoModelDistPelvic : 3264
 svHumoModelLengthPelvicHip : 3265
 svHumoModelLengthHipHip : 3266

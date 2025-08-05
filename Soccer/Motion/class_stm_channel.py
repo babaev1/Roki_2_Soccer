@@ -11,7 +11,7 @@ class STM_channel():
         self.glob.Roki = Roki
         self.mb = Roki.Motherboard()
         conf = Roki.TTYConfig()
-        conf.Port = "/dev/ttyAMA2"
+        conf.Port = "/dev/shm/motherboard"
         conf.Baudrate = 1250000
         conf.Stopbits = Roki.Stopbits.One
         conf.ParityBit = True

@@ -131,7 +131,8 @@ class Motion(Robot, Motion_extention_1):
             if sleeping_time > 0.1 :
                 if self.glob.role == 'marathon':
                     self.glob.vision.detect_Line_Follow_One_Shot()
-                else:  self.glob.vision.detect_Ball_in_One_Shot()
+                else:  
+                    self.glob.vision.detect_Ball_in_One_Shot()
                 queue_length = self.stm_channel.mb.GetBodyQueueInfo()[1].Size
                 if queue_length > 1: queue_length -= 1
                 sleeping_time = queue_length * frame_time_s
@@ -530,7 +531,8 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                     if self.glob.SIMULATION == 1:
-                        self.sim.simxSynchronousTrigger(self.clientID)
+                        #self.sim.simxSynchronousTrigger(self.clientID)
+                        self.trigger('walk_initial_pose')
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
@@ -787,7 +789,8 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                         if self.glob.SIMULATION == 1:
-                            self.sim.simxSynchronousTrigger(self.clientID)
+                            #self.sim.simxSynchronousTrigger(self.clientID)
+                            self.trigger('walk_cycle_v0')
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     servoDatas = []
@@ -829,7 +832,11 @@ class Motion(Robot, Motion_extention_1):
             self.local.refresh_odometry()
         #self.first_Leg_Is_Right_Leg = tmp1
         if self.glob.SIMULATION == 5: self.wait_for_gueue_end(self.with_Vision)
-        else: self.glob.vision.detect_Ball_in_One_Shot()
+        else:
+            if not self.glob.camera_streaming:
+                start = time.perf_counter()
+                self.glob.vision.detect_Ball_in_One_Shot()
+                print('time used for detect_Ball_in_One_Shot:', time.perf_counter() - start)
 
     def walk_Cycle(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles, half = False):
         self.robot_In_0_Pose = False
@@ -1006,7 +1013,8 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                         if self.glob.SIMULATION == 1:
-                            self.sim.simxSynchronousTrigger(self.clientID)
+                            #self.sim.simxSynchronousTrigger(self.clientID)
+                            self.trigger('walk_Cycle')
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     servoDatas = []
@@ -1056,7 +1064,10 @@ class Motion(Robot, Motion_extention_1):
             if self.glob.role == 'marathon':
                 self.glob.vision.detect_Line_Follow_One_Shot()
             else:  
-                if self.with_Vision: self.glob.vision.detect_Ball_in_One_Shot()
+                if self.with_Vision:
+                    start = time.perf_counter()
+                    self.glob.vision.detect_Ball_in_One_Shot()
+                    print('time used for detect_Ball_in_One_Shot:', time.perf_counter() - start)
 
     def walk_Cycle_With_Tors_v2(self, stepLength,sideLength, rotation,cycle, number_Of_Cycles):
         self.walk_Cycle_With_Tors_v2_init(stepLength,sideLength, rotation)
@@ -1470,7 +1481,8 @@ class Motion(Robot, Motion_extention_1):
                     #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                     #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                     if self.glob.SIMULATION == 1:
-                        self.sim.simxSynchronousTrigger(self.clientID)
+                        #self.sim.simxSynchronousTrigger(self.clientID)
+                        self.trigger('perform_motion')
             elif self.glob.SIMULATION == 5:
                 joint_number = len(angles)
                 servoDatas = []
@@ -1553,7 +1565,8 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                     if self.glob.SIMULATION == 1:
-                        self.sim.simxSynchronousTrigger(self.clientID)
+                        #self.sim.simxSynchronousTrigger(self.clientID)
+                        self.trigger('walk_final_pose')
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     servoDatas = []
@@ -1642,7 +1655,8 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                     if self.glob.SIMULATION == 1:
-                        self.sim.simxSynchronousTrigger(self.clientID)
+                        #self.sim.simxSynchronousTrigger(self.clientID)
+                        self.trigger('walk_Final_Pose_After_Kick')
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
@@ -1786,7 +1800,8 @@ class Motion(Robot, Motion_extention_1):
                         #if self.glob.SIMULATION == 1 or self.glob.SIMULATION  == 0:
                         #    self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
                         if self.glob.SIMULATION == 1:
-                            self.sim.simxSynchronousTrigger(self.clientID)
+                            #self.sim.simxSynchronousTrigger(self.clientID)
+                            self.trigger('kick')
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
@@ -1899,7 +1914,8 @@ class Motion(Robot, Motion_extention_1):
                         returnCode, Dummy_Hposition= self.sim.simxGetObjectPosition(self.clientID,
                                               self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
                     if self.glob.SIMULATION == 1:
-                        self.sim.simxSynchronousTrigger(self.clientID)
+                        #self.sim.simxSynchronousTrigger(self.clientID)
+                        self.trigger('turn')
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':

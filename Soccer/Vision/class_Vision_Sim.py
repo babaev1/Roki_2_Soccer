@@ -1,6 +1,7 @@
 import json
 import math
 import sys
+import time
 import traceback
 from tkinter import EXCEPTION
 #import reload
@@ -19,7 +20,9 @@ class Vision_Sim(Vision_General):
     def snapshot(self):
         try:
             #self.glob.motion.sim_simxSynchronousTrigger(self.glob.motion.clientID)
+            start = time.perf_counter()
             self.image = self.glob.motion.vision_Sensor_Get_Image()
+            #print('time used for vision_Sensor_Get_Image: ', time.perf_counter()-start)
             self.glob.motion.refresh_Orientation()
             #print("snapshot: self.glob.motion.euler_angle['pitch'] :", self.glob.motion.euler_angle['pitch'], ' head_tilt: ', self.glob.motion.neck_tilt * self.glob.motion.TIK2RAD)
             #print("snapshot: self.glob.motion.euler_angle['roll'] :", self.glob.motion.euler_angle['roll'])

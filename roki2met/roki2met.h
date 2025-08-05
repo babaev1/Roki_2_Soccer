@@ -1,5 +1,5 @@
 
-//IronArt v0.116
+//IronArt v0.117
 //Данный файл сгенерирован автоматически системой IronArt и не должен редактироваться
 //
 #ifndef ROKI2MET_H
@@ -103,6 +103,15 @@ int svRemoteRightJoystickY _at_ 3257;  //Смещение правого джо�
 #define ARB_GETUP_FACEUP   2097152
 #define ARB_APPLAUSE       4194304
 #define ARB_BEEP           8388608
+
+
+
+//Отладочные переменные
+int svDebug0         _at_ 2603;
+int svDebug1         _at_ 2604;
+int svDebug2         _at_ 2605;
+int svDebug3         _at_ 2606;
+
 
 
 

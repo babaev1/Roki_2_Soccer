@@ -216,7 +216,8 @@ class Player():
 
     def play_game(self):
         if self.role == 'goalkeeper': self.goalkeeper_main_cycle()
-        if self.role == 'penalty_Goalkeeper': self.FIRA_penalty_Goalkeeper_main_cycle()
+        if self.role == 'penalty_Goalkeeper': self.penalty_Goalkeeper_main_cycle()
+        if self.role == 'FIRA_penalty_Goalkeeper': self.FIRA_penalty_Goalkeeper_main_cycle()
         if self.role == 'side_to_side': self.side_to_side_main_cycle()
         if self.role == 'forward': self.forward_main_cycle(self.second_pressed_button)
         if self.role == 'forward_v2': self.forward_v2_main_cycle()
@@ -425,7 +426,8 @@ class Player():
         #self.motion.first_Leg_Is_Right_Leg = False
         if self.motion.first_Leg_Is_Right_Leg: invert = -1
         else: invert = 1
-        self.motion.walk_Initial_Pose()
+        if self.glob.hardcode_walking: self.motion.hardcode_walk_Init()
+        else: self.motion.walk_Initial_Pose()
         number_Of_Cycles += 1
         for cycle in range(number_Of_Cycles):
             stepLength1 = stepLength
@@ -436,7 +438,10 @@ class Player():
             #if rotation > 0: rotation *= 1.5
             rotation = self.motion.normalize_rotation(rotation)
             #rotation = 0
-            self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
+            if self.glob.hardcode_walking:
+                last = (cycle == (number_Of_Cycles - 1))
+                self.motion.hardcode_walk_Cycle(stepLength1, sideLength, rotation, 0, last=last)
+            else: self.motion.walk_Cycle(stepLength1,sideLength, rotation,cycle, number_Of_Cycles)
         self.motion.walk_Final_Pose()
 
     def sidestep_test_main_cycle(self, pressed_button):
@@ -469,6 +474,7 @@ class Player():
         return yaw
 
     def forward_main_cycle(self, pressed_button):
+        if self.glob.camera_streaming: self.glob.vision.camera_thread.start()
         self.glob.monitor_is_on = True
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         if self.glob.SIMULATION == 5:
@@ -508,11 +514,12 @@ class Player():
             #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
             #                                                                  very_Fast = True, first_look_point=first_look_point)
             #time.sleep(1) # this is to look around for ball 
-            if self.glob.robot_see_ball <= 10:   # must be 0
-                self.motion.head_Return(0, self.motion.neck_play_pose)
-                success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = True,
-                                                                                  very_Fast = False)
-                self.motion.head_Return(0, self.motion.neck_play_pose)
+            if not self.glob.camera_streaming:
+                if self.glob.robot_see_ball <= 10:   # must be 0
+                    self.motion.head_Return(0, self.motion.neck_play_pose)
+                    success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = True,
+                                                                                      very_Fast = False)
+                    self.motion.head_Return(0, self.motion.neck_play_pose)
             #self.glob.pf_coord = self.local.coord_odometry
             self.glob.local.localisation_Complete()
             time_elapsed = time.time() - second_player_timer
@@ -653,19 +660,21 @@ class Player():
                     self.motion.jump_turn(0)
 
     def FIRA_penalty_Shooter_main_cycle(self):
+        if self.glob.camera_streaming: self.glob.vision.camera_thread.start()
         self.f = Forward_Vector_Matrix(self.motion, self.local, self.glob)
         self.motion.head_Return(0, -1500)
         time.sleep(1)
-        self.motion.jump_turn(self.motion.params['PENALTY_JUMP_TURN_ANGLE'], jumps_limit = 2) # 0.5
+        self.motion.jump_turn(self.motion.params['PENALTY_JUMP_TURN_ANGLE'], jumps_limit = 10) # 0.5
         self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
         self.motion.kick(True, small = True)
-        self.motion.walk_Final_Pose_After_Kick()
+        self.motion.jump_turn(0.75, jumps_limit = 10)
+        #self.motion.walk_Final_Pose_After_Kick()
         for _ in range(5):
             self.motion.falling_Test()
             time.sleep(0.5)
-        self.motion.jump_turn(self.f.direction_To_Guest)
-        self.motion.near_distance_omni_motion(300, math.pi/2)
-
+        #self.motion.jump_turn(self.f.direction_To_Guest)
+        self.motion.near_distance_omni_motion(400, 0) #math.pi/2)
+        #return
         while (True):
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break
@@ -886,8 +895,9 @@ class Player():
             success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
                                                                               very_Fast = True )
             if dist != 0:
-                displacement = self.glob.ball_coord[1] - self.glob.pf_coord[1]
-                if abs(displacement) > 0.2:
+                #displacement = self.glob.ball_coord[1] - self.glob.pf_coord[1]
+                displacement = dist * math.sin(napravl)
+                if abs(displacement) > 0.1:
                     self.motion.near_distance_omni_motion(abs(displacement) * 1000, math.copysign(math.pi/2, displacement))
 
 
@@ -2053,7 +2063,7 @@ class Player():
                     if ok1 and ok2 and ok3 and ok4:
                         ntc = min(ntc1_value, ntc2_value, ntc3_value, ntc4_value)
                         print("Lowest NTC: ", ntc)
-                        if ntc < 1100: break                                    # risk temperature in knee servos
+                        if ntc < 1100 and ntc != 0 : break                                    # risk temperature in knee servos
                 stepLength1 = stepLength
                 if cycle ==0 : stepLength1 = stepLength/3
                 if cycle ==1 : stepLength1 = stepLength/3 * 2

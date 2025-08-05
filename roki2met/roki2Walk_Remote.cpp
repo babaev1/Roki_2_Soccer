@@ -22,6 +22,7 @@
 #define ARB_SPLITS         2097152
 #define ARB_JUMP           4194304
 
+int IKerr;
 int slowWalk;
 float stepLength; // = 0.0    # -50 - +70. Best choise 64 for forward. Maximum safe value for backward step -50.
 float sideLength; // = 0.0         # -20 - +20. Side step length to right (+) and to left (-)
@@ -170,8 +171,8 @@ void setup() {
   gaitHeight = 180;  // Distance between Center of mass and floor in walk pose
   stepHeight = 32.0; // elevation of sole over floor
   
-  selfMotionShiftCorrectionX = -50.0 / 21.0;
-  selfMotionShiftCorrectionY = 70.0 / 21.0;
+  selfMotionShiftCorrectionX = 0.0 / 21.0;
+  selfMotionShiftCorrectionY = 0.0 / 21.0;
 
   //self.LIMALPHA[3][1]=0
 
@@ -194,7 +195,7 @@ void setup() {
   stepZtr = (ztr0 + gaitHeight) / selfInitPoses;
   stepZtl = (ztl0 + gaitHeight) / selfInitPoses;
   
-  bodyTiltAtWalk = 0.04;
+  bodyTiltAtWalk = 0.01;
   solyLandingSkew = 0.01;
   
   if( slowWalk ) {
@@ -204,8 +205,8 @@ void setup() {
     }
   else {
     fr1 = 8; //8;           // frame number for 1-st phase of gait ( two legs on floor)
-    fr2 = 10; //12;          // frame number for 2-nd phase of gait ( one leg in air)
-    amplitude = 32;    // mm side amplitude (maximum distance between most right and most left position of Center of Mass) 53.4*2
+    fr2 = 12; //12;          // frame number for 2-nd phase of gait ( one leg in air)
+    amplitude = 20;    // mm side amplitude (maximum distance between most right and most left position of Center of Mass) 53.4*2
     }
   stepYtr = amplitude / 2.0 / selfInitPoses;
   stepYtl = amplitude / 2.0 / selfInitPoses;
@@ -221,8 +222,8 @@ void setup() {
   //На каждом шаге происходит линейная интерполяция позиций в течение количества
   //фреймов, заданных данной переменной
   //Фактическая длительность шага составляет fps - 1, т.е. она короче на один фрейм
-  fps = 4;
-  walking_frame = 3;
+  fps = 5;
+  walking_frame = 2;
   }
   
 
@@ -230,58 +231,6 @@ void setup() {
 //Ожидание завершения перемещения
 //Перемещение выполняется с помощью линейной интерполяции промежуточных значений
 //fps определяет расчетную длительность шага, фактическая длительность на 1 меньше
-int computeAlphaForWalk_() {
-  //Вычислить значения углов серв для правой ноги
-  //if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
-  //else sfIkAngle( xtr, ytr, ztr, xr, yr, zr, -wr );
-  sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
-  if( svIkOutPresent ) {
-    //Записать новые значения в сервы
-    if (selfFirstLegIsRightLeg == 1){
-    	sfPoseGroupLin( MASK_RIGHT_PELVIC, -svIkEncA5, fps );
-    	sfPoseGroupLin( MASK_RIGHT_HIP_SIDE, -svIkEncA6, fps );
-    	sfPoseGroupLin( MASK_RIGHT_HIP, -svIkEncA7, fps );
-    	sfPoseGroupLin( MASK_RIGHT_KNEE, -svIkEncA8, fps );
-    	sfPoseGroupLin( MASK_RIGHT_FOOT_FRONT, svIkEncA9, fps );
-    	sfPoseGroupLin( MASK_RIGHT_FOOT_SIDE, -svIkEncA10, fps );
-      }
-    else {
-        sfPoseGroupLin( MASK_LEFT_PELVIC, svIkEncA5, fps );
-    	sfPoseGroupLin( MASK_LEFT_HIP_SIDE, -svIkEncA6, fps );
-    	sfPoseGroupLin( MASK_LEFT_HIP, -svIkEncA7, fps );
-    	sfPoseGroupLin( MASK_LEFT_KNEE, -svIkEncA8, fps );
-    	sfPoseGroupLin( MASK_LEFT_FOOT_FRONT, svIkEncA9, fps );
-    	sfPoseGroupLin( MASK_LEFT_FOOT_SIDE, -svIkEncA10, fps );
-      }
-    }
-  //Вычислить значение углов серв для левой ноги
-  //if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
-  //else sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, -wl );
-  sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
-  if( svIkOutPresent ) {
-    //Записать новые значения в сервы
-    if (selfFirstLegIsRightLeg == 1){
-    	sfPoseGroupLin( MASK_LEFT_PELVIC, -svIkEncA5, fps );
-    	sfPoseGroupLin( MASK_LEFT_HIP_SIDE, -svIkEncA6, fps );
-    	sfPoseGroupLin( MASK_LEFT_HIP, -svIkEncA7, fps );
-    	sfPoseGroupLin( MASK_LEFT_KNEE, -svIkEncA8, fps );
-    	sfPoseGroupLin( MASK_LEFT_FOOT_FRONT, svIkEncA9, fps );
-    	sfPoseGroupLin( MASK_LEFT_FOOT_SIDE, -svIkEncA10, fps );
-      }
-    else {
-        sfPoseGroupLin( MASK_RIGHT_PELVIC, svIkEncA5, fps );
-    	sfPoseGroupLin( MASK_RIGHT_HIP_SIDE, -svIkEncA6, fps );
-    	sfPoseGroupLin( MASK_RIGHT_HIP, -svIkEncA7, fps );
-    	sfPoseGroupLin( MASK_RIGHT_KNEE, -svIkEncA8, fps );
-    	sfPoseGroupLin( MASK_RIGHT_FOOT_FRONT, svIkEncA9, fps );
-    	sfPoseGroupLin( MASK_RIGHT_FOOT_SIDE, -svIkEncA10, fps );
-      }
-    }
-  //Ожидать когда движение завершится
-  //sfWaitFrame( fps - 6 );
-  sfWaitFrame(walking_frame);
-  return 1;
-  }
 
 int computeAlphaForWalk() {
     //Вычислить значения углов серв для правой ноги
@@ -296,7 +245,9 @@ int computeAlphaForWalk() {
             sfPoseGroupLin(MASK_RIGHT_KNEE_BOT, -svIkEncA8 / 2, fps);
             sfPoseGroupLin(MASK_RIGHT_FOOT_FRONT, svIkEncA9, fps);
             sfPoseGroupLin(MASK_RIGHT_FOOT_SIDE, -svIkEncA10, fps);
+            sfPoseGroupLin(MASK_RIGHT_ELBOW, 5145, fps);
     }
+    else IKerr++;
     //Вычислить значение углов серв для левой ноги
     if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
     else sfIkAngle(xtr, ytr, ztr, xr, yr, zr, -wr);
@@ -309,7 +260,9 @@ int computeAlphaForWalk() {
             sfPoseGroupLin(MASK_LEFT_KNEE_BOT, -svIkEncA8 / 2, fps);
             sfPoseGroupLin(MASK_LEFT_FOOT_FRONT, svIkEncA9, fps);
             sfPoseGroupLin(MASK_LEFT_FOOT_SIDE, -svIkEncA10, fps);
+            sfPoseGroupLin(MASK_LEFT_ELBOW, 5145, fps);
     }
+    else IKerr++;
     //Ожидать когда движение завершится
     sfWaitFrame(walking_frame);
     return 1;
@@ -319,65 +272,6 @@ int computeAlphaForWalk() {
 //Ожидание завершения перемещения
 //Перемещение выполняется с помощью синусоидальной интерполяции промежуточных значений
 //frames - количество фреймов интерполяции и фактическая длительность
-void computeAlphaForWalkFine_( int frames ) {
-  //Вычислить значения углов серв для правой ноги
-  //if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
-  //else sfIkAngle( xtr, ytr, ztr, xr, yr, zr, -wr );
-  sfIkAngle( xtr, ytr, ztr, xr, yr, zr, wr );
-  //Ни одного решения не найдено
-  if( svIkOutPresent ) {
-    //Записать новые значения в сервы
-    if (selfFirstLegIsRightLeg == 1){
-    	sfPoseGroupLin( MASK_RIGHT_PELVIC, -svIkEncA5, frames );
-    	sfPoseGroupLin( MASK_RIGHT_HIP_SIDE, -svIkEncA6, frames );
-    	sfPoseGroupLin( MASK_RIGHT_HIP, -svIkEncA7, frames );
-    	sfPoseGroupLin( MASK_RIGHT_KNEE, -svIkEncA8 / 2, frames );
-        sfPoseGroupLin( MASK_RIGHT_KNEE_BOT, -svIkEncA8 / 2, frames);
-    	sfPoseGroupLin( MASK_RIGHT_FOOT_FRONT, svIkEncA9, frames );
-    	sfPoseGroupLin( MASK_RIGHT_FOOT_SIDE, -svIkEncA10, frames );
-        sfPoseGroupLin( MASK_RIGHT_ELBOW, 5145, frames);
-      }
-    else {
-      sfPoseGroupLin( MASK_LEFT_PELVIC, svIkEncA5, frames );
-    	sfPoseGroupLin( MASK_LEFT_HIP_SIDE, -svIkEncA6, frames );
-    	sfPoseGroupLin( MASK_LEFT_HIP, -svIkEncA7, frames );
-    	sfPoseGroupLin( MASK_LEFT_KNEE, -svIkEncA8 / 2, frames );
-        sfPoseGroupLin( MASK_LEFT_KNEE_BOT, -svIkEncA8 / 2, frames);
-    	sfPoseGroupLin( MASK_LEFT_FOOT_FRONT, svIkEncA9, frames );
-    	sfPoseGroupLin( MASK_LEFT_FOOT_SIDE, -svIkEncA10, frames );
-        sfPoseGroupLin(MASK_LEFT_ELBOW, 5145, frames);
-      }
-    }
-  //Вычислить значение углов серв для левой ноги
-  //if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
-  //else sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, -wl );
-  sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
-  if( svIkOutPresent ) {
-    //Записать новые значения в сервы
-    if (selfFirstLegIsRightLeg == 1){
-    	sfPoseGroupLin( MASK_LEFT_PELVIC, -svIkEncA5, frames );
-    	sfPoseGroupLin( MASK_LEFT_HIP_SIDE, -svIkEncA6, frames );
-    	sfPoseGroupLin( MASK_LEFT_HIP, -svIkEncA7, frames );
-    	sfPoseGroupLin( MASK_LEFT_KNEE, -svIkEncA8 / 2, frames );
-        sfPoseGroupLin( MASK_LEFT_KNEE_BOT, -svIkEncA8 / 2, frames);
-    	sfPoseGroupLin( MASK_LEFT_FOOT_FRONT, svIkEncA9, frames );
-    	sfPoseGroupLin( MASK_LEFT_FOOT_SIDE, -svIkEncA10, frames );
-        sfPoseGroupLin(MASK_LEFT_ELBOW, 5145, frames);
-      }
-    else {
-      sfPoseGroupLin( MASK_RIGHT_PELVIC, svIkEncA5, frames );
-    	sfPoseGroupLin( MASK_RIGHT_HIP_SIDE, -svIkEncA6, frames );
-    	sfPoseGroupLin( MASK_RIGHT_HIP, -svIkEncA7, frames );
-    	sfPoseGroupLin( MASK_RIGHT_KNEE, -svIkEncA8 / 2, frames );
-        sfPoseGroupLin( MASK_RIGHT_KNEE_BOT, -svIkEncA8 / 2, frames);
-    	sfPoseGroupLin( MASK_RIGHT_FOOT_FRONT, svIkEncA9, frames );
-    	sfPoseGroupLin( MASK_RIGHT_FOOT_SIDE, -svIkEncA10, frames );
-        sfPoseGroupLin( MASK_RIGHT_ELBOW, 5145, frames);
-      }
-    }
-  //Ожидать когда движение завершится
-  sfWaitFrame( frames );
-  }
 
 void computeAlphaForWalkFine(int frames) {
     //Вычислить значения углов серв для правой ноги
@@ -395,6 +289,7 @@ void computeAlphaForWalkFine(int frames) {
             sfPoseGroupLin(MASK_RIGHT_FOOT_SIDE, -svIkEncA10, frames);
             sfPoseGroupLin( MASK_RIGHT_ELBOW, 5145, frames);
     }
+    else IKerr++;
     //Вычислить значение углов серв для левой ноги
     if (selfFirstLegIsRightLeg == 1) sfIkAngle( xtl, -ytl, ztl, xl, -yl, zl, wl );
     else sfIkAngle(xtr, ytr, ztr, xr, yr, zr, -wr);
@@ -409,6 +304,7 @@ void computeAlphaForWalkFine(int frames) {
             sfPoseGroupLin(MASK_LEFT_FOOT_SIDE, -svIkEncA10, frames);
             sfPoseGroupLin(MASK_LEFT_ELBOW, 5145, frames);
     }
+    else IKerr++;
     //Ожидать когда движение завершится
     sfWaitFrame(frames);
 }
@@ -442,8 +338,7 @@ void walkInitialPose() {
     ytr = -d10 - j * stepYtr;
     ytl =  d10 - j * stepYtl;
     //Вычислить обратную кинематику и отправить 
-    if( !computeAlphaForWalk() )
-      return;
+    computeAlphaForWalk();
     }
   }
 
@@ -524,17 +419,18 @@ void walkInit() {
 void walkPhasa1() {
   ztl = ztr = -gaitHeight;
   for( j = 0; j < fr1; j += framestep ) {
-    s = amplitude / 2 * sfMathCos( alpha01 * j / 2 );
+    //s = amplitude / 2 * sfMathCos( alpha01 * j / 2 );
     //s = amplitude / 2 * sfMathCos(alpha01 * (j / 2 + fase_offset * framestep));
+    //s = (amplitude + sideLength) * (0.5 - (j * 1.0 + framestep) / fr1);
+    s = amplitude * (0.5 - (j * 1.0 + framestep) / fr1);
     ytr = s - d10 + correctedSideLenghtHalf;
     ytl = s + d10 + correctedSideLenghtHalf;
     if( stepType == STEP_FIRST ) continue;
     xtl = xtl0 - dx0Typical - dx0Typical * j / framestep;
     xtr = xtr0 - dx0Typical - dx0Typical * j / framestep;
     //Вычислить обратную кинематику и отправить 
-    if( !computeAlphaForWalk() )
-      return;
-    testDrop();
+    computeAlphaForWalk();
+    //testDrop();
     }
   }
 
@@ -542,16 +438,17 @@ void walkPhasa1() {
 void walkPhasa3() {
   ztl = ztr = -gaitHeight;
   for( j = 0; j < fr1; j += framestep ) {
-    s = amplitude / 2 * sfMathCos( alpha01 * (j + fr1) / 2 );
+    //s = amplitude / 2 * sfMathCos( alpha01 * (j + fr1) / 2 );
     //s = amplitude / 2 * sfMathCos(alpha01 * ((j -fr2) / 2 + fase_offset * framestep));
+    //s = -(amplitude + sideLength) * (0.5 - (j * 1.0 + framestep) / fr1);
+    s = -amplitude * (0.5 - (j * 1.0 + framestep) / fr1);
     ytr = s - d10 - correctedSideLenghtHalf;
     ytl = s + d10 + correctedSideLenghtHalf;
     xtl -= dx0Typical;
     xtr -= dx0Typical;
     //Вычислить обратную кинематику и отправить 
-    if( !computeAlphaForWalk() )
-      return;
-    testDrop();
+    computeAlphaForWalk();
+    //testDrop();
     }
   }
   
@@ -603,9 +500,8 @@ void walkPhasa2() {
     ytl += dy0Typical;
 
     //Вычислить обратную кинематику и отправить 
-    if( !computeAlphaForWalk() )
-      return;
-    testDrop();
+    computeAlphaForWalk();
+    //testDrop();
     }
   }
 
@@ -646,15 +542,10 @@ void walkPhasa4() {
     ytr += dy0Typical;
     
     //Вычислить обратную кинематику и отправить 
-    if( !computeAlphaForWalk() )
-      return;
+    computeAlphaForWalk();
     testDrop();
     }
   }
-
-//Здесь отдельно алгоритм медленной ходьбы
-//#include <roki3ASlowWalk.cpp>
-
 
 float forwardDirection;
 
@@ -720,12 +611,12 @@ int frontBackFactor; //Фактор миксования вперед-назад
 void mixing() {
   //Начальные установки
   leftRightFactor = 100;
-  frontBackFactor = 70;
+  frontBackFactor = 100;
   //В бесконечном цикле выполняем подмешивание
   while(1) {
     //По боковому крену
-    leftFootSideAddonMix = svImuGyroZ * leftRightFactor >> 10;
-    rightFootSideAddonMix = -svImuGyroZ * leftRightFactor >> 10;
+    leftFootSideAddonMix = -svImuGyroZ * leftRightFactor >> 10;
+    rightFootSideAddonMix = svImuGyroZ * leftRightFactor >> 10;
     
     //По крену вперед-назад
     rightFootFrontAddonMix = leftFootFrontAddonMix = -svImuGyroX * frontBackFactor >> 10;
@@ -743,7 +634,7 @@ void mixing() {
 
 void runTest() {
   //Стали в начальную позу
-  walkInitialPoseFine();
+  walkInitialPose();
   //Выполняем первый шаг
   stepType = STEP_FIRST;
   stepLength = STEP_LENGHT / 3.0;
@@ -781,7 +672,7 @@ int joystickToStepLength() {
 //Преобразование джойстика в длину в сторону
 int joystickToSideLength() {
   //Здесь 20 - максимальная величина в сторону
-  side_motion = - svRemoteRightJoystickX * 80.0 / 100.0;
+  side_motion = - svRemoteRightJoystickX * 40.0 / 100.0;
   motion_to_right = (side_motion <= 0 ? 1:0);
   return sfAbs (side_motion);
   }
@@ -965,7 +856,7 @@ void kick(int kickByRight, int small, int invert){
 }
 
 void turn(int direction, int factor){
-  int frames = 4;
+  int frames = 2;
   if (direction == 1){
     sfPoseGroup( MASK_RIGHT_PELVIC, -200 * factor, frames );
     sfPoseGroup( MASK_LEFT_PELVIC, 200 * factor, frames );
@@ -981,7 +872,7 @@ void turn(int direction, int factor){
   sfPoseGroup( MASK_RIGHT_FOOT_SIDE, 0, frames );
   sfPoseGroup( MASK_LEFT_FOOT_SIDE, 0, frames );
   sfWaitFrame( frames );
-  sfWaitFrame( 6 );
+  sfWaitFrame( 2 );
   //forwardDirection = svEulerYaw;
   forwardDirection = get_yaw();
 }
@@ -1109,7 +1000,7 @@ void movingRemoteControl(){
     selfFirstLegIsRightLeg = motion_to_right;
     if (svRemoteLeftJoystickY < 0 && ((svRemoteButton / 2048) % 2 == 1)) stepNumber = -svRemoteLeftJoystickY;
     //Стали в начальную позу
-    walkInitialPoseFine();
+    walkInitialPose();
     walkLoop();
   
     //Финальный шаг
@@ -1128,6 +1019,7 @@ void main() {
   setup();
   sideLength = 0;
   rotation = 0;
+  IKerr = 0;
 
   //Процесс запускаем не сразу, а через некоторое время (100 фреймов - 1 сек)
   //sfWaitFrame( 100 );

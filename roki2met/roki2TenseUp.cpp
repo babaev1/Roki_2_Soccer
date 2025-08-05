@@ -9,6 +9,7 @@
 
 void main() {
   //Переназначаем кнопку на нужный слот
+  //svButtonRight = sfSlotIndex("roki2Walk_test.cpp");
   svButtonRight = sfSlotIndex("roki2Walk_Remote.cpp");
   //svButtonRight = sfSlotIndex("roki4Jump.cpp");
   //Переводим все сервы в 0

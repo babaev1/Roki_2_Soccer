@@ -3,13 +3,14 @@ from multiprocessing import Array
 
 class Glob:
     def __init__(self, simulation, current_work_directory, particles_number = 1000, event_type = 'Robocup'):
+        self.hardcode_walking = False
         self.record_motions = False
         self.event_type = event_type
         self.neural_vision = False
         self.neural = None
         self.role = None
         self.monitor_is_on = False
-        self.camera_streaming = True        # supply IMU data for camera as stream or as one-off
+        self.camera_streaming = False        # supply IMU data for camera as stream or as one-off
         self.with_Local = True
         self.data_quality_is_good = False
         self.deflection = []
@@ -43,8 +44,8 @@ class Glob:
         if self.SIMULATION == 1 or self.SIMULATION == 0 or self.SIMULATION == 3:
             import socket
             self.landmarks_filename = current_work_directory + "Init_params/Sim/Sim_landmarks.json"
-            #params_filename = current_work_directory + "Init_params/Sim/" + "Sim_params.json"
-            params_filename = current_work_directory + "Init_params/Real/Real_params.json"
+            params_filename = current_work_directory + "Init_params/Sim/" + "Sim_params.json"
+            #params_filename = current_work_directory + "Init_params/Real/Real_params.json"
             params_2_filename = current_work_directory + "Init_params/Sim/" + "Sim_params_2.json"
             with open(current_work_directory + "Init_params/Sim/" + "wifi_params.json", "r") as f:
                 self.wifi_params = json.loads(f.read())
@@ -137,5 +138,46 @@ class Glob:
         self.vision = new_vision
         self.motion.vision = self.vision
         self.local.vision = self.vision
+
+class Variables_4_Walk:
+    def __init__(self):
+        self.stepLength_0 = 0.0
+        self.sideLength_0 = 0.0
+        self.direction_0 = 0
+        self.stepLength_1 = 0.0
+        self.sideLength_1 = 0.0
+        self.direction_1 = 0
+        self.stepLength_2 = 0.0
+        self.sideLength_2 = 0.0
+        self.direction_2 = 0
+        self.stepLength_3 = 0.0
+        self.sideLength_3 = 0.0
+        self.direction_3 = 0
+        self.rotation = 0.0
+        self.gaitHeight = 0.0
+        self.stepHeight = 0.0
+        self.fr1 = 0
+        self.fr2 = 0
+        self.amplitude = 0.0
+        self.body_tilt_at_walk = 0.0
+        self.body_tilt_at_walk_backwards = 0.0
+        self.sole_lading_skew = 0.0
+        self.body_tilt_at_kick = 0.0
+        self.number_Of_Cycles = 0
+        self.SIMULATION = 0
+        self.coord_shift_x = 0
+        self.coord_shift_y = 0
+        self.first_Leg_Is_Right_Leg = 0
+        self.half = 0
+        self.motion_shift_correction_x = 0
+        self.motion_shift_correction_y = 0
+        self.first_step_yield = 0
+        self.cycle_step_yield = 0
+        self.side_step_right_yield = 0
+        self.side_step_left_yield = 0
+        self.rotation_yield_right = 0
+        self.rotation_yield_left = 0
+        self.imu_drift_speed = 0
+        
 
 

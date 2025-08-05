@@ -112,7 +112,8 @@ class Motion_real(Motion):
                 i=i-1
                 returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                          self.jointHandle[22] , i * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)
-                self.sim.simxSynchronousTrigger(self.clientID)
+                #self.sim.simxSynchronousTrigger(self.clientID)
+                self.trigger('head_tilt_calibration')
                 img1 = self.vision_Sensor_Get_Image()
                 img = re.Image(img1)
                 for blob in img.find_blobs([self.vision.TH['orange ball']['th']],
@@ -168,7 +169,8 @@ class Motion_real(Motion):
             returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                         self.jointHandle[22] , self.neck_play_pose * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
             for j in range(20):
-                self.sim.simxSynchronousTrigger(self.clientID)
+                #self.sim.simxSynchronousTrigger(self.clientID)
+                self.trigger('seek_Ball_In_Pose')
 
         if self.glob.SIMULATION == 5:
             a, course, dist = self.vision.seek_Ball_In_Frame_N(with_Localization)
@@ -250,6 +252,7 @@ class Motion_real(Motion):
                          self.jointHandle[22] , self.neck_tilt * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
                 for j in range(20):
                     self.sim.simxSynchronousTrigger(self.clientID)
+                    self.trigger('seek_Ball_In_Pose')
             #self.refresh_Orientation()
             if self.glob.SIMULATION == 5:
                 a, course, dist = self.vision.seek_Ball_In_Frame_N(with_Localization)
@@ -367,7 +370,8 @@ class Motion_real(Motion):
                 returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                          self.jointHandle[22] , self.neck_tilt * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
                 for j in range(20):
-                    self.sim.simxSynchronousTrigger(self.clientID)
+                    #self.sim.simxSynchronousTrigger(self.clientID)
+                    self.trigger('watch_Ball_In_Pose')
             self.refresh_Orientation()
             a, course, dist, speed = self.vision.detect_Ball_Speed()
             if a == True or (a== False and dist !=0): break
@@ -502,7 +506,8 @@ class Motion_real(Motion):
                         self.jointHandle[22] , self.neck_play_pose*0.000589*self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
             for i in range(16):
                 if self.glob.SIMULATION != 0:
-                    self.sim.simxSynchronousTrigger(self.clientID)
+                    #self.sim.simxSynchronousTrigger(self.clientID)
+                    self.trigger('head_Up')
         self.refresh_Orientation()
         return old_neck_pan, old_neck_tilt
 
@@ -522,7 +527,8 @@ class Motion_real(Motion):
                         self.jointHandle[22] , old_neck_tilt*0.000589*self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
             for i in range(16):
                 if self.glob.SIMULATION != 0:
-                    self.sim.simxSynchronousTrigger(self.clientID)
+                    #self.sim.simxSynchronousTrigger(self.clientID)
+                    self.trigger('head_Return')
         self.neck_pan = old_neck_pan
         self.neck_tilt = old_neck_tilt
         self.refresh_Orientation()
@@ -557,16 +563,17 @@ class Motion_real(Motion):
         #stepLength = dist_mm*math.cos(napravl)/(self.first_step_yield*1.25+self.cycle_step_yield*(n-1)+ self.cycle_step_yield*0.75)*64 * 30/64
         stepLength = dist_mm*math.cos(napravl)/(self.first_step_yield+self.cycle_step_yield*(n-1))*64
         number_Of_Cycles = n+2
-        sideLength = abs(displacement) /number_Of_Cycles*20/side_step_yield
+        sideLength = displacement /number_Of_Cycles*20/side_step_yield
         if stepLength > 15 and number_Of_Cycles > 4: 
             deceleration = True
             number_Of_Cycles += 1
         else: deceleration = False
         #self.local.correct_yaw_in_pf()
-        if one_Off_Motion: 
+        if one_Off_Motion and not self.glob.hardcode_walking: 
             self.walk_Initial_Pose()
             after_cycle = 0
         else: after_cycle = 1
+        if self.glob.hardcode_walking: self.hardcode_walk_Init()   
         for cycle in range(number_Of_Cycles):
             self.refresh_Orientation()
             rotation = initial_direction - self.imu_body_yaw() * 1
@@ -577,8 +584,16 @@ class Motion_real(Motion):
             if deceleration:
                 if cycle == number_Of_Cycles - 1: stepLength1 = stepLength / 3
                 if cycle == number_Of_Cycles - 2: stepLength1 = stepLength * 2 / 3
-            self.walk_Cycle(stepLength1, sideLength, invert*rotation,cycle,number_Of_Cycles + after_cycle)
-        if one_Off_Motion: self.walk_Final_Pose()
+            if self.glob.hardcode_walking:
+                last = (cycle == number_Of_Cycles - 1)
+                self.hardcode_walk_Cycle(stepLength1, sideLength, invert * rotation, initial_direction, last = last)
+            else:
+                self.walk_Cycle(stepLength1, abs(sideLength), invert*rotation,cycle,number_Of_Cycles + after_cycle)
+        if self.glob.hardcode_walking:
+            self.end_walking.get()
+            #self.pause_in_ms(0.5)
+        else:
+            if one_Off_Motion: self.walk_Final_Pose()
         #self.first_Leg_Is_Right_Leg = first_Leg_Is_Right_Leg_Old
         self.local.coord_odometry[0] += dist * math.cos(napravl)
         self.local.coord_odometry[1] += dist * math.sin(napravl)
@@ -862,18 +877,36 @@ class Motion_real(Motion):
         acceleration = False
         deceleration = False
         invert = round(random.random(),0)*2 - 1
-        self.walk_Initial_Pose()
         delta_yaw = invert * math.radians(angle) #0.52 #0.79
         number_Of_Cycles = math.ceil(abs(delta_yaw / 0.2))
         delta_yaw_step = delta_yaw / number_Of_Cycles
         stepLength = 0
         self.head_Return(0, self.neck_play_pose)
-        for cycle in range(number_Of_Cycles):
-            stepLength1 = stepLength
-            self.refresh_Orientation()
-            rotation = 0 + delta_yaw_step * (cycle + 1) - self.imu_body_yaw()
-            rotation = self.normalize_rotation(rotation)
-            self.walk_Cycle(stepLength1, sideLength, rotation, cycle, number_Of_Cycles+1)
+        if self.glob.hardcode_walking:
+            for cycle in range(number_Of_Cycles):
+                self.var.stepLength.value = stepLength
+                self.refresh_Orientation()
+                rotation = 0 + delta_yaw_step * (cycle + 1) - self.imu_body_yaw()
+                rotation = self.normalize_rotation(rotation)
+                self.var.rotation.value = rotation
+                self.var.number_Of_Cycles.value = 1
+                #while self.var.number_Of_Cycles.value > 0 :
+                #    print('Motion_real: var.number_Of_Cycles :', self.var.number_Of_Cycles.value)
+                #    time.sleep(0.001)
+                if self.glob.with_Local:
+                    self.local.coord_shift[0] = self.var.coord_shift_x.value
+                    self.local.coord_shift[1] = self.var.coord_shift_y.value
+                self.local.coordinate_record(odometry = True, shift = True)
+                self.local.refresh_odometry()
+                if self.glob.monitor_is_on: self.glob.monitor()
+        else:
+            self.walk_Initial_Pose()
+            for cycle in range(number_Of_Cycles):
+                stepLength1 = stepLength
+                self.refresh_Orientation()
+                rotation = 0 + delta_yaw_step * (cycle + 1) - self.imu_body_yaw()
+                rotation = self.normalize_rotation(rotation)
+                self.walk_Cycle(stepLength1, sideLength, rotation, cycle, number_Of_Cycles+1)
         delta_yaw = -2 * math.radians(angle)  #-1.04 # -1.58
         number_Of_Cycles = math.ceil(abs(delta_yaw / 0.2))
         delta_yaw_step = delta_yaw / number_Of_Cycles
@@ -883,6 +916,7 @@ class Motion_real(Motion):
         #number_Of_Cycles += 1
         deceleration = True
         number_Of_Cycles -= 2
+        if self.glob.hardcode_walking: self.hardcode_walk_Init()
         for cycle in range(number_Of_Cycles):
             stepLength1 = stepLength
             if acceleration:
@@ -894,7 +928,11 @@ class Motion_real(Motion):
             self.refresh_Orientation()
             rotation = (math.radians(angle) + delta_yaw_step * (cycle))  * invert - self.imu_body_yaw()
             rotation = self.normalize_rotation(rotation)
-            self.walk_Cycle(stepLength1, sideLength, rotation, cycle + 1, number_Of_Cycles+2)
+            if self.glob.hardcode_walking:
+                last = (cycle == number_Of_Cycles - 1)
+                self.hardcode_walk_Cycle(stepLength1, sideLength, rotation, (math.radians(angle) + delta_yaw_step * cycle) * invert, last=last)
+            else:
+                self.walk_Cycle(stepLength1, sideLength, rotation, cycle + 1, number_Of_Cycles+2)
         stepLength_old = stepLength
         acceleration = False
         deceleration = False
@@ -917,15 +955,78 @@ class Motion_real(Motion):
                 if cycle == number_Of_Cycles - 2: stepLength1 = stepLength * 2 / 3
                 #print('steplength = ', stepLength1)
             self.refresh_Orientation()
-            if self.glob.robot_see_ball > 0: rotation = self.glob.ball_course / 5
-            else: rotation = -math.radians(angle) * invert - self.imu_body_yaw()
+            if self.glob.robot_see_ball > 0: 
+                rotation = self.glob.ball_course / 5
+                direction = self.glob.ball_course / 5 + self.imu_body_yaw()
+            else: 
+                rotation = -math.radians(angle) * invert - self.imu_body_yaw()
+                direction = -math.radians(angle) * invert
             rotation = self.normalize_rotation(rotation)
-            self.walk_Cycle(stepLength1, sideLength, rotation, cycle + 1, number_Of_Cycles+2)
+            if self.glob.hardcode_walking:
+                last = (cycle == number_Of_Cycles - 1)
+                self.hardcode_walk_Cycle(stepLength1, sideLength, rotation, direction, last=last)
+            else:
+                self.walk_Cycle(stepLength1, sideLength, rotation, cycle + 1, number_Of_Cycles+2)
         stepLength_old = stepLength
         acceleration = False
         deceleration = False
-        self.walk_Final_Pose()
+        if not self.glob.hardcode_walking: self.walk_Final_Pose()
         self.first_Leg_Is_Right_Leg = True
+
+    def hardcode_walk_Init(self):
+        self.var.gaitHeight.value = self.gaitHeight
+        self.var.stepHeight.value = self.stepHeight
+        self.var.fr1.value = self.fr1
+        self.var.fr2.value = self.fr2
+        self.var.amplitude.value = self.amplitude
+        self.var.body_tilt_at_walk.value = self.params['BODY_TILT_AT_WALK']
+        self.var.body_tilt_at_walk_backwards.value = self.params['BODY_TILT_AT_WALK_BACKWARDS']
+        self.var.sole_lading_skew.value = self.params['SOLE_LANDING_SKEW']
+        self.var.body_tilt_at_kick.value = self.params['BODY_TILT_AT_KICK']
+        self.var.SIMULATION.value = self.glob.SIMULATION
+        self.var.motion_shift_correction_x.value = -self.glob.params['MOTION_SHIFT_TEST_X'] / 21.0
+        self.var.motion_shift_correction_y.value = -self.glob.params['MOTION_SHIFT_TEST_Y'] / 21.0
+        self.var.first_step_yield.value = self.glob.first_step_yield
+        self.var.cycle_step_yield.value = self.glob.cycle_step_yield
+        self.var.side_step_right_yield.value = self.glob.side_step_right_yield
+        self.var.side_step_left_yield.value = self.glob.side_step_left_yield
+        self.var.rotation_yield_right.value = self.glob.params['ROTATION_YIELD_RIGHT'] 
+        self.var.rotation_yield_left.value = self.glob.params['ROTATION_YIELD_LEFT'] 
+        self.var.imu_drift_speed.value = math.radians(self.glob.params['IMU_DRIFT_IN_DEGREES_DURING_6_MIN_MEASUREMENT'])/ 360.0
+
+    def hardcode_walk_Cycle(self, stepLength, sideLength, rotation, direction, last = False):
+        while self.var.number_Of_Cycles.value > 3 : time.sleep(0.001)
+        if self.var.number_Of_Cycles.value == 0:
+            self.var.stepLength_0.value = stepLength
+            self.var.sideLength_0.value = sideLength
+            self.var.direction_0.value = direction
+            self.var.number_Of_Cycles.value = 1
+        elif self.var.number_Of_Cycles.value == 1:
+            self.var.stepLength_1.value = stepLength
+            self.var.sideLength_1.value = sideLength
+            self.var.direction_1.value = direction
+            self.var.number_Of_Cycles.value = 2
+        elif self.var.number_Of_Cycles.value == 2:
+            self.var.stepLength_2.value = stepLength
+            self.var.sideLength_2.value = sideLength
+            self.var.direction_2.value = direction
+            self.var.number_Of_Cycles.value = 3
+        elif self.var.number_Of_Cycles.value == 3:
+            self.var.stepLength_3.value = stepLength
+            self.var.sideLength_3.value = sideLength
+            self.var.direction_3.value = direction
+            self.var.number_Of_Cycles.value = 4
+        print('number_Of_Cycles: ', self.var.number_Of_Cycles.value)
+        # if self.first_Leg_Is_Right_Leg: self.var.first_Leg_Is_Right_Leg.value = 1
+        # else: self.var.first_Leg_Is_Right_Leg.value = 0
+        if last:
+            while self.var.number_Of_Cycles.value > 0 : time.sleep(0.001)
+            if self.glob.with_Local:
+                self.local.coord_shift[0] = self.var.coord_shift_x.value
+                self.local.coord_shift[1] = self.var.coord_shift_y.value
+            self.local.coordinate_record(odometry = True, shift = True)
+        self.local.refresh_odometry()
+        if self.glob.monitor_is_on: self.glob.monitor()
 
     def far_distance_straight_approach(self, ball_coord, target_yaw, gap = 0.2, stop_Over = False):
         print('far_distance_straight_approach: initial arc')
@@ -1037,10 +1138,9 @@ class Motion_real(Motion):
         else:
             self.first_Leg_Is_Right_Leg = False
             invert = -1
-        self.walk_Initial_Pose()
-        #cycle = 0
+        if not self.glob.hardcode_walking: self.walk_Initial_Pose()
+        if self.glob.hardcode_walking: self.hardcode_walk_Init()
         for cycle in range(number_Of_Cycles):
-        #while True:
             discontinue = (self.glob.ball_distance - proximity - 0.1) < 0.1 * (6 - self.glob.robot_see_ball)
             if discontinue: last_step_factor  *= 0.6
             else: 
@@ -1056,7 +1156,10 @@ class Motion_real(Motion):
             #side_motion = self.glob.ball_distance * math.tan(self.glob.ball_course - self.local.coord_odometry[2])
             side_motion = self.glob.ball_distance * math.tan(self.glob.ball_course)
             if ((motion_to_right and (side_motion >= 0)) or ((not motion_to_right) and (side_motion < 0))) and cycle != 0 :
-                self.walk_Cycle(stepLength, 0, invert * rotation, 1, 3, half = True)
+                if not self.glob.hardcode_walking: self.walk_Cycle(stepLength, 0, invert * rotation, 1, 3, half = True)
+                else:
+                    self.var.half.value = 1
+                    self.hardcode_walk_Cycle(stepLength, 0, invert * rotation, direction_To_Ball)
             motion_to_right = (side_motion < 0)
             sideLength = abs(side_motion) * 1000
             if sideLength > 20: sideLength = 20
@@ -1067,12 +1170,14 @@ class Motion_real(Motion):
                 self.first_Leg_Is_Right_Leg = False
                 invert = -1
             if last_step_factor < 0.6 :
-                self.walk_Cycle(stepLength1, sideLength, invert * rotation, cycle, cycle + 1)
+                if not self.glob.hardcode_walking: self.walk_Cycle(stepLength1, sideLength, invert * rotation, cycle, cycle + 1)
+                else: self.hardcode_walk_Cycle(stepLength1, sideLength, invert * rotation, direction_To_Ball)
                 break
             else:
-                self.walk_Cycle(stepLength1, sideLength, invert * rotation, cycle, number_Of_Cycles)
+                if not self.glob.hardcode_walking: self.walk_Cycle(stepLength1, sideLength, invert * rotation, cycle, number_Of_Cycles)
+                else: self.hardcode_walk_Cycle(stepLength1, sideLength, invert * rotation, direction_To_Ball, last = True)
             #cycle += 1
-        self.walk_Final_Pose()
+        if not self.glob.hardcode_walking: self.walk_Final_Pose()
         return
 
     def far_distance_plan_approach(self, ball_coord, target_yaw, stop_Over = False):
@@ -1324,7 +1429,8 @@ class Motion_real(Motion):
                         returnCode, Dummy_Hposition= self.sim.simxGetObjectPosition(self.clientID,
                                               self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
                     if self.glob.SIMULATION == 1:
-                        self.sim.simxSynchronousTrigger(self.clientID)
+                        #self.sim.simxSynchronousTrigger(self.clientID)
+                        self.trigger('walk_Restart')
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
@@ -1385,7 +1491,8 @@ class Motion_real(Motion):
                         returnCode, Dummy_Hposition= self.sim.simxGetObjectPosition(self.clientID,
                                               self.Dummy_HHandle , -1, self.sim.simx_opmode_buffer)
                     if self.glob.SIMULATION == 1:
-                        self.sim.simxSynchronousTrigger(self.clientID)
+                        #self.sim.simxSynchronousTrigger(self.clientID)
+                        self.trigger('walk_Restart')
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     if self.model == 'Roki_2':
@@ -1426,7 +1533,8 @@ class Motion_real(Motion):
                 returnCode = self.sim.simxSetJointTargetPosition(self.clientID,
                             self.jointHandle[22] , tilt * self.TIK2RAD * self.ACTIVESERVOS[22][3], self.sim.simx_opmode_oneshot)  # Шея Наклон
                 if self.glob.SIMULATION != 0:
-                    self.sim.simxSynchronousTrigger(self.clientID)
+                    #self.sim.simxSynchronousTrigger(self.clientID)
+                    self.trigger('control_Head_motion')
             self.neck_pan = pan
             self.neck_tilt = tilt
 
@@ -1468,6 +1576,10 @@ class Motion_real(Motion):
             [ 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             #[ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ]
+        motion0 = [
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ]
         self.refresh_Orientation()
         for i in range(jumps_limit):
             correction_yaw = course - self.body_euler_angle['yaw']
@@ -1495,6 +1607,7 @@ class Motion_real(Motion):
             self.play_Soft_Motion_Slot(motion_list = motion, hands_on = hands_on)
             time.sleep(0.5)
             self.refresh_Orientation()
+        self.play_Soft_Motion_Slot(motion_list = motion0, hands_on = hands_on)
         self.refresh_Orientation()
         if self.glob.with_Local:
             old_orientation = self.local.coord_odometry[2]

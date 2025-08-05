@@ -94,15 +94,17 @@ if __name__ == '__main__':
         sys.path.append( current_work_directory + 'Soccer/Localisation/PF/')
         sys.path.append( current_work_directory)
         
-        from class_Glob import Glob
-        from class_Vision_Sim import Vision_Sim
-        from class_Local import *
-        from strategy import Player
-        from class_Motion_sim import *
+        from Soccer.Localisation.class_Glob import Glob
+        from Soccer.Vision.class_Vision_Sim import Vision_Sim
+        from Soccer.Localisation.class_Local import *
+        from Soccer.strategy import Player
+        from Soccer.Motion.class_Motion_sim import *
+        from Soccer.Motion.motion_sim_as_process import motion_sim_as_process_launch
+        from multiprocessing import Process, Queue
 
         #goalkeeper, forward_v2, run_test, penalty_Shooter, rotation_test, penalty_Goalkeeper, spot_walk, dance, quaternion_test, test_walk, kick_test, marathon, FIRA_penalty_Shooter
-        second_pressed_button = 'start'   # side_step_left, side_step_right, short_run, rotation_right, spot_run, start_later
-        role = 'marathon'
+        second_pressed_button =  'start'   # side_step_left, side_step_right, short_run, rotation_right, spot_run, start_later
+        role = 'FIRA_penalty_Shooter'
 
         particles_number = 1000
         initial_coord = [-0.5, 0, 0]
@@ -124,13 +126,23 @@ if __name__ == '__main__':
         motion.local = local
         local.coordinate_record(odometry = True)
         motion.falling_Flag = 0
-
+        trigger_queue = Queue()
+        trigger_release = Queue()
+        motion.trigger_queue = trigger_queue
+        motion.trigger_release = trigger_release
+        t1 = threading.Thread(target = motion.joint_Trigger, args = (motion.clientID, trigger_queue, trigger_release), daemon = True)
+        t1.start()
+        if glob.hardcode_walking:
+            var, Dummy_1Data, end_walking = motion_sim_as_process_launch(glob, motion)
+            motion.Dummy_1Data = Dummy_1Data
+            motion.end_walking = end_walking
+            motion.var = var
         
 
         glob.role = role
         m = Player(role, second_pressed_button, glob, motion, local)
         m.play_game()
-
+        """
         if os.path.isfile("Export_data.npy"):
             export_data = np.load("Export_data.npy")
             #rng = export_data[0]
@@ -155,7 +167,7 @@ if __name__ == '__main__':
             plt.show()
             os.remove("Export_data.npy")
             #print('average timing for 3m : ', 3 / (Dummy_HDataX[-1] - Dummy_HDataX[0]) * len(Dummy_HDataX) * 0.010)
-
+        """
 
 
     #except Exception as e:

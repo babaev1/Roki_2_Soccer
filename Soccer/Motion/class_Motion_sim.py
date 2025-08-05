@@ -4,6 +4,8 @@
 import sys, os
 import math, time, json
 import cv2
+import threading
+import queue
 
 
 current_work_directory = os.getcwd()
@@ -32,6 +34,8 @@ sys.path.append( current_work_directory + 'Soccer/Localisation/PF/')
 from class_Motion import *
 from class_Motion_real import Motion_real
 from compute_Alpha_v3 import Alpha
+
+
 
 class Transfer_Data():
     def __init__(self):
@@ -131,7 +135,38 @@ class Motion_sim(Motion_real):
         self.head_pitch_with_horizontal_camera = data1['head_pitch_with_horizontal_camera']
         self.neck_tilt = self.neck_calibr
         self.trigger_counter = 0
+        self.var = None
+        self.end_walking = None
+        self.Dummy_1Data = None
+        self.trigger_queue = None
+        self.trigger_release = None
+
+    def joint_Trigger(self, clientID, trigger_queue, trigger_release):
+        print('clientID', clientID)
+        while True:
+            trigger_id = trigger_queue.get()
+            print('trigger_id :', trigger_id)
+            self.sim.simxSynchronousTrigger(clientID)
+            trigger_release.put(trigger_id)
+            time.sleep(0.01)
+
+    def trigger(self, id):
+        self.trigger_queue.put(id)     # send trigger
+        while True:
+            message = self.trigger_release.get()                 #check if release related to current request
+            if message == id: break
+            else: self.trigger_release.put(message)
+            time.sleep(0.01)
         
+    def trigger_Enabler(self, trigger_queue , ready_queue):
+        while True:
+            command = trigger_queue.get()
+            if command == 'trigger':
+                #print('trigger')
+                self.sim.simxSynchronousTrigger(self.clientID)
+                ready_queue.put('ready')
+            #time.sleep(0.005)
+
 
     def wait_sim_step(self):
         while True:
@@ -284,7 +319,8 @@ class Motion_sim(Motion_real):
                                  tempActivePose*self.ACTIVESERVOS[j][3] +self.trims[j], self.sim.simx_opmode_streaming)
                 #self.sim.simxPauseCommunication(self.clientID, False)
                 if self.glob.SIMULATION == 1:
-                    self.sim.simxSynchronousTrigger(self.clientID)
+                    #self.sim.simxSynchronousTrigger(self.clientID)
+                    self.trigger('simulateMotion')
         return
 
 
@@ -299,6 +335,7 @@ class Motion_sim(Motion_real):
                 uprint ('Failed connecting to remote API server')
                 uprint ('Program ended')
                 exit(0)
+            print('self.clientID: ', self.clientID)
             # Collect Joint Handles and trims from model
             returnCode, self.Dummy_HHandle = self.sim.simxGetObjectHandle(self.clientID, self.robot_Number+'/'+'Dummy_H', self.sim.simx_opmode_blocking)
             returnCode, self.Dummy_1Handle = self.sim.simxGetObjectHandle(self.clientID, self.robot_Number+'/'+'Dummy1', self.sim.simx_opmode_blocking)
@@ -334,7 +371,9 @@ class Motion_sim(Motion_real):
                 #uprint(quaternion_to_euler_angle(Dummy_Hquaternion))
                 self.timeElapsed = self.timeElapsed +1
                 #self.vision_Sensor_Display(self.vision_Sensor_Get_Image())
-                if self.glob.SIMULATION == 1 : self.sim.simxSynchronousTrigger(self.clientID)
+                if self.glob.SIMULATION == 1 : 
+                    #self.sim.simxSynchronousTrigger(self.clientID)
+                    self.trigger('sim_Progress')
                 if self.glob.SIMULATION == 3 : 
                     time.sleep(0.005)
                     self.wait_sim_step() 
@@ -350,13 +389,19 @@ class Motion_sim(Motion_real):
                 else: returnCode = self.sim.simxSetJointPosition(self.clientID,
                                    self.jointHandle[j] , self.trims[j], self.sim.simx_opmode_oneshot)
     def print_Diagnostics(self):
-        Dummy_HDataX =[]
-        Dummy_HDataY =[]
-        Dummy_HDataZ =[]
-        for i in range (self.timeElapsed):
-            Dummy_HDataX.append( self.Dummy_HData[i][0])
-            Dummy_HDataY.append(self.Dummy_HData[i][1])
-            Dummy_HDataZ.append(self.Dummy_HData[i][2])
+        if self.glob.hardcode_walking:
+            self.Dummy_Data =[]
+            while True:
+                try:
+                    self.Dummy_Data.append(self.Dummy_1Data.get(timeout=1.0))
+                except queue.Empty: break
+        Dummy_1DataX =[]
+        Dummy_1DataY =[]
+        Dummy_1DataZ =[]
+        for i in range (len(self.Dummy_Data)):
+            Dummy_1DataX.append( self.Dummy_Data[i][0])
+            Dummy_1DataY.append(self.Dummy_Data[i][1])
+            Dummy_1DataZ.append(self.Dummy_Data[i][2])
         BallDataX =[]
         BallDataY =[]
         BallDataZ =[]
@@ -366,44 +411,44 @@ class Motion_sim(Motion_real):
             BallDataZ.append(self.BallData[i][2])
         uprint('exitFlag' ,self.exitFlag)
 
-        rng = self.np.arange(self.timeElapsed, dtype=float)
-        export_data = np.resize(rng, (7, rng.shape[0]))
-        export_data[1] = Dummy_HDataX
-        export_data[2] = Dummy_HDataY
-        export_data[3] = Dummy_HDataZ
-        export_data[4] = BallDataX
-        export_data[5] = BallDataY
-        export_data[6] = BallDataZ
-        np.save("Export_data", export_data)
-        #self.plt.plot(rng,Dummy_HDataX, label = 'Body X')
-        #self.plt.plot(rng,Dummy_HDataY, label = 'Body Y')
-        #self.plt.plot(rng,Dummy_HDataZ, label = 'Body Z')
-        #self.plt.plot(rng,BallDataX, label = 'Ball X')
-        #self.plt.plot(rng,BallDataY, label = 'Ball Y')
-        #self.plt.plot(rng,BallDataZ, label = 'Ball Z')
+        rng = self.np.arange(len(self.Dummy_Data), dtype=float)
+        # export_data = np.resize(rng, (7, rng.shape[0]))
+        # export_data[1] = Dummy_HDataX
+        # export_data[2] = Dummy_HDataY
+        # export_data[3] = Dummy_HDataZ
+        # export_data[4] = BallDataX
+        # export_data[5] = BallDataY
+        # export_data[6] = BallDataZ
+        #np.save("Export_data", export_data)
+        # self.plt.plot(rng,Dummy_HDataX, label = 'Body X')
+        # self.plt.plot(rng,Dummy_HDataY, label = 'Body Y')
+        # self.plt.plot(rng,Dummy_HDataZ, label = 'Body Z')
+        # self.plt.plot(rng,BallDataX, label = 'Ball X')
+        # self.plt.plot(rng,BallDataY, label = 'Ball Y')
+        # self.plt.plot(rng,BallDataZ, label = 'Ball Z')
         
         #fig = self.plt.figure(figsize=(15, 15))
         #ax = fig.add_subplot(111)
-
-        #ax.plot(rng,Dummy_HDataX, label = 'Body X')
-        #ax.plot(rng,Dummy_HDataY, label = 'Body Y')
-        #ax.plot(rng,Dummy_HDataZ, label = 'Body Z')
-        #ax.plot(rng,BallDataX, label = 'Ball X')
-        #ax.plot(rng,BallDataY, label = 'Ball Y')
-        #ax.plot(rng,BallDataZ, label = 'Ball Z')
+        ax = self.plt
+        ax.plot(rng,Dummy_1DataX, label = 'Body X')
+        ax.plot(rng,Dummy_1DataY, label = 'Body Y')
+        # ax.plot(rng,Dummy_1DataZ, label = 'Body Z')
+        # ax.plot(rng,BallDataX, label = 'Ball X')
+        # ax.plot(rng,BallDataY, label = 'Ball Y')
+        # ax.plot(rng,BallDataZ, label = 'Ball Z')
         
-        #ax.legend(loc='upper left')
-        #ax.grid(True)
+        ax.legend(loc='upper left')
+        ax.grid(True)
         
         #fig.canvas.draw()
         
         #data = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
         #data = data.reshape(fig.canvas.get_width_height()[::-1] + (3,))
 
-        #if self.glob.SIMULATION == 1 or self.glob.SIMULATION == 3:
-        #    #self.plt.show()
-        #    cv2.imshow("plots", data)
-        #    cv2.waitKey(1)
+        if self.glob.SIMULATION == 1 or self.glob.SIMULATION == 3:
+           self.plt.show()
+           #cv2.imshow("plots", data)
+           #cv2.waitKey(1)
 
             #break
         uprint('exitFlag' ,self.exitFlag)
@@ -413,6 +458,10 @@ class Motion_sim(Motion_real):
         self.sim.simxFinish(self.clientID)
         #self.transfer_Data.finish_Flag = True
         pass
+
+def motion_sim_as_process_launch(glob):
+    if not glob.hardcode_walking: return None
+
 
 
 if __name__=="__main__":

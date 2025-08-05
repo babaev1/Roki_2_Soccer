@@ -241,7 +241,8 @@ class Motion_extention_1:
                         self.body_euler_angle = self.quaternion_to_euler_angle(Dummy_1quaternion)
                         self.timeElapsed = self.timeElapsed +1
                         if self.glob.SIMULATION == 1:
-                            self.sim_simxSynchronousTrigger(self.clientID)
+                            #self.sim_simxSynchronousTrigger(self.clientID)
+                            self.trigger('walk_Cycle_slow')
                 elif self.glob.SIMULATION == 5:
                     joint_number = len(angles)
                     servoDatas = []

@@ -1159,6 +1159,10 @@ svRemoteLeftJoystickY : 3254
 svRemoteRightJoystick : 3255
 svRemoteRightJoystickX : 3256
 svRemoteRightJoystickY : 3257
+svDebug0 : 2603
+svDebug1 : 2604
+svDebug2 : 2605
+svDebug3 : 2606
 svHumoModelDistPelvic : 3264
 svHumoModelLengthPelvicHip : 3265
 svHumoModelLengthHipHip : 3266

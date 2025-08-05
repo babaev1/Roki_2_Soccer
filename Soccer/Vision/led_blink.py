@@ -4,7 +4,7 @@ import threading
 
 class Led:
     def __init__(self):
-        self.ser = serial.Serial ('/dev/ttyAMA1') #Open named port
+        self.ser = serial.Serial ('/dev/shm/bluecoin') #Open named port
         self.ser.baudrate = 115200 
         os.system("raspi-gpio set 4 a4")
         self.blink = threading.Event()

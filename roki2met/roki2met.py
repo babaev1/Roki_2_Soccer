@@ -1,9 +1,10 @@
 
-#Этот файл автоматически сгенерирован с помощью программы IronArt v0.116
+#Этот файл автоматически сгенерирован с помощью программы IronArt v0.117
 #Не следует его редактировать вручную
 
 class roki2met :
     #Индексы доступных слотов
+    roki2InitSlot = 1
     roki2TenseUpSlot = 2
     mixingRoki2metSlot = 3
     roki2Walk_RemoteSlot = 4
@@ -28,6 +29,7 @@ class roki2met :
     roki2WalkStraight_v1Slot = 26
     sprint_v4_testSlot = 28
     numberingSlot = 29
+    roki2Walk_testSlot = 30
 
 
     #Перечень доступных звуков
@@ -73,6 +75,10 @@ class roki2met :
     svRemoteRightJoystick = 3255
     svRemoteRightJoystickX = 3256
     svRemoteRightJoystickY = 3257
+    svDebug0 = 2603
+    svDebug1 = 2604
+    svDebug2 = 2605
+    svDebug3 = 2606
     svHumoModelDistPelvic = 3264
     svHumoModelLengthPelvicHip = 3265
     svHumoModelLengthHipHip = 3266
@@ -293,6 +299,10 @@ class roki2met :
     leftClawVelo = 3077
     leftClawFlags = 3079
     leftClawAddonMix = 3081
+    jump_mode = 1024
+    robot_Serial_Number = 1025
+    splits_Mode = 1026
+    lowest_ntc = 1027
 
 
 
@@ -314,83 +324,84 @@ class roki2met :
 
     class roki2Walk_Remote :
         #Перечень переменных слота roki2Walk_Remote
-        slowWalk = 2
-        stepLength = 3
-        sideLength = 4
-        rotation = 5
-        selfMotionShiftCorrectionX = 6
-        selfMotionShiftCorrectionY = 7
-        selfFirstStepYield = 8
-        selfCycleStepYield = 9
-        selfSideStepRightYield = 10
-        selfSideStepLeftYield = 11
-        selfFirstLegIsRightLeg = 12
-        motion_to_right = 13
-        side_motion = 14
-        selfInitPoses = 15
-        selfExitFlag = 16
-        selfFallingFlag = 17
-        selfNeckPan = 18
-        rotationYieldRight = 19
-        rotationYieldLeft = 20
-        framestep = 21
-        xtr = 22
-        ytr = 23
-        ztr = 24
-        xr = 25
-        yr = 26
-        zr = 27
-        wr = 28
-        xtl = 29
-        ytl = 30
-        ztl = 31
-        xl = 32
-        yl = 33
-        zl = 34
-        wl = 35
-        e10 = 36
-        d10 = 37
-        amplitude = 38
-        alpha01 = 39
-        fr1 = 40
-        fr2 = 41
-        gaitHeight = 42
-        stepHeight = 43
-        correctedStepLenght = 44
-        correctedStepLenghtHalf = 45
-        correctedSideLenght = 46
-        correctedSideLenghtHalf = 47
-        ztr0 = 48
-        ztl0 = 49
-        stepZtr = 50
-        stepZtl = 51
-        stepYtr = 52
-        stepYtl = 53
-        stepType = 54
-        fps = 55
-        walking_frame = 56
-        bodyTiltAtWalk = 57
-        solyLandingSkew = 58
-        stepNumber = 59
-        yaw = 60
-        pitch = 61
-        roll = 62
-        j = 63
-        xtl0 = 64
-        xtr0 = 65
-        dx0Typical = 66
-        dy0Typical = 67
-        correctedRotation = 68
-        s = 69
-        fase_offset = 70
-        dx = 71
-        dy = 72
-        stepRotation = 73
-        dx0 = 74
-        forwardDirection = 75
-        leftRightFactor = 76
-        frontBackFactor = 77
-        frameCount = 78
+        IKerr = 2
+        slowWalk = 3
+        stepLength = 4
+        sideLength = 5
+        rotation = 6
+        selfMotionShiftCorrectionX = 7
+        selfMotionShiftCorrectionY = 8
+        selfFirstStepYield = 9
+        selfCycleStepYield = 10
+        selfSideStepRightYield = 11
+        selfSideStepLeftYield = 12
+        selfFirstLegIsRightLeg = 13
+        motion_to_right = 14
+        side_motion = 15
+        selfInitPoses = 16
+        selfExitFlag = 17
+        selfFallingFlag = 18
+        selfNeckPan = 19
+        rotationYieldRight = 20
+        rotationYieldLeft = 21
+        framestep = 22
+        xtr = 23
+        ytr = 24
+        ztr = 25
+        xr = 26
+        yr = 27
+        zr = 28
+        wr = 29
+        xtl = 30
+        ytl = 31
+        ztl = 32
+        xl = 33
+        yl = 34
+        zl = 35
+        wl = 36
+        e10 = 37
+        d10 = 38
+        amplitude = 39
+        alpha01 = 40
+        fr1 = 41
+        fr2 = 42
+        gaitHeight = 43
+        stepHeight = 44
+        correctedStepLenght = 45
+        correctedStepLenghtHalf = 46
+        correctedSideLenght = 47
+        correctedSideLenghtHalf = 48
+        ztr0 = 49
+        ztl0 = 50
+        stepZtr = 51
+        stepZtl = 52
+        stepYtr = 53
+        stepYtl = 54
+        stepType = 55
+        fps = 56
+        walking_frame = 57
+        bodyTiltAtWalk = 58
+        solyLandingSkew = 59
+        stepNumber = 60
+        yaw = 61
+        pitch = 62
+        roll = 63
+        j = 64
+        xtl0 = 65
+        xtr0 = 66
+        dx0Typical = 67
+        dy0Typical = 68
+        correctedRotation = 69
+        s = 70
+        fase_offset = 71
+        dx = 72
+        dy = 73
+        stepRotation = 74
+        dx0 = 75
+        forwardDirection = 76
+        leftRightFactor = 77
+        frontBackFactor = 78
+        frameCount = 79
 
 
     class roki2microJump :
@@ -1146,3 +1157,92 @@ class roki2met :
     class numbering :
         #Перечень переменных слота numbering
         s = 2
+
+
+    class roki2Walk_test :
+        #Перечень переменных слота roki2Walk_test
+        IKerr = 2
+        stepLength = 3
+        sideLength = 4
+        rotation = 5
+        selfMotionShiftCorrectionX = 6
+        selfMotionShiftCorrectionY = 7
+        selfFirstStepYield = 8
+        selfCycleStepYield = 9
+        selfSideStepRightYield = 10
+        selfSideStepLeftYield = 11
+        selfFirstLegIsRightLeg = 12
+        motion_to_right = 13
+        side_motion = 14
+        selfInitPoses = 15
+        rotationYieldRight = 16
+        rotationYieldLeft = 17
+        framestep = 18
+        x_cap = 19
+        y_cap = 20
+        xtr = 21
+        xtr_cap = 22
+        xr_cap = 23
+        ytr = 24
+        ytr_cap = 25
+        ztr = 26
+        xr = 27
+        yr = 28
+        zr = 29
+        wr = 30
+        xtl = 31
+        xtl_cap = 32
+        xl_cap = 33
+        xt_cap_limit = 34
+        x_cap_limit = 35
+        ytl = 36
+        ytl_cap = 37
+        side_cap = 38
+        yt_cap_limit = 39
+        ztl = 40
+        xl = 41
+        yl = 42
+        zl = 43
+        wl = 44
+        e10 = 45
+        d10 = 46
+        amplitude = 47
+        alpha01 = 48
+        fr1 = 49
+        fr2 = 50
+        gaitHeight = 51
+        stepHeight = 52
+        correctedStepLenght = 53
+        correctedStepLenghtHalf = 54
+        correctedSideLenght = 55
+        correctedSideLenghtHalf = 56
+        ztr0 = 57
+        ztl0 = 58
+        stepZtr = 59
+        stepZtl = 60
+        stepYtr = 61
+        stepYtl = 62
+        stepType = 63
+        fps = 64
+        walking_frame = 65
+        bodyTiltAtWalk = 66
+        solyLandingSkew = 67
+        stepNumber = 68
+        yaw = 69
+        pitch = 70
+        roll = 71
+        j = 72
+        xtl0 = 73
+        xtr0 = 74
+        dx0Typical = 75
+        dy0Typical = 76
+        correctedRotation = 77
+        s = 78
+        fase_offset = 79
+        dx = 80
+        dy = 81
+        stepRotation = 82
+        dx0 = 83
+        forwardDirection = 84
+        leftRightFactor = 85
+        frontBackFactor = 86

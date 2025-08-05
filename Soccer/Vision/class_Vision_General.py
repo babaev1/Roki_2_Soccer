@@ -21,9 +21,10 @@ class Vision_General:
         self.camera_elevation = 410
         self.yaw = 0
         self.image = None
-        self.event = threading.Event()
-        self.camera_thread = threading.Thread(target = self.detect_Ball_in_Stream, args=(self.event,))
-        self.camera_thread.setDaemon(True)
+        if self.glob.camera_streaming:
+            self.event = threading.Event()
+            self.camera_thread = threading.Thread(target = self.detect_Ball_in_Stream, args=(self.event,))
+            self.camera_thread.setDaemon(True)
         #self.camera_thread.start()
         self.last_seen_centroid = [0,0,0]
 
