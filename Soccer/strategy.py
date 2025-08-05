@@ -1705,8 +1705,8 @@ class Player():
             success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
                                                                               very_Fast = False)
 
-            intercom.memISet(var.kcik_by_right, 1)
-            intercom.memISet(var.kcik_power, 100)
+            intercom.memISet(var.kick_by_right, 1)
+            intercom.memISet(var.kick_power, 100)
             self.glob.rcb.motionPlay(31)
             #self.test_walk_main_cycle()
             #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
