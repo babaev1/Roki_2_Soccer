@@ -865,7 +865,16 @@ class Motion_real(Motion):
             self.first_Leg_Is_Right_Leg = True
             kick_by_Right = self.fine_adjustment_before_kick( kick_direction)
             if self.glob.ball_distance < 0.2:
-                self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
+                success_Code, napravl, dist, speed = self.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False)
+                if kick_by_Right: kick_by_right = 1
+                else: kick_by_right = 0
+                kick_offset = 0
+                if success_Code:
+                    if napravl < 0 : kick_by_right = 1
+                    else: kick_by_right = 0
+                    kick_offset = int(abs(math.sin(napravl) * dist * 1000)) - 62
+                self.hard_kick(kick_by_right = kick_by_right, kick_power = 100, kick_offset = kick_offset)
+                #self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
                 self.pause_in_ms(1000)
         return True
 

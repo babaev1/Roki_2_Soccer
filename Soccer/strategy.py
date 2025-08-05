@@ -1008,12 +1008,12 @@ class Player():
                 change_legs = False
                 #self.motion.walk_Restart()
             self.motion.first_Leg_Is_Right_Leg = False
-            side_step_yield = self.motion.side_step_left_yield
+            side_step_yield = self.motion.side_step_left_yield * 0.75
             invert = -1
         #print('6self.motion.first_Leg_Is_Right_Leg:', self.motion.first_Leg_Is_Right_Leg)
         yaw_increment_at_side_step =  math.copysign(2 * math.asin(side_step_yield / 2 / (turning_radius * 1000)), alpha)
         number_Of_Cycles = int(round(abs(alpha / yaw_increment_at_side_step)))+1
-        sideLength = 20
+        sideLength = 20 * 0.75
         for cycle in range(1, number_Of_Cycles):
             stepLength = 0
             if self.glob.robot_see_ball == 5:
