@@ -1705,6 +1705,7 @@ class Player():
             success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
                                                                               very_Fast = False)
             kick_offset = 0
+            kick_by_right = 1
             if success_Code:
                 if napravl < 0 : kick_by_right = 1
                 else: kick_by_right = 0
