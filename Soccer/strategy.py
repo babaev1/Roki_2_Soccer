@@ -725,17 +725,21 @@ class Player():
         #self.motion.jump_turn(self.motion.params['PENALTY_JUMP_TURN_ANGLE'], jumps_limit = 10) # 0.5
         #self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
         #self.motion.kick(True, small = True)
-        self.motion.jump_turn(0.75, jumps_limit = 10)
+        self.motion.jump_turn(0.6, jumps_limit = 10)
         #self.motion.walk_Final_Pose_After_Kick()
         for _ in range(5):
             self.motion.falling_Test()
             time.sleep(0.5)
         #self.motion.jump_turn(self.f.direction_To_Guest)
         self.motion.stepHeight = 10
-        self.motion.gaitHeight = 190
-        self.walk_straight(number_Of_Cycles = 50, stepLength = 20, sideLength = 0, respect_body_tilt = False, direction = 0.75)
-        elf.motion.stepHeight = 32
         self.motion.gaitHeight = 180
+        self.walk_straight_vision(number_Of_Cycles = 50, stepLength = 15, sideLength = 0, respect_body_tilt = False, direction = 0.6)
+        self.motion.stepHeight = 32
+        self.motion.gaitHeight = 180
+        self.f.dir_To_Guest()
+        self.motion.one_jump_backward()
+        success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
+        return
         #self.motion.near_distance_omni_motion(500, 0) #math.pi/2)
         #self.motion.jump_turn(0, jumps_limit = 10)
         #self.motion.near_distance_omni_motion(300, 0)
@@ -1715,6 +1719,22 @@ class Player():
             #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
         if self.glob.SIMULATION == 1:
             self.motion.sim_Progress(10)
+    
+    def walk_straight_vision(self, number_Of_Cycles = 0, stepLength = 0, sideLength = 0, respect_body_tilt = False, direction = 0):
+        self.motion.vith_Vision = True
+        self.motion.walk_Initial_Pose()
+        number_Of_Cycles += 2
+        for cycle in range(number_Of_Cycles):
+            sideLength = math.copysign(10, self.glob.ball_course) 
+            stepLength1 = stepLength
+            if cycle ==0 or cycle == number_Of_Cycles-1 : stepLength1 = stepLength/3
+            if cycle ==1 or cycle == number_Of_Cycles-2 : stepLength1 = stepLength/3 * 2
+            self.motion.refresh_Orientation()
+            #self.motion.body_euler_angle_calc()
+            rotation = direction - self.motion.body_euler_angle['yaw'] * 1.0
+            rotation = self.motion.normalize_rotation(rotation)
+            self.motion.walk_Cycle(stepLength1, sideLength, rotation,cycle, number_Of_Cycles)
+        self.motion.walk_Final_Pose(respect_body_tilt = respect_body_tilt)
 
     def walk_straight(self, number_Of_Cycles = 0, stepLength = 0, sideLength = 0, respect_body_tilt = False, direction = 0):
         self.motion.walk_Initial_Pose()
