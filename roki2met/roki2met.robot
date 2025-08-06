@@ -2,12 +2,12 @@
     "AType": "Zubr robot file",
     "AVersion": 2,
     "EntryBlock": {
-        "id": "2536a80ba20",
+        "id": "1fe12fade00",
         "type": "Block"
     },
     "Objects": [
         {
-            "id": "2536a80ba20",
+            "id": "1fe12fade00",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -26,7 +26,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80ba20",
+                        "id": "1fe12fade00",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -36,7 +36,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536a9c5300",
+                    "id": "1fe13ae5270",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -51,7 +51,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80ba20",
+                        "id": "1fe12fade00",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -61,7 +61,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "253758f9690",
+                    "id": "1fe13ae4850",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -76,7 +76,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80ba20",
+                        "id": "1fe12fade00",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -86,7 +86,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758fa770",
+                    "id": "1fe13ca1580",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -101,7 +101,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80ba20",
+                        "id": "1fe12fade00",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -111,7 +111,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f9c30",
+                    "id": "1fe13ca18e0",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -126,7 +126,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80ba20",
+                        "id": "1fe12fade00",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -136,7 +136,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758fa530",
+                    "id": "1fe13ca0a40",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -151,7 +151,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80ba20",
+                        "id": "1fe12fade00",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -161,7 +161,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758fa0b0",
+                    "id": "1fe13ca1340",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -173,7 +173,7 @@
             "ry1": 212,
             "ry2": 311,
             "shaft": {
-                "id": "2536a9c5300",
+                "id": "1fe13ae5270",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -181,7 +181,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b7a0",
+            "id": "1fe12fad800",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -200,7 +200,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b7a0",
+                        "id": "1fe12fad800",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -210,7 +210,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "253758f9e70",
+                    "id": "1fe13ca06e0",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -225,7 +225,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b7a0",
+                        "id": "1fe12fad800",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -235,7 +235,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "253758f9f90",
+                    "id": "1fe13ca04a0",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -250,7 +250,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b7a0",
+                        "id": "1fe12fad800",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -260,7 +260,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758fa890",
+                    "id": "1fe13ca0fe0",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -275,7 +275,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b7a0",
+                        "id": "1fe12fad800",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -285,7 +285,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f97b0",
+                    "id": "1fe13ca1460",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -300,7 +300,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b7a0",
+                        "id": "1fe12fad800",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -310,7 +310,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f9570",
+                    "id": "1fe13ca0ec0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -325,7 +325,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b7a0",
+                        "id": "1fe12fad800",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -335,7 +335,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f9d50",
+                    "id": "1fe13ca0380",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -347,7 +347,7 @@
             "ry1": 85,
             "ry2": 184,
             "shaft": {
-                "id": "253758f9e70",
+                "id": "1fe13ca06e0",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -355,7 +355,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80a420",
+            "id": "1fe12fae300",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -374,7 +374,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a420",
+                        "id": "1fe12fae300",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -384,7 +384,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "253758f8c70",
+                    "id": "1fe13ca0020",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -399,7 +399,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80a420",
+                        "id": "1fe12fae300",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -409,7 +409,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "253758f98d0",
+                    "id": "1fe13ca05c0",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -424,7 +424,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a420",
+                        "id": "1fe12fae300",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -434,7 +434,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f9450",
+                    "id": "1fe13ca1a00",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -449,7 +449,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a420",
+                        "id": "1fe12fae300",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -459,7 +459,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758fa1d0",
+                    "id": "1fe13ca1100",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -474,7 +474,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a420",
+                        "id": "1fe12fae300",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -484,7 +484,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758fa650",
+                    "id": "1fe13ca0140",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -499,7 +499,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a420",
+                        "id": "1fe12fae300",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -509,7 +509,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758fa410",
+                    "id": "1fe13ca0c80",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -521,7 +521,7 @@
             "ry1": 304,
             "ry2": 403,
             "shaft": {
-                "id": "253758f8c70",
+                "id": "1fe13ca0020",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -529,7 +529,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80a720",
+            "id": "1fe12fae200",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -548,7 +548,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a720",
+                        "id": "1fe12fae200",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -558,7 +558,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "253758f9210",
+                    "id": "1fe13ca1b20",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -573,7 +573,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80a720",
+                        "id": "1fe12fae200",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -583,7 +583,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "253758f8a30",
+                    "id": "1fe13ca1220",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -598,7 +598,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a720",
+                        "id": "1fe12fae200",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -608,7 +608,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f8d90",
+                    "id": "1fe13ca1c40",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -623,7 +623,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a720",
+                        "id": "1fe12fae200",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -633,7 +633,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758fa2f0",
+                    "id": "1fe13ca1d60",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -648,7 +648,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a720",
+                        "id": "1fe12fae200",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -658,7 +658,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f99f0",
+                    "id": "1fe13ca16a0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -673,7 +673,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a720",
+                        "id": "1fe12fae200",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -683,7 +683,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f9b10",
+                    "id": "1fe13ca17c0",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -695,7 +695,7 @@
             "ry1": 389,
             "ry2": 488,
             "shaft": {
-                "id": "253758f9210",
+                "id": "1fe13ca1b20",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -703,7 +703,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b020",
+            "id": "1fe12faf000",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -722,7 +722,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b020",
+                        "id": "1fe12faf000",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -732,7 +732,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "253758f8b50",
+                    "id": "1fe13ca1e80",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -747,7 +747,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b020",
+                        "id": "1fe12faf000",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -757,7 +757,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "253758f8eb0",
+                    "id": "1fe13ca0260",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -772,7 +772,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b020",
+                        "id": "1fe12faf000",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -782,7 +782,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f8fd0",
+                    "id": "1fe13ca0800",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -797,7 +797,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b020",
+                        "id": "1fe12faf000",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -807,7 +807,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f90f0",
+                    "id": "1fe13ca0920",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -822,7 +822,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b020",
+                        "id": "1fe12faf000",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -832,7 +832,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "253758f9330",
+                    "id": "1fe13ca0b60",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -847,7 +847,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b020",
+                        "id": "1fe12faf000",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -857,7 +857,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb8a90",
+                    "id": "1fe13ca0da0",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -869,7 +869,7 @@
             "ry1": 522,
             "ry2": 621,
             "shaft": {
-                "id": "253758f8b50",
+                "id": "1fe13ca1e80",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -877,7 +877,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b820",
+            "id": "1fe12fae900",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -896,7 +896,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b820",
+                        "id": "1fe12fae900",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -906,7 +906,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536deb8190",
+                    "id": "1fe1b7d1880",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -921,7 +921,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b820",
+                        "id": "1fe12fae900",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -931,7 +931,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536deb7770",
+                    "id": "1fe1b7d0560",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -946,7 +946,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b820",
+                        "id": "1fe12fae900",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -956,7 +956,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb8610",
+                    "id": "1fe1b7d19a0",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -971,7 +971,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b820",
+                        "id": "1fe12fae900",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -981,7 +981,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb84f0",
+                    "id": "1fe1b7d1520",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -996,7 +996,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b820",
+                        "id": "1fe12fae900",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -1006,7 +1006,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb7ad0",
+                    "id": "1fe1b7d08c0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -1021,7 +1021,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b820",
+                        "id": "1fe12fae900",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -1031,7 +1031,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb8cd0",
+                    "id": "1fe1b7d1400",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -1043,7 +1043,7 @@
             "ry1": 636,
             "ry2": 735,
             "shaft": {
-                "id": "2536deb8190",
+                "id": "1fe1b7d1880",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -1051,7 +1051,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b1a0",
+            "id": "1fe12faee00",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -1070,7 +1070,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b1a0",
+                        "id": "1fe12faee00",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -1080,7 +1080,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536deb9150",
+                    "id": "1fe1b7d1ac0",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -1095,7 +1095,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b1a0",
+                        "id": "1fe12faee00",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -1105,7 +1105,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536deb79b0",
+                    "id": "1fe1b7d11c0",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -1120,7 +1120,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b1a0",
+                        "id": "1fe12faee00",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -1130,7 +1130,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb8730",
+                    "id": "1fe1b7d1be0",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -1145,7 +1145,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b1a0",
+                        "id": "1fe12faee00",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -1155,7 +1155,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb7bf0",
+                    "id": "1fe1b7d1640",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -1170,7 +1170,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b1a0",
+                        "id": "1fe12faee00",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -1180,7 +1180,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb82b0",
+                    "id": "1fe1b7d12e0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -1195,7 +1195,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b1a0",
+                        "id": "1fe12faee00",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -1205,7 +1205,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb8850",
+                    "id": "1fe1b7d0d40",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -1217,7 +1217,7 @@
             "ry1": 422,
             "ry2": 521,
             "shaft": {
-                "id": "2536deb9150",
+                "id": "1fe1b7d1ac0",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -1225,7 +1225,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b4a0",
+            "id": "1fe12fade80",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -1244,7 +1244,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b4a0",
+                        "id": "1fe12fade80",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -1254,7 +1254,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536deb7e30",
+                    "id": "1fe1b7d22a0",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -1269,7 +1269,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b4a0",
+                        "id": "1fe12fade80",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -1279,7 +1279,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536deb7f50",
+                    "id": "1fe1b7d1d00",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -1294,7 +1294,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b4a0",
+                        "id": "1fe12fade80",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -1304,7 +1304,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb8970",
+                    "id": "1fe1b7d0f80",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -1319,7 +1319,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b4a0",
+                        "id": "1fe12fade80",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -1329,7 +1329,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb8070",
+                    "id": "1fe1b7d0e60",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -1344,7 +1344,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b4a0",
+                        "id": "1fe12fade80",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -1354,7 +1354,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb8bb0",
+                    "id": "1fe1b7d07a0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -1369,7 +1369,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b4a0",
+                        "id": "1fe12fade80",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -1379,7 +1379,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb72f0",
+                    "id": "1fe1b7d1760",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -1391,7 +1391,7 @@
             "ry1": 541,
             "ry2": 640,
             "shaft": {
-                "id": "2536deb7e30",
+                "id": "1fe1b7d22a0",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -1399,7 +1399,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b5a0",
+            "id": "1fe12fae800",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -1418,7 +1418,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b5a0",
+                        "id": "1fe12fae800",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -1428,7 +1428,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536deb8df0",
+                    "id": "1fe1b7d1e20",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -1443,7 +1443,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b5a0",
+                        "id": "1fe12fae800",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -1453,7 +1453,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536deb83d0",
+                    "id": "1fe1b7d1f40",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -1468,7 +1468,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b5a0",
+                        "id": "1fe12fae800",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -1478,7 +1478,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb8f10",
+                    "id": "1fe1b7d2060",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -1493,7 +1493,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b5a0",
+                        "id": "1fe12fae800",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -1503,7 +1503,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb7410",
+                    "id": "1fe1b7d0440",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -1518,7 +1518,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b5a0",
+                        "id": "1fe12fae800",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -1528,7 +1528,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb9030",
+                    "id": "1fe1b7d09e0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -1543,7 +1543,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b5a0",
+                        "id": "1fe12fae800",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -1553,7 +1553,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb7530",
+                    "id": "1fe1b7d2180",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -1565,7 +1565,7 @@
             "ry1": 662,
             "ry2": 761,
             "shaft": {
-                "id": "2536deb8df0",
+                "id": "1fe1b7d1e20",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -1573,7 +1573,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b120",
+            "id": "1fe12fae100",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -1592,7 +1592,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b120",
+                        "id": "1fe12fae100",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -1602,7 +1602,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536deb7650",
+                    "id": "1fe1b7d0b00",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -1617,7 +1617,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b120",
+                        "id": "1fe12fae100",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -1627,7 +1627,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536deb7890",
+                    "id": "1fe1b7d0680",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -1642,7 +1642,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b120",
+                        "id": "1fe12fae100",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -1652,7 +1652,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb7d10",
+                    "id": "1fe1b7d10a0",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -1667,7 +1667,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b120",
+                        "id": "1fe12fae100",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -1677,7 +1677,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb9780",
+                    "id": "1fe1b7d0c20",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -1692,7 +1692,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b120",
+                        "id": "1fe12fae100",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -1702,7 +1702,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb9d20",
+                    "id": "1fe13c58110",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -1717,7 +1717,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b120",
+                        "id": "1fe12fae100",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -1727,7 +1727,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deba620",
+                    "id": "1fe13c59e50",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -1739,7 +1739,7 @@
             "ry1": 757,
             "ry2": 856,
             "shaft": {
-                "id": "2536deb7650",
+                "id": "1fe1b7d0b00",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -1747,7 +1747,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b3a0",
+            "id": "1fe12fad880",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -1766,7 +1766,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b3a0",
+                        "id": "1fe12fad880",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -1776,7 +1776,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536deb9660",
+                    "id": "1fe13c58c50",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -1791,7 +1791,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b3a0",
+                        "id": "1fe12fad880",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -1801,7 +1801,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536deb9f60",
+                    "id": "1fe13c57ff0",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -1816,7 +1816,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b3a0",
+                        "id": "1fe12fad880",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -1826,7 +1826,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb9e40",
+                    "id": "1fe13c58230",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -1841,7 +1841,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b3a0",
+                        "id": "1fe12fad880",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -1851,7 +1851,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb98a0",
+                    "id": "1fe13c588f0",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -1866,7 +1866,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b3a0",
+                        "id": "1fe12fad880",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -1876,7 +1876,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deba740",
+                    "id": "1fe13c590d0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -1891,7 +1891,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b3a0",
+                        "id": "1fe12fad880",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -1901,7 +1901,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deba3e0",
+                    "id": "1fe13c598b0",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -1913,7 +1913,7 @@
             "ry1": 879,
             "ry2": 978,
             "shaft": {
-                "id": "2536deb9660",
+                "id": "1fe13c58c50",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -1921,7 +1921,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80a8a0",
+            "id": "1fe12fae380",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -1940,7 +1940,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a8a0",
+                        "id": "1fe12fae380",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -1950,7 +1950,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536deb9ae0",
+                    "id": "1fe13c59c10",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -1965,7 +1965,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80a8a0",
+                        "id": "1fe12fae380",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -1975,7 +1975,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536deb99c0",
+                    "id": "1fe13c58470",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -1990,7 +1990,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a8a0",
+                        "id": "1fe12fae380",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -2000,7 +2000,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deba860",
+                    "id": "1fe13c58350",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -2015,7 +2015,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a8a0",
+                        "id": "1fe12fae380",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -2025,7 +2025,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deba500",
+                    "id": "1fe13c59310",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -2040,7 +2040,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a8a0",
+                        "id": "1fe12fae380",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -2050,7 +2050,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb9c00",
+                    "id": "1fe13c58590",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -2065,7 +2065,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a8a0",
+                        "id": "1fe12fae380",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -2075,7 +2075,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debace0",
+                    "id": "1fe13c599d0",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -2087,7 +2087,7 @@
             "ry1": 1000,
             "ry2": 1099,
             "shaft": {
-                "id": "2536deb9ae0",
+                "id": "1fe13c59c10",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -2095,7 +2095,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80a920",
+            "id": "1fe12faea00",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -2114,7 +2114,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a920",
+                        "id": "1fe12faea00",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -2124,7 +2124,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536deba2c0",
+                    "id": "1fe13c586b0",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -2139,7 +2139,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80a920",
+                        "id": "1fe12faea00",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -2149,7 +2149,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536deba980",
+                    "id": "1fe13c587d0",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -2164,7 +2164,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a920",
+                        "id": "1fe12faea00",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -2174,7 +2174,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deba080",
+                    "id": "1fe13c58a10",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -2189,7 +2189,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a920",
+                        "id": "1fe12faea00",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -2199,7 +2199,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deba1a0",
+                    "id": "1fe13c58b30",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -2214,7 +2214,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a920",
+                        "id": "1fe12faea00",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -2224,7 +2224,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb9420",
+                    "id": "1fe13c59af0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -2239,7 +2239,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a920",
+                        "id": "1fe12faea00",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -2249,7 +2249,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debb160",
+                    "id": "1fe13c58d70",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -2261,7 +2261,7 @@
             "ry1": 1115,
             "ry2": 1214,
             "shaft": {
-                "id": "2536deba2c0",
+                "id": "1fe13c586b0",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -2269,7 +2269,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b0a0",
+            "id": "1fe12faeb00",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -2288,7 +2288,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b0a0",
+                        "id": "1fe12faeb00",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -2298,7 +2298,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536debaaa0",
+                    "id": "1fe13c58e90",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -2313,7 +2313,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b0a0",
+                        "id": "1fe12faeb00",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -2323,7 +2323,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536debabc0",
+                    "id": "1fe13c58fb0",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -2338,7 +2338,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b0a0",
+                        "id": "1fe12faeb00",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -2348,7 +2348,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debae00",
+                    "id": "1fe13c59430",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -2363,7 +2363,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b0a0",
+                        "id": "1fe12faeb00",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -2373,7 +2373,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debaf20",
+                    "id": "1fe13c591f0",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -2388,7 +2388,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b0a0",
+                        "id": "1fe12faeb00",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -2398,7 +2398,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debb040",
+                    "id": "1fe13c59790",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -2413,7 +2413,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b0a0",
+                        "id": "1fe12faeb00",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -2423,7 +2423,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536deb9300",
+                    "id": "1fe13c59550",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -2435,7 +2435,7 @@
             "ry1": 523,
             "ry2": 622,
             "shaft": {
-                "id": "2536debaaa0",
+                "id": "1fe13c58e90",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -2443,7 +2443,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b320",
+            "id": "1fe12faef80",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -2462,7 +2462,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b320",
+                        "id": "1fe12faef80",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -2472,7 +2472,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536deb9540",
+                    "id": "1fe13c59670",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -2487,7 +2487,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b320",
+                        "id": "1fe12faef80",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -2497,7 +2497,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536debbd30",
+                    "id": "1fe13c59d30",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -2512,7 +2512,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b320",
+                        "id": "1fe12faef80",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -2522,7 +2522,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debb9d0",
+                    "id": "1fe13c5b200",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -2537,7 +2537,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b320",
+                        "id": "1fe12faef80",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -2547,7 +2547,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debbe50",
+                    "id": "1fe13c5ad80",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -2562,7 +2562,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b320",
+                        "id": "1fe12faef80",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -2572,7 +2572,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debc630",
+                    "id": "1fe13c5b8c0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -2587,7 +2587,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b320",
+                        "id": "1fe12faef80",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -2597,7 +2597,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debc090",
+                    "id": "1fe13c5a120",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -2609,7 +2609,7 @@
             "ry1": 638,
             "ry2": 737,
             "shaft": {
-                "id": "2536deb9540",
+                "id": "1fe13c59670",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -2617,7 +2617,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b220",
+            "id": "1fe12fae280",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -2636,7 +2636,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b220",
+                        "id": "1fe12fae280",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -2646,7 +2646,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536debd170",
+                    "id": "1fe13c5ab40",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -2661,7 +2661,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b220",
+                        "id": "1fe12fae280",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -2671,7 +2671,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536debd050",
+                    "id": "1fe13c5bb00",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -2686,7 +2686,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b220",
+                        "id": "1fe12fae280",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -2696,7 +2696,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debc510",
+                    "id": "1fe13c5b440",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -2711,7 +2711,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b220",
+                        "id": "1fe12fae280",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -2721,7 +2721,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debbc10",
+                    "id": "1fe13c5be60",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -2736,7 +2736,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b220",
+                        "id": "1fe12fae280",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -2746,7 +2746,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debc2d0",
+                    "id": "1fe13c5b560",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -2761,7 +2761,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b220",
+                        "id": "1fe12fae280",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -2771,7 +2771,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debc870",
+                    "id": "1fe13c5bd40",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -2783,7 +2783,7 @@
             "ry1": 754,
             "ry2": 853,
             "shaft": {
-                "id": "2536debd170",
+                "id": "1fe13c5ab40",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -2791,7 +2791,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b620",
+            "id": "1fe12fadd80",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -2810,7 +2810,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b620",
+                        "id": "1fe12fadd80",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -2820,7 +2820,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536debbf70",
+                    "id": "1fe13c5b680",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -2835,7 +2835,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b620",
+                        "id": "1fe12fadd80",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -2845,7 +2845,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536debc1b0",
+                    "id": "1fe13c5a000",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -2860,7 +2860,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b620",
+                        "id": "1fe12fadd80",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -2870,7 +2870,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debc750",
+                    "id": "1fe13c5b9e0",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -2885,7 +2885,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b620",
+                        "id": "1fe12fadd80",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -2895,7 +2895,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debb8b0",
+                    "id": "1fe13c5a360",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -2910,7 +2910,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b620",
+                        "id": "1fe12fadd80",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -2920,7 +2920,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debc990",
+                    "id": "1fe13c5b7a0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -2935,7 +2935,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b620",
+                        "id": "1fe12fadd80",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -2945,7 +2945,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debcab0",
+                    "id": "1fe13c5bc20",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -2957,7 +2957,7 @@
             "ry1": 874,
             "ry2": 973,
             "shaft": {
-                "id": "2536debbf70",
+                "id": "1fe13c5b680",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -2965,7 +2965,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80ada0",
+            "id": "1fe12fae700",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -2984,7 +2984,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80ada0",
+                        "id": "1fe12fae700",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -2994,7 +2994,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536debb670",
+                    "id": "1fe13c5b320",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -3009,7 +3009,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80ada0",
+                        "id": "1fe12fae700",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -3019,7 +3019,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536debb310",
+                    "id": "1fe13c5a7e0",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -3034,7 +3034,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80ada0",
+                        "id": "1fe12fae700",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -3044,7 +3044,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debc3f0",
+                    "id": "1fe13c5aea0",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -3059,7 +3059,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80ada0",
+                        "id": "1fe12fae700",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -3069,7 +3069,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debcbd0",
+                    "id": "1fe13c5a5a0",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -3084,7 +3084,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80ada0",
+                        "id": "1fe12fae700",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -3094,7 +3094,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debb550",
+                    "id": "1fe13c5a480",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -3109,7 +3109,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80ada0",
+                        "id": "1fe12fae700",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -3119,7 +3119,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debccf0",
+                    "id": "1fe13c5a240",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -3131,7 +3131,7 @@
             "ry1": 991,
             "ry2": 1090,
             "shaft": {
-                "id": "2536debb670",
+                "id": "1fe13c5b320",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -3139,7 +3139,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80a7a0",
+            "id": "1fe12fadf00",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -3158,7 +3158,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a7a0",
+                        "id": "1fe12fadf00",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -3168,7 +3168,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536debce10",
+                    "id": "1fe13c5a6c0",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -3183,7 +3183,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80a7a0",
+                        "id": "1fe12fadf00",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -3193,7 +3193,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536debcf30",
+                    "id": "1fe13c5a900",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -3208,7 +3208,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a7a0",
+                        "id": "1fe12fadf00",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -3218,7 +3218,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debb430",
+                    "id": "1fe13c5aa20",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -3233,7 +3233,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a7a0",
+                        "id": "1fe12fadf00",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -3243,7 +3243,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debb790",
+                    "id": "1fe13c5b0e0",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -3258,7 +3258,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a7a0",
+                        "id": "1fe12fadf00",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -3268,7 +3268,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debbaf0",
+                    "id": "1fe13c5ac60",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -3283,7 +3283,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a7a0",
+                        "id": "1fe12fadf00",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -3293,7 +3293,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debd440",
+                    "id": "1fe13c5afc0",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -3305,7 +3305,7 @@
             "ry1": 1105,
             "ry2": 1204,
             "shaft": {
-                "id": "2536debce10",
+                "id": "1fe13c5a6c0",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -3313,7 +3313,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b2a0",
+            "id": "1fe12fae480",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -3332,7 +3332,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b2a0",
+                        "id": "1fe12fae480",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -3342,7 +3342,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536debd7a0",
+                    "id": "1fe13c5cc70",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -3357,7 +3357,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b2a0",
+                        "id": "1fe12fae480",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -3367,7 +3367,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536debe640",
+                    "id": "1fe13c5cd90",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -3382,7 +3382,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b2a0",
+                        "id": "1fe12fae480",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -3392,7 +3392,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debe520",
+                    "id": "1fe13c5ca30",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -3407,7 +3407,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b2a0",
+                        "id": "1fe12fae480",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -3417,7 +3417,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debd320",
+                    "id": "1fe13c5d7b0",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -3432,7 +3432,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b2a0",
+                        "id": "1fe12fae480",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -3442,7 +3442,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debd8c0",
+                    "id": "1fe13c5c7f0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -3457,7 +3457,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b2a0",
+                        "id": "1fe12fae480",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -3467,7 +3467,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debdf80",
+                    "id": "1fe13c5d570",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -3479,7 +3479,7 @@
             "ry1": 300,
             "ry2": 399,
             "shaft": {
-                "id": "2536debd7a0",
+                "id": "1fe13c5cc70",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -3487,7 +3487,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80a0a0",
+            "id": "1fe12fae400",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -3506,7 +3506,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a0a0",
+                        "id": "1fe12fae400",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -3516,7 +3516,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536debe0a0",
+                    "id": "1fe13c5d0f0",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -3531,7 +3531,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80a0a0",
+                        "id": "1fe12fae400",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -3541,7 +3541,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536debef40",
+                    "id": "1fe13c5ceb0",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -3556,7 +3556,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a0a0",
+                        "id": "1fe12fae400",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -3566,7 +3566,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debee20",
+                    "id": "1fe13c5cfd0",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -3581,7 +3581,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a0a0",
+                        "id": "1fe12fae400",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -3591,7 +3591,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debd560",
+                    "id": "1fe13c5c370",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -3606,7 +3606,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a0a0",
+                        "id": "1fe12fae400",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -3616,7 +3616,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debe1c0",
+                    "id": "1fe13c5db10",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -3631,7 +3631,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80a0a0",
+                        "id": "1fe12fae400",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -3641,7 +3641,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debe760",
+                    "id": "1fe13c5dc30",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -3653,7 +3653,7 @@
             "ry1": 417,
             "ry2": 516,
             "shaft": {
-                "id": "2536debe0a0",
+                "id": "1fe13c5d0f0",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -3661,7 +3661,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a809ea0",
+            "id": "1fe12fad600",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -3680,7 +3680,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a809ea0",
+                        "id": "1fe12fad600",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -3690,7 +3690,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536debde60",
+                    "id": "1fe13c5dd50",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -3705,7 +3705,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a809ea0",
+                        "id": "1fe12fad600",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -3715,7 +3715,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536debdd40",
+                    "id": "1fe13c5d330",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -3730,7 +3730,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a809ea0",
+                        "id": "1fe12fad600",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -3740,7 +3740,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debd680",
+                    "id": "1fe13c5de70",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -3755,7 +3755,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a809ea0",
+                        "id": "1fe12fad600",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -3765,7 +3765,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debe880",
+                    "id": "1fe13c5d9f0",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -3780,7 +3780,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a809ea0",
+                        "id": "1fe12fad600",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -3790,7 +3790,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debf180",
+                    "id": "1fe13c5d210",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -3805,7 +3805,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a809ea0",
+                        "id": "1fe12fad600",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -3815,7 +3815,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debd9e0",
+                    "id": "1fe13c5d450",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -3827,7 +3827,7 @@
             "ry1": 536,
             "ry2": 635,
             "shaft": {
-                "id": "2536debde60",
+                "id": "1fe13c5dd50",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -3835,7 +3835,7 @@
             "unitType": 1
         },
         {
-            "id": "2536a80b6a0",
+            "id": "1fe12faeb80",
             "jackList": [
                 {
                     "AngleIndex": 6,
@@ -3854,7 +3854,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b6a0",
+                        "id": "1fe12faeb80",
                         "type": "Block"
                     },
                     "PosX": 35,
@@ -3864,7 +3864,7 @@
                         "z": 19.5
                     },
                     "Signature": "inpPlasticServoV8",
-                    "id": "2536debe2e0",
+                    "id": "1fe13c5c910",
                     "name": "Вал ведущий",
                     "type": "Shaft"
                 },
@@ -3879,7 +3879,7 @@
                     },
                     "Orientation": 4,
                     "Parent": {
-                        "id": "2536a80b6a0",
+                        "id": "1fe12faeb80",
                         "type": "Block"
                     },
                     "PosX": 70,
@@ -3889,7 +3889,7 @@
                         "z": 0
                     },
                     "Signature": "inpPlasticServoRearX4",
-                    "id": "2536debe9a0",
+                    "id": "1fe13c5d690",
                     "name": "Крепление сзади",
                     "type": "Jack"
                 },
@@ -3904,7 +3904,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b6a0",
+                        "id": "1fe12faeb80",
                         "type": "Block"
                     },
                     "PosX": 105,
@@ -3914,7 +3914,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debf060",
+                    "id": "1fe13c5cb50",
                     "name": "Крепление верх слева",
                     "type": "Jack"
                 },
@@ -3929,7 +3929,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b6a0",
+                        "id": "1fe12faeb80",
                         "type": "Block"
                     },
                     "PosX": 140,
@@ -3939,7 +3939,7 @@
                         "z": 12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debdb00",
+                    "id": "1fe13c5c010",
                     "name": "Крепление верх справа",
                     "type": "Jack"
                 },
@@ -3954,7 +3954,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b6a0",
+                        "id": "1fe12faeb80",
                         "type": "Block"
                     },
                     "PosX": 175,
@@ -3964,7 +3964,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debdc20",
+                    "id": "1fe13c5d8d0",
                     "name": "Крепление низ слева",
                     "type": "Jack"
                 },
@@ -3979,7 +3979,7 @@
                     },
                     "Orientation": 0,
                     "Parent": {
-                        "id": "2536a80b6a0",
+                        "id": "1fe12faeb80",
                         "type": "Block"
                     },
                     "PosX": 210,
@@ -3989,7 +3989,7 @@
                         "z": -12.600000381469727
                     },
                     "Signature": "inpPlasticServoSideX2",
-                    "id": "2536debe400",
+                    "id": "1fe13c5c130",
                     "name": "Крепление низ справа",
                     "type": "Jack"
                 }
@@ -4001,7 +4001,7 @@
             "ry1": 651,
             "ry2": 750,
             "shaft": {
-                "id": "2536debe2e0",
+                "id": "1fe13c5c910",
                 "type": "Shaft"
             },
             "type": "Block",
@@ -4010,7 +4010,7 @@
         }
     ],
     "RobotId": 183386725,
-    "RobotVersion": 235154165,
+    "RobotVersion": 239635740,
     "SlotDebugList": [
         [
             "svImuAccX",
@@ -4145,6 +4145,20 @@
             "xtr_cap",
             "pitch",
             "roll"
+        ],
+        [
+            "ytr",
+            "ytl",
+            "amplitude",
+            "sideLength",
+            "correctedSideLenghtHalf",
+            "IKerr",
+            "svEulerRoll",
+            "xtr_cap",
+            "pitch",
+            "kick_power",
+            "kick_offset",
+            "kick_by_right"
         ]
     ],
     "SlotList": [
@@ -4177,7 +4191,8 @@
         "",
         "sprint_v4_test.cpp",
         "numbering.cpp",
-        "roki2Walk_test.cpp"
+        "roki2Walk_test.cpp",
+        "roki2Kick.cpp"
     ],
     "SoundList": [
     ],

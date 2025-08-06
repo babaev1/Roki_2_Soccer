@@ -31,6 +31,7 @@ class roki2met :
     numberingSlot = 29
     roki2Walk_testSlot = 30
     roki2KickSlot = 31
+    roki2GetRestSlot = 32
 
 
     #Перечень доступных звуков
@@ -1339,3 +1340,8 @@ class roki2met :
         forwardDirection = 84
         leftRightFactor = 85
         frontBackFactor = 86
+
+
+    class roki2GetRest :
+        #Перечень переменных слота roki2GetRest
+        frameCount = 2

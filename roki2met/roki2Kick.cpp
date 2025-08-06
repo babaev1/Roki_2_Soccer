@@ -620,7 +620,7 @@ void kick(int invert) {
         dx0 = stepLengthKick / (2 * fr1 + fr2 + 4) * framestep;
         if (j == fr1 || j == fr1 + fr2 - 2) {
             xtr -= dx0;
-            ytr = s - 64;
+            ytr = s - (64 + kick_offset);
         }
         else
             xtr += dx * fr2 / (fr2 - 2 * framestep);
@@ -740,7 +740,7 @@ void main() {
   //Запускаем миксинг
   sfCreateTask( mixing, 20 );
 
-  kick();
+  kick(1);
   //runTest(); // простой тест ходьбы прямо
   
   //Переходим к срипту "Напряжен"

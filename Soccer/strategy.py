@@ -2068,10 +2068,24 @@ class Player():
                     ok2, ntc2_value = intercom.memIGet(ntc2)
                     ok3, ntc3_value = intercom.memIGet(ntc3)
                     ok4, ntc4_value = intercom.memIGet(ntc4)
-                    if ok1 and ok2 and ok3 and ok4:
-                        ntc = min(ntc1_value, ntc2_value, ntc3_value, ntc4_value)
-                        print("Lowest NTC: ", ntc)
-                        if ntc < 1100 and ntc != 0 : break                                    # risk temperature in knee servos
+                    temperature_is_bad = False
+                    if ok1:
+                        print('ntc1 : ', ntc1_value)
+                        if ntc1_value < 1100 and ntc1_value > 0: temperature_is_bad = True
+                    if ok2:
+                        print('ntc2 : ', ntc2_value)
+                        if ntc2_value < 1100 and ntc2_value > 0: temperature_is_bad = True
+                    if ok3:
+                        print('ntc3 : ', ntc3_value)
+                        if ntc3_value < 1100 and ntc3_value > 0: temperature_is_bad = True
+                    if ok4:
+                        print('ntc4 : ', ntc4_value)
+                        if ntc4_value < 1100 and ntc4_value > 0: temperature_is_bad = True
+                    if temperature_is_bad : break
+                    # if ok1 and ok2 and ok3 and ok4:
+                    #     ntc = min(ntc1_value, ntc2_value, ntc3_value, ntc4_value)
+                    #     print("Lowest NTC: ", ntc)
+                    #     if ntc < 1100 and ntc != 0 : break                                    # risk temperature in knee servos
                 stepLength1 = stepLength
                 if cycle ==0 : stepLength1 = stepLength/3
                 if cycle ==1 : stepLength1 = stepLength/3 * 2
@@ -2123,8 +2137,9 @@ class Player():
             else:
                 if self.glob.camera_down_Flag == True: self.glob.camera_reset()
                 else:  
+                    self.motion.rcb.motionPlay(32)
                     if self.glob.SIMULATION == 5: os.system("espeak -ven-m1 -a200 'I need cooling of knees'")
-                    time.sleep(90)                           # cool down knees
+                    time.sleep(100)                           # cool down knees
 
 
     def normalize_rotation(self, yaw, limit= 0.3):
