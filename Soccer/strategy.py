@@ -731,12 +731,16 @@ class Player():
             self.motion.falling_Test()
             time.sleep(0.5)
         #self.motion.jump_turn(self.f.direction_To_Guest)
-        #self.walk_straight(number_Of_Cycles = 50, stepLength = 20, sideLength = 0, respect_body_tilt = False, direction = 0.75)
+        self.motion.stepHeight = 10
+        self.motion.gaitHeight = 190
+        self.walk_straight(number_Of_Cycles = 50, stepLength = 20, sideLength = 0, respect_body_tilt = False, direction = 0.75)
+        elf.motion.stepHeight = 32
+        self.motion.gaitHeight = 180
         #self.motion.near_distance_omni_motion(500, 0) #math.pi/2)
         #self.motion.jump_turn(0, jumps_limit = 10)
         #self.motion.near_distance_omni_motion(300, 0)
         #return
-        for _ in range(50): self.motion.one_jump_forward(fraction = 1, hands_on = True)
+        #for _ in range(50): self.motion.one_jump_forward(fraction = 1, hands_on = True)
         while (True):
             if self.motion.falling_Flag != 0:
                 if self.motion.falling_Flag == 3: break
