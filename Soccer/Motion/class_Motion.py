@@ -1683,7 +1683,7 @@ class Motion(Robot, Motion_extention_1):
         self.xr, self.xl, self.yr, self.yl = xr_old, xl_old, yr_old, yl_old
         #self.robot_In_0_Pose = True
 
-    def kick(self, first_Leg_Is_Right_Leg, small = False):
+    def kick(self, first_Leg_Is_Right_Leg, small = False, kick_offset = 0):
         self.robot_In_0_Pose = False
         if not self.falling_Test() == 0:
             #self.local.quality =0
@@ -1742,13 +1742,13 @@ class Motion(Robot, Motion_extention_1):
                 dx0 = stepLength/(2*self.fr1+self.fr2+4)*framestep
                 if iii==self.fr1:
                     self.xtr -= dx0
-                    self.ytr = S - 64
+                    self.ytr = S - (64 + kick_offset)
                 elif iii == (self.fr1 +self.fr2 - 2):
                     self.xtr -= dx0
-                    self.ytr = S - 64
+                    self.ytr = S - (64 + kick_offset)
                 else:
                     self.xtr += dx*self.fr2/(self.fr2-2 * framestep)
-                    self.ytr = S - 64
+                    self.ytr = S - (64 + kick_offset)
                 if iii == self.fr1 +self.fr2 - 10: self.xtr += kick_size
                 if iii == self.fr1 +self.fr2 - 4: self.xtr -= kick_size
                 self.xtl -= dx0
@@ -1935,13 +1935,13 @@ class Motion(Robot, Motion_extention_1):
                     time1 = time.perf_counter() - start1
         #self.robot_In_0_Pose = True
 
-    def hard_kick(self, kick_by_right = 1, kick_power = 100, kick_offset = 0):
+    def hard_kick(self, kick_by_right = 1, kick_offset = 0):
         var = roki2met.roki2met
         intercom = self.glob.stm_channel.zubr       # used for communication between head and zubr-controller with memIGet/memISet commands
         if kick_offset < -60 : kick_offset = -60
         if kick_offset > 80 : kick_offset = 80
         intercom.memISet(var.kick_by_right, kick_by_right)
-        intercom.memISet(var.kick_power, kick_power)
+        intercom.memISet(var.kick_power, self.kick_power)
         intercom.memISet(var.kick_offset, kick_offset)
         self.glob.rcb.motionPlay(31)
 

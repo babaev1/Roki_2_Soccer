@@ -873,8 +873,47 @@ class Motion_real(Motion):
                     if napravl < 0 : kick_by_right = 1
                     else: kick_by_right = 0
                     kick_offset = int(abs(math.sin(napravl) * dist * 1000)) - 62
-                self.hard_kick(kick_by_right = kick_by_right, kick_power = 100, kick_offset = kick_offset)
+                self.hard_kick(kick_by_right = kick_by_right, kick_offset = kick_offset)
                 #self.kick( first_Leg_Is_Right_Leg=kick_by_Right)
+                self.pause_in_ms(1000)
+        return True
+
+    def near_distance_ball_approach_and_kick_streaming_FIRA(self, kick_direction):
+        print('near_distance_ball_approach_and_kick_streaming')
+        offset_of_ball = self.params['KICK_OFFSET_OF_BALL']  # self.d10 # module of local robot Y coordinate of ball im mm before kick 
+        if self.glob.ball_distance > 0.9 or self.glob.robot_see_ball <= 0: return False
+        dist = self.glob.ball_distance
+        napravl = self.glob.ball_course
+        dist_mm = self.glob.ball_distance *1000
+        # if  0.02 < abs(dist * math.cos(napravl)) < 0.06 and dist * math.sin(napravl) < 0.03:
+        #     if napravl > 0: self.kick(first_Leg_Is_Right_Leg=False)
+        #     else: self.kick(first_Leg_Is_Right_Leg=True)
+        if dist_mm * math.cos(napravl) < self.params["KICK_ADJUSTMENT_DISTANCE_2"] :
+            direction = math.copysign(2.55, napravl)
+            slide_back_dist = - (self.params["KICK_ADJUSTMENT_DISTANCE_2"] - dist_mm * math.cos(napravl))/ math.cos(2.55)
+            self.near_distance_omni_motion( slide_back_dist , direction)
+        else:
+            if napravl > 0:
+                kick_by_Right = False
+            else:
+                kick_by_Right = True
+            self.first_Leg_Is_Right_Leg = True
+            #result, kick_by_Right = self.verify_ball_position(kick_by_Right, kick_direction)
+            self.first_Leg_Is_Right_Leg = True
+            kick_by_Right = self.fine_adjustment_before_kick( kick_direction)
+            if self.glob.ball_distance < 0.2:
+                success_Code, napravl, dist, speed = self.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False)
+                if kick_by_Right: kick_by_right = 1
+                else: kick_by_right = 0
+                kick_offset = 0
+                if success_Code:
+                    if napravl < 0 : kick_by_right = 1
+                    else: kick_by_right = 0
+                    kick_offset = int(abs(math.sin(napravl) * dist * 1000)) - 62
+                if self.glob.SIMULATION == 5:
+                    self.hard_kick(kick_by_right = kick_by_right, kick_offset = kick_offset)
+                else:
+                    self.kick( first_Leg_Is_Right_Leg=kick_by_Right, kick_offset = kick_offset)
                 self.pause_in_ms(1000)
         return True
 

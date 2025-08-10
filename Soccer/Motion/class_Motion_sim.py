@@ -145,7 +145,7 @@ class Motion_sim(Motion_real):
         print('clientID', clientID)
         while True:
             trigger_id = trigger_queue.get()
-            print('trigger_id :', trigger_id)
+            #print('trigger_id :', trigger_id)
             self.sim.simxSynchronousTrigger(clientID)
             trigger_release.put(trigger_id)
             time.sleep(0.01)

@@ -223,7 +223,7 @@ class Player():
         if self.role == 'forward_v2': self.forward_v2_main_cycle()
         if self.role == 'marathon':  self.marathon_main_cycle()
         if self.role == 'penalty_Shooter': self.penalty_Shooter_main_cycle()
-        if self.role == 'FIRA_penalty_Shooter': self.FIRA_penalty_Shooter_main_cycle_()
+        if self.role == 'FIRA_penalty_Shooter': self.FIRA_penalty_Shooter_main_cycle()
         if self.role == 'run_test': self.run_test_main_cycle(self.second_pressed_button)
         if self.role == 'jump_test': self.jump_test(self.second_pressed_button)
         if self.role == 'rotation_test': self.rotation_test_main_cycle()
@@ -666,7 +666,18 @@ class Player():
         time.sleep(1)
         self.motion.jump_turn(self.motion.params['PENALTY_JUMP_TURN_ANGLE'], jumps_limit = 10) # 0.5
         self.motion.kick_power = self.motion.params['PENALTY_FIRST_KICK_POWER_20-100']
-        self.motion.kick(True, small = True)
+        #self.motion.kick(True, small = True)
+        success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False)
+        kick_offset = 0
+        kick_by_right = 1
+        if success_Code:
+            if napravl < 0 : kick_by_right = 1
+            else: kick_by_right = 0
+            kick_offset = int(abs(math.sin(napravl) * dist * 1000)) - 62
+        if self.glob.SIMULATION == 5:
+            self.motion.hard_kick(kick_by_right = kick_by_right, kick_offset = kick_offset)
+        else:
+            self.motion.kick( first_Leg_Is_Right_Leg=kick_by_right, kick_offset = kick_offset)
         self.motion.jump_turn(0.75, jumps_limit = 10)
         #self.motion.walk_Final_Pose_After_Kick()
         for _ in range(5):
@@ -715,7 +726,7 @@ class Player():
                 if self.f.kick_Power == 1: self.motion.kick_power = 100
                 if self.f.kick_Power == 2: self.motion.kick_power = 60
                 if self.f.kick_Power == 3: self.motion.kick_power = 20
-                success_Code = self.motion.near_distance_ball_approach_and_kick_streaming(self.f.direction_To_Guest)
+                success_Code = self.motion.near_distance_ball_approach_and_kick_streaming_FIRA(self.f.direction_To_Guest)
 
     def FIRA_penalty_Shooter_main_cycle_(self):
         if self.glob.camera_streaming: self.glob.vision.camera_thread.start()
@@ -956,7 +967,7 @@ class Player():
 
     def go_Around_Ball(self, dist, napravl):
         print('go_Around_Ball')
-        turning_radius = 0.25 # meters
+        turning_radius = 0.20 # meters
         approach_distance = self.glob.params["KICK_ADJUSTMENT_DISTANCE_1"]
         #first_look_point= self.glob.ball_coord
         #success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
@@ -1714,7 +1725,7 @@ class Player():
                 if napravl < 0 : kick_by_right = 1
                 else: kick_by_right = 0
                 kick_offset = int(abs(math.sin(napravl) * dist * 1000)) - 62
-            self.motion.hard_kick(kick_by_right, kick_power = 100, kick_offset = kick_offset)
+            self.motion.hard_kick(kick_by_right, kick_offset = kick_offset)
             #self.test_walk_main_cycle()
             #self.motion.play_Soft_Motion_Slot(name ='Kick_Right_v3')
         if self.glob.SIMULATION == 1:
