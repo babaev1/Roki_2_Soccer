@@ -678,6 +678,7 @@ class Player():
             self.motion.hard_kick(kick_by_right = kick_by_right, kick_offset = kick_offset)
         else:
             self.motion.kick( first_Leg_Is_Right_Leg=kick_by_right, kick_offset = kick_offset)
+        time.sleep(1)
         self.motion.jump_turn(0.75, jumps_limit = 10)
         #self.motion.walk_Final_Pose_After_Kick()
         for _ in range(5):
