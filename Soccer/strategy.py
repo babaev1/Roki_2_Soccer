@@ -1719,6 +1719,9 @@ class Player():
             self.motion.kick(True)
         else:
             self.motion.head_Return(0, -1500)
+            kick_by_right = 1
+            kick_offset = 0
+            self.motion.kick_power = 100
             success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
                                                                               very_Fast = False)
             if success_Code:
