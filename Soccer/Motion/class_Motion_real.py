@@ -865,7 +865,12 @@ class Motion_real(Motion):
             self.first_Leg_Is_Right_Leg = True
             kick_by_Right = self.fine_adjustment_before_kick( kick_direction)
             if self.glob.ball_distance < 0.2:
-                success_Code, napravl, dist, speed = self.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False)
+                self.glob.vision.detect_Ball_in_One_Shot()
+                if self.glob.robot_see_ball == 5:
+                    napravl, dist = self.glob.ball_course, self.glob.ball_distance
+                    success_Code = True
+                else:
+                    success_Code, napravl, dist, speed = self.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False)
                 if kick_by_Right: kick_by_right = 1
                 else: kick_by_right = 0
                 kick_offset = 0
