@@ -698,7 +698,7 @@ class Player():
             if self.glob.camera_down_Flag == True: self.glob.camera_reset()
             if self.glob.robot_see_ball <= 10:   # must be 0
                 self.motion.head_Return(0, self.motion.neck_play_pose)
-                success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = True,
+                success_Code, napravl, dist, speed = self.motion.seek_Ball_In_Pose(fast_Reaction_On = True, with_Localization = False,
                                                                                   very_Fast = False)
             self.glob.local.localisation_Complete()
             self.f.dir_To_Guest()

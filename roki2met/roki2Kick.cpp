@@ -744,6 +744,6 @@ void main() {
   //runTest(); // простой тест ходьбы прямо
   
   //Переходим к срипту "Напряжен"
-  sfStartSlot( sfSlotIndex("roki2TenseUp.cpp") );
+  sfStartSlot( sfSlotIndex("mixingRoki2met.cpp") );
   }
 

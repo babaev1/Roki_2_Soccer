@@ -3328,9 +3328,9 @@ VBC3_PUSH_CONST 3956  //func address kick
 VBC1_PUSH_1 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
-[1:747] ;sfStartSlot( sfSlotIndex("roki2TenseUp.cpp") );
+[1:747] ;sfStartSlot( sfSlotIndex("mixingRoki2met.cpp") );
 VBC5_PUSH_CONST 42 | 0x80000000 //import func index sfStartSlot
-VBC1_PUSH_1 
+VBC1_PUSH_2 
 VBC1_CALL1
 VBC1_STACK_UP2//remove result, call address and params
 [1:748] ;
