@@ -845,7 +845,7 @@ class Motion_real(Motion):
     def near_distance_ball_approach_and_kick_streaming(self, kick_direction):
         print('near_distance_ball_approach_and_kick_streaming')
         offset_of_ball = self.params['KICK_OFFSET_OF_BALL']  # self.d10 # module of local robot Y coordinate of ball im mm before kick 
-        if self.glob.ball_distance > 0.9 or self.glob.robot_see_ball <= 0: return False
+        #if self.glob.ball_distance > 0.9 or self.glob.robot_see_ball <= 0: return False
         dist = self.glob.ball_distance
         napravl = self.glob.ball_course
         dist_mm = self.glob.ball_distance *1000
