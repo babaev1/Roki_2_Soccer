@@ -828,7 +828,7 @@ class Motion_real(Motion):
             if kick_by_Right: side_motion = ball_y + self.glob.params["KICK_OFFSET_OF_BALL"]
             else: side_motion = ball_y - self.glob.params["KICK_OFFSET_OF_BALL"]
             front_motion = ball_x - self.glob.params["KICK_ADJUSTMENT_DISTANCE_2"]
-            if (front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance) or self.glob.ball_distance > 0.4 or self.glob.robot_see_ball < 0:
+            if (front_motion <= front_motion_tolerance and abs(side_motion) < side_motion_tolerance) or self.glob.ball_distance > 2.4 or self.glob.robot_see_ball < 0:
                 break
             if not self.falling_Test() == 0:
                 if self.falling_Flag == 3: uprint('STOP!')
